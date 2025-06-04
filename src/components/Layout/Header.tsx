@@ -41,18 +41,18 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-nutrition-green">
+              <h1 className="text-xl lg:text-2xl font-bold text-nutrition-green">
                 JA Dietética
               </h1>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-6">
+            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
               {navigationItems.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-nutrition-black hover:text-nutrition-green transition-colors duration-200 font-medium"
+                  className="text-sm xl:text-base text-nutrition-black hover:text-nutrition-green transition-colors duration-200 font-medium"
                 >
                   {item.label}
                 </a>
@@ -114,6 +114,18 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                     className="mx-4 mt-4 bg-nutrition-green hover:bg-nutrition-green-dark text-white w-full"
                   >
                     Iniciar Sesión
+                  </Button>
+                )}
+                {isLoggedIn && (
+                  <Button
+                    onClick={() => {
+                      setIsSidebarOpen(true);
+                      setIsMenuOpen(false);
+                    }}
+                    variant="outline"
+                    className="mx-4 mt-4 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white w-full"
+                  >
+                    Mi Cuenta
                   </Button>
                 )}
               </nav>

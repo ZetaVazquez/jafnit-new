@@ -3,6 +3,13 @@ import React, { useState } from 'react';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
 import HeroCarousel from '@/components/Home/HeroCarousel';
+import Portfolio from '@/components/Home/Portfolio';
+import News from '@/components/Home/News';
+import Testimonials from '@/components/Home/Testimonials';
+import FAQ from '@/components/Home/FAQ';
+import Pricing from '@/components/Home/Pricing';
+import BMICalculator from '@/components/Home/BMICalculator';
+import Contact from '@/components/Home/Contact';
 import Questionnaire from '@/components/Home/Questionnaire';
 import LoginModal from '@/components/Auth/LoginModal';
 
@@ -136,6 +143,14 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <Portfolio />
+        <News />
+        <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
+        <FAQ />
+        <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
+        <BMICalculator />
+        <Contact />
 
         {/* Call to Action */}
         <section className="py-20 bg-nutrition-green text-white">
