@@ -59,12 +59,21 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
       {/* Diagonal Split Overlay */}
       <div className="absolute inset-0">
         {/* Left Side with Content */}
-        <div className="absolute inset-0 diagonal-split bg-nutrition-green bg-opacity-90">
+        <div className="absolute inset-0 diagonal-split bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark bg-opacity-95">
           <div className="flex items-center justify-start h-full pl-8 lg:pl-16">
             <div className="text-white max-w-lg">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
-                José Antonio
-              </h1>
+              {/* Logo and Brand */}
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-nutrition-orange to-nutrition-orange-dark rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-2xl">JA</span>
+                </div>
+                <div>
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
+                    José Antonio
+                  </h1>
+                </div>
+              </div>
+              
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-nutrition-orange">
                 Dietética y Entrenamiento
               </h2>
@@ -76,7 +85,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
               </p>
               <Button
                 onClick={onStartQuestionnaire}
-                className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-nutrition-orange to-nutrition-orange-dark hover:from-nutrition-orange-dark hover:to-nutrition-orange text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 Comenzar Evaluación
               </Button>

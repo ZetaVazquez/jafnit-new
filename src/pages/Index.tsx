@@ -50,47 +50,80 @@ const Index = () => {
         <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
         
         {/* About Section */}
-        <section id="about" className="py-20 bg-white">
+        <section id="about" className="py-20 bg-gradient-to-br from-nutrition-green-lighter to-white">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-4xl font-bold text-nutrition-black mb-6">
+              <div className="order-2 lg:order-1">
+                <h2 className="text-4xl font-bold text-nutrition-black mb-8">
                   Sobre Nosotros
                 </h2>
-                <p className="text-lg text-gray-600 mb-6">
-                  José Antonio es un profesional certificado en nutrición y entrenamiento personal 
-                  con más de 10 años de experiencia transformando vidas a través de planes 
-                  personalizados y seguimiento profesional.
-                </p>
-                <p className="text-lg text-gray-600 mb-6">
-                  Nuestro enfoque se basa en la ciencia, la personalización y el acompañamiento 
-                  constante para asegurar que alcances tus objetivos de forma sostenible y saludable.
-                </p>
-                <div className="grid grid-cols-2 gap-6">
+                
+                {/* Quien soy */}
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-nutrition-green-forest mb-4">¿Quién soy?</h3>
+                  <p className="text-lg text-gray-600 mb-4">
+                    Soy José Antonio, un profesional certificado en nutrición y entrenamiento personal 
+                    con una pasión genuina por ayudar a las personas a transformar sus vidas a través 
+                    de hábitos saludables y sostenibles.
+                  </p>
+                </div>
+
+                {/* Mi experiencia */}
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-nutrition-green-emerald mb-4">Mi Experiencia</h3>
+                  <p className="text-lg text-gray-600 mb-4">
+                    Con más de 10 años de experiencia en el sector de la salud y el fitness, 
+                    he tenido el privilegio de acompañar a más de 500 personas en su viaje 
+                    hacia una vida más saludable y plena.
+                  </p>
+                </div>
+
+                {/* Como puedo ayudarte */}
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4">¿Cómo puedo ayudarte?</h3>
+                  <p className="text-lg text-gray-600 mb-4">
+                    Mi enfoque se basa en la personalización, la ciencia y el acompañamiento 
+                    constante. Creo planes únicos que se adaptan a tu estilo de vida, 
+                    objetivos y preferencias, asegurando resultados sostenibles.
+                  </p>
+                </div>
+
+                {/* Frase motivadora */}
+                <div className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald p-6 rounded-lg shadow-lg">
+                  <p className="text-white text-lg font-medium italic text-center">
+                    "Pequeños cambios, grandes resultados"
+                  </p>
+                  <p className="text-white text-base mt-2 text-center opacity-90">
+                    Porque mejorar tu salud no significa restringirte, sino aprender a comer y entrenar de forma inteligente
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6 mt-8">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-nutrition-green">500+</div>
+                    <div className="text-3xl font-bold text-nutrition-green-emerald">500+</div>
                     <div className="text-gray-600">Clientes Transformados</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-nutrition-green">10+</div>
+                    <div className="text-3xl font-bold text-nutrition-green-emerald">10+</div>
                     <div className="text-gray-600">Años de Experiencia</div>
                   </div>
                 </div>
               </div>
-              <div className="relative">
+              
+              <div className="relative order-1 lg:order-2">
                 <img
                   src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                   alt="José Antonio - Nutricionista y Entrenador"
                   className="rounded-lg shadow-xl"
                 />
-                <div className="absolute inset-0 rounded-lg border-4 border-nutrition-green border-opacity-20"></div>
+                <div className="absolute inset-0 rounded-lg border-4 border-nutrition-green-emerald border-opacity-20"></div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Services Section */}
-        <section id="services" className="py-20 bg-gray-50">
+        <section id="services" className="py-20 bg-gradient-to-br from-gray-50 to-nutrition-green-lighter">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-nutrition-black mb-4">
@@ -107,37 +140,45 @@ const Index = () => {
                   title: 'Nutrición Personalizada',
                   description: 'Planes alimentarios adaptados a tus necesidades, objetivos y preferencias',
                   icon: '🥗',
+                  color: 'from-nutrition-green to-nutrition-green-emerald'
                 },
                 {
                   title: 'Entrenamiento Personal',
                   description: 'Rutinas diseñadas específicamente para ti con seguimiento profesional',
                   icon: '💪',
+                  color: 'from-nutrition-green-emerald to-nutrition-green-lime'
                 },
                 {
                   title: 'Seguimiento Continuo',
                   description: 'Monitoreo constante de tu progreso con ajustes según resultados',
                   icon: '📊',
+                  color: 'from-nutrition-green-lime to-nutrition-green'
                 },
                 {
                   title: 'Educación Nutricional',
                   description: 'Aprende hábitos saludables para mantener resultados a largo plazo',
                   icon: '🎓',
+                  color: 'from-nutrition-green-dark to-nutrition-green-forest'
                 },
                 {
                   title: 'Suplementación',
                   description: 'Recomendaciones personalizadas de suplementos según tus necesidades',
                   icon: '💊',
+                  color: 'from-nutrition-green-forest to-nutrition-green-darker'
                 },
                 {
                   title: 'Soporte 24/7',
                   description: 'Asistencia y motivación constante a través de nuestra plataforma',
                   icon: '🤝',
+                  color: 'from-nutrition-green-darker to-nutrition-green-dark'
                 },
               ].map((service, index) => (
-                <div key={index} className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  <div className="text-4xl mb-4">{service.icon}</div>
-                  <h3 className="text-xl font-bold text-nutrition-black mb-4">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
+                <div key={index} className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-l-4 border-nutrition-green-emerald">
+                  <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center text-2xl mb-4 mx-auto`}>
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-nutrition-black mb-4 text-center">{service.title}</h3>
+                  <p className="text-gray-600 text-center">{service.description}</p>
                 </div>
               ))}
             </div>
@@ -153,7 +194,7 @@ const Index = () => {
         <Contact />
 
         {/* Call to Action */}
-        <section className="py-20 bg-nutrition-green text-white">
+        <section className="py-20 bg-gradient-to-r from-nutrition-green via-nutrition-green-emerald to-nutrition-green-lime text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">
               ¿Listo para Transformar tu Vida?
@@ -163,7 +204,7 @@ const Index = () => {
             </p>
             <button
               onClick={() => setShowLogin(true)}
-              className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="bg-gradient-to-r from-nutrition-orange to-nutrition-orange-dark hover:from-nutrition-orange-dark hover:to-nutrition-orange text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               Quiero mi Cambio
             </button>

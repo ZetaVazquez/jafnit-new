@@ -76,13 +76,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
   const currentQuestionData = questions[currentQuestion];
   const isAnswered = answers[currentQuestionData.id];
   const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const isLastQuestion = currentQuestion === questions.length - 1;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl text-nutrition-green">
+            <CardTitle className="text-2xl bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent">
               Cuestionario Personalizado
             </CardTitle>
             <Button variant="ghost" onClick={onClose}>
@@ -93,7 +94,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
           {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
             <div 
-              className="bg-nutrition-green h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -115,14 +116,28 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
                   onClick={() => handleAnswer(option)}
                   className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
                     answers[currentQuestionData.id] === option
-                      ? 'border-nutrition-green bg-nutrition-green bg-opacity-10 text-nutrition-green'
-                      : 'border-gray-200 hover:border-nutrition-green hover:bg-gray-50'
+                      ? 'border-nutrition-green-emerald bg-nutrition-green-lighter text-nutrition-green-forest'
+                      : 'border-gray-200 hover:border-nutrition-green-emerald hover:bg-nutrition-green-lighter hover:bg-opacity-50'
                   }`}
                 >
                   {option}
                 </button>
               ))}
             </div>
+
+            {/* Mensaje especial en la última pregunta */}
+            {isLastQuestion && isAnswered && (
+              <div className="mt-8 p-6 bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-lg border-l-4 border-nutrition-green-emerald">
+                <div className="text-center">
+                  <h4 className="text-xl font-bold text-nutrition-green-forest mb-2">
+                    ¡Ya casi estamos!
+                  </h4>
+                  <p className="text-nutrition-green-dark">
+                    Ahora solo hace falta que seas parte de nuestra familia para poder tomar el cambio que tanto necesitas.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between">
@@ -130,7 +145,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
               variant="outline"
               onClick={prevQuestion}
               disabled={currentQuestion === 0}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Anterior</span>
@@ -139,7 +154,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
             <Button
               onClick={nextQuestion}
               disabled={!isAnswered}
-              className="flex items-center space-x-2 bg-nutrition-green hover:bg-nutrition-green-dark"
+              className="flex items-center space-x-2 bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
             >
               <span>{currentQuestion === questions.length - 1 ? 'Finalizar' : 'Siguiente'}</span>
               <ChevronRight className="w-4 h-4" />

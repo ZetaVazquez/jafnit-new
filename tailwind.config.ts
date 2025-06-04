@@ -53,11 +53,16 @@ export default {
 					DEFAULT: '#ffffff',
 					foreground: '#111827'
 				},
-				// Custom nutrition app colors
+				// Custom nutrition app colors with more green variations
 				nutrition: {
 					green: '#22c55e',
 					'green-light': '#86efac',
+					'green-lighter': '#bbf7d0',
 					'green-dark': '#15803d',
+					'green-darker': '#14532d',
+					'green-emerald': '#10b981',
+					'green-lime': '#84cc16',
+					'green-forest': '#166534',
 					orange: '#fb923c',
 					'orange-light': '#fed7aa',
 					'orange-dark': '#ea580c',

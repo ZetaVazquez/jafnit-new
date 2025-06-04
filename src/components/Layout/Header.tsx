@@ -39,9 +39,13 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <h1 className="text-xl lg:text-2xl font-bold text-nutrition-green">
+            {/* Logo and Brand */}
+            <div className="flex items-center space-x-3">
+              {/* Logo */}
+              <div className="w-10 h-10 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-lg">JA</span>
+              </div>
+              <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent">
                 JA Dietética
               </h1>
             </div>
@@ -52,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-sm xl:text-base text-nutrition-black hover:text-nutrition-green transition-colors duration-200 font-medium"
+                  className="text-sm xl:text-base text-nutrition-black hover:text-nutrition-green-emerald transition-colors duration-200 font-medium"
                 >
                   {item.label}
                 </a>
@@ -65,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                 <Button
                   onClick={() => setIsSidebarOpen(true)}
                   variant="outline"
-                  className="hidden lg:flex items-center space-x-2 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                  className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
                 >
                   <User className="w-4 h-4" />
                   <span>Mi Cuenta</span>
@@ -73,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
               ) : (
                 <Button
                   onClick={onLogin}
-                  className="hidden lg:flex bg-nutrition-green hover:bg-nutrition-green-dark text-white"
+                  className="hidden lg:flex bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
                 >
                   Iniciar Sesión
                 </Button>
@@ -99,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="block px-4 py-2 text-nutrition-black hover:text-nutrition-green hover:bg-gray-50 transition-colors duration-200"
+                    className="block px-4 py-2 text-nutrition-black hover:text-nutrition-green-emerald hover:bg-gray-50 transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
@@ -111,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                       onLogin();
                       setIsMenuOpen(false);
                     }}
-                    className="mx-4 mt-4 bg-nutrition-green hover:bg-nutrition-green-dark text-white w-full"
+                    className="mx-4 mt-4 bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white w-full"
                   >
                     Iniciar Sesión
                   </Button>
@@ -123,7 +127,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                       setIsMenuOpen(false);
                     }}
                     variant="outline"
-                    className="mx-4 mt-4 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white w-full"
+                    className="mx-4 mt-4 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white w-full"
                   >
                     Mi Cuenta
                   </Button>
@@ -141,7 +145,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
           <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-right">
             <div className="p-6">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xl font-bold text-nutrition-green">Mi Cuenta</h2>
+                <h2 className="text-xl font-bold text-nutrition-green-emerald">Mi Cuenta</h2>
                 <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
                   <X className="w-5 h-5" />
                 </Button>
@@ -152,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 text-nutrition-black hover:text-nutrition-green transition-colors duration-200"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-nutrition-green-lighter text-nutrition-black hover:text-nutrition-green-forest transition-colors duration-200"
                     onClick={() => setIsSidebarOpen(false)}
                   >
                     <item.icon className="w-5 h-5" />
