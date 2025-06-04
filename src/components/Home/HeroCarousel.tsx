@@ -46,18 +46,16 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
   return (
     <section id="home" className="relative h-screen overflow-hidden">
-      {/* Background Image - Hidden on screens smaller than 1110px */}
-      <div className="absolute inset-0 hidden xl:[1110px]:block">
+      {/* Background Carousel Images - Always visible but opacified */}
+      <div className="absolute inset-0">
         <img
           src={slides[currentSlide].image}
           alt="Hero Background"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        {/* Green overlay to opacify the background images */}
+        <div className="absolute inset-0 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark opacity-85"></div>
       </div>
-
-      {/* Background for mobile/tablet - shown on screens smaller than 1110px */}
-      <div className="absolute inset-0 xl:[1110px]:hidden bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark"></div>
 
       {/* Diagonal Split Overlay - Hidden on screens smaller than 1110px */}
       <div className="absolute inset-0 hidden xl:[1110px]:block">
