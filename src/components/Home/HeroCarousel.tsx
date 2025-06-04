@@ -46,8 +46,8 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
   return (
     <section id="home" className="relative h-screen overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0">
+      {/* Background Image - Hidden on screens smaller than 1110px */}
+      <div className="absolute inset-0 hidden xl:[1110px]:block">
         <img
           src={slides[currentSlide].image}
           alt="Hero Background"
@@ -56,8 +56,11 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
       </div>
 
-      {/* Diagonal Split Overlay */}
-      <div className="absolute inset-0">
+      {/* Background for mobile/tablet - shown on screens smaller than 1110px */}
+      <div className="absolute inset-0 xl:[1110px]:hidden bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark"></div>
+
+      {/* Diagonal Split Overlay - Hidden on screens smaller than 1110px */}
+      <div className="absolute inset-0 hidden xl:[1110px]:block">
         {/* Left Side with Content */}
         <div className="absolute inset-0 diagonal-split bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark bg-opacity-95">
           <div className="flex items-center justify-start h-full pl-8 lg:pl-16">
@@ -97,22 +100,55 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         <div className="absolute inset-0 diagonal-split-right"></div>
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Content for mobile/tablet - shown on screens smaller than 1110px */}
+      <div className="absolute inset-0 xl:[1110px]:hidden flex items-center justify-center">
+        <div className="text-white max-w-lg text-center px-8">
+          {/* Logo and Brand */}
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-nutrition-orange to-nutrition-orange-dark rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-2xl">JA</span>
+            </div>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold leading-tight">
+                José Antonio
+              </h1>
+            </div>
+          </div>
+          
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-nutrition-orange">
+            Dietética y Entrenamiento
+          </h2>
+          <h3 className="text-xl md:text-2xl mb-6">
+            {slides[currentSlide].title}
+          </h3>
+          <p className="text-lg md:text-xl mb-8 opacity-90">
+            {slides[currentSlide].subtitle}
+          </p>
+          <Button
+            onClick={onStartQuestionnaire}
+            className="bg-gradient-to-r from-nutrition-orange to-nutrition-orange-dark hover:from-nutrition-orange-dark hover:to-nutrition-orange text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            Comenzar Evaluación
+          </Button>
+        </div>
+      </div>
+
+      {/* Navigation Arrows - Hidden on screens smaller than 1110px */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10 hidden xl:[1110px]:block"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10 hidden xl:[1110px]:block"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      {/* Slide Indicators - Hidden on screens smaller than 1110px */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 hidden xl:[1110px]:flex">
         {slides.map((_, index) => (
           <button
             key={index}
