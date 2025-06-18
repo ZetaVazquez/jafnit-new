@@ -45,7 +45,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   };
 
   return (
-    <section id="home" className="relative h-screen overflow-hidden">
+    <section id="home" className="relative h-[85vh] md:h-[90vh] overflow-hidden">
       {/* Background Carousel Images - Always visible but opacified */}
       <div className="absolute inset-0">
         <img
@@ -54,18 +54,18 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           className="w-full h-full object-cover"
         />
         {/* Green overlay to opacify the background images */}
-        <div className="absolute inset-0 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark opacity-85"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-nutrition-green/85 via-nutrition-green-emerald/80 to-nutrition-green-sage/75"></div>
       </div>
 
       {/* Diagonal Split Overlay - Hidden on screens smaller than 1110px */}
       <div className="absolute inset-0 hidden xl:[1110px]:block">
         {/* Left Side with Content */}
-        <div className="absolute inset-0 diagonal-split bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark bg-opacity-95">
+        <div className="absolute inset-0 diagonal-split bg-gradient-to-br from-nutrition-green/95 via-nutrition-green-emerald/90 to-nutrition-green-sage/85">
           <div className="flex items-center justify-start h-full pl-8 lg:pl-16">
             <div className="text-white max-w-lg">
               {/* Logo and Brand */}
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-nutrition-orange to-nutrition-orange-dark rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-nutrition-accent to-nutrition-accent-dark rounded-full flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-2xl">JA</span>
                 </div>
                 <div>
@@ -75,7 +75,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 </div>
               </div>
               
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-nutrition-orange">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-nutrition-accent">
                 Dietética y Entrenamiento
               </h2>
               <h3 className="text-xl md:text-2xl lg:text-3xl mb-6">
@@ -86,7 +86,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
               </p>
               <Button
                 onClick={onStartQuestionnaire}
-                className="bg-gradient-to-r from-nutrition-orange to-nutrition-orange-dark hover:from-nutrition-orange-dark hover:to-nutrition-orange text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-nutrition-accent to-nutrition-accent-dark hover:from-nutrition-accent-dark hover:to-nutrition-accent text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 Comenzar Evaluación
               </Button>
@@ -103,7 +103,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         <div className="text-white max-w-lg text-center px-8">
           {/* Logo and Brand */}
           <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-nutrition-orange to-nutrition-orange-dark rounded-full flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 bg-gradient-to-br from-nutrition-accent to-nutrition-accent-dark rounded-full flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-2xl">JA</span>
             </div>
             <div>
@@ -113,7 +113,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             </div>
           </div>
           
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-nutrition-orange">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-nutrition-accent">
             Dietética y Entrenamiento
           </h2>
           <h3 className="text-xl md:text-2xl mb-6">
@@ -124,7 +124,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           </p>
           <Button
             onClick={onStartQuestionnaire}
-            className="bg-gradient-to-r from-nutrition-orange to-nutrition-orange-dark hover:from-nutrition-orange-dark hover:to-nutrition-orange text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="bg-gradient-to-r from-nutrition-accent to-nutrition-accent-dark hover:from-nutrition-accent-dark hover:to-nutrition-accent text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           >
             Comenzar Evaluación
           </Button>
@@ -152,7 +152,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`w-3 h-3 rounded-full transition-all duration-200 ${
-              index === currentSlide ? 'bg-nutrition-orange' : 'bg-white bg-opacity-50'
+              index === currentSlide ? 'bg-nutrition-accent' : 'bg-white bg-opacity-50'
             }`}
           />
         ))}

@@ -26,15 +26,15 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#22c55e', // Green
+					DEFAULT: '#16a34a', // Green-600
 					foreground: '#ffffff'
 				},
 				secondary: {
-					DEFAULT: '#f3f4f6', // Light gray/white
-					foreground: '#111827'
+					DEFAULT: '#f8fafc', // Slate-50
+					foreground: '#0f172a'
 				},
 				accent: {
-					DEFAULT: '#fb923c', // Orange
+					DEFAULT: '#059669', // Emerald-600
 					foreground: '#ffffff'
 				},
 				destructive: {
@@ -42,33 +42,35 @@ export default {
 					foreground: '#ffffff'
 				},
 				muted: {
-					DEFAULT: '#f9fafb',
-					foreground: '#6b7280'
+					DEFAULT: '#f1f5f9',
+					foreground: '#64748b'
 				},
 				popover: {
 					DEFAULT: '#ffffff',
-					foreground: '#111827'
+					foreground: '#0f172a'
 				},
 				card: {
 					DEFAULT: '#ffffff',
-					foreground: '#111827'
+					foreground: '#0f172a'
 				},
-				// Custom nutrition app colors with more green variations
+				// Nueva paleta de colores más armoniosa para nutrición
 				nutrition: {
-					green: '#22c55e',
-					'green-light': '#86efac',
-					'green-lighter': '#bbf7d0',
-					'green-dark': '#15803d',
-					'green-darker': '#14532d',
-					'green-emerald': '#10b981',
-					'green-lime': '#84cc16',
-					'green-forest': '#166534',
-					orange: '#fb923c',
-					'orange-light': '#fed7aa',
-					'orange-dark': '#ea580c',
-					black: '#111827',
+					green: '#16a34a',        // Green-600 - Principal
+					'green-light': '#4ade80', // Green-400 - Suave
+					'green-lighter': '#bbf7d0', // Green-200 - Muy suave
+					'green-dark': '#15803d',   // Green-700 - Oscuro
+					'green-darker': '#166534', // Green-800 - Muy oscuro
+					'green-emerald': '#059669', // Emerald-600 - Para acentos
+					'green-sage': '#84cc16',   // Lime-500 - Verde sabio
+					'green-forest': '#14532d', // Green-900 - Verde bosque
+					accent: '#059669',         // Emerald-600 - Acento principal
+					'accent-light': '#34d399', // Emerald-400
+					'accent-dark': '#047857',  // Emerald-700
+					black: '#0f172a',         // Slate-900
 					white: '#ffffff',
-					gray: '#6b7280'
+					gray: '#64748b',          // Slate-500
+					'gray-light': '#94a3b8',  // Slate-400
+					'gray-lighter': '#f1f5f9', // Slate-100
 				}
 			},
 			borderRadius: {

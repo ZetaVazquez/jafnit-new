@@ -8,10 +8,11 @@ import { Label } from '@/components/ui/label';
 interface LoginModalProps {
   onClose: () => void;
   onLogin: (email: string, password: string) => void;
+  initialMode?: 'login' | 'register';
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true);
+const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode = 'login' }) => {
+  const [isLogin, setIsLogin] = useState(initialMode === 'login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -33,7 +34,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md border-nutrition-green-emerald border-2">
+      <Card className="w-full max-w-md border-nutrition-green border-2">
         <CardHeader className="bg-gradient-to-r from-nutrition-green-lighter to-white">
           <div className="flex items-center justify-between">
             <CardTitle className="text-2xl bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent">
@@ -57,7 +58,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin }) => {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Tu nombre completo"
                   required={!isLogin}
-                  className="border-nutrition-green-emerald focus:ring-nutrition-green focus:border-nutrition-green"
+                  className="border-nutrition-green focus:ring-nutrition-green focus:border-nutrition-green"
                 />
               </div>
             )}
@@ -71,7 +72,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
                 required
-                className="border-nutrition-green-emerald focus:ring-nutrition-green focus:border-nutrition-green"
+                className="border-nutrition-green focus:ring-nutrition-green focus:border-nutrition-green"
               />
             </div>
 
@@ -84,7 +85,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Tu contraseña"
                 required
-                className="border-nutrition-green-emerald focus:ring-nutrition-green focus:border-nutrition-green"
+                className="border-nutrition-green focus:ring-nutrition-green focus:border-nutrition-green"
               />
             </div>
 
@@ -98,7 +99,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin }) => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirma tu contraseña"
                   required={!isLogin}
-                  className="border-nutrition-green-emerald focus:ring-nutrition-green focus:border-nutrition-green"
+                  className="border-nutrition-green focus:ring-nutrition-green focus:border-nutrition-green"
                 />
               </div>
             )}

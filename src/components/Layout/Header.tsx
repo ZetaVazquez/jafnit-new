@@ -7,10 +7,11 @@ import { cn } from '@/lib/utils';
 interface HeaderProps {
   isLoggedIn: boolean;
   onLogin: () => void;
+  onRegister: () => void;
   onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onRegister, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -64,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
             </nav>
 
             {/* User Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               {isLoggedIn ? (
                 <Button
                   onClick={() => setIsSidebarOpen(true)}
@@ -75,12 +76,21 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                   <span>Mi Cuenta</span>
                 </Button>
               ) : (
-                <Button
-                  onClick={onLogin}
-                  className="hidden lg:flex bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
-                >
-                  Iniciar Sesión
-                </Button>
+                <div className="hidden lg:flex items-center space-x-2">
+                  <Button
+                    onClick={onLogin}
+                    variant="outline"
+                    className="border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                  >
+                    Iniciar Sesión
+                  </Button>
+                  <Button
+                    onClick={onRegister}
+                    className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
+                  >
+                    Registrarse
+                  </Button>
+                </div>
               )}
 
               {/* Mobile Menu Button */}
@@ -110,15 +120,27 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onLogout }) => {
                   </a>
                 ))}
                 {!isLoggedIn && (
-                  <Button
-                    onClick={() => {
-                      onLogin();
-                      setIsMenuOpen(false);
-                    }}
-                    className="mx-4 mt-4 bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white w-full"
-                  >
-                    Iniciar Sesión
-                  </Button>
+                  <div className="px-4 mt-4 space-y-2">
+                    <Button
+                      onClick={() => {
+                        onLogin();
+                        setIsMenuOpen(false);
+                      }}
+                      variant="outline"
+                      className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                    >
+                      Iniciar Sesión
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        onRegister();
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
+                    >
+                      Registrarse
+                    </Button>
+                  </div>
                 )}
                 {isLoggedIn && (
                   <Button

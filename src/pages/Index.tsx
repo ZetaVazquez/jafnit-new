@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
@@ -12,11 +11,14 @@ import BMICalculator from '@/components/Home/BMICalculator';
 import Contact from '@/components/Home/Contact';
 import Questionnaire from '@/components/Home/Questionnaire';
 import LoginModal from '@/components/Auth/LoginModal';
+import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 
 const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [loginMode, setLoginMode] = useState<'login' | 'register'>('login');
+  const [userName, setUserName] = useState('');
 
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
@@ -24,6 +26,7 @@ const Index = () => {
 
   const handleQuestionnaireComplete = () => {
     setShowQuestionnaire(false);
+    setLoginMode('register');
     setShowLogin(true);
   };
 
@@ -31,18 +34,36 @@ const Index = () => {
     // Simulate login
     console.log('Login attempt:', { email, password });
     setIsLoggedIn(true);
+    setUserName(email.split('@')[0]); // Use first part of email as name
     setShowLogin(false);
+  };
+
+  const handleShowLogin = () => {
+    setLoginMode('login');
+    setShowLogin(true);
+  };
+
+  const handleShowRegister = () => {
+    setLoginMode('register');
+    setShowLogin(true);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserName('');
   };
+
+  // If logged in, show dashboard
+  if (isLoggedIn) {
+    return <ClientDashboard userName={userName} onLogout={handleLogout} />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header 
         isLoggedIn={isLoggedIn} 
-        onLogin={() => setShowLogin(true)}
+        onLogin={handleShowLogin}
+        onRegister={handleShowRegister}
         onLogout={handleLogout}
       />
       
@@ -61,7 +82,7 @@ const Index = () => {
                 {/* Quien soy */}
                 <div className="mb-8">
                   <h3 className="text-2xl font-bold text-nutrition-green-forest mb-4">¿Quién soy?</h3>
-                  <p className="text-lg text-gray-600 mb-4">
+                  <p className="text-lg text-nutrition-gray mb-4">
                     Soy José Antonio, un profesional certificado en nutrición y entrenamiento personal 
                     con una pasión genuina por ayudar a las personas a transformar sus vidas a través 
                     de hábitos saludables y sostenibles.
@@ -71,7 +92,7 @@ const Index = () => {
                 {/* Mi experiencia */}
                 <div className="mb-8">
                   <h3 className="text-2xl font-bold text-nutrition-green-emerald mb-4">Mi Experiencia</h3>
-                  <p className="text-lg text-gray-600 mb-4">
+                  <p className="text-lg text-nutrition-gray mb-4">
                     Con más de 10 años de experiencia en el sector de la salud y el fitness, 
                     he tenido el privilegio de acompañar a más de 500 personas en su viaje 
                     hacia una vida más saludable y plena.
@@ -81,7 +102,7 @@ const Index = () => {
                 {/* Como puedo ayudarte */}
                 <div className="mb-8">
                   <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4">¿Cómo puedo ayudarte?</h3>
-                  <p className="text-lg text-gray-600 mb-4">
+                  <p className="text-lg text-nutrition-gray mb-4">
                     Mi enfoque se basa en la personalización, la ciencia y el acompañamiento 
                     constante. Creo planes únicos que se adaptan a tu estilo de vida, 
                     objetivos y preferencias, asegurando resultados sostenibles.
@@ -101,11 +122,11 @@ const Index = () => {
                 <div className="grid grid-cols-2 gap-6 mt-8">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-nutrition-green-emerald">500+</div>
-                    <div className="text-gray-600">Clientes Transformados</div>
+                    <div className="text-nutrition-gray">Clientes Transformados</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-nutrition-green-emerald">10+</div>
-                    <div className="text-gray-600">Años de Experiencia</div>
+                    <div className="text-nutrition-gray">Años de Experiencia</div>
                   </div>
                 </div>
               </div>
@@ -123,13 +144,13 @@ const Index = () => {
         </section>
 
         {/* Services Section */}
-        <section id="services" className="py-20 bg-gradient-to-br from-gray-50 to-nutrition-green-lighter">
+        <section id="services" className="py-20 bg-gradient-to-br from-nutrition-gray-lighter to-nutrition-green-lighter">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-nutrition-black mb-4">
                 Nuestros Servicios
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-nutrition-gray max-w-2xl mx-auto">
                 Ofrecemos soluciones integrales para tu bienestar físico y nutricional
               </p>
             </div>
@@ -178,7 +199,7 @@ const Index = () => {
                     {service.icon}
                   </div>
                   <h3 className="text-xl font-bold text-nutrition-black mb-4 text-center">{service.title}</h3>
-                  <p className="text-gray-600 text-center">{service.description}</p>
+                  <p className="text-nutrition-gray text-center">{service.description}</p>
                 </div>
               ))}
             </div>
@@ -194,7 +215,7 @@ const Index = () => {
         <Contact />
 
         {/* Call to Action */}
-        <section className="py-20 bg-gradient-to-r from-nutrition-green via-nutrition-green-emerald to-nutrition-green-lime text-white">
+        <section className="py-20 bg-gradient-to-r from-nutrition-green via-nutrition-green-emerald to-nutrition-green-sage text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">
               ¿Listo para Transformar tu Vida?
@@ -203,8 +224,8 @@ const Index = () => {
               Comienza tu viaje hacia una vida más saludable hoy mismo
             </p>
             <button
-              onClick={() => setShowLogin(true)}
-              className="bg-gradient-to-r from-nutrition-orange to-nutrition-orange-dark hover:from-nutrition-orange-dark hover:to-nutrition-orange text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              onClick={handleShowRegister}
+              className="bg-gradient-to-r from-nutrition-accent to-nutrition-accent-dark hover:from-nutrition-accent-dark hover:to-nutrition-accent text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               Quiero mi Cambio
             </button>
@@ -226,6 +247,7 @@ const Index = () => {
         <LoginModal
           onClose={() => setShowLogin(false)}
           onLogin={handleLogin}
+          initialMode={loginMode}
         />
       )}
     </div>
