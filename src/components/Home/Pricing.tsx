@@ -60,40 +60,35 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 ${
+              className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 border-transparent hover:border-nutrition-green-light ${
                 plan.highlighted
-                  ? 'ring-4 ring-nutrition-accent transform scale-105'
-                  : 'hover:shadow-xl border-2 border-transparent hover:border-nutrition-green-light'
+                  ? 'ring-2 ring-nutrition-accent'
+                  : ''
               }`}
             >
-              <div className={`p-8 ${plan.highlighted ? 'bg-nutrition-green' : 'bg-white'}`}>
+              <div className="p-8">
                 <div className="text-center">
-                  <h3 className={`text-2xl font-bold mb-2 ${
-                    plan.highlighted ? 'text-white' : 'text-nutrition-black'
-                  }`}>
+                  <h3 className="text-2xl font-bold mb-2 text-nutrition-black">
                     {plan.name}
                   </h3>
-                  <p className={`text-lg mb-4 ${
-                    plan.highlighted ? 'text-white opacity-90' : 'text-nutrition-gray'
-                  }`}>
+                  <p className="text-lg mb-4 text-nutrition-gray">
                     {plan.duration}
                   </p>
-                  <div className={`text-4xl font-bold mb-6 ${
-                    plan.highlighted ? 'text-white' : 'text-nutrition-green'
-                  }`}>
+                  <div className="text-4xl font-bold mb-6 text-nutrition-green">
                     {plan.price}
                   </div>
+                  {plan.highlighted && (
+                    <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
+                      Más Popular
+                    </div>
+                  )}
                 </div>
 
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
-                      <Check className={`w-5 h-5 mr-3 mt-0.5 ${
-                        plan.highlighted ? 'text-white' : 'text-nutrition-green'
-                      }`} />
-                      <span className={`text-sm ${
-                        plan.highlighted ? 'text-white' : 'text-nutrition-gray'
-                      }`}>
+                      <Check className="w-5 h-5 mr-3 mt-0.5 text-nutrition-green" />
+                      <span className="text-sm text-nutrition-gray">
                         {feature}
                       </span>
                     </li>
@@ -102,11 +97,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
 
                 <Button
                   onClick={onStartQuestionnaire}
-                  className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
-                    plan.highlighted
-                      ? 'bg-nutrition-accent hover:bg-nutrition-accent-dark text-white'
-                      : 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
-                  }`}
+                  className="w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 bg-nutrition-green hover:bg-nutrition-green-dark text-white"
                 >
                   Elegir Plan
                 </Button>

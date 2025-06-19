@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -9,9 +9,22 @@ interface HeaderProps {
   onLogin: () => void;
   onRegister: () => void;
   onLogout: () => void;
+  onNavigateToHome?: () => void;
+  onNavigateToPortfolio?: () => void;
+  onNavigateToNews?: () => void;
+  onNavigateToChangePlan?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onRegister, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  isLoggedIn, 
+  onLogin, 
+  onRegister, 
+  onLogout,
+  onNavigateToHome,
+  onNavigateToPortfolio,
+  onNavigateToNews,
+  onNavigateToChangePlan
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -33,6 +46,10 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onRegister, onLogo
     { label: 'Mis Dietas', icon: BookOpen, href: '#diets' },
     { label: 'Mis Entrenamientos', icon: Dumbbell, href: '#workouts' },
     { label: 'Calendario', icon: Calendar, href: '#calendar' },
+    { label: 'Página de Visitantes', icon: Home, action: onNavigateToHome },
+    { label: 'Portfolio', icon: Camera, action: onNavigateToPortfolio },
+    { label: 'Noticias para Ti', icon: FileText, action: onNavigateToNews },
+    { label: 'Cambiar mi Plan', icon: CreditCard, action: onNavigateToChangePlan },
   ];
 
   return (
@@ -179,7 +196,13 @@ const Header: React.FC<HeaderProps> = ({ isLoggedIn, onLogin, onRegister, onLogo
                     key={item.label}
                     href={item.href}
                     className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-nutrition-green-lighter text-nutrition-black hover:text-nutrition-green-forest transition-colors duration-200"
-                    onClick={() => setIsSidebarOpen(false)}
+                    onClick={(e) => {
+                      if (item.action) {
+                        e.preventDefault();
+                        item.action();
+                      }
+                      setIsSidebarOpen(false);
+                    }}
                   >
                     <item.icon className="w-5 h-5" />
                     <span>{item.label}</span>

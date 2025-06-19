@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
@@ -12,6 +13,11 @@ import Contact from '@/components/Home/Contact';
 import Questionnaire from '@/components/Home/Questionnaire';
 import LoginModal from '@/components/Auth/LoginModal';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
+import PortfolioView from '@/components/Dashboard/Portfolio';
+import NewsView from '@/components/Dashboard/News';
+import ChangePlan from '@/components/Dashboard/ChangePlan';
+
+type ViewType = 'home' | 'dashboard' | 'portfolio' | 'news' | 'changePlan';
 
 const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,6 +25,7 @@ const Index = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [loginMode, setLoginMode] = useState<'login' | 'register'>('login');
   const [userName, setUserName] = useState('');
+  const [currentView, setCurrentView] = useState<ViewType>('home');
 
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
@@ -36,6 +43,7 @@ const Index = () => {
     setIsLoggedIn(true);
     setUserName(email.split('@')[0]); // Use first part of email as name
     setShowLogin(false);
+    setCurrentView('dashboard');
   };
 
   const handleShowLogin = () => {
@@ -51,11 +59,44 @@ const Index = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserName('');
+    setCurrentView('home');
   };
 
-  // If logged in, show dashboard
-  if (isLoggedIn) {
+  const handleNavigateToHome = () => {
+    setCurrentView('home');
+  };
+
+  const handleNavigateToPortfolio = () => {
+    setCurrentView('portfolio');
+  };
+
+  const handleNavigateToNews = () => {
+    setCurrentView('news');
+  };
+
+  const handleNavigateToChangePlan = () => {
+    setCurrentView('changePlan');
+  };
+
+  const handleGoBackToDashboard = () => {
+    setCurrentView('dashboard');
+  };
+
+  // Render different views
+  if (isLoggedIn && currentView === 'dashboard') {
     return <ClientDashboard userName={userName} onLogout={handleLogout} />;
+  }
+
+  if (isLoggedIn && currentView === 'portfolio') {
+    return <PortfolioView onGoBack={handleGoBackToDashboard} />;
+  }
+
+  if (isLoggedIn && currentView === 'news') {
+    return <NewsView onGoBack={handleGoBackToDashboard} />;
+  }
+
+  if (isLoggedIn && currentView === 'changePlan') {
+    return <ChangePlan onGoBack={handleGoBackToDashboard} />;
   }
 
   return (
@@ -65,6 +106,10 @@ const Index = () => {
         onLogin={handleShowLogin}
         onRegister={handleShowRegister}
         onLogout={handleLogout}
+        onNavigateToHome={handleNavigateToHome}
+        onNavigateToPortfolio={handleNavigateToPortfolio}
+        onNavigateToNews={handleNavigateToNews}
+        onNavigateToChangePlan={handleNavigateToChangePlan}
       />
       
       <main className="flex-1">
