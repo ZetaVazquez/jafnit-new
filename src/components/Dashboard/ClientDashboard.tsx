@@ -8,12 +8,14 @@ import PlanRecommendationModal from './PlanRecommendationModal';
 interface ClientDashboardProps {
   userName: string;
   onLogout: () => void;
+  onDecidePlanLater: () => void;
   questionnaireResponses?: any; // Aquí vendrían las respuestas del cuestionario
 }
 
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ 
   userName, 
   onLogout,
+  onDecidePlanLater,
   questionnaireResponses 
 }) => {
   const [showRecommendationModal, setShowRecommendationModal] = useState(false);
@@ -28,6 +30,11 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({
     // Mostrar modal de recomendación cuando el usuario se registra por primera vez
     setShowRecommendationModal(true);
   }, []);
+
+  const handleDecideLater = () => {
+    setShowRecommendationModal(false);
+    onDecidePlanLater();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
@@ -200,6 +207,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({
       <PlanRecommendationModal
         isOpen={showRecommendationModal}
         onClose={() => setShowRecommendationModal(false)}
+        onDecideLater={handleDecideLater}
         recommendedPlan={recommendedPlan}
       />
     </div>

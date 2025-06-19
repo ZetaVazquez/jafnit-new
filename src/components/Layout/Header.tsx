@@ -13,6 +13,7 @@ interface HeaderProps {
   onNavigateToPortfolio?: () => void;
   onNavigateToNews?: () => void;
   onNavigateToChangePlan?: () => void;
+  onStartQuestionnaire?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -23,7 +24,8 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToHome,
   onNavigateToPortfolio,
   onNavigateToNews,
-  onNavigateToChangePlan
+  onNavigateToChangePlan,
+  onStartQuestionnaire
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -51,6 +53,15 @@ const Header: React.FC<HeaderProps> = ({
     { label: 'Noticias para Ti', icon: FileText, action: onNavigateToNews },
     { label: 'Cambiar mi Plan', icon: CreditCard, action: onNavigateToChangePlan },
   ];
+
+  const handleRegisterClick = () => {
+    if (onStartQuestionnaire) {
+      onStartQuestionnaire();
+    } else {
+      onRegister();
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <>
@@ -102,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({
                     Iniciar Sesión
                   </Button>
                   <Button
-                    onClick={onRegister}
+                    onClick={handleRegisterClick}
                     className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
                   >
                     Registrarse
@@ -149,10 +160,7 @@ const Header: React.FC<HeaderProps> = ({
                       Iniciar Sesión
                     </Button>
                     <Button
-                      onClick={() => {
-                        onRegister();
-                        setIsMenuOpen(false);
-                      }}
+                      onClick={handleRegisterClick}
                       className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
                     >
                       Registrarse

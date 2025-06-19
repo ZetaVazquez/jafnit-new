@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,12 +7,14 @@ import { Check, Star, CreditCard } from 'lucide-react';
 interface PlanRecommendationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onDecideLater: () => void;
   recommendedPlan: 'monthly' | 'quarterly';
 }
 
 const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   isOpen,
   onClose,
+  onDecideLater,
   recommendedPlan
 }) => {
   const [selectedPlan, setSelectedPlan] = useState(recommendedPlan);
@@ -125,7 +126,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
           <div className="flex space-x-4">
             <Button
               variant="outline"
-              onClick={onClose}
+              onClick={onDecideLater}
               className="flex-1 border-nutrition-green text-nutrition-green hover:bg-nutrition-green-lighter"
             >
               Decidir Más Tarde

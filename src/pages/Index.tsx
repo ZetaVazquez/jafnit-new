@@ -82,9 +82,17 @@ const Index = () => {
     setCurrentView('dashboard');
   };
 
+  const handleDecidePlanLater = () => {
+    setCurrentView('home');
+  };
+
   // Render different views
   if (isLoggedIn && currentView === 'dashboard') {
-    return <ClientDashboard userName={userName} onLogout={handleLogout} />;
+    return <ClientDashboard 
+      userName={userName} 
+      onLogout={handleLogout} 
+      onDecidePlanLater={handleDecidePlanLater}
+    />;
   }
 
   if (isLoggedIn && currentView === 'portfolio') {
@@ -110,6 +118,7 @@ const Index = () => {
         onNavigateToPortfolio={handleNavigateToPortfolio}
         onNavigateToNews={handleNavigateToNews}
         onNavigateToChangePlan={handleNavigateToChangePlan}
+        onStartQuestionnaire={handleStartQuestionnaire}
       />
       
       <main className="flex-1">
