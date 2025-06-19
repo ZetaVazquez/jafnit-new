@@ -1,15 +1,34 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Calendar, BookOpen, Dumbbell, TrendingUp, Target } from 'lucide-react';
+import PlanRecommendationModal from './PlanRecommendationModal';
 
 interface ClientDashboardProps {
   userName: string;
   onLogout: () => void;
+  questionnaireResponses?: any; // Aquí vendrían las respuestas del cuestionario
 }
 
-const ClientDashboard: React.FC<ClientDashboardProps> = ({ userName, onLogout }) => {
+const ClientDashboard: React.FC<ClientDashboardProps> = ({ 
+  userName, 
+  onLogout,
+  questionnaireResponses 
+}) => {
+  const [showRecommendationModal, setShowRecommendationModal] = useState(false);
+  const [recommendedPlan, setRecommendedPlan] = useState<'monthly' | 'quarterly'>('monthly');
+
+  useEffect(() => {
+    // Simular lógica de recomendación basada en respuestas del cuestionario
+    // En el futuro, esto se basará en las respuestas reales
+    const shouldRecommendQuarterly = Math.random() > 0.5; // Simulación
+    setRecommendedPlan(shouldRecommendQuarterly ? 'quarterly' : 'monthly');
+    
+    // Mostrar modal de recomendación cuando el usuario se registra por primera vez
+    setShowRecommendationModal(true);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
       {/* Header */}
@@ -176,6 +195,13 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ userName, onLogout })
           </CardContent>
         </Card>
       </main>
+
+      {/* Plan Recommendation Modal */}
+      <PlanRecommendationModal
+        isOpen={showRecommendationModal}
+        onClose={() => setShowRecommendationModal(false)}
+        recommendedPlan={recommendedPlan}
+      />
     </div>
   );
 };

@@ -60,11 +60,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 border-transparent hover:border-nutrition-green-light ${
-                plan.highlighted
-                  ? 'ring-2 ring-nutrition-accent'
-                  : ''
-              }`}
+              className="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 border-nutrition-green-light hover:border-nutrition-green"
             >
               <div className="p-8">
                 <div className="text-center">

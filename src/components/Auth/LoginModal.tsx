@@ -112,7 +112,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white py-2"
+              className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white py-2"
             >
               {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
             </Button>
