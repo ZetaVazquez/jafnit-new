@@ -11,54 +11,56 @@ import Pricing from '@/components/Home/Pricing';
 import BMICalculator from '@/components/Home/BMICalculator';
 import Contact from '@/components/Home/Contact';
 import Questionnaire from '@/components/Home/Questionnaire';
-import LoginModal from '@/components/Auth/LoginModal';
+import AuthModal from '@/components/Auth/AuthModal';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import PortfolioView from '@/components/Dashboard/Portfolio';
 import NewsView from '@/components/Dashboard/News';
 import ChangePlan from '@/components/Dashboard/ChangePlan';
+import { useAuth } from '@/hooks/useAuth';
 
 type ViewType = 'home' | 'dashboard' | 'portfolio' | 'news' | 'changePlan';
 
 const Index = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, signOut, loading } = useAuth();
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [loginMode, setLoginMode] = useState<'login' | 'register'>('login');
-  const [userName, setUserName] = useState('');
+  const [showAuth, setShowAuth] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [currentView, setCurrentView] = useState<ViewType>('home');
 
   const handleStartQuestionnaire = () => {
-    setShowQuestionnaire(true);
+    if (user) {
+      setShowQuestionnaire(true);
+    } else {
+      setAuthMode('register');
+      setShowAuth(true);
+    }
   };
 
   const handleQuestionnaireComplete = () => {
     setShowQuestionnaire(false);
-    setLoginMode('register');
-    setShowLogin(true);
-  };
-
-  const handleLogin = (email: string, password: string) => {
-    // Simulate login
-    console.log('Login attempt:', { email, password });
-    setIsLoggedIn(true);
-    setUserName(email.split('@')[0]); // Use first part of email as name
-    setShowLogin(false);
     setCurrentView('dashboard');
   };
 
   const handleShowLogin = () => {
-    setLoginMode('login');
-    setShowLogin(true);
+    setAuthMode('login');
+    setShowAuth(true);
   };
 
   const handleShowRegister = () => {
-    setLoginMode('register');
-    setShowLogin(true);
+    setAuthMode('register');
+    setShowAuth(true);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserName('');
+  const handleAuthSuccess = () => {
+    if (authMode === 'register') {
+      setShowQuestionnaire(true);
+    } else {
+      setCurrentView('dashboard');
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
     setCurrentView('home');
   };
 
@@ -86,31 +88,42 @@ const Index = () => {
     setCurrentView('home');
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-nutrition-green"></div>
+          <p className="mt-4 text-nutrition-gray">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Render different views
-  if (isLoggedIn && currentView === 'dashboard') {
+  if (user && currentView === 'dashboard') {
     return <ClientDashboard 
-      userName={userName} 
+      userName={user.email?.split('@')[0] || 'Usuario'} 
       onLogout={handleLogout} 
       onDecidePlanLater={handleDecidePlanLater}
     />;
   }
 
-  if (isLoggedIn && currentView === 'portfolio') {
+  if (user && currentView === 'portfolio') {
     return <PortfolioView onGoBack={handleGoBackToDashboard} />;
   }
 
-  if (isLoggedIn && currentView === 'news') {
+  if (user && currentView === 'news') {
     return <NewsView onGoBack={handleGoBackToDashboard} />;
   }
 
-  if (isLoggedIn && currentView === 'changePlan') {
+  if (user && currentView === 'changePlan') {
     return <ChangePlan onGoBack={handleGoBackToDashboard} />;
   }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header 
-        isLoggedIn={isLoggedIn} 
+        isLoggedIn={!!user} 
         onLogin={handleShowLogin}
         onRegister={handleShowRegister}
         onLogout={handleLogout}
@@ -297,11 +310,12 @@ const Index = () => {
         />
       )}
 
-      {showLogin && (
-        <LoginModal
-          onClose={() => setShowLogin(false)}
-          onLogin={handleLogin}
-          initialMode={loginMode}
+      {showAuth && (
+        <AuthModal
+          isOpen={showAuth}
+          onClose={() => setShowAuth(false)}
+          initialTab={authMode}
+          onSuccess={handleAuthSuccess}
         />
       )}
     </div>
