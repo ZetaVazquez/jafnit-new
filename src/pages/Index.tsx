@@ -16,9 +16,12 @@ import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import PortfolioView from '@/components/Dashboard/Portfolio';
 import NewsView from '@/components/Dashboard/News';
 import ChangePlan from '@/components/Dashboard/ChangePlan';
+import MyDiets from '@/components/Dashboard/MyDiets';
+import MyGoals from '@/components/Dashboard/MyGoals';
+import MyProgress from '@/components/Dashboard/MyProgress';
 import { useAuth } from '@/hooks/useAuth';
 
-type ViewType = 'home' | 'dashboard' | 'portfolio' | 'news' | 'changePlan';
+type ViewType = 'home' | 'dashboard' | 'portfolio' | 'news' | 'changePlan' | 'myDiets' | 'myGoals' | 'myProgress';
 
 const Index = () => {
   const { user, signOut, loading } = useAuth();
@@ -80,6 +83,18 @@ const Index = () => {
     setCurrentView('changePlan');
   };
 
+  const handleNavigateToMyDiets = () => {
+    setCurrentView('myDiets');
+  };
+
+  const handleNavigateToMyGoals = () => {
+    setCurrentView('myGoals');
+  };
+
+  const handleNavigateToMyProgress = () => {
+    setCurrentView('myProgress');
+  };
+
   const handleGoBackToDashboard = () => {
     setCurrentView('dashboard');
   };
@@ -105,6 +120,9 @@ const Index = () => {
       userName={user.email?.split('@')[0] || 'Usuario'} 
       onLogout={handleLogout} 
       onDecidePlanLater={handleDecidePlanLater}
+      onNavigateToMyDiets={handleNavigateToMyDiets}
+      onNavigateToMyGoals={handleNavigateToMyGoals}
+      onNavigateToMyProgress={handleNavigateToMyProgress}
     />;
   }
 
@@ -118,6 +136,18 @@ const Index = () => {
 
   if (user && currentView === 'changePlan') {
     return <ChangePlan onGoBack={handleGoBackToDashboard} />;
+  }
+
+  if (user && currentView === 'myDiets') {
+    return <MyDiets onGoBack={handleGoBackToDashboard} />;
+  }
+
+  if (user && currentView === 'myGoals') {
+    return <MyGoals onGoBack={handleGoBackToDashboard} />;
+  }
+
+  if (user && currentView === 'myProgress') {
+    return <MyProgress onGoBack={handleGoBackToDashboard} />;
   }
 
   return (

@@ -9,13 +9,19 @@ interface ClientDashboardProps {
   userName: string;
   onLogout: () => void;
   onDecidePlanLater: () => void;
-  questionnaireResponses?: any; // Aquí vendrían las respuestas del cuestionario
+  onNavigateToMyDiets: () => void;
+  onNavigateToMyGoals: () => void;
+  onNavigateToMyProgress: () => void;
+  questionnaireResponses?: any;
 }
 
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ 
   userName, 
   onLogout,
   onDecidePlanLater,
+  onNavigateToMyDiets,
+  onNavigateToMyGoals,
+  onNavigateToMyProgress,
   questionnaireResponses 
 }) => {
   const [showRecommendationModal, setShowRecommendationModal] = useState(false);
@@ -102,7 +108,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">Accede a tu plan de alimentación personalizado</p>
-              <Button className="w-full bg-nutrition-green-emerald hover:bg-nutrition-accent-dark text-white">
+              <Button 
+                onClick={onNavigateToMyDiets}
+                className="w-full bg-nutrition-green-emerald hover:bg-nutrition-accent-dark text-white"
+              >
                 Ver Plan
               </Button>
             </CardContent>
@@ -134,7 +143,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">Sigue tu evolución y resultados</p>
-              <Button className="w-full bg-nutrition-accent hover:bg-nutrition-accent-dark text-white">
+              <Button 
+                onClick={onNavigateToMyProgress}
+                className="w-full bg-nutrition-accent hover:bg-nutrition-accent-dark text-white"
+              >
                 Ver Progreso
               </Button>
             </CardContent>
@@ -166,7 +178,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">Define y alcanza tus metas</p>
-              <Button className="w-full bg-nutrition-green-forest hover:bg-nutrition-green-darker text-white">
+              <Button 
+                onClick={onNavigateToMyGoals}
+                className="w-full bg-nutrition-green-forest hover:bg-nutrition-green-darker text-white"
+              >
                 Ver Objetivos
               </Button>
             </CardContent>

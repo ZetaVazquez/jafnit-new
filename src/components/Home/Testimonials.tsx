@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { Testimonial } from '@/types';
 
@@ -52,7 +51,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {testimonials.map((testimonial) => (
             <div key={testimonial.id} className="comic-bubble">
               <div className="flex items-center mb-4">
@@ -73,15 +72,6 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
               <p className="text-gray-600 text-sm">"{testimonial.comment}"</p>
             </div>
           ))}
-        </div>
-
-        <div className="text-center">
-          <Button
-            onClick={onStartQuestionnaire}
-            className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            Quiero mi Cambio
-          </Button>
         </div>
       </div>
     </section>
