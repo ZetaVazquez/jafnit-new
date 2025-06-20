@@ -28,7 +28,7 @@ export interface Subscription {
   status: 'pending' | 'active' | 'expired' | 'cancelled';
   start_date?: string;
   end_date?: string;
-  payment_method: string;
+  payment_method?: string;
   amount: number;
   created_at: string;
   updated_at: string;
@@ -66,7 +66,7 @@ export interface DailyGoal {
   description?: string;
   target_value?: number;
   target_unit?: string;
-  is_active: boolean;
+  is_active?: boolean;
   created_at: string;
 }
 
@@ -75,7 +75,7 @@ export interface DailyProgress {
   user_id: string;
   goal_id: string;
   date: string;
-  completed: boolean;
+  completed?: boolean;
   value_achieved?: number;
   notes?: string;
   completed_at?: string;
@@ -93,5 +93,14 @@ export interface BodyMeasurement {
   hip_circumference?: number;
   notes?: string;
   measured_at: string;
+  created_at: string;
+}
+
+export interface ActivityLog {
+  id: string;
+  user_id: string;
+  activity_type: 'login' | 'logout' | 'goal_completed' | 'measurement_added' | 'diet_viewed' | 'workout_completed';
+  description?: string;
+  metadata?: any;
   created_at: string;
 }

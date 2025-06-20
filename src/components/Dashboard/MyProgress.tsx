@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,10 +68,10 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
         }
 
         // Process progress data for charts
-        const chartData = processProgressData(progressData || [], goalsData || []);
+        const chartData = processProgressData(progressData || [], (goalsData || []) as DailyGoal[]);
         
         setProgressData(chartData);
-        setGoals(goalsData || []);
+        setGoals((goalsData || []) as DailyGoal[]);
         setBodyMeasurements(measurementsData || []);
       } catch (error) {
         console.error('Error:', error);
