@@ -19,6 +19,7 @@ import MyProgress from './MyProgress';
 import MyDiets from './MyDiets';
 import MyWorkouts from './MyWorkouts';
 import UserProfile from './UserProfile';
+import MySchedule from './MySchedule';
 
 const ClientDashboard = () => {
   const { user, profile, signOut } = useAuth();
@@ -46,6 +47,10 @@ const ClientDashboard = () => {
 
   if (currentView === 'profile') {
     return <UserProfile onGoBack={() => setCurrentView('dashboard')} />;
+  }
+
+  if (currentView === 'schedule') {
+    return <MySchedule onGoBack={() => setCurrentView('dashboard')} />;
   }
 
   return (
@@ -238,7 +243,10 @@ const ClientDashboard = () => {
           </Card>
 
           {/* Schedule Card */}
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => setCurrentView('schedule')}
+          >
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
                 <Calendar className="w-5 h-5 mr-2" />
@@ -247,7 +255,7 @@ const ClientDashboard = () => {
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
-                Programa y gestiona tus citas y entrenamientos.
+                Registra tu progreso diario con un calendario editable.
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
                 Ver Agenda

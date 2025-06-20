@@ -18,7 +18,6 @@ import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   const { user, loading } = useAuth();
-  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
@@ -42,11 +41,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Header onLoginClick={() => setShowAuthModal(true)} />
+      <Header />
       
       <main>
         <section id="inicio">
-          <HeroCarousel onLoginClick={() => setShowAuthModal(true)} />
+          <HeroCarousel />
         </section>
         
         <section id="calculadora-imc">
@@ -54,14 +53,11 @@ const Index = () => {
         </section>
         
         <section id="cuestionario">
-          <Questionnaire
-            onQuestionnaireComplete={() => setShowQuestionnaire(false)}
-            onLoginRequired={() => setShowAuthModal(true)}
-          />
+          <Questionnaire />
         </section>
         
         <section id="precios">
-          <Pricing onSelectPlan={() => setShowAuthModal(true)} />
+          <Pricing />
         </section>
         
         <section id="testimonios">

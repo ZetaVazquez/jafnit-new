@@ -1,12 +1,14 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, TrendingUp, Calendar, BarChart3 } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Calendar, BarChart3, Scale } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { DailyProgress, DailyGoal, BodyMeasurement } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import BodyMeasurements from './BodyMeasurements';
 
 interface MyProgressProps {
   onGoBack: () => void;
@@ -18,6 +20,7 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
   const [bodyMeasurements, setBodyMeasurements] = useState<BodyMeasurement[]>([]);
   const [goals, setGoals] = useState<DailyGoal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showMeasurements, setShowMeasurements] = useState(false);
 
   useEffect(() => {
     const fetchProgressData = async () => {
@@ -165,6 +168,30 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
     return streak;
   }
 
+  if (showMeasurements) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+        <header className="bg-white shadow-md">
+          <div className="container mx-auto px-4 py-4">
+            <Button
+              onClick={() => setShowMeasurements(false)}
+              variant="ghost"
+              className="mb-4 text-nutrition-green hover:text-nutrition-green-dark"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver al Progreso
+            </Button>
+            <h1 className="text-3xl font-bold text-nutrition-black">Mediciones Corporales</h1>
+            <p className="text-nutrition-gray mt-2">Gestiona tus mediciones y progreso físico</p>
+          </div>
+        </header>
+        <main className="container mx-auto px-4 py-8">
+          <BodyMeasurements onClose={() => setShowMeasurements(false)} />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
       {/* Header */}
@@ -186,7 +213,7 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
       {/* Content */}
       <main className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="py-6 text-center">
               <TrendingUp className="w-8 h-8 text-nutrition-green mx-auto mb-2" />
@@ -205,15 +232,39 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => setShowMeasurements(true)}
+          >
             <CardContent className="py-6 text-center">
-              <Calendar className="w-8 h-8 text-nutrition-green-sage mx-auto mb-2" />
+              <Scale className="w-8 h-8 text-nutrition-green-sage mx-auto mb-2" />
               <div className="text-2xl font-bold text-nutrition-black">
                 {latestMeasurement?.weight || '--'}
               </div>
               <div className="text-sm text-nutrition-gray">Peso actual (kg)</div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardContent className="py-6 text-center">
+              <Calendar className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-nutrition-black">
+                {bodyMeasurements.length}
+              </div>
+              <div className="text-sm text-nutrition-gray">Mediciones registradas</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Action Button */}
+        <div className="mb-8">
+          <Button 
+            onClick={() => setShowMeasurements(true)}
+            className="bg-nutrition-green hover:bg-nutrition-green-dark"
+          >
+            <Scale className="w-4 h-4 mr-2" />
+            Gestionar Mediciones
+          </Button>
         </div>
 
         {/* Progress Chart */}
