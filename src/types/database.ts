@@ -36,6 +36,24 @@ export interface Subscription {
   updated_at: string;
 }
 
+export interface PendingPayment {
+  id: string;
+  user_id: string;
+  plan_type: 'monthly' | 'quarterly';
+  amount: number;
+  payment_method: string;
+  payment_reference?: string;
+  receipt_url?: string;
+  notes?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+  updated_at: string;
+  profiles?: {
+    name: string;
+    email: string;
+  };
+}
+
 export interface DietPlan {
   id: string;
   user_id: string;

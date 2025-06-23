@@ -8,22 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ArrowLeft, Check, X, Eye, DollarSign } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-interface PendingPayment {
-  id: string;
-  user_id: string;
-  plan_type: string;
-  amount: number;
-  payment_reference: string;
-  receipt_url: string;
-  notes: string;
-  status: string;
-  created_at: string;
-  profiles: {
-    name: string;
-    email: string;
-  };
-}
+import { PendingPayment } from '@/types/database';
 
 interface AdminPendingPaymentsProps {
   onGoBack: () => void;
@@ -54,7 +39,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPendingPayments(data || []);
+      setPendingPayments(data as PendingPayment[] || []);
     } catch (error) {
       console.error('Error fetching pending payments:', error);
       toast({
@@ -99,7 +84,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
         .insert({
           admin_id: (await supabase.auth.getUser()).data.user?.id,
           amount: payment.amount,
-          description: `Pago ${payment.plan_type} - ${payment.profiles.name}`,
+          description: `Pago ${payment.plan_type} - ${payment.profiles?.name}`,
           earning_date: new Date().toISOString().split('T')[0]
         });
 
@@ -115,7 +100,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
 
       toast({
         title: "Pago aprobado",
-        description: `Suscripción activada para ${payment.profiles.name}`,
+        description: `Suscripción activada para ${payment.profiles?.name}`,
       });
 
       fetchPendingPayments();
@@ -140,7 +125,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
 
       toast({
         title: "Pago rechazado",
-        description: `Pago rechazado para ${payment.profiles.name}`,
+        description: `Pago rechazado para ${payment.profiles?.name}`,
       });
 
       fetchPendingPayments();
