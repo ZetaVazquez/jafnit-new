@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,7 +38,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPendingPayments(data || []);
+      setPendingPayments((data || []) as PendingPayment[]);
     } catch (error) {
       console.error('Error fetching pending payments:', error);
       toast({
