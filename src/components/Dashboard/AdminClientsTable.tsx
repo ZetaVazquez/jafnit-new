@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Search, Trash2, Eye } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ArrowLeft, Search, Trash2, Eye, Edit } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -17,6 +18,7 @@ interface Client {
   plan_type: string;
   end_date: string | null;
   created_at: string;
+  subscription_id?: string;
 }
 
 interface AdminClientsTableProps {
@@ -28,6 +30,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
   const [filteredClients, setFilteredClients] = useState<Client[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [editingPlan, setEditingPlan] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -44,6 +47,9 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
   const fetchClients = async () => {
     try {
+      // Primero actualizar suscripciones expiradas
+      await supabase.rpc('update_expired_subscriptions');
+
       const { data, error } = await supabase
         .from('profiles')
         .select(`
@@ -52,13 +58,15 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
           email,
           created_at,
           subscriptions (
+            id,
             status,
             plan_type,
             end_date
           )
         `)
         .neq('email', 'josefiguenu@gmail.com')
-        .neq('email', 'consultajafn@gmail.com');
+        .neq('email', 'consultajafn@gmail.com')
+        .neq('email', 'zaiidav347@gmail.com');
 
       if (error) throw error;
 
@@ -69,7 +77,8 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         created_at: profile.created_at,
         subscription_status: profile.subscriptions?.[0]?.status || 'inactive',
         plan_type: profile.subscriptions?.[0]?.plan_type || 'none',
-        end_date: profile.subscriptions?.[0]?.end_date || null
+        end_date: profile.subscriptions?.[0]?.end_date || null,
+        subscription_id: profile.subscriptions?.[0]?.id || null
       })) || [];
 
       setClients(clientsData);
@@ -82,6 +91,83 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateClientPlan = async (clientId: string, planType: string) => {
+    try {
+      const client = clients.find(c => c.id === clientId);
+      if (!client) return;
+
+      if (planType === 'none') {
+        // Eliminar suscripción existente
+        if (client.subscription_id) {
+          const { error } = await supabase
+            .from('subscriptions')
+            .delete()
+            .eq('id', client.subscription_id);
+
+          if (error) throw error;
+        }
+      } else {
+        // Calcular fechas
+        const startDate = new Date();
+        const endDate = new Date();
+        const amount = planType === 'monthly' ? 75 : 210;
+        
+        if (planType === 'monthly') {
+          endDate.setMonth(endDate.getMonth() + 1);
+        } else if (planType === 'quarterly') {
+          endDate.setMonth(endDate.getMonth() + 3);
+        }
+
+        if (client.subscription_id) {
+          // Actualizar suscripción existente
+          const { error } = await supabase
+            .from('subscriptions')
+            .update({
+              plan_type: planType,
+              status: 'active',
+              start_date: startDate.toISOString(),
+              end_date: endDate.toISOString(),
+              amount: amount,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', client.subscription_id);
+
+          if (error) throw error;
+        } else {
+          // Crear nueva suscripción
+          const { error } = await supabase
+            .from('subscriptions')
+            .insert({
+              user_id: clientId,
+              plan_type: planType,
+              status: 'active',
+              start_date: startDate.toISOString(),
+              end_date: endDate.toISOString(),
+              amount: amount,
+              payment_method: 'manual'
+            });
+
+          if (error) throw error;
+        }
+      }
+
+      toast({
+        title: "Plan actualizado",
+        description: `El plan del cliente ha sido ${planType === 'none' ? 'eliminado' : 'actualizado'} correctamente.`,
+      });
+
+      fetchClients(); // Refrescar la lista
+      setEditingPlan(null);
+    } catch (error) {
+      console.error('Error updating plan:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el plan del cliente.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -100,7 +186,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         description: `${clientName} ha sido eliminado exitosamente.`,
       });
 
-      fetchClients(); // Refresh the list
+      fetchClients();
     } catch (error) {
       console.error('Error deleting client:', error);
       toast({
@@ -119,6 +205,17 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         return 'bg-red-100 text-red-800';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getPlanColor = (planType: string) => {
+    switch (planType) {
+      case 'monthly':
+        return 'bg-blue-100 text-blue-800';
+      case 'quarterly':
+        return 'bg-purple-100 text-purple-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -187,9 +284,36 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
                     <TableCell className="font-medium">{client.name}</TableCell>
                     <TableCell>{client.email}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">
-                        {client.plan_type === 'none' ? 'Sin plan' : client.plan_type}
-                      </Badge>
+                      {editingPlan === client.id ? (
+                        <Select
+                          defaultValue={client.plan_type === 'none' ? 'none' : client.plan_type}
+                          onValueChange={(value) => updateClientPlan(client.id, value)}
+                        >
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">Sin plan</SelectItem>
+                            <SelectItem value="monthly">Mensual</SelectItem>
+                            <SelectItem value="quarterly">Trimestral</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <Badge className={getPlanColor(client.plan_type)}>
+                            {client.plan_type === 'none' ? 'Sin plan' : 
+                             client.plan_type === 'monthly' ? 'Mensual' : 
+                             client.plan_type === 'quarterly' ? 'Trimestral' : 'Sin plan'}
+                          </Badge>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setEditingPlan(client.id)}
+                          >
+                            <Edit className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Badge className={getStatusColor(client.subscription_status)}>

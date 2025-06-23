@@ -466,12 +466,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_user_subscription_status: {
+        Args: { user_uuid: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _user_id: string
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      update_expired_subscriptions: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {

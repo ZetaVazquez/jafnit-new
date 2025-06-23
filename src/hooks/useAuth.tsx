@@ -11,10 +11,13 @@ interface AuthContextType {
   userRole: string | null;
   isAdmin: boolean;
   loading: boolean;
+  subscriptionStatus: string;
+  hasActiveSubscription: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
+  refreshSubscriptionStatus: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,9 +27,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string>('inactive');
   const [loading, setLoading] = useState(true);
 
   const isAdmin = userRole === 'admin';
+  const hasActiveSubscription = subscriptionStatus === 'active';
+
+  const refreshSubscriptionStatus = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .rpc('get_user_subscription_status', { user_uuid: user.id });
+
+      if (error) {
+        console.error('Error checking subscription:', error);
+        setSubscriptionStatus('inactive');
+      } else {
+        setSubscriptionStatus(data || 'inactive');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubscriptionStatus('inactive');
+    }
+  };
 
   useEffect(() => {
     // Set up auth state listener
@@ -66,6 +90,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               } else {
                 setUserRole(roleData?.role || 'user');
               }
+
+              // Fetch subscription status (only for non-admin users)
+              const adminEmails = ['josefiguenu@gmail.com', 'consultajafn@gmail.com', 'zaiidav347@gmail.com'];
+              if (!adminEmails.includes(session.user.email || '')) {
+                await refreshSubscriptionStatus();
+              } else {
+                setSubscriptionStatus('active'); // Admins always have active status
+              }
             } catch (error) {
               console.error('Error in profile/role fetch:', error);
             }
@@ -73,6 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           setProfile(null);
           setUserRole(null);
+          setSubscriptionStatus('inactive');
         }
         
         setLoading(false);
@@ -142,10 +175,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       userRole,
       isAdmin,
       loading,
+      subscriptionStatus,
+      hasActiveSubscription,
       signUp,
       signIn,
       signOut,
-      updateProfile
+      updateProfile,
+      refreshSubscriptionStatus
     }}>
       {children}
     </AuthContext.Provider>
