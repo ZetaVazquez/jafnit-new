@@ -19,10 +19,37 @@ import { Toaster } from "@/components/ui/toaster";
 const Index = () => {
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   useEffect(() => {
     console.log("User state changed:", { user: !!user, loading });
   }, [user, loading]);
+
+  const handleLogin = () => {
+    setAuthMode('login');
+    setShowAuthModal(true);
+  };
+
+  const handleRegister = () => {
+    setAuthMode('register');
+    setShowAuthModal(true);
+  };
+
+  const handleStartQuestionnaire = () => {
+    setShowQuestionnaire(true);
+  };
+
+  const handleQuestionnaireComplete = () => {
+    setShowQuestionnaire(false);
+    // Optionally show auth modal after questionnaire
+    setAuthMode('register');
+    setShowAuthModal(true);
+  };
+
+  const handleQuestionnaireClose = () => {
+    setShowQuestionnaire(false);
+  };
 
   if (loading) {
     return (
@@ -39,29 +66,39 @@ const Index = () => {
     return <ClientDashboard />;
   }
 
+  if (showQuestionnaire) {
+    return (
+      <Questionnaire 
+        onComplete={handleQuestionnaireComplete}
+        onClose={handleQuestionnaireClose}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header 
+        isLoggedIn={false}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        onLogout={() => {}}
+      />
       
       <main>
         <section id="inicio">
-          <HeroCarousel />
+          <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
         </section>
         
         <section id="calculadora-imc">
           <BMICalculator />
         </section>
         
-        <section id="cuestionario">
-          <Questionnaire />
-        </section>
-        
         <section id="precios">
-          <Pricing />
+          <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
         </section>
         
         <section id="testimonios">
-          <Testimonials />
+          <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
         </section>
         
         <section id="portfolio">

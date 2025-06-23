@@ -60,7 +60,6 @@ const MySchedule: React.FC<MyScheduleProps> = ({ onGoBack }) => {
 
   const fetchDayEntries = async () => {
     try {
-      // Como no tenemos una tabla específica, vamos a usar activity_logs para almacenar las entradas del calendario
       const { data, error } = await supabase
         .from('activity_logs')
         .select('*')
@@ -75,14 +74,18 @@ const MySchedule: React.FC<MyScheduleProps> = ({ onGoBack }) => {
 
       const entriesMap: Record<string, DayEntry> = {};
       data?.forEach(log => {
-        if (log.metadata && log.metadata.date) {
-          entriesMap[log.metadata.date] = {
-            date: log.metadata.date,
-            workout_quality: log.metadata.workout_quality,
-            diet_quality: log.metadata.diet_quality,
-            mood: log.metadata.mood,
-            notes: log.metadata.notes || ''
-          };
+        // Type guard to check if metadata is an object with the expected properties
+        if (log.metadata && typeof log.metadata === 'object' && !Array.isArray(log.metadata)) {
+          const metadata = log.metadata as Record<string, any>;
+          if (metadata.date) {
+            entriesMap[metadata.date] = {
+              date: metadata.date,
+              workout_quality: metadata.workout_quality,
+              diet_quality: metadata.diet_quality,
+              mood: metadata.mood,
+              notes: metadata.notes || ''
+            };
+          }
         }
       });
 
