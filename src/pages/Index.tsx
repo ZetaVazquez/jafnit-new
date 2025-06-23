@@ -4,6 +4,8 @@ import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import HeroCarousel from "@/components/Home/HeroCarousel";
+import AboutUs from "@/components/Home/AboutUs";
+import Services from "@/components/Home/Services";
 import Pricing from "@/components/Home/Pricing";
 import Testimonials from "@/components/Home/Testimonials";
 import FAQ from "@/components/Home/FAQ";
@@ -14,6 +16,7 @@ import News from "@/components/Home/News";
 import Questionnaire from "@/components/Home/Questionnaire";
 import ClientDashboard from "@/components/Dashboard/ClientDashboard";
 import AuthModal from "@/components/Auth/AuthModal";
+import PlanRecommendationModal from "@/components/Dashboard/PlanRecommendationModal";
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
@@ -21,10 +24,25 @@ const Index = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [currentView, setCurrentView] = useState<'public' | 'dashboard'>('public');
+  const [showPlanModal, setShowPlanModal] = useState(false);
+  const [hasShownPlanModal, setHasShownPlanModal] = useState(false);
 
   useEffect(() => {
     console.log("User state changed:", { user: !!user, loading });
-  }, [user, loading]);
+    
+    // Show plan modal only once when user logs in
+    if (user && !hasShownPlanModal) {
+      setShowPlanModal(true);
+      setHasShownPlanModal(true);
+      setCurrentView('dashboard');
+    } else if (user) {
+      setCurrentView('dashboard');
+    } else {
+      setCurrentView('public');
+      setHasShownPlanModal(false);
+    }
+  }, [user, loading, hasShownPlanModal]);
 
   const handleLogin = () => {
     setAuthMode('login');
@@ -42,13 +60,25 @@ const Index = () => {
 
   const handleQuestionnaireComplete = () => {
     setShowQuestionnaire(false);
-    // Optionally show auth modal after questionnaire
     setAuthMode('register');
     setShowAuthModal(true);
   };
 
   const handleQuestionnaireClose = () => {
     setShowQuestionnaire(false);
+  };
+
+  const handleNavigateToHome = () => {
+    setCurrentView('public');
+  };
+
+  const handleNavigateToDashboard = () => {
+    setCurrentView('dashboard');
+  };
+
+  const handleLogout = () => {
+    setCurrentView('public');
+    setHasShownPlanModal(false);
   };
 
   if (loading) {
@@ -62,10 +92,6 @@ const Index = () => {
     );
   }
 
-  if (user) {
-    return <ClientDashboard />;
-  }
-
   if (showQuestionnaire) {
     return (
       <Questionnaire 
@@ -75,18 +101,46 @@ const Index = () => {
     );
   }
 
+  // Show dashboard view for logged-in users
+  if (user && currentView === 'dashboard') {
+    return (
+      <>
+        <ClientDashboard 
+          onNavigateToHome={handleNavigateToHome}
+          onLogout={handleLogout}
+        />
+        <PlanRecommendationModal
+          isOpen={showPlanModal}
+          onClose={() => setShowPlanModal(false)}
+          onDecideLater={() => setShowPlanModal(false)}
+          recommendedPlan="quarterly"
+        />
+      </>
+    );
+  }
+
+  // Show public view
   return (
     <div className="min-h-screen">
       <Header 
-        isLoggedIn={false}
+        isLoggedIn={!!user}
         onLogin={handleLogin}
         onRegister={handleRegister}
-        onLogout={() => {}}
+        onLogout={handleLogout}
+        onNavigateToDashboard={user ? handleNavigateToDashboard : undefined}
       />
       
       <main>
         <section id="inicio">
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
+        </section>
+        
+        <section id="sobre-nosotros">
+          <AboutUs />
+        </section>
+        
+        <section id="servicios">
+          <Services />
         </section>
         
         <section id="calculadora-imc">

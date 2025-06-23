@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,9 @@ import {
   Apple, 
   Dumbbell,
   LogOut,
-  Bell
+  Bell,
+  MessageCircle,
+  Home
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import MyGoals from './MyGoals';
@@ -21,12 +22,24 @@ import MyWorkouts from './MyWorkouts';
 import UserProfile from './UserProfile';
 import MySchedule from './MySchedule';
 
-const ClientDashboard = () => {
+interface ClientDashboardProps {
+  onNavigateToHome?: () => void;
+  onLogout?: () => void;
+}
+
+const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onLogout }) => {
   const { user, profile, signOut } = useAuth();
   const [currentView, setCurrentView] = useState<string>('dashboard');
 
   const handleSignOut = async () => {
     await signOut();
+    if (onLogout) {
+      onLogout();
+    }
+  };
+
+  const handleChatWithTrainer = () => {
+    alert('Abriendo chat con tu entrenador personal...');
   };
 
   if (currentView === 'goals') {
@@ -77,9 +90,33 @@ const ClientDashboard = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={handleChatWithTrainer}
+                className="text-nutrition-green hover:bg-nutrition-green-lighter"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Chat
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={handleChatWithTrainer}
+              >
                 <Bell className="w-4 h-4" />
               </Button>
+              {onNavigateToHome && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={onNavigateToHome}
+                  className="text-nutrition-green border-nutrition-green hover:bg-nutrition-green hover:text-white"
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Página Principal
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="sm"

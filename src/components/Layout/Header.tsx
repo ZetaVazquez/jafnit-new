@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard, Bell, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -14,6 +14,7 @@ interface HeaderProps {
   onNavigateToNews?: () => void;
   onNavigateToChangePlan?: () => void;
   onStartQuestionnaire?: () => void;
+  onNavigateToDashboard?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -25,21 +26,22 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToPortfolio,
   onNavigateToNews,
   onNavigateToChangePlan,
-  onStartQuestionnaire
+  onStartQuestionnaire,
+  onNavigateToDashboard
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigationItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'Sobre Nosotros', href: '#about' },
-    { label: 'Servicios', href: '#services' },
+    { label: 'Inicio', href: '#inicio' },
+    { label: 'Sobre Nosotros', href: '#sobre-nosotros' },
+    { label: 'Servicios', href: '#servicios' },
     { label: 'Portfolio', href: '#portfolio' },
-    { label: 'Noticias', href: '#news' },
-    { label: 'Opiniones', href: '#testimonials' },
+    { label: 'Noticias', href: '#noticias' },
+    { label: 'Opiniones', href: '#testimonios' },
     { label: 'FAQ', href: '#faq' },
-    { label: 'Precios', href: '#pricing' },
-    { label: 'Contacto', href: '#contact' },
+    { label: 'Precios', href: '#precios' },
+    { label: 'Contacto', href: '#contacto' },
   ];
 
   const sidebarItems = [
@@ -63,6 +65,11 @@ const Header: React.FC<HeaderProps> = ({
     setIsMenuOpen(false);
   };
 
+  const handleChatWithTrainer = () => {
+    // Simulamos abrir chat con entrenador
+    alert('Abriendo chat con tu entrenador personal...');
+  };
+
   return (
     <>
       <header className="bg-white shadow-md sticky top-0 z-50">
@@ -70,7 +77,6 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-between h-16">
             {/* Logo and Brand */}
             <div className="flex items-center space-x-3">
-              {/* Logo */}
               <div className="w-10 h-10 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">JA</span>
               </div>
@@ -95,14 +101,60 @@ const Header: React.FC<HeaderProps> = ({
             {/* User Actions */}
             <div className="flex items-center space-x-3">
               {isLoggedIn ? (
-                <Button
-                  onClick={() => setIsSidebarOpen(true)}
-                  variant="outline"
-                  className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
-                >
-                  <User className="w-4 h-4" />
-                  <span>Mi Cuenta</span>
-                </Button>
+                <>
+                  {/* Chat with Trainer Button */}
+                  <Button
+                    onClick={handleChatWithTrainer}
+                    variant="ghost"
+                    size="sm"
+                    className="hidden lg:flex items-center space-x-2 text-nutrition-green-emerald hover:bg-nutrition-green-lighter"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat</span>
+                  </Button>
+                  
+                  {/* Notifications */}
+                  <Button
+                    onClick={handleChatWithTrainer}
+                    variant="ghost"
+                    size="sm"
+                    className="hidden lg:flex"
+                  >
+                    <Bell className="w-4 h-4" />
+                  </Button>
+                  
+                  {/* Back to Public Page */}
+                  <Button
+                    onClick={onNavigateToHome}
+                    variant="outline"
+                    size="sm"
+                    className="hidden lg:flex items-center space-x-2 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                  >
+                    <Home className="w-4 h-4" />
+                    <span>Página Principal</span>
+                  </Button>
+                  
+                  {/* My Account Button */}
+                  {onNavigateToDashboard && (
+                    <Button
+                      onClick={onNavigateToDashboard}
+                      variant="outline"
+                      className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                    >
+                      <User className="w-4 h-4" />
+                      <span>Mi Cuenta</span>
+                    </Button>
+                  )}
+                  
+                  <Button
+                    onClick={() => setIsSidebarOpen(true)}
+                    variant="outline"
+                    className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                  >
+                    <Settings className="w-4 h-4" />
+                    <span>Configuración</span>
+                  </Button>
+                </>
               ) : (
                 <div className="hidden lg:flex items-center space-x-2">
                   <Button
@@ -147,7 +199,56 @@ const Header: React.FC<HeaderProps> = ({
                     {item.label}
                   </a>
                 ))}
-                {!isLoggedIn && (
+                
+                {isLoggedIn ? (
+                  <div className="px-4 mt-4 space-y-2">
+                    <Button
+                      onClick={() => {
+                        handleChatWithTrainer();
+                        setIsMenuOpen(false);
+                      }}
+                      variant="outline"
+                      className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Chat con Entrenador
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        onNavigateToHome?.();
+                        setIsMenuOpen(false);
+                      }}
+                      variant="outline"
+                      className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                    >
+                      <Home className="w-4 h-4 mr-2" />
+                      Página Principal
+                    </Button>
+                    {onNavigateToDashboard && (
+                      <Button
+                        onClick={() => {
+                          onNavigateToDashboard();
+                          setIsMenuOpen(false);
+                        }}
+                        variant="outline"
+                        className="w-full border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                      >
+                        <User className="w-4 h-4 mr-2" />
+                        Mi Cuenta
+                      </Button>
+                    )}
+                    <Button
+                      onClick={() => {
+                        setIsSidebarOpen(true);
+                        setIsMenuOpen(false);
+                      }}
+                      variant="outline"
+                      className="w-full border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                    >
+                      Configuración
+                    </Button>
+                  </div>
+                ) : (
                   <div className="px-4 mt-4 space-y-2">
                     <Button
                       onClick={() => {
@@ -167,18 +268,6 @@ const Header: React.FC<HeaderProps> = ({
                     </Button>
                   </div>
                 )}
-                {isLoggedIn && (
-                  <Button
-                    onClick={() => {
-                      setIsSidebarOpen(true);
-                      setIsMenuOpen(false);
-                    }}
-                    variant="outline"
-                    className="mx-4 mt-4 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white w-full"
-                  >
-                    Mi Cuenta
-                  </Button>
-                )}
               </nav>
             </div>
           )}
@@ -192,7 +281,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-right">
             <div className="p-6">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xl font-bold text-nutrition-green-emerald">Mi Cuenta</h2>
+                <h2 className="text-xl font-bold text-nutrition-green-emerald">Configuración</h2>
                 <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
                   <X className="w-5 h-5" />
                 </Button>
