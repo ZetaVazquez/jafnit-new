@@ -26,19 +26,35 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
 
   const fetchPendingPayments = async () => {
     try {
-      const { data, error } = await supabase
+      // First get pending payments
+      const { data: paymentsData, error: paymentsError } = await supabase
         .from('pending_payments')
-        .select(`
-          *,
-          profiles:user_id (
-            name,
-            email
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setPendingPayments((data || []) as PendingPayment[]);
+      if (paymentsError) throw paymentsError;
+
+      // Then get profiles for each payment
+      const paymentsWithProfiles = await Promise.all(
+        (paymentsData || []).map(async (payment) => {
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, name, email, created_at, updated_at')
+            .eq('id', payment.user_id)
+            .maybeSingle();
+
+          if (profileError) {
+            console.error('Error fetching profile:', profileError);
+          }
+
+          return {
+            ...payment,
+            profiles: profileData || null
+          } as PendingPayment;
+        })
+      );
+
+      setPendingPayments(paymentsWithProfiles);
     } catch (error) {
       console.error('Error fetching pending payments:', error);
       toast({
