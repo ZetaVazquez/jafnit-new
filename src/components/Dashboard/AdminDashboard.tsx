@@ -4,31 +4,28 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
-  User, 
-  Target, 
-  TrendingUp, 
-  Calendar, 
+  Users, 
   Apple, 
   Dumbbell,
   LogOut,
   Bell,
   MessageCircle,
-  Home
+  Home,
+  TrendingUp,
+  DollarSign
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import MyGoals from './MyGoals';
-import MyProgress from './MyProgress';
-import MyDiets from './MyDiets';
-import MyWorkouts from './MyWorkouts';
-import UserProfile from './UserProfile';
-import MySchedule from './MySchedule';
+import AdminClientsTable from './AdminClientsTable';
+import AdminDietManager from './AdminDietManager';
+import AdminWorkoutManager from './AdminWorkoutManager';
+import AdminEarnings from './AdminEarnings';
 
-interface ClientDashboardProps {
+interface AdminDashboardProps {
   onNavigateToHome?: () => void;
   onLogout?: () => void;
 }
 
-const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onLogout }) => {
+const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
   const { user, profile, signOut } = useAuth();
   const [currentView, setCurrentView] = useState<string>('dashboard');
 
@@ -39,32 +36,24 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     }
   };
 
-  const handleChatWithTrainer = () => {
-    alert('Abriendo chat con tu entrenador personal...');
+  const handleChatWithClients = () => {
+    alert('Abriendo chat con tus clientes...');
   };
 
-  if (currentView === 'goals') {
-    return <MyGoals onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'progress') {
-    return <MyProgress onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'clients') {
+    return <AdminClientsTable onGoBack={() => setCurrentView('dashboard')} />;
   }
 
   if (currentView === 'diets') {
-    return <MyDiets onGoBack={() => setCurrentView('dashboard')} />;
+    return <AdminDietManager onGoBack={() => setCurrentView('dashboard')} />;
   }
 
   if (currentView === 'workouts') {
-    return <MyWorkouts onGoBack={() => setCurrentView('dashboard')} />;
+    return <AdminWorkoutManager onGoBack={() => setCurrentView('dashboard')} />;
   }
 
-  if (currentView === 'profile') {
-    return <UserProfile onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'schedule') {
-    return <MySchedule onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'earnings') {
+    return <AdminEarnings onGoBack={() => setCurrentView('dashboard')} />;
   }
 
   return (
@@ -76,34 +65,33 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             <div className="flex items-center space-x-4">
               <Avatar 
                 className="w-12 h-12 cursor-pointer hover:ring-2 hover:ring-nutrition-green transition-all"
-                onClick={() => setCurrentView('profile')}
               >
                 <AvatarImage src={profile?.profile_image_url} />
                 <AvatarFallback className="bg-nutrition-green text-white">
-                  {profile?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  JA
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold text-nutrition-black">
-                  ¡Hola, {profile?.name || 'Usuario'}!
+                  ¡Hola, José Antonio!
                 </h1>
-                <p className="text-nutrition-gray">Bienvenido a tu panel de control</p>
+                <p className="text-nutrition-gray">Panel de Administrador</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={handleChatWithTrainer}
+                onClick={handleChatWithClients}
                 className="text-nutrition-green hover:bg-nutrition-green-lighter"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Chat
+                Chat con Clientes
               </Button>
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={handleChatWithTrainer}
+                onClick={handleChatWithClients}
               >
                 <Bell className="w-4 h-4" />
               </Button>
@@ -135,15 +123,15 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald text-white">
             <CardContent className="py-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Objetivos de Hoy</p>
-                  <p className="text-2xl font-bold">3/4</p>
+                  <p className="text-white/80 text-sm">Clientes Activos</p>
+                  <p className="text-2xl font-bold">12</p>
                 </div>
-                <Target className="w-8 h-8 text-white/80" />
+                <Users className="w-8 h-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
@@ -152,10 +140,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             <CardContent className="py-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Entrenamientos</p>
-                  <p className="text-2xl font-bold">12</p>
+                  <p className="text-white/80 text-sm">Dietas Asignadas</p>
+                  <p className="text-2xl font-bold">8</p>
                 </div>
-                <Dumbbell className="w-8 h-8 text-white/80" />
+                <Apple className="w-8 h-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
@@ -164,81 +152,51 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             <CardContent className="py-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Días Activos</p>
-                  <p className="text-2xl font-bold">7</p>
+                  <p className="text-white/80 text-sm">Entrenamientos</p>
+                  <p className="text-2xl font-bold">15</p>
                 </div>
-                <TrendingUp className="w-8 h-8 text-white/80" />
+                <Dumbbell className="w-8 h-8 text-white/80" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+            <CardContent className="py-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white/80 text-sm">Ingresos Mes</p>
+                  <p className="text-2xl font-bold">€2,340</p>
+                </div>
+                <DollarSign className="w-8 h-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Profile Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Clients Management Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('profile')}
+            onClick={() => setCurrentView('clients')}
           >
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
-                <User className="w-5 h-5 mr-2" />
-                Mi Perfil
+                <Users className="w-5 h-5 mr-2" />
+                Gestión de Clientes
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
-                Gestiona tu información personal, configuraciones y preferencias.
+                Ver progreso de clientes, gestionar suscripciones y eliminar usuarios.
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Perfil
+                Ver Clientes
               </Button>
             </CardContent>
           </Card>
 
-          {/* Goals Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('goals')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <Target className="w-5 h-5 mr-2" />
-                Mis Objetivos
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Sigue y completa tus objetivos diarios de salud y bienestar.
-              </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Objetivos
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Progress Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('progress')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <TrendingUp className="w-5 h-5 mr-2" />
-                Mi Progreso
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Visualiza tu evolución y logros a lo largo del tiempo.
-              </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Progreso
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Diet Card */}
+          {/* Diet Management Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('diets')}
@@ -246,20 +204,20 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
                 <Apple className="w-5 h-5 mr-2" />
-                Mi Plan Nutricional
+                Sus Dietas
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
-                Accede a tu plan de alimentación personalizado y recetas.
+                Crear y asignar planes nutricionales personalizados para cada cliente.
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Plan
+                Gestionar Dietas
               </Button>
             </CardContent>
           </Card>
 
-          {/* Workouts Card */}
+          {/* Workout Management Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('workouts')}
@@ -267,36 +225,36 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
                 <Dumbbell className="w-5 h-5 mr-2" />
-                Mis Entrenamientos
+                Sus Entrenamientos
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
-                Descubre y sigue tus rutinas de ejercicios personalizadas.
+                Diseñar y asignar rutinas de ejercicios adaptadas a cada cliente.
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Entrenamientos
+                Gestionar Entrenamientos
               </Button>
             </CardContent>
           </Card>
 
-          {/* Schedule Card */}
+          {/* Earnings Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('schedule')}
+            onClick={() => setCurrentView('earnings')}
           >
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
-                <Calendar className="w-5 h-5 mr-2" />
-                Mi Agenda
+                <TrendingUp className="w-5 h-5 mr-2" />
+                Ganancias
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
-                Registra tu progreso diario con un calendario editable.
+                Revisar ingresos mensuales y anuales, estadísticas financieras.
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Agenda
+                Ver Ganancias
               </Button>
             </CardContent>
           </Card>
@@ -306,4 +264,4 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   );
 };
 
-export default ClientDashboard;
+export default AdminDashboard;

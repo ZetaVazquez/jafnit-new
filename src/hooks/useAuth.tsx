@@ -8,6 +8,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
+  userRole: string | null;
+  isAdmin: boolean;
   loading: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -21,7 +23,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const isAdmin = userRole === 'admin';
 
   useEffect(() => {
     // Set up auth state listener
@@ -45,12 +50,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               } else {
                 setProfile(profileData);
               }
+
+              // Fetch user role
+              const { data: roleData, error: roleError } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', session.user.id)
+                .single();
+
+              if (roleError && roleError.code !== 'PGRST116') {
+                console.error('Error fetching role:', roleError);
+                setUserRole('user'); // Default to user role
+              } else {
+                setUserRole(roleData?.role || 'user');
+              }
             } catch (error) {
-              console.error('Error in profile fetch:', error);
+              console.error('Error in profile/role fetch:', error);
             }
           }, 0);
         } else {
           setProfile(null);
+          setUserRole(null);
         }
         
         setLoading(false);
@@ -117,6 +137,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user,
       session,
       profile,
+      userRole,
+      isAdmin,
       loading,
       signUp,
       signIn,

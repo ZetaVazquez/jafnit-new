@@ -44,6 +44,33 @@ export type Database = {
           },
         ]
       }
+      admin_earnings: {
+        Row: {
+          admin_id: string
+          amount: number
+          created_at: string
+          description: string | null
+          earning_date: string
+          id: string
+        }
+        Insert: {
+          admin_id: string
+          amount: number
+          created_at?: string
+          description?: string | null
+          earning_date?: string
+          id?: string
+        }
+        Update: {
+          admin_id?: string
+          amount?: number
+          created_at?: string
+          description?: string | null
+          earning_date?: string
+          id?: string
+        }
+        Relationships: []
+      }
       body_measurements: {
         Row: {
           body_fat_percentage: number | null
@@ -191,6 +218,7 @@ export type Database = {
       }
       diet_plans: {
         Row: {
+          assigned_to: string | null
           calories_target: number | null
           created_at: string
           created_by: string | null
@@ -202,6 +230,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assigned_to?: string | null
           calories_target?: number | null
           created_at?: string
           created_by?: string | null
@@ -213,6 +242,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assigned_to?: string | null
           calories_target?: number | null
           created_at?: string
           created_by?: string | null
@@ -363,8 +393,30 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       workout_plans: {
         Row: {
+          assigned_to: string | null
           created_at: string
           created_by: string | null
           description: string | null
@@ -376,6 +428,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assigned_to?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -387,6 +440,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assigned_to?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -412,10 +466,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _user_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -530,6 +590,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

@@ -15,12 +15,13 @@ import BMICalculator from "@/components/Home/BMICalculator";
 import News from "@/components/Home/News";
 import Questionnaire from "@/components/Home/Questionnaire";
 import ClientDashboard from "@/components/Dashboard/ClientDashboard";
+import AdminDashboard from "@/components/Dashboard/AdminDashboard";
 import AuthModal from "@/components/Auth/AuthModal";
 import PlanRecommendationModal from "@/components/Dashboard/PlanRecommendationModal";
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
-  const { user, loading } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
@@ -29,10 +30,10 @@ const Index = () => {
   const [hasShownPlanModal, setHasShownPlanModal] = useState(false);
 
   useEffect(() => {
-    console.log("User state changed:", { user: !!user, loading });
+    console.log("User state changed:", { user: !!user, loading, isAdmin });
     
-    // Show plan modal only once when user logs in
-    if (user && !hasShownPlanModal) {
+    // Show plan modal only once when non-admin user logs in
+    if (user && !isAdmin && !hasShownPlanModal) {
       setShowPlanModal(true);
       setHasShownPlanModal(true);
       setCurrentView('dashboard');
@@ -42,7 +43,7 @@ const Index = () => {
       setCurrentView('public');
       setHasShownPlanModal(false);
     }
-  }, [user, loading, hasShownPlanModal]);
+  }, [user, loading, hasShownPlanModal, isAdmin]);
 
   const handleLogin = () => {
     setAuthMode('login');
@@ -101,8 +102,18 @@ const Index = () => {
     );
   }
 
-  // Show dashboard view for logged-in users
-  if (user && currentView === 'dashboard') {
+  // Show admin dashboard for admin users
+  if (user && isAdmin && currentView === 'dashboard') {
+    return (
+      <AdminDashboard 
+        onNavigateToHome={handleNavigateToHome}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
+  // Show client dashboard for regular users
+  if (user && !isAdmin && currentView === 'dashboard') {
     return (
       <>
         <ClientDashboard 
