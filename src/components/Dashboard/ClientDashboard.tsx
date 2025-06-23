@@ -22,6 +22,7 @@ import MyDiets from './MyDiets';
 import MyWorkouts from './MyWorkouts';
 import UserProfile from './UserProfile';
 import MySchedule from './MySchedule';
+import { useToast } from '@/hooks/use-toast';
 
 interface ClientDashboardProps {
   onNavigateToHome?: () => void;
@@ -31,11 +32,29 @@ interface ClientDashboardProps {
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onLogout }) => {
   const { user, profile, signOut } = useAuth();
   const [currentView, setCurrentView] = useState<string>('dashboard');
+  const { toast } = useToast();
 
   const handleSignOut = async () => {
-    await signOut();
-    if (onLogout) {
-      onLogout();
+    try {
+      console.log('Client dashboard logout initiated...');
+      await signOut();
+      
+      // Call the onLogout callback if provided
+      if (onLogout) {
+        onLogout();
+      }
+      
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión exitosamente",
+      });
+    } catch (error) {
+      console.error('Error during logout from client dashboard:', error);
+      toast({
+        title: "Error",
+        description: "Hubo un problema al cerrar sesión",
+        variant: "destructive",
+      });
     }
   };
 
@@ -196,7 +215,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* Goals Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('goals')}
@@ -217,7 +235,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* Progress Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('progress')}
@@ -238,7 +255,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* Diet Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('diets')}
@@ -259,7 +275,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* Workouts Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('workouts')}
@@ -280,7 +295,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* Schedule Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('schedule')}

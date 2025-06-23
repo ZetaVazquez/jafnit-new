@@ -9,6 +9,7 @@ import AdminDietPlanManager from './AdminDietPlanManager';
 import AdminWorkoutManager from './AdminWorkoutManager';
 import AdminEarnings from './AdminEarnings';
 import AdminPendingPayments from './AdminPendingPayments';
+import { useToast } from '@/hooks/use-toast';
 
 interface AdminDashboardProps {
   onNavigateToHome: () => void;
@@ -17,11 +18,12 @@ interface AdminDashboardProps {
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
   const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments'>('overview');
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
   const [totalWorkoutPlans, setTotalWorkoutPlans] = useState(0);
   const [monthlyEarnings, setMonthlyEarnings] = useState(0);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -64,6 +66,28 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
     fetchDashboardData();
   }, []);
 
+  const handleAdminLogout = async () => {
+    try {
+      console.log('Admin logout initiated...');
+      await signOut();
+      
+      // Call the onLogout callback
+      onLogout();
+      
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión exitosamente",
+      });
+    } catch (error) {
+      console.error('Error during admin logout:', error);
+      toast({
+        title: "Error",
+        description: "Hubo un problema al cerrar sesión",
+        variant: "destructive",
+      });
+    }
+  };
+
   const renderContent = () => {
     switch (currentView) {
       case 'clients':
@@ -94,7 +118,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
                 </Button>
                 <Button
                   variant="destructive"
-                  onClick={onLogout}
+                  onClick={handleAdminLogout}
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Cerrar Sesión

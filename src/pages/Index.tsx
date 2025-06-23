@@ -20,14 +20,16 @@ import AdminDashboard from "@/components/Dashboard/AdminDashboard";
 import AuthModal from "@/components/Auth/AuthModal";
 import PlanRecommendationModal from "@/components/Dashboard/PlanRecommendationModal";
 import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, signOut } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [currentView, setCurrentView] = useState<'public' | 'dashboard'>('public');
   const [showPlanModal, setShowPlanModal] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     console.log("User state changed:", { user: !!user, loading, isAdmin });
@@ -94,8 +96,23 @@ const Index = () => {
     setCurrentView('dashboard');
   };
 
-  const handleLogout = () => {
-    setCurrentView('public');
+  const handleLogout = async () => {
+    try {
+      console.log('Logout initiated...');
+      await signOut();
+      setCurrentView('public');
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión exitosamente",
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      toast({
+        title: "Error",
+        description: "Hubo un problema al cerrar sesión",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {

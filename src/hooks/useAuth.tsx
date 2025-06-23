@@ -103,6 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           }, 0);
         } else {
+          // Clear all user data when signed out
           setProfile(null);
           setUserRole(null);
           setSubscriptionStatus('inactive');
@@ -149,7 +150,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      console.log('Signing out...');
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error signing out:', error);
+        throw error;
+      }
+      
+      // Clear all state immediately
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      setUserRole(null);
+      setSubscriptionStatus('inactive');
+      
+      console.log('Successfully signed out');
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+      throw error;
+    }
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
