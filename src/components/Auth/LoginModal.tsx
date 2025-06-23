@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { X, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -15,19 +17,85 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
   const [mode, setMode] = useState(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const { signUp, signIn } = useAuth();
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     
-    if (mode === 'register' && password !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
-      return;
+    try {
+      if (mode === 'register') {
+        if (password !== confirmPassword) {
+          toast({
+            title: "Error",
+            description: "Las contraseñas no coinciden",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        if (!name.trim()) {
+          toast({
+            title: "Error", 
+            description: "El nombre es requerido",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        console.log('Attempting to register user:', { email, name });
+        const { error } = await signUp(email, password, name.trim());
+        
+        if (error) {
+          console.error('Registration error:', error);
+          toast({
+            title: "Error en el registro",
+            description: error.message || "No se pudo crear la cuenta",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "¡Registro exitoso!",
+            description: "Tu cuenta ha sido creada correctamente",
+          });
+          onClose();
+        }
+      } else {
+        console.log('Attempting to login user:', { email });
+        const { error } = await signIn(email, password);
+        
+        if (error) {
+          console.error('Login error:', error);
+          toast({
+            title: "Error en el inicio de sesión",
+            description: error.message || "Credenciales inválidas",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "¡Bienvenido!",
+            description: "Has iniciado sesión correctamente",
+          });
+          onClose();
+        }
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      toast({
+        title: "Error inesperado",
+        description: "Algo salió mal. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
-    
-    onLogin(email, password);
   };
 
   return (
@@ -44,6 +112,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {mode === 'register' && (
+              <div>
+                <Label htmlFor="name" className="text-nutrition-black">
+                  Nombre Completo
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mt-1 border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                  required
+                  placeholder="Tu nombre completo"
+                />
+              </div>
+            )}
+
             <div>
               <Label htmlFor="email" className="text-nutrition-black">
                 Correo Electrónico
@@ -55,6 +140,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
                 required
+                placeholder="tu@email.com"
               />
             </div>
 
@@ -70,6 +156,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
                   onChange={(e) => setPassword(e.target.value)}
                   className="pr-10 border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
                   required
+                  minLength={6}
+                  placeholder="Mínimo 6 caracteres"
                 />
                 <Button
                   type="button"
@@ -96,6 +184,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="pr-10 border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
                     required
+                    minLength={6}
+                    placeholder="Repite tu contraseña"
                   />
                   <Button
                     type="button"
@@ -113,8 +203,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
             <Button
               type="submit"
               className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white py-2"
+              disabled={loading}
             >
-              {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {mode === 'login' ? 'Iniciando sesión...' : 'Creando cuenta...'}
+                </div>
+              ) : (
+                mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'
+              )}
             </Button>
           </form>
 
@@ -126,6 +224,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onLogin, initialMode }
               variant="ghost"
               onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
               className="text-nutrition-green hover:text-nutrition-green-dark hover:bg-nutrition-green-lighter mt-2"
+              disabled={loading}
             >
               {mode === 'login' ? 'Crear Cuenta' : 'Iniciar Sesión'}
             </Button>
