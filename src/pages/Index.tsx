@@ -27,23 +27,39 @@ const Index = () => {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [currentView, setCurrentView] = useState<'public' | 'dashboard'>('public');
   const [showPlanModal, setShowPlanModal] = useState(false);
-  const [hasShownPlanModal, setHasShownPlanModal] = useState(false);
 
   useEffect(() => {
     console.log("User state changed:", { user: !!user, loading, isAdmin });
     
-    // Show plan modal only once when non-admin user logs in
-    if (user && !isAdmin && !hasShownPlanModal) {
-      setShowPlanModal(true);
-      setHasShownPlanModal(true);
+    if (user && !isAdmin) {
+      // Check if user has an active subscription
+      const checkSubscription = async () => {
+        try {
+          const { data: subscription } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('status', 'active')
+            .single();
+          
+          // Only show plan modal if user has no active subscription
+          if (!subscription) {
+            setShowPlanModal(true);
+          }
+        } catch (error) {
+          // If no subscription found, show plan modal
+          setShowPlanModal(true);
+        }
+      };
+      
+      checkSubscription();
       setCurrentView('dashboard');
-    } else if (user) {
+    } else if (user && isAdmin) {
       setCurrentView('dashboard');
     } else {
       setCurrentView('public');
-      setHasShownPlanModal(false);
     }
-  }, [user, loading, hasShownPlanModal, isAdmin]);
+  }, [user, loading, isAdmin]);
 
   const handleLogin = () => {
     setAuthMode('login');
@@ -79,7 +95,6 @@ const Index = () => {
 
   const handleLogout = () => {
     setCurrentView('public');
-    setHasShownPlanModal(false);
   };
 
   if (loading) {

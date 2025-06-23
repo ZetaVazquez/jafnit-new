@@ -32,21 +32,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state changed:', event, !!session?.user);
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user profile
+          // Defer Supabase calls to avoid callback issues
           setTimeout(async () => {
             try {
-              const { data: profileData, error } = await supabase
+              // Fetch user profile
+              const { data: profileData, error: profileError } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', session.user.id)
                 .single();
               
-              if (error && error.code !== 'PGRST116') {
-                console.error('Error fetching profile:', error);
+              if (profileError && profileError.code !== 'PGRST116') {
+                console.error('Error fetching profile:', profileError);
               } else {
                 setProfile(profileData);
               }
