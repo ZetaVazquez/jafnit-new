@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import HeroCarousel from "@/components/Home/HeroCarousel";
