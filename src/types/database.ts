@@ -1,3 +1,4 @@
+
 export interface Profile {
   id: string;
   name: string;
@@ -42,6 +43,7 @@ export interface DietPlan {
   description?: string;
   meal_plan?: any;
   calories_target?: number;
+  assigned_to?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;
@@ -54,6 +56,7 @@ export interface WorkoutPlan {
   description?: string;
   exercises?: any;
   difficulty_level?: 'beginner' | 'intermediate' | 'advanced';
+  assigned_to?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;

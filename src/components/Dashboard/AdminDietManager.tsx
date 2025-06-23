@@ -22,6 +22,7 @@ interface DietPlan {
   assigned_to: string;
   client_name: string;
   calories_target: number;
+  meal_plan?: any;
   created_at: string;
 }
 
@@ -75,19 +76,28 @@ const AdminDietManager: React.FC<AdminDietManagerProps> = ({ onGoBack }) => {
 
   const fetchDietPlans = async () => {
     try {
-      const { data, error } = await supabase
+      // First get the diet plans
+      const { data: dietsData, error: dietsError } = await supabase
         .from('diet_plans')
-        .select(`
-          *,
-          profiles!diet_plans_assigned_to_fkey (name)
-        `);
+        .select('*');
 
-      if (error) throw error;
+      if (dietsError) throw dietsError;
 
-      const plansWithClientNames = data?.map(plan => ({
-        ...plan,
-        client_name: plan.profiles?.name || 'Sin asignar'
-      })) || [];
+      // Then get the profiles separately
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, name');
+
+      if (profilesError) throw profilesError;
+
+      // Combine the data
+      const plansWithClientNames = dietsData?.map(plan => {
+        const clientProfile = profilesData?.find(profile => profile.id === plan.assigned_to);
+        return {
+          ...plan,
+          client_name: clientProfile?.name || 'Sin asignar'
+        };
+      }) || [];
 
       setDietPlans(plansWithClientNames);
     } catch (error) {
@@ -181,7 +191,7 @@ const AdminDietManager: React.FC<AdminDietManagerProps> = ({ onGoBack }) => {
 
       toast({
         title: "Dieta eliminada",
-        description: "La di has been created successfully.",
+        description: "La dieta ha sido eliminada exitosamente.",
       });
 
       fetchDietPlans();

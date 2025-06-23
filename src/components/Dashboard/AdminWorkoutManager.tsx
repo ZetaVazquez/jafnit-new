@@ -22,6 +22,7 @@ interface WorkoutPlan {
   assigned_to: string;
   client_name: string;
   difficulty_level: string;
+  exercises?: any;
   created_at: string;
 }
 
@@ -75,19 +76,28 @@ const AdminWorkoutManager: React.FC<AdminWorkoutManagerProps> = ({ onGoBack }) =
 
   const fetchWorkoutPlans = async () => {
     try {
-      const { data, error } = await supabase
+      // First get the workout plans
+      const { data: workoutsData, error: workoutsError } = await supabase
         .from('workout_plans')
-        .select(`
-          *,
-          profiles!workout_plans_assigned_to_fkey (name)
-        `);
+        .select('*');
 
-      if (error) throw error;
+      if (workoutsError) throw workoutsError;
 
-      const plansWithClientNames = data?.map(plan => ({
-        ...plan,
-        client_name: plan.profiles?.name || 'Sin asignar'
-      })) || [];
+      // Then get the profiles separately
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, name');
+
+      if (profilesError) throw profilesError;
+
+      // Combine the data
+      const plansWithClientNames = workoutsData?.map(plan => {
+        const clientProfile = profilesData?.find(profile => profile.id === plan.assigned_to);
+        return {
+          ...plan,
+          client_name: clientProfile?.name || 'Sin asignar'
+        };
+      }) || [];
 
       setWorkoutPlans(plansWithClientNames);
     } catch (error) {
