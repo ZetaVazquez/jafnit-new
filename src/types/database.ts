@@ -1,4 +1,3 @@
-
 export interface Profile {
   id: string;
   name: string;
@@ -48,10 +47,7 @@ export interface PendingPayment {
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   updated_at: string;
-  profiles?: {
-    name: string;
-    email: string;
-  };
+  profiles?: Profile | null;
 }
 
 export interface DietPlan {

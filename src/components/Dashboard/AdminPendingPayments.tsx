@@ -31,7 +31,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
         .from('pending_payments')
         .select(`
           *,
-          profiles (
+          profiles:user_id (
             name,
             email
           )
@@ -39,7 +39,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPendingPayments(data as PendingPayment[] || []);
+      setPendingPayments(data || []);
     } catch (error) {
       console.error('Error fetching pending payments:', error);
       toast({
@@ -197,8 +197,8 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
                   <TableRow key={payment.id}>
                     <TableCell>
                       <div>
-                        <div className="font-medium">{payment.profiles?.name}</div>
-                        <div className="text-sm text-gray-500">{payment.profiles?.email}</div>
+                        <div className="font-medium">{payment.profiles?.name || 'Usuario desconocido'}</div>
+                        <div className="text-sm text-gray-500">{payment.profiles?.email || 'Email no disponible'}</div>
                       </div>
                     </TableCell>
                     <TableCell className="capitalize">{payment.plan_type}</TableCell>
@@ -269,7 +269,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
             {selectedPayment && (
               <div className="space-y-4">
                 <div>
-                  <strong>Cliente:</strong> {selectedPayment.profiles?.name}
+                  <strong>Cliente:</strong> {selectedPayment.profiles?.name || 'Usuario desconocido'}
                 </div>
                 <div>
                   <strong>Plan:</strong> {selectedPayment.plan_type}
