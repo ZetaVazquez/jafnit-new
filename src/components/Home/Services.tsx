@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
@@ -83,6 +82,7 @@ const Services: React.FC = () => {
           ))}
         </div>
 
+        
         <div className="mt-16 bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light p-8 rounded-2xl text-center">
           <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4">
             ¿Necesitas algo más específico?

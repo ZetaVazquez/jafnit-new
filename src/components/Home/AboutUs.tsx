@@ -56,7 +56,7 @@ const AboutUs: React.FC = () => {
           
           <div className="relative">
             <img
-              src="/lovable-uploads/e8c5f8a4-4b3d-4c4c-9a4d-5b2c7e8f9a1b.png"
+              src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
               alt="José Antonio - Dietista y Entrenador"
               className="rounded-lg shadow-xl w-full"
             />
