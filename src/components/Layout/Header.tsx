@@ -77,11 +77,15 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-between h-16">
             {/* Logo and Brand */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">JA</span>
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-nutrition-green/20">
+                <img 
+                  src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
+                  alt="JAFNFIT Logo" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent">
-                JA Dietética
+                JAFNFIT
               </h1>
             </div>
 

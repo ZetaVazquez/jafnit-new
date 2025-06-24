@@ -13,18 +13,18 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "Transforma tu Vida",
-      subtitle: "Con nutrición personalizada"
+      title: "No se trata de hacer más,",
+      subtitle: "sino de hacerlo diferente."
     },
     {
       image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "Entrena con Propósito",
-      subtitle: "Rutinas diseñadas para ti"
+      title: "No necesitas más fuerza,",
+      subtitle: "necesitas dirección."
     },
     {
       image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "Alcanza tus Objetivos",
-      subtitle: "Con seguimiento profesional"
+      title: "Transforma tu Vida",
+      subtitle: "Con nutrición personalizada"
     }
   ];
 
@@ -65,28 +65,32 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             <div className="text-white max-w-lg">
               {/* Logo and Brand */}
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-nutrition-accent to-nutrition-accent-dark rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-2xl">JA</span>
+                <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
+                  <img 
+                    src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
+                    alt="JAFNFIT Logo" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
-                    José Antonio
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white drop-shadow-lg">
+                    JAFNFIT
                   </h1>
                 </div>
               </div>
               
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-nutrition-accent">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-yellow-300 drop-shadow-md">
                 Dietética y Entrenamiento
               </h2>
-              <h3 className="text-xl md:text-2xl lg:text-3xl mb-6">
+              <h3 className="text-xl md:text-2xl lg:text-3xl mb-4 text-yellow-100 font-semibold drop-shadow-md">
                 {slides[currentSlide].title}
               </h3>
-              <p className="text-lg md:text-xl mb-8 opacity-90">
+              <p className="text-lg md:text-xl mb-8 text-yellow-100 font-medium drop-shadow-sm">
                 {slides[currentSlide].subtitle}
               </p>
               <Button
                 onClick={onStartQuestionnaire}
-                className="bg-gradient-to-r from-nutrition-accent to-nutrition-accent-dark hover:from-nutrition-accent-dark hover:to-nutrition-accent text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 Comenzar Evaluación
               </Button>
@@ -103,28 +107,32 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         <div className="text-white max-w-lg text-center px-8">
           {/* Logo and Brand */}
           <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-nutrition-accent to-nutrition-accent-dark rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-2xl">JA</span>
+            <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
+              <img 
+                src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
+                alt="JAFNFIT Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-                José Antonio
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight text-white drop-shadow-lg">
+                JAFNFIT
               </h1>
             </div>
           </div>
           
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-nutrition-accent">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-300 drop-shadow-md">
             Dietética y Entrenamiento
           </h2>
-          <h3 className="text-xl md:text-2xl mb-6">
+          <h3 className="text-xl md:text-2xl mb-4 text-yellow-100 font-semibold drop-shadow-md">
             {slides[currentSlide].title}
           </h3>
-          <p className="text-lg md:text-xl mb-8 opacity-90">
+          <p className="text-lg md:text-xl mb-8 text-yellow-100 font-medium drop-shadow-sm">
             {slides[currentSlide].subtitle}
           </p>
           <Button
             onClick={onStartQuestionnaire}
-            className="bg-gradient-to-r from-nutrition-accent to-nutrition-accent-dark hover:from-nutrition-accent-dark hover:to-nutrition-accent text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           >
             Comenzar Evaluación
           </Button>
@@ -152,7 +160,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`w-3 h-3 rounded-full transition-all duration-200 ${
-              index === currentSlide ? 'bg-nutrition-accent' : 'bg-white bg-opacity-50'
+              index === currentSlide ? 'bg-yellow-400' : 'bg-white bg-opacity-50'
             }`}
           />
         ))}
