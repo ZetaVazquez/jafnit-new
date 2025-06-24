@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard, Bell, MessageCircle } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -66,9 +66,11 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleChatWithTrainer = () => {
-    // Simulamos abrir chat con entrenador
-    alert('Abriendo chat con tu entrenador personal...');
+    window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank');
   };
+
+  // Check if we're on the public page (assuming currentView is not passed as prop, we'll check URL or state)
+  const isOnPublicPage = window.location.pathname === '/' && window.location.hash === '';
 
   return (
     <>
@@ -117,26 +119,18 @@ const Header: React.FC<HeaderProps> = ({
                     <span>Chat</span>
                   </Button>
                   
-                  {/* Notifications */}
-                  <Button
-                    onClick={handleChatWithTrainer}
-                    variant="ghost"
-                    size="sm"
-                    className="hidden lg:flex"
-                  >
-                    <Bell className="w-4 h-4" />
-                  </Button>
-                  
-                  {/* Back to Public Page */}
-                  <Button
-                    onClick={onNavigateToHome}
-                    variant="outline"
-                    size="sm"
-                    className="hidden lg:flex items-center space-x-2 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
-                  >
-                    <Home className="w-4 h-4" />
-                    <span>Página Principal</span>
-                  </Button>
+                  {/* Back to Public Page - Only show when NOT on public page */}
+                  {!isOnPublicPage && (
+                    <Button
+                      onClick={onNavigateToHome}
+                      variant="outline"
+                      size="sm"
+                      className="hidden lg:flex items-center space-x-2 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                    >
+                      <Home className="w-4 h-4" />
+                      <span>Página Principal</span>
+                    </Button>
+                  )}
                   
                   {/* My Account Button */}
                   {onNavigateToDashboard && (
@@ -217,17 +211,19 @@ const Header: React.FC<HeaderProps> = ({
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Chat con Entrenador
                     </Button>
-                    <Button
-                      onClick={() => {
-                        onNavigateToHome?.();
-                        setIsMenuOpen(false);
-                      }}
-                      variant="outline"
-                      className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
-                    >
-                      <Home className="w-4 h-4 mr-2" />
-                      Página Principal
-                    </Button>
+                    {!isOnPublicPage && (
+                      <Button
+                        onClick={() => {
+                          onNavigateToHome?.();
+                          setIsMenuOpen(false);
+                        }}
+                        variant="outline"
+                        className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                      >
+                        <Home className="w-4 h-4 mr-2" />
+                        Página Principal
+                      </Button>
+                    )}
                     {onNavigateToDashboard && (
                       <Button
                         onClick={() => {
