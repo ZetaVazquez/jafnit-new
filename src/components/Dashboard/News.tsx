@@ -1,17 +1,32 @@
 
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription } from '@/hooks/useSubscription';
 import AdminNews from './AdminNews';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
 
-const News: React.FC = () => {
+interface NewsProps {
+  onGoBack?: () => void;
+}
+
+const News: React.FC<NewsProps> = ({ onGoBack }) => {
   const { user } = useAuth();
 
   // Si no hay usuario autenticado, no mostrar nada
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-8">
+        {onGoBack && (
+          <Button
+            onClick={onGoBack}
+            variant="outline"
+            className="mb-6 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver al Dashboard
+          </Button>
+        )}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-nutrition-green mb-4">
             Noticias y Actualizaciones
@@ -27,6 +42,16 @@ const News: React.FC = () => {
   return (
     <SubscriptionGuard>
       <div className="container mx-auto px-4 py-8">
+        {onGoBack && (
+          <Button
+            onClick={onGoBack}
+            variant="outline"
+            className="mb-6 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver al Dashboard
+          </Button>
+        )}
         <AdminNews />
       </div>
     </SubscriptionGuard>

@@ -13,7 +13,8 @@ import {
   LogOut,
   Bell,
   MessageCircle,
-  Home
+  Home,
+  Newspaper
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import MyGoals from './MyGoals';
@@ -22,6 +23,7 @@ import MyDiets from './MyDiets';
 import MyWorkouts from './MyWorkouts';
 import UserProfile from './UserProfile';
 import MySchedule from './MySchedule';
+import News from './News';
 import { useToast } from '@/hooks/use-toast';
 
 interface ClientDashboardProps {
@@ -84,6 +86,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
 
   if (currentView === 'schedule') {
     return <MySchedule onGoBack={() => setCurrentView('dashboard')} />;
+  }
+
+  if (currentView === 'news') {
+    return <News onGoBack={() => setCurrentView('dashboard')} />;
   }
 
   return (
@@ -311,6 +317,27 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
                 Ver Agenda
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* New News Card */}
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => setCurrentView('news')}
+          >
+            <CardHeader>
+              <CardTitle className="flex items-center text-nutrition-green">
+                <Newspaper className="w-5 h-5 mr-2" />
+                Noticias
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-nutrition-gray mb-4">
+                Mantente al día con las últimas noticias y actualizaciones.
+              </p>
+              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
+                Ver Noticias
               </Button>
             </CardContent>
           </Card>
