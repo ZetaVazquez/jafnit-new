@@ -93,7 +93,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
 
                 <Button
                   onClick={onStartQuestionnaire}
-                  className="w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 bg-nutrition-green hover:bg-nutrition-green-dark text-white"
+                  className="w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
                 >
                   Elegir Plan
                 </Button>

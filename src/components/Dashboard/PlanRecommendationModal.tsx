@@ -139,13 +139,13 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
               <Button
                 variant="outline"
                 onClick={onDecideLater}
-                className="flex-1 border-nutrition-green text-nutrition-green hover:bg-nutrition-green-lighter"
+                className="flex-1"
               >
                 Decidir Más Tarde
               </Button>
               <Button
                 onClick={handlePayment}
-                className="flex-1 bg-nutrition-green hover:bg-nutrition-green-dark text-white"
+                className="flex-1"
               >
                 Pagar con Bizum
               </Button>
