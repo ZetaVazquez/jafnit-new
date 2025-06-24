@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
 
 interface NewsItem {
   id: string;
@@ -17,12 +18,16 @@ const AdminNews: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { hasActiveSubscription } = useSubscription();
 
   useEffect(() => {
-    if (user) {
+    // Solo cargar noticias si el usuario está autenticado y tiene suscripción activa
+    if (user && hasActiveSubscription) {
       fetchNews();
+    } else {
+      setLoading(false);
     }
-  }, [user]);
+  }, [user, hasActiveSubscription]);
 
   const fetchNews = async () => {
     try {
@@ -41,6 +46,24 @@ const AdminNews: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // Si el usuario no está autenticado o no tiene suscripción activa, no mostrar nada
+  if (!user || !hasActiveSubscription) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-nutrition-green mb-6">
+          Noticias y Actualizaciones
+        </h2>
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-gray-600">
+              Necesitas una suscripción activa para ver las noticias y actualizaciones.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
