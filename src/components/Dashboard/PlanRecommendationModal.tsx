@@ -66,9 +66,9 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   return (
     <>
       <Dialog open={isOpen && !showPaymentProcess} onOpenChange={onClose}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-nutrition-green-lighter">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-nutrition-green flex items-center">
+            <DialogTitle className="text-2xl font-bold text-nutrition-green flex items-center justify-center">
               <Star className="w-6 h-6 mr-2" />
               Plan Recomendado Para Ti
             </DialogTitle>
@@ -87,8 +87,8 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                   key={key}
                   className={`cursor-pointer transition-all duration-300 border-2 ${
                     selectedPlan === key
-                      ? 'border-nutrition-green bg-nutrition-green-lighter'
-                      : 'border-gray-200 hover:border-nutrition-green-light'
+                      ? 'border-nutrition-green bg-white'
+                      : 'border-gray-200 hover:border-nutrition-green-light bg-white'
                   } ${
                     recommendedPlan === key ? 'ring-2 ring-nutrition-accent' : ''
                   }`}

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,7 +33,7 @@ const BizumPaymentProcess: React.FC<BizumPaymentProcessProps> = ({
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const bizumNumber = "612345678"; // Cambiar por tu número real
+  const bizumNumber = "697754823"; // Número correcto actualizado
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
