@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, FileText, Dumbbell, DollarSign, TrendingUp, Calendar, Home, LogOut, Clock } from 'lucide-react';
+import { Users, FileText, Dumbbell, DollarSign, TrendingUp, Calendar, Home, LogOut, Clock, PlusCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AdminClientsTable from './AdminClientsTable';
@@ -9,6 +9,7 @@ import AdminDietPlanManager from './AdminDietPlanManager';
 import AdminWorkoutManager from './AdminWorkoutManager';
 import AdminEarnings from './AdminEarnings';
 import AdminPendingPayments from './AdminPendingPayments';
+import AdminNewsManager from './AdminNewsManager';
 import { useToast } from '@/hooks/use-toast';
 
 interface AdminDashboardProps {
@@ -17,12 +18,13 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news'>('overview');
   const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
   const [totalWorkoutPlans, setTotalWorkoutPlans] = useState(0);
   const [monthlyEarnings, setMonthlyEarnings] = useState(0);
+  const [totalNews, setTotalNews] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,6 +60,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
           const totalEarnings = earningsData?.reduce((sum, earning) => sum + earning.amount, 0) || 0;
           setMonthlyEarnings(totalEarnings);
         }
+
+        // Fetch total news
+        const { count: newsCount } = await supabase
+          .from('admin_news')
+          .select('*', { count: 'exact' });
+        setTotalNews(newsCount || 0);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       }
@@ -100,6 +108,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
         return <AdminEarnings onGoBack={() => setCurrentView('overview')} />;
       case 'pending-payments':
         return <AdminPendingPayments onGoBack={() => setCurrentView('overview')} />;
+      case 'news':
+        return <AdminNewsManager onGoBack={() => setCurrentView('overview')} />;
       default:
         return (
           <div className="container mx-auto px-4 py-8">
@@ -192,6 +202,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold text-nutrition-black">Ganancias Mensuales</h3>
                       <p className="text-nutrition-gray">€{monthlyEarnings}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('news')}>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="p-3 bg-purple-100 rounded-lg">
+                      <PlusCircle className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="text-lg font-semibold text-nutrition-black">Creación de Noticias</h3>
+                      <p className="text-nutrition-gray">{totalNews} noticias creadas</p>
                     </div>
                   </div>
                 </CardContent>

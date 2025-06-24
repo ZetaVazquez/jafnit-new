@@ -71,6 +71,39 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_news: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          image_url: string | null
+          published: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by: string
+          id?: string
+          image_url?: string | null
+          published?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          image_url?: string | null
+          published?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       body_measurements: {
         Row: {
           body_fat_percentage: number | null

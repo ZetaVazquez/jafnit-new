@@ -122,3 +122,14 @@ export interface ActivityLog {
   metadata?: any;
   created_at: string;
 }
+
+export interface AdminNews {
+  id: string;
+  title: string;
+  content: string;
+  image_url?: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  published: boolean;
+}
