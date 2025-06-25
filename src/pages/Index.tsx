@@ -41,6 +41,14 @@ const Index = () => {
     setShowDashboard(false);
   };
 
+  const handleLogin = () => {
+    // Login logic handled by auth system
+  };
+
+  const handleRegister = () => {
+    handleStartQuestionnaire();
+  };
+
   if (showDashboard && user) {
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
@@ -60,12 +68,20 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header 
+        isLoggedIn={!!user}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+        onLogout={handleLogout}
+        onNavigateToHome={handleBackToHome}
+        onNavigateToDashboard={handleGoToDashboard}
+        onStartQuestionnaire={handleStartQuestionnaire}
+      />
       <main>
         <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
         <AboutUs />
         <Services />
-        <Testimonials />
+        <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
         <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
         <BMICalculator />
         <News />
