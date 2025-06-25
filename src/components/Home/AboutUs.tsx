@@ -67,18 +67,18 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
           
-          {/* Profile photo section - larger and more centered */}
+          {/* Profile photo section - much larger and more centered */}
           <div className="relative flex justify-center items-center">
-            {/* Decorative rings around the image */}
+            {/* Decorative rings around the image - larger */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-96 h-96 rounded-full border-4 border-nutrition-green-light opacity-30 animate-pulse"></div>
+              <div className="w-[500px] h-[500px] rounded-full border-4 border-nutrition-green-light opacity-30 animate-pulse"></div>
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[420px] h-[420px] rounded-full border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+              <div className="w-[540px] h-[540px] rounded-full border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
             </div>
             
-            {/* Main image container with white border - larger size */}
-            <div className="relative z-10 w-80 h-80 rounded-full border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
+            {/* Main image container with white border - much larger size */}
+            <div className="relative z-10 w-96 h-96 rounded-full border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
               <img
                 src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
                 alt="José Antonio - Tu Dietista y Entrenador Personal"
