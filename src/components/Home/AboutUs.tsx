@@ -1,8 +1,13 @@
 
 import React from 'react';
 import { Award, Users, Heart, Target } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-const AboutUs: React.FC = () => {
+interface AboutUsProps {
+  onQuestionnaireOpen?: () => void;
+}
+
+const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
   const stats = [
     { icon: Users, value: '30+', label: 'Clientes en Seguimiento' },
     { icon: Award, value: '6', label: 'Meses de Experiencia' },
@@ -36,51 +41,74 @@ const AboutUs: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold text-nutrition-black mb-6 title-main tracking-tight">
-            Mi Historia
+            Sobre Mi
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
-            Descubre cómo pasé de estar perdido en el mundo de las dietas a convertirme en tu guía hacia una vida más saludable y plena.
-          </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
           <div className="space-y-8">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-nutrition-green-light">
               <h3 className="text-3xl font-bold text-nutrition-green mb-6 title-playful">
-                Todo Comenzó Con Una Pregunta...
+                💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
               </h3>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed font-light">
-                <span className="text-nutrition-accent font-semibold">"¿Por qué es tan difícil comer bien?"</span> 
-                Me hice esta pregunta después de años viendo cómo las personas (incluido yo mismo) luchábamos 
-                con dietas restrictivas que no funcionaban a largo plazo.
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
               </p>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed font-light">
-                Fue entonces cuando decidí estudiar nutrición y entrenamiento personal, no solo para entender 
-                la ciencia detrás de la alimentación, sino para <span className="text-nutrition-green font-semibold">
-                crear un método que realmente funcionara</span> para personas reales, con vidas reales.
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
+              </p>
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
+              </p>
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed font-semibold text-nutrition-green">
+                Hasta que el cuerpo dijo basta.
               </p>
             </div>
 
             <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl p-8 shadow-lg">
               <h4 className="text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
-                Mi Promesa Para Ti
+                🚀 Mi misión ahora es ayudarte a transformar tu físico sin destruirte en el intento
               </h4>
-              <p className="text-lg text-nutrition-green-dark leading-relaxed font-light">
-                No más dietas que te hagan sentir culpable. No más restricciones extremas. 
-                Solo un <span className="font-semibold">enfoque inteligente, sostenible y personalizado</span> 
-                que se adapte a tu vida, no al revés.
+              <p className="text-lg text-nutrition-green-dark leading-relaxed mb-4">
+                Ese fue el punto de inflexión. Empecé a estudiar, a entender cómo funciona realmente el cuerpo y la mente 🧠. Dejé de castigarme y reconstruí mi forma de entrenar, de comer y de vivir.
+              </p>
+              <p className="text-lg text-nutrition-green-dark leading-relaxed">
+                Hoy soy dietista y entrenador. Pero sobre todo, soy alguien que ha estado donde tú estás.
+              </p>
+              <p className="text-lg text-nutrition-green-dark leading-relaxed font-semibold">
+                Trabajo con personas reales, con agendas apretadas, inseguridades y objetivos claros 🎯
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4">
-              <div className="bg-nutrition-green text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                🍎 Alimentación Inteligente
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-nutrition-green-light">
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-lg text-gray-700">
+                  <span className="text-nutrition-green font-semibold mr-2">🔥</span>
+                  Sin dietas imposibles
+                </div>
+                <div className="flex items-center text-lg text-gray-700">
+                  <span className="text-nutrition-green font-semibold mr-2">🏋️‍♂️</span>
+                  Sin rutinas de 3 horas al día
+                </div>
+                <div className="flex items-center text-lg text-gray-700">
+                  <span className="text-nutrition-green font-semibold mr-2">🧊</span>
+                  Sin perder el norte
+                </div>
               </div>
-              <div className="bg-nutrition-green-emerald text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                💪 Entrenamiento Personalizado
-              </div>
-              <div className="bg-nutrition-accent text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                🎯 Resultados Reales
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                Si estás cansado de no reconocerte en el espejo, de probar y fallar, de sentir que ya nada funciona…
+              </p>
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed font-semibold text-nutrition-green">
+                👉 Yo estuve ahí. Y salí. Ahora te toca a ti.
+              </p>
+              
+              <div className="text-center">
+                <Button 
+                  onClick={onQuestionnaireOpen}
+                  className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  🎯 QUIERO CAMBIAR
+                </Button>
               </div>
             </div>
           </div>
