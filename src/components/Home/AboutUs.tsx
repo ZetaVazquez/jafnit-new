@@ -17,7 +17,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
   return (
     <section id="about" className="py-20 dynamic-background relative overflow-hidden">
-      {/* Decorative background elements con más círculos y triángulos */}
+      {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Círculos grandes */}
         <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
@@ -40,45 +40,46 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-nutrition-black mb-6 title-main tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-bold text-nutrition-black mb-6 title-main tracking-tight">
             Sobre Mi
           </h2>
         </div>
 
-        {/* First section: Text + Photo side by side on desktop */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-          <div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-nutrition-green-light">
-              <h3 className="text-3xl font-bold text-nutrition-green mb-6 title-playful">
+        {/* First section: Text + Photo - Mobile: stacked, Desktop: side by side */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-12 lg:mb-20">
+          {/* Text content - shows first on mobile */}
+          <div className="order-1 lg:order-1 w-full">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-lg border border-nutrition-green-light">
+              <h3 className="text-xl md:text-3xl font-bold text-nutrition-green mb-4 lg:mb-6 title-playful">
                 💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
               </h3>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
                 Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
               </p>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
                 🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
               </p>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
                 ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
               </p>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed font-semibold text-nutrition-green">
+              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed font-semibold text-nutrition-green">
                 Hasta que el cuerpo dijo basta.
               </p>
             </div>
           </div>
           
-          {/* Profile photo section - much larger and more centered */}
-          <div className="relative flex justify-center items-center">
-            {/* Decorative rings around the image - larger */}
+          {/* Profile photo section - shows second on mobile, larger and centered */}
+          <div className="order-2 lg:order-2 relative flex justify-center items-center w-full py-8 lg:py-0">
+            {/* Decorative rings around the image - responsive sizes */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[500px] h-[500px] rounded-full border-4 border-nutrition-green-light opacity-30 animate-pulse"></div>
+              <div className="w-80 h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] rounded-full border-2 lg:border-4 border-nutrition-green-light opacity-30 animate-pulse"></div>
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[540px] h-[540px] rounded-full border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+              <div className="w-84 h-84 md:w-[400px] md:h-[400px] lg:w-[540px] lg:h-[540px] rounded-full border-1 lg:border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
             </div>
             
-            {/* Main image container with white border - much larger size */}
-            <div className="relative z-10 w-96 h-96 rounded-full border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
+            {/* Main image container - responsive sizing */}
+            <div className="relative z-10 w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 lg:border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
               <img
                 src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
                 alt="José Antonio - Tu Dietista y Entrenador Personal"
@@ -86,63 +87,63 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               />
             </div>
             
-            {/* Floating info card */}
-            <div className="absolute -bottom-8 -right-8 bg-white p-6 rounded-2xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-nutrition-green rounded-full animate-pulse"></div>
+            {/* Floating info card - responsive positioning and sizing */}
+            <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 lg:-bottom-8 lg:-right-8 bg-white p-3 md:p-4 lg:p-6 rounded-xl lg:rounded-2xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center space-x-2 lg:space-x-3">
+                <div className="w-2 h-2 lg:w-3 lg:h-3 bg-nutrition-green rounded-full animate-pulse"></div>
                 <div>
-                  <h4 className="font-bold text-nutrition-green text-lg title-playful">José Antonio</h4>
-                  <p className="text-nutrition-gray text-sm">Dietista y Entrenador</p>
-                  <p className="text-xs text-gray-500 mt-1">Tu Compañero en el Cambio</p>
+                  <h4 className="font-bold text-nutrition-green text-sm md:text-base lg:text-lg title-playful">José Antonio</h4>
+                  <p className="text-nutrition-gray text-xs md:text-sm">Dietista y Entrenador</p>
+                  <p className="text-xs text-gray-500 mt-1 hidden md:block">Tu Compañero en el Cambio</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Second section: Two blocks horizontally on desktop */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-20">
-          <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl p-8 shadow-lg">
-            <h4 className="text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
+        {/* Second section: Two blocks - Mobile: stacked, Desktop: horizontal */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-8 mb-12 lg:mb-20">
+          <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl p-6 lg:p-8 shadow-lg">
+            <h4 className="text-xl lg:text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
               🚀 Mi misión ahora es ayudarte a transformar tu físico sin destruirte en el intento
             </h4>
-            <p className="text-lg text-nutrition-green-dark leading-relaxed mb-4">
+            <p className="text-base lg:text-lg text-nutrition-green-dark leading-relaxed mb-4">
               Ese fue el punto de inflexión. Empecé a estudiar, a entender cómo funciona realmente el cuerpo y la mente 🧠. Dejé de castigarme y reconstruí mi forma de entrenar, de comer y de vivir.
             </p>
-            <p className="text-lg text-nutrition-green-dark leading-relaxed">
+            <p className="text-base lg:text-lg text-nutrition-green-dark leading-relaxed mb-4">
               Hoy soy dietista y entrenador. Pero sobre todo, soy alguien que ha estado donde tú estás.
             </p>
-            <p className="text-lg text-nutrition-green-dark leading-relaxed font-semibold">
+            <p className="text-base lg:text-lg text-nutrition-green-dark leading-relaxed font-semibold">
               Trabajo con personas reales, con agendas apretadas, inseguridades y objetivos claros 🎯
             </p>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-nutrition-green-light">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-lg border border-nutrition-green-light">
             <div className="space-y-3 mb-6">
-              <div className="flex items-center text-lg text-gray-700">
+              <div className="flex items-center text-base lg:text-lg text-gray-700">
                 <span className="text-nutrition-green font-semibold mr-2">🔥</span>
                 Sin dietas imposibles
               </div>
-              <div className="flex items-center text-lg text-gray-700">
+              <div className="flex items-center text-base lg:text-lg text-gray-700">
                 <span className="text-nutrition-green font-semibold mr-2">🏋️‍♂️</span>
                 Sin rutinas de 3 horas al día
               </div>
-              <div className="flex items-center text-lg text-gray-700">
+              <div className="flex items-center text-base lg:text-lg text-gray-700">
                 <span className="text-nutrition-green font-semibold mr-2">🧊</span>
                 Sin perder el norte
               </div>
             </div>
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+            <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
               Si estás cansado de no reconocerte en el espejo, de probar y fallar, de sentir que ya nada funciona…
             </p>
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed font-semibold text-nutrition-green">
+            <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed font-semibold text-nutrition-green">
               👉 Yo estuve ahí. Y salí. Ahora te toca a ti.
             </p>
             
             <div className="text-center">
               <Button 
                 onClick={onQuestionnaireOpen}
-                className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full sm:w-auto"
               >
                 🎯 QUIERO CAMBIAR
               </Button>
@@ -150,19 +151,19 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* Stats Section with more dynamic design */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-nutrition-green-light">
-          <h3 className="text-3xl font-bold text-center text-nutrition-green mb-8 title-main">
+        {/* Stats Section - responsive grid */}
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-xl border border-nutrition-green-light">
+          <h3 className="text-2xl lg:text-3xl font-bold text-center text-nutrition-green mb-6 lg:mb-8 title-main">
             Resultados Que Hablan Por Sí Solos
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <stat.icon className="w-10 h-10" />
+                <div className="inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-3 lg:mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <stat.icon className="w-8 h-8 lg:w-10 lg:h-10" />
                 </div>
-                <div className="text-4xl font-bold text-nutrition-green mb-2 title-main">{stat.value}</div>
-                <div className="text-nutrition-gray font-medium text-sm">{stat.label}</div>
+                <div className="text-2xl lg:text-4xl font-bold text-nutrition-green mb-1 lg:mb-2 title-main">{stat.value}</div>
+                <div className="text-nutrition-gray font-medium text-xs lg:text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
