@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { DietPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
+import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 interface MyDietsProps {
   onGoBack: () => void;
@@ -46,19 +47,19 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
   const DietsContent = () => {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white flex items-center justify-center">
+        <DynamicBackground className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-nutrition-green mx-auto"></div>
             <p className="mt-4 text-nutrition-gray">Cargando tus dietas...</p>
           </div>
-        </div>
+        </DynamicBackground>
       );
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+      <DynamicBackground className="min-h-screen">
         {/* Header */}
-        <header className="bg-white shadow-md">
+        <header className="bg-white/80 backdrop-blur-sm shadow-md">
           <div className="container mx-auto px-4 py-4">
             <Button
               onClick={onGoBack}
@@ -68,7 +69,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver al Dashboard
             </Button>
-            <h1 className="text-3xl font-bold text-nutrition-black">Mis Dietas</h1>
+            <h1 className="text-3xl font-bold text-nutrition-black title-main">Mis Dietas</h1>
             <p className="text-nutrition-gray mt-2">Aquí encontrarás todos tus planes de alimentación personalizados</p>
           </div>
         </header>
@@ -76,10 +77,10 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
         {/* Content */}
         <main className="container mx-auto px-4 py-8">
           {dietPlans.length === 0 ? (
-            <Card className="text-center py-12">
+            <Card className="text-center py-12 bg-white/90 backdrop-blur-sm">
               <CardContent>
                 <ChefHat className="w-16 h-16 text-nutrition-green mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-nutrition-black mb-2">
+                <h3 className="text-xl font-bold text-nutrition-black mb-2 title-playful">
                   No tienes planes de dieta asignados
                 </h3>
                 <p className="text-nutrition-gray mb-6">
@@ -94,9 +95,9 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
           ) : (
             <div className="space-y-6">
               {dietPlans.map((diet) => (
-                <Card key={diet.id} className="hover:shadow-lg transition-shadow duration-300">
+                <Card key={diet.id} className="hover:shadow-lg transition-shadow duration-300 bg-white/90 backdrop-blur-sm">
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2 text-nutrition-green">
+                    <CardTitle className="flex items-center space-x-2 text-nutrition-green title-playful">
                       <ChefHat className="w-5 h-5" />
                       <span>{diet.title}</span>
                     </CardTitle>
@@ -131,7 +132,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
             </div>
           )}
         </main>
-      </div>
+      </DynamicBackground>
     );
   };
 

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Award, Users, Heart, Target, Sparkles, Zap } from 'lucide-react';
+import { Award, Users, Heart, Target } from 'lucide-react';
 
 const AboutUs: React.FC = () => {
   const stats = [
@@ -11,26 +11,31 @@ const AboutUs: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-gradient-to-br from-nutrition-green-lighter to-white relative overflow-hidden">
-      {/* Decorative background elements */}
+    <section id="about" className="py-20 dynamic-background relative overflow-hidden">
+      {/* Decorative background elements con más círculos y triángulos */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-nutrition-green-light rounded-full opacity-20 animate-pulse"></div>
-        <div className="absolute top-1/2 right-20 w-24 h-24 bg-nutrition-accent rounded-full opacity-30 animate-bounce"></div>
-        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-nutrition-green-emerald rounded-full opacity-25 animate-pulse"></div>
-        <div className="absolute top-1/4 right-1/3 w-16 h-16 bg-nutrition-green-sage rounded-full opacity-20 animate-bounce"></div>
+        {/* Círculos grandes */}
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
         
-        {/* Floating shapes */}
-        <div className="absolute top-40 left-1/2 transform -translate-x-1/2">
-          <Sparkles className="w-8 h-8 text-nutrition-accent opacity-30 animate-pulse" />
-        </div>
-        <div className="absolute bottom-40 right-1/4">
-          <Zap className="w-6 h-6 text-nutrition-green-emerald opacity-40 animate-bounce" />
-        </div>
+        {/* Círculos medianos */}
+        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
+        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
+        
+        {/* Triángulos */}
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-nutrition-black mb-6 font-sans tracking-tight">
+          <h2 className="text-5xl font-bold text-nutrition-black mb-6 title-main tracking-tight">
             Mi Historia
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
@@ -41,7 +46,7 @@ const AboutUs: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <div className="space-y-8">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-nutrition-green-light">
-              <h3 className="text-3xl font-bold text-nutrition-green mb-6 font-sans">
+              <h3 className="text-3xl font-bold text-nutrition-green mb-6 title-playful">
                 Todo Comenzó Con Una Pregunta...
               </h3>
               <p className="text-lg text-gray-700 mb-6 leading-relaxed font-light">
@@ -57,7 +62,7 @@ const AboutUs: React.FC = () => {
             </div>
 
             <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl p-8 shadow-lg">
-              <h4 className="text-2xl font-bold text-nutrition-green-dark mb-4 font-sans">
+              <h4 className="text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
                 Mi Promesa Para Ti
               </h4>
               <p className="text-lg text-nutrition-green-dark leading-relaxed font-light">
@@ -69,10 +74,10 @@ const AboutUs: React.FC = () => {
 
             <div className="flex flex-wrap gap-4">
               <div className="bg-nutrition-green text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                🍎 Sistema Anti-Dieta
+                🍎 Alimentación Inteligente
               </div>
               <div className="bg-nutrition-green-emerald text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                💪 Entrenamiento Inteligente
+                💪 Entrenamiento Personalizado
               </div>
               <div className="bg-nutrition-accent text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                 🎯 Resultados Reales
@@ -89,7 +94,7 @@ const AboutUs: React.FC = () => {
               <div className="w-96 h-96 rounded-full border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
             </div>
             
-            {/* Main image container */}
+            {/* Main image container with white border */}
             <div className="relative z-10 w-72 h-72 rounded-full border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
               <img
                 src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
@@ -103,7 +108,7 @@ const AboutUs: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-nutrition-green rounded-full animate-pulse"></div>
                 <div>
-                  <h4 className="font-bold text-nutrition-green text-lg font-sans">José Antonio</h4>
+                  <h4 className="font-bold text-nutrition-green text-lg title-playful">José Antonio</h4>
                   <p className="text-nutrition-gray text-sm">Dietista y Entrenador</p>
                   <p className="text-xs text-gray-500 mt-1">Tu Compañero en el Cambio</p>
                 </div>
@@ -114,7 +119,7 @@ const AboutUs: React.FC = () => {
 
         {/* Stats Section with more dynamic design */}
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-nutrition-green-light">
-          <h3 className="text-3xl font-bold text-center text-nutrition-green mb-8 font-sans">
+          <h3 className="text-3xl font-bold text-center text-nutrition-green mb-8 title-main">
             Resultados Que Hablan Por Sí Solos
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -123,7 +128,7 @@ const AboutUs: React.FC = () => {
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <stat.icon className="w-10 h-10" />
                 </div>
-                <div className="text-4xl font-bold text-nutrition-green mb-2 font-sans">{stat.value}</div>
+                <div className="text-4xl font-bold text-nutrition-green mb-2 title-main">{stat.value}</div>
                 <div className="text-nutrition-gray font-medium text-sm">{stat.label}</div>
               </div>
             ))}

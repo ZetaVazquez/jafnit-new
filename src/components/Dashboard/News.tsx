@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import AdminNews from './AdminNews';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
+import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 interface NewsProps {
   onGoBack?: () => void;
@@ -16,7 +17,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
   // Si no hay usuario autenticado, no mostrar nada
   if (!user) {
     return (
-      <div className="min-h-screen bg-nutrition-green-lighter">
+      <DynamicBackground className="min-h-screen">
         <div className="container mx-auto px-4 py-8">
           {onGoBack && (
             <Button
@@ -29,7 +30,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
             </Button>
           )}
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-nutrition-green mb-4">
+            <h2 className="text-2xl font-bold text-nutrition-green mb-4 title-main">
               Noticias y Actualizaciones
             </h2>
             <p className="text-gray-600">
@@ -37,13 +38,13 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
             </p>
           </div>
         </div>
-      </div>
+      </DynamicBackground>
     );
   }
 
   return (
     <SubscriptionGuard>
-      <div className="min-h-screen bg-nutrition-green-lighter">
+      <DynamicBackground className="min-h-screen">
         <div className="container mx-auto px-4 py-8">
           {onGoBack && (
             <Button
@@ -57,7 +58,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
           )}
           <AdminNews />
         </div>
-      </div>
+      </DynamicBackground>
     </SubscriptionGuard>
   );
 };

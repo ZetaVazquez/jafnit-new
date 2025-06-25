@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChevronLeft, ChevronRight, Sparkles, Zap } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { QuestionnaireQuestion } from '@/types';
 
 interface QuestionnaireProps {
@@ -79,27 +79,28 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
   const isLastQuestion = currentQuestion === questions.length - 1;
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-nutrition-green-lighter to-white flex items-center justify-center z-50 p-4 overflow-hidden">
-      {/* Decorative background elements */}
+    <div className="fixed inset-0 dynamic-background flex items-center justify-center z-50 p-4 overflow-hidden">
+      {/* Decorative background elements con más círculos y triángulos */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-nutrition-green-light rounded-full opacity-20 animate-pulse"></div>
-        <div className="absolute top-1/2 right-20 w-24 h-24 bg-nutrition-accent rounded-full opacity-30 animate-bounce"></div>
-        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-nutrition-green-emerald rounded-full opacity-25 animate-pulse"></div>
-        <div className="absolute top-1/4 right-1/3 w-16 h-16 bg-nutrition-green-sage rounded-full opacity-20 animate-bounce"></div>
+        {/* Círculos */}
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
+        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
         
-        {/* Floating shapes */}
-        <div className="absolute top-40 left-1/2 transform -translate-x-1/2">
-          <Sparkles className="w-8 h-8 text-nutrition-accent opacity-30 animate-pulse" />
-        </div>
-        <div className="absolute bottom-40 right-1/4">
-          <Zap className="w-6 h-6 text-nutrition-green-emerald opacity-40 animate-bounce" />
-        </div>
+        {/* Triángulos */}
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
       </div>
 
       <Card className="w-full max-w-2xl bg-white/90 backdrop-blur-sm border border-nutrition-green-light shadow-2xl relative z-10">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent font-sans">
+            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent title-main">
               Cuestionario Personalizado
             </CardTitle>
             <Button variant="ghost" onClick={onClose} className="hover:bg-nutrition-green-lighter rounded-full">
@@ -121,7 +122,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
 
         <CardContent>
           <div className="mb-8">
-            <h3 className="text-2xl font-bold mb-8 text-nutrition-black font-sans leading-tight">
+            <h3 className="text-2xl font-bold mb-8 text-nutrition-black title-playful leading-tight">
               {currentQuestionData.question}
             </h3>
 
@@ -153,9 +154,9 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
               <div className="mt-10 p-8 bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl border-l-4 border-nutrition-green-emerald shadow-lg">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-nutrition-green rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Sparkles className="w-8 h-8 text-white" />
+                    <span className="text-2xl">🎉</span>
                   </div>
-                  <h4 className="text-2xl font-bold text-nutrition-green-forest mb-3 font-sans">
+                  <h4 className="text-2xl font-bold text-nutrition-green-forest mb-3 title-playful">
                     ¡Ya casi estamos!
                   </h4>
                   <p className="text-lg text-nutrition-green-dark font-medium">

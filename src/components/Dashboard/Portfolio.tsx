@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Calendar, Play } from 'lucide-react';
+import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 interface PortfolioProps {
   onGoBack: () => void;
@@ -64,9 +65,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ onGoBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+    <DynamicBackground className="min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-md">
+      <header className="bg-white/80 backdrop-blur-sm shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Button
@@ -77,7 +78,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onGoBack }) => {
               <ArrowLeft className="w-5 h-5 mr-2" />
               Volver
             </Button>
-            <h1 className="text-2xl font-bold text-nutrition-black">Portfolio Diario</h1>
+            <h1 className="text-2xl font-bold text-nutrition-black title-main">Portfolio Diario</h1>
           </div>
         </div>
       </header>
@@ -85,7 +86,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onGoBack }) => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-nutrition-black mb-4">
+          <h2 className="text-3xl font-bold text-nutrition-black mb-4 title-playful">
             Contenido Diario de José Antonio
           </h2>
           <p className="text-lg text-nutrition-gray">
@@ -95,9 +96,9 @@ const Portfolio: React.FC<PortfolioProps> = ({ onGoBack }) => {
 
         <div className="space-y-8">
           {portfolioData.map((day, dayIndex) => (
-            <Card key={dayIndex} className="shadow-lg">
+            <Card key={dayIndex} className="shadow-lg bg-white/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald text-white">
-                <CardTitle className="flex items-center space-x-2">
+                <CardTitle className="flex items-center space-x-2 title-playful">
                   <Calendar className="w-5 h-5" />
                   <span>{formatDate(day.date)}</span>
                 </CardTitle>
@@ -137,7 +138,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ onGoBack }) => {
           ))}
         </div>
       </main>
-    </div>
+    </DynamicBackground>
   );
 };
 
