@@ -19,7 +19,7 @@ import { useAuth } from '@/hooks/useAuth';
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
@@ -37,9 +37,13 @@ const Index = () => {
     setShowDashboard(false);
   };
 
+  const handleLogout = () => {
+    setShowDashboard(false);
+  };
+
   if (showDashboard && user) {
-    return user.is_admin ? (
-      <AdminDashboard onBackToHome={handleBackToHome} />
+    return isAdmin ? (
+      <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
       <ClientDashboard onBackToHome={handleBackToHome} />
     );
@@ -49,19 +53,19 @@ const Index = () => {
     return (
       <Questionnaire 
         onClose={handleCloseQuestionnaire}
-        onGoToDashboard={handleGoToDashboard}
+        onComplete={handleGoToDashboard}
       />
     );
   }
 
   return (
     <div className="min-h-screen">
-      <Header onGoToDashboard={handleGoToDashboard} />
+      <Header />
       <main>
         <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
-        <AboutUs onStartQuestionnaire={handleStartQuestionnaire} />
+        <AboutUs />
         <Services />
-        <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
+        <Testimonials />
         <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
         <BMICalculator />
         <News />
