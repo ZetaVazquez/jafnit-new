@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
+import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 const Services: React.FC = () => {
   const services = [
@@ -43,70 +45,71 @@ const Services: React.FC = () => {
   ];
 
   return (
-    <section id="services" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
-            Nuestros Servicios
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ofrecemos un enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
-          </p>
-        </div>
+    <section id="services" className="py-20">
+      <DynamicBackground>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
+              Nuestros Servicios
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Ofrecemos un enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card key={index} className="h-full hover:shadow-lg transition-shadow duration-300 border-t-4 border-t-nutrition-green">
-              <CardHeader className="text-center pb-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
-                  <service.icon className="w-8 h-8" />
-                </div>
-                <CardTitle className="text-xl text-nutrition-black">
-                  {service.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-nutrition-gray mb-6">
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-nutrition-gray">
-                      <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <Card key={index} className="h-full bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-t-4 border-t-nutrition-green shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
+                    <service.icon className="w-8 h-8" />
+                  </div>
+                  <CardTitle className="text-xl text-nutrition-black title-playful">
+                    {service.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-nutrition-gray mb-6">
+                    {service.description}
+                  </p>
+                  <ul className="space-y-2">
+                    {service.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center text-sm text-nutrition-gray">
+                        <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-        
-        <div className="mt-16 bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light p-8 rounded-2xl text-center">
-          <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4">
-            ¿Necesitas algo más específico?
-          </h3>
-          <p className="text-nutrition-gray mb-6 max-w-2xl mx-auto">
-            Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva, 
-            trastornos alimentarios, alergias e intolerancias, y mucho más.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <span className="bg-white text-nutrition-green px-4 py-2 rounded-full text-sm font-medium">
-              Nutrición Deportiva
-            </span>
-            <span className="bg-white text-nutrition-green px-4 py-2 rounded-full text-sm font-medium">
-              Pérdida de Peso
-            </span>
-            <span className="bg-white text-nutrition-green px-4 py-2 rounded-full text-sm font-medium">
-              Ganancia Muscular
-            </span>
-            <span className="bg-white text-nutrition-green px-4 py-2 rounded-full text-sm font-medium">
-              Alergias e Intolerancias
-            </span>
+          <div className="mt-16 bg-gradient-to-r from-nutrition-green-lighter/80 to-nutrition-green-light/80 backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
+            <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
+              ¿Necesitas algo más específico?
+            </h3>
+            <p className="text-nutrition-gray mb-6 max-w-2xl mx-auto">
+              Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva, 
+              trastornos alimentarios, alergias e intolerancias, y mucho más.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
+                Nutrición Deportiva
+              </span>
+              <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
+                Pérdida de Peso
+              </span>
+              <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
+                Ganancia Muscular
+              </span>
+              <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
+                Alergias e Intolerancias
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      </DynamicBackground>
     </section>
   );
 };
