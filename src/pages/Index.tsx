@@ -53,7 +53,7 @@ const Index = () => {
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
-      <ClientDashboard onBackToHome={handleBackToHome} />
+      <ClientDashboard onNavigateToHome={handleBackToHome} />
     );
   }
 
