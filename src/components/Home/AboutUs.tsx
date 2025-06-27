@@ -15,6 +15,41 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
     { icon: Target, value: '100+', label: 'Objetivos Alcanzados' }
   ];
 
+  const testimonials = [
+    {
+      id: 1,
+      name: "María G.",
+      text: "Increíble transformación en 3 meses! José me ayudó a perder 12 kilos y ganar confianza. Su método realmente funciona 💪",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b1a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      rotation: "-rotate-3",
+      position: "top-left"
+    },
+    {
+      id: 2,
+      name: "Carlos R.",
+      text: "El mejor entrenador! Plan personalizado que se adapta a mi horario. Bajé 15 kilos sin sufrir 🙌",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      rotation: "rotate-2",
+      position: "top-right"
+    },
+    {
+      id: 3,
+      name: "Ana M.",
+      text: "Cambió mi vida completamente. Ahora tengo energía, autoestima y el cuerpo que siempre quise ❤️",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      rotation: "rotate-1",
+      position: "bottom-left"
+    },
+    {
+      id: 4,
+      name: "David L.",
+      text: "Profesional 100%. Sus consejos y seguimiento marcaron la diferencia. Recomendado totalmente 👍",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      rotation: "-rotate-2",
+      position: "bottom-right"
+    }
+  ];
+
   return (
     <section id="about" className="py-20 dynamic-background relative overflow-hidden">
       {/* Decorative background elements */}
@@ -45,63 +80,119 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* First section: Text + Photo - Mobile: stacked, Desktop: side by side */}
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-12 lg:mb-20">
-          {/* Text content - shows first on mobile */}
-          <div className="order-1 lg:order-1 w-full">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-lg border border-nutrition-green-light">
-              <h3 className="text-xl md:text-3xl font-bold text-nutrition-green mb-4 lg:mb-6 title-playful">
-                💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
-              </h3>
-              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
-                Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
-              </p>
-              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
-                🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
-              </p>
-              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
-                ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
-              </p>
-              <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed font-semibold text-nutrition-green">
-                Hasta que el cuerpo dijo basta.
-              </p>
+        {/* Main content area with testimonials */}
+        <div className="relative">
+          {/* Testimonials positioned around the content */}
+          {/* Top Left Testimonials */}
+          <div className="absolute top-0 left-0 transform -translate-x-4 -translate-y-4 z-20 hidden lg:block">
+            <div className={`${testimonials[0].rotation} transform hover:scale-105 transition-all duration-300`}>
+              <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-nutrition-green-light max-w-xs">
+                <div className="flex items-center mb-2">
+                  <img src={testimonials[0].image} alt={testimonials[0].name} className="w-8 h-8 rounded-full mr-2" />
+                  <span className="font-semibold text-sm text-nutrition-green">{testimonials[0].name}</span>
+                </div>
+                <p className="text-xs text-gray-700 leading-tight">{testimonials[0].text}</p>
+              </div>
             </div>
           </div>
-          
-          {/* Profile photo section - shows second on mobile, larger and centered */}
-          <div className="order-2 lg:order-2 relative flex justify-center items-center w-full py-8 lg:py-0">
-            {/* Decorative rings around the image - responsive sizes */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-80 h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] rounded-full border-2 lg:border-4 border-nutrition-green-light opacity-30 animate-pulse"></div>
+
+          {/* Top Right Testimonials */}
+          <div className="absolute top-0 right-0 transform translate-x-4 -translate-y-8 z-20 hidden lg:block">
+            <div className={`${testimonials[1].rotation} transform hover:scale-105 transition-all duration-300`}>
+              <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-nutrition-green-light max-w-xs">
+                <div className="flex items-center mb-2">
+                  <img src={testimonials[1].image} alt={testimonials[1].name} className="w-8 h-8 rounded-full mr-2" />
+                  <span className="font-semibold text-sm text-nutrition-green">{testimonials[1].name}</span>
+                </div>
+                <p className="text-xs text-gray-700 leading-tight">{testimonials[1].text}</p>
+              </div>
             </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-84 h-84 md:w-[400px] md:h-[400px] lg:w-[540px] lg:h-[540px] rounded-full border-1 lg:border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+          </div>
+
+          {/* Bottom Left Testimonials */}
+          <div className="absolute bottom-0 left-0 transform -translate-x-8 translate-y-4 z-20 hidden lg:block">
+            <div className={`${testimonials[2].rotation} transform hover:scale-105 transition-all duration-300`}>
+              <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-nutrition-green-light max-w-xs">
+                <div className="flex items-center mb-2">
+                  <img src={testimonials[2].image} alt={testimonials[2].name} className="w-8 h-8 rounded-full mr-2" />
+                  <span className="font-semibold text-sm text-nutrition-green">{testimonials[2].name}</span>
+                </div>
+                <p className="text-xs text-gray-700 leading-tight">{testimonials[2].text}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Right Testimonials */}
+          <div className="absolute bottom-0 right-0 transform translate-x-8 translate-y-8 z-20 hidden lg:block">
+            <div className={`${testimonials[3].rotation} transform hover:scale-105 transition-all duration-300`}>
+              <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-nutrition-green-light max-w-xs">
+                <div className="flex items-center mb-2">
+                  <img src={testimonials[3].image} alt={testimonials[3].name} className="w-8 h-8 rounded-full mr-2" />
+                  <span className="font-semibold text-sm text-nutrition-green">{testimonials[3].name}</span>
+                </div>
+                <p className="text-xs text-gray-700 leading-tight">{testimonials[3].text}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Main content grid */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-12 lg:mb-20">
+            {/* Left Content Block */}
+            <div className="order-1 lg:order-1 w-full">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-lg border border-nutrition-green-light">
+                <h3 className="text-xl md:text-3xl font-bold text-nutrition-green mb-4 lg:mb-6 title-playful">
+                  💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
+                </h3>
+                <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
+                  Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
+                </p>
+                <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
+                  🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
+                </p>
+                <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed">
+                  ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
+                </p>
+                <p className="text-base lg:text-lg text-gray-700 mb-4 lg:mb-6 leading-relaxed font-semibold text-nutrition-green">
+                  Hasta que el cuerpo dijo basta.
+                </p>
+              </div>
             </div>
             
-            {/* Main image container - responsive sizing */}
-            <div className="relative z-10 w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 lg:border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
-              <img
-                src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
-                alt="José Antonio - Tu Dietista y Entrenador Personal"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            {/* Floating info card - responsive positioning and sizing */}
-            <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 lg:-bottom-8 lg:-right-8 bg-white p-3 md:p-4 lg:p-6 rounded-xl lg:rounded-2xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <div className="flex items-center space-x-2 lg:space-x-3">
-                <div className="w-2 h-2 lg:w-3 lg:h-3 bg-nutrition-green rounded-full animate-pulse"></div>
-                <div>
-                  <h4 className="font-bold text-nutrition-green text-sm md:text-base lg:text-lg title-playful">José Antonio</h4>
-                  <p className="text-nutrition-gray text-xs md:text-sm">Dietista y Entrenador</p>
-                  <p className="text-xs text-gray-500 mt-1 hidden md:block">Tu Compañero en el Cambio</p>
+            {/* Profile photo section - much larger and more prominent */}
+            <div className="order-2 lg:order-2 relative flex justify-center items-center w-full py-8 lg:py-0">
+              {/* Decorative rings around the image */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-96 h-96 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] rounded-full border-2 lg:border-4 border-nutrition-green-light opacity-30 animate-pulse"></div>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-[400px] h-[400px] md:w-[520px] md:h-[520px] lg:w-[640px] lg:h-[640px] rounded-full border-1 lg:border-2 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+              </div>
+              
+              {/* Main image container - much larger */}
+              <div className="relative z-10 w-80 h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px] rounded-full border-4 lg:border-8 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
+                <img
+                  src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
+                  alt="José Antonio - Tu Dietista y Entrenador Personal"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Floating info card */}
+              <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 lg:-bottom-8 lg:-right-8 bg-white p-3 md:p-4 lg:p-6 rounded-xl lg:rounded-2xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  <div className="w-2 h-2 lg:w-3 lg:h-3 bg-nutrition-green rounded-full animate-pulse"></div>
+                  <div>
+                    <h4 className="font-bold text-nutrition-green text-sm md:text-base lg:text-lg title-playful">José Antonio</h4>
+                    <p className="text-nutrition-gray text-xs md:text-sm">Dietista y Entrenador</p>
+                    <p className="text-xs text-gray-500 mt-1 hidden md:block">Tu Compañero en el Cambio</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Second section: Two blocks - Mobile: stacked, Desktop: horizontal */}
+        {/* Second section: Two blocks horizontally aligned */}
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-8 mb-12 lg:mb-20">
           <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl p-6 lg:p-8 shadow-lg">
             <h4 className="text-xl lg:text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
@@ -151,7 +242,25 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* Stats Section - responsive grid */}
+        {/* Mobile testimonials - only visible on mobile */}
+        <div className="lg:hidden mb-12">
+          <h3 className="text-xl font-bold text-center text-nutrition-green mb-6 title-main">
+            Lo que dicen mis clientes
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.id} className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-nutrition-green-light">
+                <div className="flex items-center mb-2">
+                  <img src={testimonial.image} alt={testimonial.name} className="w-10 h-10 rounded-full mr-3" />
+                  <span className="font-semibold text-nutrition-green">{testimonial.name}</span>
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">{testimonial.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats Section */}
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-xl border border-nutrition-green-light">
           <h3 className="text-2xl lg:text-3xl font-bold text-center text-nutrition-green mb-6 lg:mb-8 title-main">
             Resultados Que Hablan Por Sí Solos

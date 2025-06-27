@@ -13,25 +13,25 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "No se trata de hacer más,",
-      subtitle: "sino de hacerlo diferente."
+      title: "Deja de vivir en el cuerpo que ya no quieres",
+      subtitle: "Transforma tu físico y tu mentalidad con un plan que realmente funciona. Sin dietas imposibles, sin entrenamientos de 3 horas. Solo resultados reales."
     },
     {
       image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "No necesitas más fuerza,",
-      subtitle: "necesitas dirección."
+      title: "¿Cansado de intentar y no conseguir resultados?",
+      subtitle: "Yo estuve donde tú estás. Perdí 30 kilos sin destruir mi salud. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen."
     },
     {
       image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "Transforma tu Vida",
-      subtitle: "Con nutrición personalizada"
+      title: "El problema no eres tú. Es tu método.",
+      subtitle: "Planes personalizados que se adaptan a tu vida real. Nada de copiar y pegar. Tu cuerpo, tus objetivos, tu ritmo."
     }
   ];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(timer);
   }, []);
@@ -62,9 +62,9 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         {/* Left Side with Content */}
         <div className="absolute inset-0 diagonal-split bg-gradient-to-br from-nutrition-green/95 via-nutrition-green-emerald/90 to-nutrition-green-sage/85">
           <div className="flex items-center justify-start h-full pl-8 lg:pl-16">
-            <div className="text-white max-w-lg">
+            <div className="text-white max-w-2xl">
               {/* Logo and Brand */}
-              <div className="flex items-center space-x-4 mb-6">
+              <div className="flex items-center space-x-4 mb-8">
                 <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
                   <img 
                     src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
@@ -79,20 +79,20 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 </div>
               </div>
               
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-yellow-300 drop-shadow-md">
-                Dietética y Entrenamiento
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-yellow-300 drop-shadow-md">
+                Dietética y Entrenamiento Personal
               </h2>
-              <h3 className="text-xl md:text-2xl lg:text-3xl mb-4 text-yellow-100 font-semibold drop-shadow-md">
+              <h3 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 text-yellow-100 font-bold drop-shadow-md leading-tight">
                 {slides[currentSlide].title}
               </h3>
-              <p className="text-lg md:text-xl mb-8 text-yellow-100 font-medium drop-shadow-sm">
+              <p className="text-lg md:text-xl lg:text-2xl mb-10 text-yellow-100 font-medium drop-shadow-sm leading-relaxed max-w-xl">
                 {slides[currentSlide].subtitle}
               </p>
               <Button
                 onClick={onStartQuestionnaire}
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-10 py-5 text-xl font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                Comenzar Evaluación
+                🎯 COMENZAR MI TRANSFORMACIÓN
               </Button>
             </div>
           </div>
@@ -122,19 +122,19 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           </div>
           
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-300 drop-shadow-md">
-            Dietética y Entrenamiento
+            Dietética y Entrenamiento Personal
           </h2>
-          <h3 className="text-xl md:text-2xl mb-4 text-yellow-100 font-semibold drop-shadow-md">
+          <h3 className="text-xl md:text-2xl lg:text-3xl mb-4 text-yellow-100 font-bold drop-shadow-md leading-tight">
             {slides[currentSlide].title}
           </h3>
-          <p className="text-lg md:text-xl mb-8 text-yellow-100 font-medium drop-shadow-sm">
+          <p className="text-lg md:text-xl mb-8 text-yellow-100 font-medium drop-shadow-sm leading-relaxed">
             {slides[currentSlide].subtitle}
           </p>
           <Button
             onClick={onStartQuestionnaire}
             className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           >
-            Comenzar Evaluación
+            🎯 COMENZAR MI TRANSFORMACIÓN
           </Button>
         </div>
       </div>
