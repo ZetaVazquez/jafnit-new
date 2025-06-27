@@ -45,7 +45,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* Main content grid according to sketch */}
+        {/* Main content grid according to original layout */}
         <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start mb-12 lg:mb-20">
           {/* Top Left Text Block */}
           <div className="order-1 lg:order-1 lg:col-span-1 lg:row-span-1">
