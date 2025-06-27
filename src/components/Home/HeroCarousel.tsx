@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -13,18 +12,18 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "Deja de vivir en el cuerpo que ya no quieres",
-      subtitle: "Transforma tu físico y tu mentalidad con un plan que realmente funciona. Sin dietas imposibles, sin entrenamientos de 3 horas. Solo resultados reales."
+      title: "Deja de vivir en el cuerpo que ya no quieres y empieza a construir la versión más fuerte de ti mismo",
+      subtitle: "Transforma tu físico y tu mentalidad con un plan que realmente funciona, diseñado específicamente para personas como tú que han intentado todo sin éxito. Sin dietas imposibles de seguir, sin entrenamientos de 3 horas que no puedes mantener. Solo resultados reales y duraderos que te harán sentir orgulloso cada vez que te mires al espejo."
     },
     {
       image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "¿Cansado de intentar y no conseguir resultados?",
-      subtitle: "Yo estuve donde tú estás. Perdí 30 kilos sin destruir mi salud. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen."
+      title: "¿Cansado de intentar y no conseguir resultados? Yo pasé por exactamente lo mismo que tú estás viviendo ahora",
+      subtitle: "Yo estuve donde tú estás en este momento. Perdí 30 kilos sin destruir mi salud ni mi vida social, y lo más importante: sin volver a recuperar el peso perdido. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen y la confianza que necesitan para vivir la vida que realmente quieren."
     },
     {
       image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      title: "El problema no eres tú. Es tu método.",
-      subtitle: "Planes personalizados que se adaptan a tu vida real. Nada de copiar y pegar. Tu cuerpo, tus objetivos, tu ritmo."
+      title: "El problema no eres tú, no es tu fuerza de voluntad, no es tu genética. Es tu método y nadie te lo había explicado antes",
+      subtitle: "Planes personalizados que se adaptan a tu vida real, no a la vida perfecta que no tienes. Nada de copiar y pegar rutinas de internet que no funcionan para ti. Tu cuerpo es único, tus objetivos son únicos, tu ritmo de vida es único, y por eso tu plan debe ser único también."
     }
   ];
 
@@ -104,7 +103,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
       {/* Content for mobile/tablet - shown on screens smaller than 1110px */}
       <div className="absolute inset-0 xl:[1110px]:hidden flex items-center justify-center">
-        <div className="text-white max-w-lg text-center px-8">
+        <div className="text-white max-w-4xl text-center px-8">
           {/* Logo and Brand */}
           <div className="flex items-center justify-center space-x-4 mb-6">
             <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
@@ -124,10 +123,10 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-300 drop-shadow-md">
             Dietética y Entrenamiento Personal
           </h2>
-          <h3 className="text-xl md:text-2xl lg:text-3xl mb-4 text-yellow-100 font-bold drop-shadow-md leading-tight">
+          <h3 className="text-lg md:text-xl lg:text-2xl mb-4 text-yellow-100 font-bold drop-shadow-md leading-tight">
             {slides[currentSlide].title}
           </h3>
-          <p className="text-lg md:text-xl mb-8 text-yellow-100 font-medium drop-shadow-sm leading-relaxed">
+          <p className="text-base md:text-lg mb-8 text-yellow-100 font-medium drop-shadow-sm leading-relaxed">
             {slides[currentSlide].subtitle}
           </p>
           <Button
