@@ -47,7 +47,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
   ];
 
   return (
-    <section id="about" className="py-12 dynamic-background relative overflow-hidden">
+    <section id="about" className="py-16 dynamic-background relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Círculos grandes */}
@@ -70,32 +70,32 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-5xl font-bold text-nutrition-black mb-6 title-main tracking-tight">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-6xl font-bold text-nutrition-black mb-8 title-main tracking-tight">
             Sobre Mi
           </h2>
         </div>
 
-        {/* FILA 1: Texto arriba a la izquierda y testimonios arriba a la derecha */}
-        <div className="mb-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* FILA 1: Cuadro de texto arriba a la izquierda y testimonios arriba a la derecha */}
+        <div className="mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Cuadro izquierda - texto original */}
             <div className="flex justify-start">
-              <div className="w-full max-w-md">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-nutrition-green-light">
-                  <h3 className="text-lg md:text-xl font-bold text-nutrition-green mb-3 title-playful">
+              <div className="w-full max-w-2xl">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-nutrition-green-light">
+                  <h3 className="text-2xl md:text-3xl font-bold text-nutrition-green mb-6 title-playful">
                     💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
                   </h3>
-                  <p className="text-sm text-nutrition-green-dark mb-2 leading-relaxed">
+                  <p className="text-lg text-nutrition-green-dark mb-4 leading-relaxed">
                     Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
                   </p>
-                  <p className="text-sm text-nutrition-green-dark mb-2 leading-relaxed">
+                  <p className="text-lg text-nutrition-green-dark mb-4 leading-relaxed">
                     🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
                   </p>
-                  <p className="text-sm text-nutrition-green-dark mb-2 leading-relaxed">
+                  <p className="text-lg text-nutrition-green-dark mb-4 leading-relaxed">
                     ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
                   </p>
-                  <p className="text-sm text-nutrition-green-dark font-semibold">
+                  <p className="text-lg text-nutrition-green-dark font-semibold">
                     Hasta que el cuerpo dijo basta.
                   </p>
                 </div>
@@ -104,29 +104,29 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
             {/* Cuadro derecha - testimonios */}
             <div className="flex justify-end">
-              <div className="w-full max-w-md">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-nutrition-green-light">
-                  <h4 className="text-lg font-bold text-nutrition-green mb-4 title-playful text-center">
+              <div className="w-full max-w-2xl">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-nutrition-green-light">
+                  <h4 className="text-2xl font-bold text-nutrition-green mb-6 title-playful text-center">
                     💬 Testimonios
                   </h4>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {testimonials.slice(0, 2).map((testimonial) => (
-                      <div key={testimonial.id} className="flex items-start space-x-3">
+                      <div key={testimonial.id} className="flex items-start space-x-4">
                         <img
                           src={testimonial.image}
                           alt={testimonial.name}
-                          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                          className="w-16 h-16 rounded-full object-cover flex-shrink-0"
                         />
                         <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h5 className="font-semibold text-nutrition-green text-sm">{testimonial.name}</h5>
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h5 className="font-semibold text-nutrition-green text-lg">{testimonial.name}</h5>
                             <div className="flex">
                               {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="w-3 h-3 fill-current text-nutrition-orange" />
+                                <Star key={i} className="w-5 h-5 fill-current text-nutrition-orange" />
                               ))}
                             </div>
                           </div>
-                          <p className="text-xs text-nutrition-green-dark leading-relaxed">"{testimonial.comment}"</p>
+                          <p className="text-base text-nutrition-green-dark leading-relaxed">"{testimonial.comment}"</p>
                         </div>
                       </div>
                     ))}
@@ -137,20 +137,20 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 2: Foto en el centro con cuadrito de info al lado */}
-        <div className="mb-6">
-          <div className="flex justify-center">
-            <div className="relative flex justify-center items-center w-full">
+        {/* FILA 2: Foto en el centro con cuadrito de info AL LADO */}
+        <div className="mb-12">
+          <div className="flex justify-center items-center">
+            <div className="relative flex items-center justify-center space-x-8">
               {/* Decorative rings around the image */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-60 h-60 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full border-2 border-nutrition-green-light opacity-30 animate-pulse"></div>
+              <div className="absolute left-0 inset-y-0 flex items-center justify-center">
+                <div className="w-80 h-80 md:w-96 md:h-96 lg:w-[28rem] lg:h-[28rem] rounded-full border-2 border-nutrition-green-light opacity-30 animate-pulse"></div>
               </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-68 h-68 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full border-1 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+              <div className="absolute left-0 inset-y-0 flex items-center justify-center">
+                <div className="w-88 h-88 md:w-[26rem] md:h-[26rem] lg:w-[32rem] lg:h-[32rem] rounded-full border-1 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
               </div>
               
               {/* Main image container */}
-              <div className="relative z-10 w-52 h-52 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
+              <div className="relative z-10 w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
                 <img
                   src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
                   alt="José Antonio - Tu Dietista y Entrenador Personal"
@@ -158,13 +158,13 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 />
               </div>
               
-              {/* Floating info card - movido al lado de la foto */}
-              <div className="absolute top-0 right-0 md:top-4 md:right-4 lg:-right-8 lg:top-8 bg-white p-3 md:p-4 rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-nutrition-green rounded-full animate-pulse"></div>
+              {/* Floating info card - AL LADO de la foto */}
+              <div className="bg-white p-6 rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 ml-8">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-nutrition-green rounded-full animate-pulse"></div>
                   <div>
-                    <h4 className="font-bold text-nutrition-green text-sm md:text-base title-playful">José Antonio</h4>
-                    <p className="text-nutrition-gray text-xs">Dietista y Entrenador</p>
+                    <h4 className="font-bold text-nutrition-green text-xl md:text-2xl title-playful">José Antonio</h4>
+                    <p className="text-nutrition-gray text-lg">Dietista y Entrenador</p>
                   </div>
                 </div>
               </div>
@@ -173,33 +173,33 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         </div>
 
         {/* FILA 3: Testimonios abajo a la izquierda y texto abajo a la derecha */}
-        <div className="mb-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Cuadro izquierda - testimonios */}
             <div className="flex justify-start">
-              <div className="w-full max-w-md">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-nutrition-green-light">
-                  <h4 className="text-lg font-bold text-nutrition-green mb-4 title-playful text-center">
+              <div className="w-full max-w-2xl">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-nutrition-green-light">
+                  <h4 className="text-2xl font-bold text-nutrition-green mb-6 title-playful text-center">
                     💬 Más Testimonios
                   </h4>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {testimonials.slice(2, 4).map((testimonial) => (
-                      <div key={testimonial.id} className="flex items-start space-x-3">
+                      <div key={testimonial.id} className="flex items-start space-x-4">
                         <img
                           src={testimonial.image}
                           alt={testimonial.name}
-                          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                          className="w-16 h-16 rounded-full object-cover flex-shrink-0"
                         />
                         <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h5 className="font-semibold text-nutrition-green text-sm">{testimonial.name}</h5>
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h5 className="font-semibold text-nutrition-green text-lg">{testimonial.name}</h5>
                             <div className="flex">
                               {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="w-3 h-3 fill-current text-nutrition-orange" />
+                                <Star key={i} className="w-5 h-5 fill-current text-nutrition-orange" />
                               ))}
                             </div>
                           </div>
-                          <p className="text-xs text-nutrition-green-dark leading-relaxed">"{testimonial.comment}"</p>
+                          <p className="text-base text-nutrition-green-dark leading-relaxed">"{testimonial.comment}"</p>
                         </div>
                       </div>
                     ))}
@@ -210,18 +210,18 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
             {/* Cuadro derecha - texto original */}
             <div className="flex justify-end">
-              <div className="w-full max-w-md">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-nutrition-green-light">
-                  <h4 className="text-lg font-bold text-nutrition-green mb-3 title-playful">
+              <div className="w-full max-w-2xl">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-nutrition-green-light">
+                  <h4 className="text-2xl font-bold text-nutrition-green mb-6 title-playful">
                     🎯 Mi método: Simple, efectivo y sostenible
                   </h4>
-                  <p className="text-sm text-nutrition-green-dark leading-relaxed mb-2">
+                  <p className="text-lg text-nutrition-green-dark leading-relaxed mb-4">
                     Créeme cuando te digo que he probado de todo: dietas extremas, suplementos "milagro", rutinas imposibles 🔄.
                   </p>
-                  <p className="text-sm text-nutrition-green-dark leading-relaxed mb-2">
+                  <p className="text-lg text-nutrition-green-dark leading-relaxed mb-4">
                     Lo que funciona de verdad es un enfoque equilibrado que puedas mantener en el tiempo 📈.
                   </p>
-                  <p className="text-sm text-nutrition-green-dark leading-relaxed font-semibold">
+                  <p className="text-lg text-nutrition-green-dark leading-relaxed font-semibold">
                     No más extremos. Solo resultados reales y duraderos 🏆.
                   </p>
                 </div>
@@ -231,35 +231,35 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         </div>
 
         {/* FILA 4: Cuadro centrado con call to action */}
-        <div className="mb-8">
+        <div className="mb-12">
           <div className="flex justify-center">
-            <div className="w-full max-w-2xl">
-              <div className="bg-white backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-nutrition-green-light">
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-nutrition-green-dark">
-                    <span className="text-nutrition-green font-semibold mr-2">🔥</span>
+            <div className="w-full max-w-4xl">
+              <div className="bg-white backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-nutrition-green-light">
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-center text-lg text-nutrition-green-dark">
+                    <span className="text-nutrition-green font-semibold mr-3 text-xl">🔥</span>
                     Sin dietas imposibles
                   </div>
-                  <div className="flex items-center text-sm text-nutrition-green-dark">
-                    <span className="text-nutrition-green font-semibold mr-2">🏋️‍♂️</span>
+                  <div className="flex items-center text-lg text-nutrition-green-dark">
+                    <span className="text-nutrition-green font-semibold mr-3 text-xl">🏋️‍♂️</span>
                     Sin rutinas de 3 horas al día
                   </div>
-                  <div className="flex items-center text-sm text-nutrition-green-dark">
-                    <span className="text-nutrition-green font-semibold mr-2">🧊</span>
+                  <div className="flex items-center text-lg text-nutrition-green-dark">
+                    <span className="text-nutrition-green font-semibold mr-3 text-xl">🧊</span>
                     Sin perder el norte
                   </div>
                 </div>
-                <p className="text-sm text-nutrition-green-dark mb-2 leading-relaxed">
+                <p className="text-lg text-nutrition-green-dark mb-4 leading-relaxed">
                   Si estás cansado de no reconocerte en el espejo, de probar y fallar, de sentir que ya nada funciona…
                 </p>
-                <p className="text-sm text-nutrition-green-dark mb-4 leading-relaxed font-semibold text-nutrition-green">
+                <p className="text-lg text-nutrition-green-dark mb-6 leading-relaxed font-semibold text-nutrition-green">
                   👉 Yo estuve ahí. Y salí. Ahora te toca a ti.
                 </p>
                 
                 <div className="text-center">
                   <Button 
                     onClick={onQuestionnaireOpen}
-                    className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-6 py-3 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full sm:w-auto"
+                    className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-8 py-4 text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full sm:w-auto"
                   >
                     🎯 QUIERO CAMBIAR
                   </Button>
@@ -270,18 +270,18 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         </div>
 
         {/* Stats Section */}
-        <div className="bg-white backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-nutrition-green-light">
-          <h3 className="text-2xl font-bold text-center text-nutrition-green mb-6 title-main">
+        <div className="bg-white backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-nutrition-green-light">
+          <h3 className="text-3xl font-bold text-center text-nutrition-green mb-8 title-main">
             Resultados Que Hablan Por Sí Solos
           </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <stat.icon className="w-8 h-8" />
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <stat.icon className="w-10 h-10" />
                 </div>
-                <div className="text-2xl lg:text-3xl font-bold text-nutrition-green mb-1 title-main">{stat.value}</div>
-                <div className="text-nutrition-gray font-medium text-sm">{stat.label}</div>
+                <div className="text-3xl lg:text-4xl font-bold text-nutrition-green mb-2 title-main">{stat.value}</div>
+                <div className="text-nutrition-gray font-medium text-base">{stat.label}</div>
               </div>
             ))}
           </div>
