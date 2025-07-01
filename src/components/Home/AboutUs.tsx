@@ -44,26 +44,49 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* FILA 1: Texto arriba a la izquierda */}
+        {/* FILA 1: Texto arriba a la izquierda y arriba a la derecha */}
         <div className="mb-8">
-          <div className="flex justify-start">
-            <div className="w-full lg:w-2/3 xl:w-1/2">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-nutrition-green-light">
-                <h3 className="text-xl md:text-2xl font-bold text-nutrition-green mb-4 title-playful">
-                  💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
-                </h3>
-                <p className="text-base text-gray-700 mb-3 leading-relaxed">
-                  Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
-                </p>
-                <p className="text-base text-gray-700 mb-3 leading-relaxed">
-                  🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
-                </p>
-                <p className="text-base text-gray-700 mb-3 leading-relaxed">
-                  ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
-                </p>
-                <p className="text-base text-gray-700 font-semibold text-nutrition-green">
-                  Hasta que el cuerpo dijo basta.
-                </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Cuadro izquierda */}
+            <div className="flex justify-start">
+              <div className="w-full">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-nutrition-green-light">
+                  <h3 className="text-xl md:text-2xl font-bold text-nutrition-green mb-4 title-playful">
+                    💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
+                  </h3>
+                  <p className="text-base text-nutrition-green-dark mb-3 leading-relaxed">
+                    Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark mb-3 leading-relaxed">
+                    🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark mb-3 leading-relaxed">
+                    ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark font-semibold">
+                    Hasta que el cuerpo dijo basta.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Cuadro derecha */}
+            <div className="flex justify-end">
+              <div className="w-full">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-nutrition-green-light">
+                  <h4 className="text-xl font-bold text-nutrition-green mb-4 title-playful">
+                    💪 El camino hacia la transformación real
+                  </h4>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
+                    No fue fácil cambiar el chip. Tuve que desaprender años de malos hábitos y creencias erróneas sobre la pérdida de peso 📚.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
+                    Aprendí que no se trata de sufrir, sino de entender cómo funciona tu cuerpo 🧬.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed font-semibold">
+                    La clave está en la paciencia y la consistencia, no en la perfección ✨.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -104,23 +127,46 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 3: Texto abajo a la derecha */}
+        {/* FILA 3: Texto abajo a la izquierda y abajo a la derecha */}
         <div className="mb-8">
-          <div className="flex justify-end">
-            <div className="w-full lg:w-2/3 xl:w-1/2">
-              <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl p-6 shadow-xl">
-                <h4 className="text-xl font-bold text-nutrition-green-dark mb-4 title-playful">
-                  🚀 Mi misión ahora es ayudarte a transformar tu físico sin destruirte en el intento
-                </h4>
-                <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
-                  Ese fue el punto de inflexión. Empecé a estudiar, a entender cómo funciona realmente el cuerpo y la mente 🧠. Dejé de castigarme y reconstruí mi forma de entrenar, de comer y de vivir.
-                </p>
-                <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
-                  Hoy soy dietista y entrenador. Pero sobre todo, soy alguien que ha estado donde tú estás.
-                </p>
-                <p className="text-base text-nutrition-green-dark leading-relaxed font-semibold">
-                  Trabajo con personas reales, con agendas apretadas, inseguridades y objetivos claros 🎯
-                </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Cuadro izquierda */}
+            <div className="flex justify-start">
+              <div className="w-full">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-nutrition-green-light">
+                  <h4 className="text-xl font-bold text-nutrition-green mb-4 title-playful">
+                    🎯 Mi método: Simple, efectivo y sostenible
+                  </h4>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
+                    Créeme cuando te digo que he probado de todo: dietas extremas, suplementos "milagro", rutinas imposibles 🔄.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
+                    Lo que funciona de verdad es un enfoque equilibrado que puedas mantener en el tiempo 📈.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed font-semibold">
+                    No más extremos. Solo resultados reales y duraderos 🏆.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Cuadro derecha */}
+            <div className="flex justify-end">
+              <div className="w-full">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-nutrition-green-light">
+                  <h4 className="text-xl font-bold text-nutrition-green mb-4 title-playful">
+                    🚀 Mi misión ahora es ayudarte a transformar tu físico sin destruirte en el intento
+                  </h4>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
+                    Ese fue el punto de inflexión. Empecé a estudiar, a entender cómo funciona realmente el cuerpo y la mente 🧠. Dejé de castigarme y reconstruí mi forma de entrenar, de comer y de vivir.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed mb-3">
+                    Hoy soy dietista y entrenador. Pero sobre todo, soy alguien que ha estado donde tú estás.
+                  </p>
+                  <p className="text-base text-nutrition-green-dark leading-relaxed font-semibold">
+                    Trabajo con personas reales, con agendas apretadas, inseguridades y objetivos claros 🎯
+                  </p>
+                </div>
               </div>
             </div>
           </div>
