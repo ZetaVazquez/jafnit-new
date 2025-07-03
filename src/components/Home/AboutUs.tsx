@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Award, Users, Heart, Target, Star } from 'lucide-react';
+import { Award, Users, Heart, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface AboutUsProps {
@@ -13,38 +13,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
     { icon: Award, value: '6', label: 'Meses de Experiencia' },
     { icon: Heart, value: '100%', label: 'Compromiso Personal' },
     { icon: Target, value: '100+', label: 'Objetivos Alcanzados' }
-  ];
-
-  // Testimonios de ejemplo usando la misma imagen
-  const testimonials = [
-    {
-      id: '1',
-      name: 'María González',
-      comment: 'José Antonio me ayudó a transformar completamente mi estilo de vida. En 6 meses perdí 15 kilos y gané mucha confianza.',
-      rating: 5,
-      image: '/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png'
-    },
-    {
-      id: '2',
-      name: 'Carlos Rodríguez',
-      comment: 'El plan personalizado de entrenamiento y nutrición superó todas mis expectativas. Recomiendo 100% sus servicios.',
-      rating: 5,
-      image: '/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png'
-    },
-    {
-      id: '3',
-      name: 'Ana Martín',
-      comment: 'Profesional, dedicado y con resultados reales. Mi salud y energía mejoraron significativamente.',
-      rating: 5,
-      image: '/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png'
-    },
-    {
-      id: '4',
-      name: 'David López',
-      comment: 'La mejor inversión que he hecho en mi salud. El seguimiento personalizado marca la diferencia.',
-      rating: 5,
-      image: '/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png'
-    }
   ];
 
   return (
@@ -77,62 +45,26 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* FILA 1: Cuadro de texto arriba a la izquierda y testimonios arriba a la derecha */}
+        {/* FILA 1: Cuadro de texto arriba a la izquierda solamente */}
         <div className="mb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Cuadro izquierda - texto original */}
-            <div className="flex justify-start">
-              <div className="w-full max-w-3xl">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-nutrition-green-light">
-                  <h3 className="text-3xl md:text-4xl font-bold text-nutrition-green mb-8 title-playful">
-                    💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
-                  </h3>
-                  <p className="text-xl text-nutrition-green-dark mb-6 leading-relaxed">
-                    Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
-                  </p>
-                  <p className="text-xl text-nutrition-green-dark mb-6 leading-relaxed">
-                    🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
-                  </p>
-                  <p className="text-xl text-nutrition-green-dark mb-6 leading-relaxed">
-                    ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
-                  </p>
-                  <p className="text-xl text-nutrition-green-dark font-semibold">
-                    Hasta que el cuerpo dijo basta.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Cuadro derecha - testimonios */}
-            <div className="flex justify-end">
-              <div className="w-full max-w-3xl">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-nutrition-green-light">
-                  <h4 className="text-3xl font-bold text-nutrition-green mb-8 title-playful text-center">
-                    💬 Testimonios
-                  </h4>
-                  <div className="space-y-8">
-                    {testimonials.slice(0, 2).map((testimonial) => (
-                      <div key={testimonial.id} className="flex items-start space-x-6">
-                        <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <h5 className="font-semibold text-nutrition-green text-xl">{testimonial.name}</h5>
-                            <div className="flex">
-                              {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="w-6 h-6 fill-current text-nutrition-orange" />
-                              ))}
-                            </div>
-                          </div>
-                          <p className="text-lg text-nutrition-green-dark leading-relaxed">"{testimonial.comment}"</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          <div className="flex justify-start">
+            <div className="w-full max-w-3xl">
+              <div className="bg-white backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-nutrition-green-light">
+                <h3 className="text-3xl md:text-4xl font-bold text-nutrition-green mb-8 title-playful">
+                  💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
+                </h3>
+                <p className="text-xl text-nutrition-green-dark mb-6 leading-relaxed">
+                  Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
+                </p>
+                <p className="text-xl text-nutrition-green-dark mb-6 leading-relaxed">
+                  🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
+                </p>
+                <p className="text-xl text-nutrition-green-dark mb-6 leading-relaxed">
+                  ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
+                </p>
+                <p className="text-xl text-nutrition-green-dark font-semibold">
+                  Hasta que el cuerpo dijo basta.
+                </p>
               </div>
             </div>
           </div>
@@ -173,59 +105,23 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 3: Testimonios abajo a la izquierda y texto abajo a la derecha */}
+        {/* FILA 3: Cuadro de texto abajo a la derecha solamente */}
         <div className="mb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Cuadro izquierda - testimonios */}
-            <div className="flex justify-start">
-              <div className="w-full max-w-3xl">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-nutrition-green-light">
-                  <h4 className="text-3xl font-bold text-nutrition-green mb-8 title-playful text-center">
-                    💬 Más Testimonios
-                  </h4>
-                  <div className="space-y-8">
-                    {testimonials.slice(2, 4).map((testimonial) => (
-                      <div key={testimonial.id} className="flex items-start space-x-6">
-                        <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <h5 className="font-semibold text-nutrition-green text-xl">{testimonial.name}</h5>
-                            <div className="flex">
-                              {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="w-6 h-6 fill-current text-nutrition-orange" />
-                              ))}
-                            </div>
-                          </div>
-                          <p className="text-lg text-nutrition-green-dark leading-relaxed">"{testimonial.comment}"</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Cuadro derecha - texto original */}
-            <div className="flex justify-end">
-              <div className="w-full max-w-3xl">
-                <div className="bg-white backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-nutrition-green-light">
-                  <h4 className="text-3xl font-bold text-nutrition-green mb-8 title-playful">
-                    🎯 Mi método: Simple, efectivo y sostenible
-                  </h4>
-                  <p className="text-xl text-nutrition-green-dark leading-relaxed mb-6">
-                    Créeme cuando te digo que he probado de todo: dietas extremas, suplementos "milagro", rutinas imposibles 🔄.
-                  </p>
-                  <p className="text-xl text-nutrition-green-dark leading-relaxed mb-6">
-                    Lo que funciona de verdad es un enfoque equilibrado que puedas mantener en el tiempo 📈.
-                  </p>
-                  <p className="text-xl text-nutrition-green-dark leading-relaxed font-semibold">
-                    No más extremos. Solo resultados reales y duraderos 🏆.
-                  </p>
-                </div>
+          <div className="flex justify-end">
+            <div className="w-full max-w-3xl">
+              <div className="bg-white backdrop-blur-sm rounded-2xl p-10 shadow-xl border border-nutrition-green-light">
+                <h4 className="text-3xl font-bold text-nutrition-green mb-8 title-playful">
+                  🎯 Mi método: Simple, efectivo y sostenible
+                </h4>
+                <p className="text-xl text-nutrition-green-dark leading-relaxed mb-6">
+                  Créeme cuando te digo que he probado de todo: dietas extremas, suplementos "milagro", rutinas imposibles 🔄.
+                </p>
+                <p className="text-xl text-nutrition-green-dark leading-relaxed mb-6">
+                  Lo que funciona de verdad es un enfoque equilibrado que puedas mantener en el tiempo 📈.
+                </p>
+                <p className="text-xl text-nutrition-green-dark leading-relaxed font-semibold">
+                  No más extremos. Solo resultados reales y duraderos 🏆.
+                </p>
               </div>
             </div>
           </div>
