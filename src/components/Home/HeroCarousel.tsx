@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -103,10 +104,10 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
       {/* Content for mobile/tablet - shown on screens smaller than 1110px */}
       <div className="absolute inset-0 xl:[1110px]:hidden flex items-center justify-center">
-        <div className="text-white max-w-4xl text-center px-8">
+        <div className="text-white max-w-4xl text-center px-4 sm:px-6">
           {/* Logo and Brand */}
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
+          <div className="flex items-center justify-center space-x-3 mb-4 sm:mb-6">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
               <img 
                 src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
                 alt="JAFNFIT Logo" 
@@ -114,24 +115,24 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
               />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight text-white drop-shadow-lg">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-white drop-shadow-lg">
                 JAFNFIT
               </h1>
             </div>
           </div>
           
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-300 drop-shadow-md">
+          <h2 className="text-lg sm:text-xl md:text-3xl font-bold mb-4 sm:mb-6 text-yellow-300 drop-shadow-md">
             Dietética y Entrenamiento Personal
           </h2>
-          <h3 className="text-lg md:text-xl lg:text-2xl mb-4 text-yellow-100 font-bold drop-shadow-md leading-tight">
+          <h3 className="text-sm sm:text-base md:text-xl lg:text-2xl mb-3 sm:mb-4 text-yellow-100 font-bold drop-shadow-md leading-tight px-2">
             {slides[currentSlide].title}
           </h3>
-          <p className="text-base md:text-lg mb-8 text-yellow-100 font-medium drop-shadow-sm leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-lg mb-6 sm:mb-8 text-yellow-100 font-medium drop-shadow-sm leading-relaxed px-2">
             {slides[currentSlide].subtitle}
           </p>
           <Button
             onClick={onStartQuestionnaire}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
           >
             🎯 COMENZAR MI TRANSFORMACIÓN
           </Button>
