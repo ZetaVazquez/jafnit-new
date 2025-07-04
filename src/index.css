@@ -17,16 +17,19 @@
 
   * {
     @apply border-border;
+    background-color: transparent !important;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
+    background-color: white !important;
   }
 
   html {
     scroll-behavior: smooth;
+    background-color: white !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -50,6 +53,11 @@
 
   p {
     font-family: 'Inter', sans-serif;
+  }
+
+  /* Remove any yellow backgrounds */
+  div, section, main, header, footer, article, aside, nav {
+    background-color: transparent !important;
   }
 }
 
@@ -164,6 +172,17 @@
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-top: 26px solid rgba(5, 150, 105, 0.15);
+  }
+
+  /* Ensure no yellow backgrounds anywhere */
+  * {
+    background-color: transparent !important;
+  }
+
+  /* Only allow specific backgrounds */
+  .bg-white, .bg-nutrition-green, .bg-nutrition-green-dark, .bg-nutrition-green-light,
+  .bg-gradient-to-br, .bg-gradient-to-r, .dynamic-background {
+    background-color: revert !important;
   }
 }
 
