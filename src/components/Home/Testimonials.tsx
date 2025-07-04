@@ -2,7 +2,6 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { Testimonial } from '@/types';
-import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 interface TestimonialsProps {
   onStartQuestionnaire: () => void;
@@ -41,42 +40,40 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
   ];
 
   return (
-    <section id="testimonials" className="py-20">
-      <DynamicBackground>
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
-              Opiniones de Nuestros Clientes
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Descubre lo que dicen las personas que han transformado su vida con nosotros
-            </p>
-          </div>
+    <section id="testimonials" className="py-32">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
+            Opiniones de Nuestros Clientes
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Descubre lo que dicen las personas que han transformado su vida con nosotros
+          </p>
+        </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h4 className="font-bold text-nutrition-black title-playful">{testimonial.name}</h4>
-                    <div className="flex">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current text-nutrition-orange" />
-                      ))}
-                    </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-12 h-12 rounded-full mr-4"
+                />
+                <div>
+                  <h4 className="font-bold text-nutrition-black title-playful">{testimonial.name}</h4>
+                  <div className="flex">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current text-nutrition-orange" />
+                    ))}
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm">"{testimonial.comment}"</p>
               </div>
-            ))}
-          </div>
+              <p className="text-gray-600 text-sm">"{testimonial.comment}"</p>
+            </div>
+          ))}
         </div>
-      </DynamicBackground>
+      </div>
     </section>
   );
 };
