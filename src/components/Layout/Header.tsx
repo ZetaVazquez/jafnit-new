@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-6">
               <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-nutrition-green/20">
                 <img 
                   src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
