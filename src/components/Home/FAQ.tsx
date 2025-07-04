@@ -1,120 +1,74 @@
-
 import React, { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { FAQ as FAQType } from '@/types';
 
 const FAQ: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<FAQType['category']>('General');
-  const [openQuestion, setOpenQuestion] = useState<string | null>(null);
+  const [openItems, setOpenItems] = useState<number[]>([]);
 
-  const categories: FAQType['category'][] = ['General', 'Precio', 'Nutricion', 'Entrenamiento'];
-
-  const faqs: FAQType[] = [
-    // General
+  const faqs = [
     {
-      id: '1',
-      category: 'General',
-      question: '¿Cuál es tu experiencia profesional?',
-      answer: 'Tengo más de 10 años de experiencia en nutrición y entrenamiento personal, con certificaciones internacionales y más de 500 clientes transformados.'
+      question: '¿Cómo funciona el proceso de personalización?',
+      answer: 'Comenzamos con un cuestionario detallado sobre tu estilo de vida, objetivos, preferencias alimentarias y limitaciones. Luego diseñamos un plan completamente personalizado que se adapta a tus necesidades específicas y lo ajustamos según tu progreso.'
     },
     {
-      id: '2',
-      category: 'General',
-      question: '¿Trabajas online o presencial?',
-      answer: 'Ofrezco ambas modalidades. Sesiones presenciales en mi centro y seguimiento online personalizado para mayor flexibilidad.'
+      question: '¿Qué incluye el seguimiento personalizado?',
+      answer: 'El seguimiento incluye revisiones regulares de tu progreso, ajustes en tu plan nutricional y de ejercicios, resolución de dudas, motivación constante y modificaciones según tus resultados y cambios en tu rutina.'
     },
     {
-      id: '3',
-      category: 'General',
-      question: '¿Cuánto tiempo toma ver resultados?',
-      answer: 'Los primeros cambios se notan en 2-3 semanas. Resultados significativos en 2-3 meses con el plan adecuado y constancia.'
-    },
-    // Precio
-    {
-      id: '4',
-      category: 'Precio',
-      question: '¿Cuáles son las formas de pago?',
-      answer: 'Aceptamos transferencia bancaria, tarjeta de crédito/débito y pagos fraccionados según el plan elegido.'
+      question: '¿Puedo seguir el plan si tengo restricciones alimentarias?',
+      answer: 'Absolutamente. Nuestros planes se adaptan a cualquier restricción alimentaria: vegetariano, vegano, sin gluten, intolerancias, alergias, etc. Diseñamos tu plan considerando todas tus necesidades específicas.'
     },
     {
-      id: '5',
-      category: 'Precio',
-      question: '¿Hay descuentos por pagos anuales?',
-      answer: 'Sí, el plan anual incluye un descuento del 15% y beneficios adicionales exclusivos.'
+      question: '¿Cuánto tiempo necesito para ver resultados?',
+      answer: 'Los primeros cambios suelen notarse en 2-3 semanas, pero los resultados significativos aparecen entre 4-8 semanas. Recuerda que buscamos cambios duraderos, no soluciones rápidas que no se mantienen en el tiempo.'
     },
     {
-      id: '6',
-      category: 'Precio',
-      question: '¿Qué incluye cada plan?',
-      answer: 'Cada plan incluye evaluación inicial, plan personalizado, seguimiento y ajustes. Los planes superiores incluyen más sesiones y beneficios.'
-    },
-    // Nutrición
-    {
-      id: '7',
-      category: 'Nutricion',
-      question: '¿Crean dietas para vegetarianos/veganos?',
-      answer: 'Absolutamente. Adapto todos los planes a preferencias alimentarias, alergias, intolerancias y objetivos específicos.'
+      question: '¿Qué pasa si no puedo seguir el plan al 100%?',
+      answer: 'Entendemos que la vida real presenta desafíos. Por eso nuestros planes son flexibles y adaptables. Si no puedes seguir algo, lo ajustamos. El objetivo es crear hábitos sostenibles, no perfección.'
     },
     {
-      id: '8',
-      category: 'Nutricion',
-      question: '¿Con qué frecuencia se actualiza el plan?',
-      answer: 'Los planes se revisan y ajustan cada 2-4 semanas según tu progreso y feedback para optimizar resultados.'
+      question: '¿Incluye recetas y listas de compra?',
+      answer: 'Sí, cada plan incluye recetas detalladas, listas de compra organizadas y sugerencias de meal prep para hacer tu vida más fácil. Todo está diseñado para ser práctico y fácil de seguir.'
     },
     {
-      id: '9',
-      category: 'Nutricion',
-      question: '¿Incluye suplementación?',
-      answer: 'Sí, evaluamos si necesitas suplementos y te recomiendo solo los necesarios para tus objetivos específicos.'
-    },
-    // Entrenamiento
-    {
-      id: '10',
-      category: 'Entrenamiento',
-      question: '¿Las rutinas son para principiantes?',
-      answer: 'Diseño rutinas para todos los niveles, desde principiantes hasta atletas avanzados, adaptadas a tu condición física actual.'
+      question: '¿Puedo cambiar de plan durante el proceso?',
+      answer: 'Por supuesto. Puedes cambiar de plan en cualquier momento según evolucionen tus necesidades, objetivos o circunstancias. Queremos que tengas siempre el nivel de apoyo que necesitas.'
     },
     {
-      id: '11',
-      category: 'Entrenamiento',
-      question: '¿Necesito gimnasio para entrenar?',
-      answer: 'No necesariamente. Puedo crear rutinas para casa, parque o gimnasio según tus preferencias y disponibilidad de equipos.'
-    },
-    {
-      id: '12',
-      category: 'Entrenamiento',
-      question: '¿Incluye entrenamiento personal?',
-      answer: 'Los planes superiores incluyen sesiones de entrenamiento personal presencial para técnica correcta y motivación extra.'
+      question: '¿Hay garantía de resultados?',
+      answer: 'Si sigues el plan y mantienes comunicación regular con nosotros, garantizamos que verás resultados. Si no estás satisfecho en los primeros 30 días, te devolvemos tu dinero.'
     }
   ];
 
-  const filteredFAQs = faqs.filter(faq => faq.category === selectedCategory);
-
-  const toggleQuestion = (questionId: string) => {
-    setOpenQuestion(openQuestion === questionId ? null : questionId);
+  const toggleItem = (index: number) => {
+    setOpenItems(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
   };
 
   return (
-    <section id="faq" className="py-32 relative overflow-hidden">
-      {/* Formas geométricas animadas de fondo */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <section id="faq" className="py-20 dynamic-background relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden">
         {/* Círculos grandes */}
-        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 right-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 left-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 right-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 left-1/3 animate-bounce-gentle"></div>
         
         {/* Círculos medianos */}
-        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
-        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-14 h-14 bottom-1/2 left-3/4 animate-float"></div>
+        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 right-1/2 animate-float"></div>
+        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 right-1/6 animate-bounce-gentle"></div>
         
         {/* Triángulos */}
-        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-40 right-1/2 transform translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 left-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 right-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 left-1/2 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-3/4 left-1/6 animate-rotate-slow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -123,54 +77,39 @@ const FAQ: React.FC = () => {
             Preguntas Frecuentes
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Encuentra respuestas a las preguntas más comunes sobre nuestros servicios
+            Resolvemos las dudas más comunes sobre nuestros servicios y metodología
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Category Buttons */}
-          <div className="lg:col-span-1">
-            <div className="space-y-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 ${
-                    selectedCategory === category
-                      ? 'bg-nutrition-green text-white'
-                      : 'bg-white/80 backdrop-blur-sm text-nutrition-black hover:bg-nutrition-green hover:text-white'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* FAQ Items */}
-          <div className="lg:col-span-3">
-            <div className="space-y-4">
-              {filteredFAQs.map((faq) => (
-                <div key={faq.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-nutrition-green-light">
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <Card key={index} className="bg-white/95 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
+                <CardContent className="p-0">
                   <button
-                    onClick={() => toggleQuestion(faq.id)}
-                    className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors duration-200"
+                    onClick={() => toggleItem(index)}
+                    className="w-full text-left p-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors duration-200"
                   >
-                    <span className="font-semibold text-nutrition-black title-playful">{faq.question}</span>
-                    {openQuestion === faq.id ? (
-                      <ChevronUp className="w-5 h-5 text-nutrition-green" />
+                    <h3 className="text-lg font-semibold text-nutrition-black pr-4">
+                      {faq.question}
+                    </h3>
+                    {openItems.includes(index) ? (
+                      <ChevronUp className="w-5 h-5 text-nutrition-green flex-shrink-0" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-nutrition-green" />
+                      <ChevronDown className="w-5 h-5 text-nutrition-green flex-shrink-0" />
                     )}
                   </button>
-                  {openQuestion === faq.id && (
-                    <div className="px-6 pb-4">
-                      <p className="text-gray-600">{faq.answer}</p>
+                  
+                  {openItems.includes(index) && (
+                    <div className="px-6 pb-6">
+                      <p className="text-gray-600 leading-relaxed">
+                        {faq.answer}
+                      </p>
                     </div>
                   )}
-                </div>
-              ))}
-            </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </div>

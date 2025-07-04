@@ -51,7 +51,7 @@ const News: React.FC = () => {
   };
 
   return (
-    <section id="news" className="py-20 dynamic-background relative overflow-hidden">
+    <section id="noticias" className="py-20 dynamic-background relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Círculos grandes */}
