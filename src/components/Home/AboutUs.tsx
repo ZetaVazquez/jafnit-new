@@ -72,7 +72,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         {/* FILA 1: Cuadro de texto arriba a la izquierda solamente + Opiniones arriba derecha más alejadas */}
         <div className="mb-6 md:mb-10 relative">
           <div className="flex justify-start">
-            <div className="w-full max-w-5xl">
+            <div className="w-full max-w-4xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl border border-nutrition-green-light">
                 <h3 className="text-lg md:text-2xl lg:text-3xl font-bold text-nutrition-green mb-3 md:mb-4 title-playful">
                   💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
@@ -93,8 +93,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones arriba derecha - movidas más hacia el extremo derecho */}
-          <div className="absolute top-8 md:top-12 right-0 md:right-2 hidden lg:block">
+          {/* Opiniones arriba derecha - movidas mucho más hacia el extremo derecho */}
+          <div className="absolute top-8 md:top-12 -right-4 md:-right-8 hidden lg:block">
             <div className="space-y-4">
               {/* Primera opinión arriba derecha - rotada hacia la derecha */}
               <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
@@ -119,7 +119,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
 
               {/* Segunda opinión arriba derecha - rotada hacia la izquierda */}
-              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-8">
+              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-12">
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
                     <img
@@ -178,7 +178,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         {/* FILA 3: Cuadro de texto abajo a la derecha solamente + Opiniones abajo izquierda más alejadas */}
         <div className="mb-6 md:mb-10 relative">
           <div className="flex justify-end">
-            <div className="w-full max-w-5xl">
+            <div className="w-full max-w-4xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl border border-nutrition-green-light">
                 <h4 className="text-lg md:text-2xl font-bold text-nutrition-green mb-3 md:mb-4 title-playful">
                   🎯 Mi método: Simple, efectivo y sostenible
@@ -196,8 +196,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones abajo izquierda - movidas más hacia el extremo izquierdo */}
-          <div className="absolute bottom-0 left-0 md:left-2 hidden lg:block">
+          {/* Opiniones abajo izquierda - movidas mucho más hacia el extremo izquierdo */}
+          <div className="absolute bottom-0 -left-4 md:-left-8 hidden lg:block">
             <div className="space-y-4">
               {/* Primera opinión abajo izquierda - rotada hacia la izquierda */}
               <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
@@ -222,7 +222,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
 
               {/* Segunda opinión abajo izquierda - rotada hacia la derecha */}
-              <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-8">
+              <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-12">
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
                     <img
