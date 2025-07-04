@@ -106,8 +106,8 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         </div>
       </div>
 
-      {/* Silhouette positioned more towards left and at the bottom edge */}
-      <div className="absolute bottom-0 right-4 md:right-8 lg:right-12 pointer-events-none overflow-hidden">
+      {/* Silhouette positioned more towards left and at the bottom edge - SOLO VISIBLE EN DESKTOP */}
+      <div className="absolute bottom-0 right-4 md:right-8 lg:right-12 pointer-events-none overflow-hidden hidden lg:block">
         <img 
           src="/lovable-uploads/4ecf9313-d7ff-45b8-9b65-f74a7d809a03.png"
           alt="José Antonio - Entrenador Personal" 

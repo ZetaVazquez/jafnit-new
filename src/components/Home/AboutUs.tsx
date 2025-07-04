@@ -90,14 +90,14 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 2: Foto en el centro con opiniones a los extremos laterales */}
+        {/* FILA 2: Foto en el centro con opiniones a los extremos laterales - Ahora visible desde tablet */}
         <div className="mb-8 md:mb-12 relative">
           <div className="flex justify-center items-center relative">
-            {/* Opiniones extremo izquierdo */}
-            <div className="absolute left-0 top-0 hidden 2xl:block w-72 -translate-x-12">
+            {/* Opiniones extremo izquierdo - Ahora visible desde xl en adelante */}
+            <div className="absolute left-0 top-0 hidden xl:block w-80 -translate-x-20">
               <div className="space-y-8">
                 {/* Primera opinión izquierda */}
-                <div className="transform -rotate-6 hover:rotate-0 transition-transform duration-300">
+                <div className="transform -rotate-12 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
@@ -114,7 +114,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 </div>
 
                 {/* Segunda opinión izquierda */}
-                <div className="transform rotate-4 hover:rotate-0 transition-transform duration-300">
+                <div className="transform rotate-8 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
@@ -133,7 +133,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
 
             {/* Foto central */}
-            <div className="flex flex-col items-center z-10">
+            <div className="flex flex-col items-center z-20">
               <div className="relative mb-6 md:mb-8">
                 <div className="w-56 h-56 md:w-[26rem] md:h-[26rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
                   <img
@@ -144,7 +144,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 </div>
               </div>
               
-              <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 relative z-20">
+              <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 relative z-30">
                 <div className="flex items-center space-x-3 md:space-x-4">
                   <div className="w-3 h-3 md:w-4 md:h-4 bg-nutrition-green rounded-full animate-pulse"></div>
                   <div>
@@ -155,11 +155,11 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
             </div>
 
-            {/* Opiniones extremo derecho */}
-            <div className="absolute right-0 top-0 hidden 2xl:block w-72 translate-x-12">
+            {/* Opiniones extremo derecho - Ahora más ladeadas y visibles desde xl */}
+            <div className="absolute right-0 top-0 hidden xl:block w-80 translate-x-20">
               <div className="space-y-8">
-                {/* Primera opinión derecha */}
-                <div className="transform rotate-5 hover:rotate-0 transition-transform duration-300">
+                {/* Primera opinión derecha - Más ladeada */}
+                <div className="transform rotate-15 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
@@ -175,8 +175,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                   </div>
                 </div>
 
-                {/* Segunda opinión derecha */}
-                <div className="transform -rotate-4 hover:rotate-0 transition-transform duration-300">
+                {/* Segunda opinión derecha - Más ladeada */}
+                <div className="transform -rotate-12 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
