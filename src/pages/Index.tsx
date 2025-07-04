@@ -67,7 +67,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen dynamic-background">
       <Header 
         isLoggedIn={!!user}
         onLogin={handleLogin}
