@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { removeBackground, loadImage } from '@/utils/backgroundRemoval';
 
 interface HeroCarouselProps {
   onStartQuestionnaire: () => void;
@@ -9,6 +10,7 @@ interface HeroCarouselProps {
 
 const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(null);
 
   const slides = [
     {
@@ -34,6 +36,41 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
     }, 6000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const processImage = async () => {
+      try {
+        console.log('Loading and processing image...');
+        // Fetch the uploaded image
+        const response = await fetch('/lovable-uploads/dd91a4d8-2d68-4ac4-b7e5-8ae097f1b833.png');
+        const blob = await response.blob();
+        
+        // Load the image
+        const imageElement = await loadImage(blob);
+        
+        // Remove background
+        const processedBlob = await removeBackground(imageElement);
+        
+        // Create URL for the processed image
+        const url = URL.createObjectURL(processedBlob);
+        setProcessedImageUrl(url);
+        console.log('Image processed successfully');
+      } catch (error) {
+        console.error('Error processing image:', error);
+        // Fallback to original image if processing fails
+        setProcessedImageUrl('/lovable-uploads/dd91a4d8-2d68-4ac4-b7e5-8ae097f1b833.png');
+      }
+    };
+
+    processImage();
+
+    // cleanup function to revoke object URL
+    return () => {
+      if (processedImageUrl) {
+        URL.revokeObjectURL(processedImageUrl);
+      }
+    };
   }, []);
 
   const nextSlide = () => {
@@ -104,11 +141,15 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
       {/* Silhouette positioned at bottom right corner */}
       <div className="absolute bottom-0 right-0 pointer-events-none">
-        <img 
-          src="/lovable-uploads/7ef270ff-62f2-4ce7-a2cb-494f6e9f3218.png" 
-          alt="José Antonio - Entrenador Personal" 
-          className="w-48 h-60 md:w-64 md:h-80 lg:w-80 lg:h-96 xl:w-96 xl:h-[500px] object-contain object-bottom drop-shadow-2xl"
-        />
+        {processedImageUrl ? (
+          <img 
+            src={processedImageUrl}
+            alt="José Antonio - Entrenador Personal" 
+            className="w-48 h-60 md:w-64 md:h-80 lg:w-80 lg:h-96 xl:w-96 xl:h-[500px] object-contain object-bottom drop-shadow-2xl"
+          />
+        ) : (
+          <div className="w-48 h-60 md:w-64 md:h-80 lg:w-80 lg:h-96 xl:w-96 xl:h-[500px] bg-transparent animate-pulse" />
+        )}
       </div>
 
       {/* Navigation Arrows */}
