@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
@@ -57,7 +56,7 @@ const Services: React.FC = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="h-full bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-t-4 border-t-nutrition-green shadow-lg">
+            <Card key={index} className="h-full bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-4 border-nutrition-green shadow-lg">
               <CardHeader className="text-center pb-4">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
                   <service.icon className="w-8 h-8" />
