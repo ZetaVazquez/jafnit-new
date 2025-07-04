@@ -86,7 +86,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
       </div>
 
       {/* Centered Title and Logo - Positioned at the very top */}
-      <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-20">
+      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
           <div className="flex items-center justify-center space-x-4">
             <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
@@ -100,16 +100,16 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
               JAFNFIT
             </h1>
           </div>
-          <h2 className="text-sm md:text-base lg:text-lg font-bold text-yellow-300 drop-shadow-md text-center">
+          <h2 className="text-xs md:text-sm lg:text-base font-bold text-yellow-300 drop-shadow-md text-center">
             Dietética y Entrenamiento Personal
           </h2>
         </div>
       </div>
 
-      {/* Silhouette positioned more towards left and bottom */}
-      <div className="absolute bottom-4 right-12 md:bottom-6 md:right-16 lg:bottom-8 lg:right-24 pointer-events-none overflow-hidden">
+      {/* Silhouette positioned more towards left and at the bottom edge */}
+      <div className="absolute bottom-0 right-4 md:right-8 lg:right-12 pointer-events-none overflow-hidden">
         <img 
-          src="/lovable-uploads/1ef2ec72-6a8a-4e2c-a3f9-72fc43a1ce69.png"
+          src="/lovable-uploads/4ecf9313-d7ff-45b8-9b65-f74a7d809a03.png"
           alt="José Antonio - Entrenador Personal" 
           className="w-[350px] h-[450px] md:w-[400px] md:h-[520px] lg:w-[450px] lg:h-[580px] xl:w-[500px] xl:h-[650px] object-cover object-bottom drop-shadow-2xl"
           style={{ objectPosition: 'center bottom' }}
