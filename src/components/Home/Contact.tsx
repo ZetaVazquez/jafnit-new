@@ -1,189 +1,104 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Calendar } from 'lucide-react';
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Aquí iría la lógica para enviar el formulario
-    console.log('Formulario enviado:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', phone: '', message: '' });
-  };
-
+const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-16 bg-gradient-to-br from-nutrition-green-light/20 to-white">
-      <div className="container mx-auto px-4">
+    <section id="contact" className="py-32 relative overflow-hidden">
+      {/* Formas geométricas animadas de fondo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Círculos grandes */}
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        
+        {/* Círculos medianos */}
+        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
+        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-14 h-14 bottom-1/2 left-3/4 animate-float"></div>
+        
+        {/* Triángulos */}
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="section-title text-nutrition-black mb-4">
-            Contáctanos
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-nutrition-black mb-4 title-main">
+            Contáctame
           </h2>
-          <p className="text-xl text-nutrition-gray max-w-2xl mx-auto">
-            Estamos aquí para ayudarte a comenzar tu transformación
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            ¿Listo para comenzar tu transformación? Ponte en contacto conmigo
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Información de contacto */}
+          {/* Contact Information */}
           <div className="space-y-8">
-            <div className="bg-white rounded-2xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-nutrition-black mb-6 title-playful">
-                Información de Contacto
-              </h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-center">
-                  <Mail className="w-6 h-6 text-nutrition-green mr-4" />
-                  <div>
-                    <p className="font-semibold text-nutrition-black">Email</p>
-                    <p className="text-nutrition-gray">info@nutricionyvida.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <Phone className="w-6 h-6 text-nutrition-green mr-4" />
-                  <div>
-                    <p className="font-semibold text-nutrition-black">Teléfono</p>
-                    <p className="text-nutrition-gray">+34 123 456 789</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <MapPin className="w-6 h-6 text-nutrition-green mr-4" />
-                  <div>
-                    <p className="font-semibold text-nutrition-black">Ubicación</p>
-                    <p className="text-nutrition-gray">Madrid, España</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <Clock className="w-6 h-6 text-nutrition-green mr-4" />
-                  <div>
-                    <p className="font-semibold text-nutrition-black">Horario</p>
-                    <p className="text-nutrition-gray">Lun - Vie: 9:00 - 18:00</p>
-                  </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+              <div className="flex items-start space-x-4">
+                <Phone className="w-6 h-6 text-nutrition-green mt-1" />
+                <div>
+                  <h4 className="font-bold text-nutrition-black mb-1 title-playful">Teléfono</h4>
+                  <p className="text-gray-600">+34 600 123 456</p>
+                  <p className="text-sm text-gray-500">Lunes a Viernes, 9:00 - 20:00</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-nutrition-green rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4 title-playful">
-                ¿Por qué elegirnos?
-              </h3>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <span className="text-nutrition-accent mr-2">✓</span>
-                  Planes 100% personalizados
-                </li>
-                <li className="flex items-start">
-                  <span className="text-nutrition-accent mr-2">✓</span>
-                  Seguimiento profesional continuo
-                </li>
-                <li className="flex items-start">
-                  <span className="text-nutrition-accent mr-2">✓</span>
-                  Resultados garantizados
-                </li>
-                <li className="flex items-start">
-                  <span className="text-nutrition-accent mr-2">✓</span>
-                  Enfoque integral y sostenible
-                </li>
-              </ul>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+              <div className="flex items-start space-x-4">
+                <Mail className="w-6 h-6 text-nutrition-green mt-1" />
+                <div>
+                  <h4 className="font-bold text-nutrition-black mb-1 title-playful">Email</h4>
+                  <p className="text-gray-600">info@joseantoniodiet.com</p>
+                  <p className="text-sm text-gray-500">Respuesta en 24 horas</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+              <div className="flex items-start space-x-4">
+                <MapPin className="w-6 h-6 text-nutrition-green mt-1" />
+                <div>
+                  <h4 className="font-bold text-nutrition-black mb-1 title-playful">Dirección</h4>
+                  <p className="text-gray-600">Calle de la Salud, 123</p>
+                  <p className="text-gray-600">28001 Madrid, España</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Appointment Button */}
+            <div className="bg-nutrition-green/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+              <div className="flex items-center mb-4">
+                <Calendar className="w-6 h-6 text-nutrition-green mr-3" />
+                <h4 className="font-bold text-nutrition-black title-playful">¿Reservamos una cita?</h4>
+              </div>
+              <p className="text-gray-600 mb-4">
+                Agenda una consulta personalizada para conocer tus objetivos y diseñar tu plan ideal.
+              </p>
+              <Button className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white">
+                ¿Tenemos una cita?
+              </Button>
             </div>
           </div>
 
-          {/* Formulario */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-nutrition-black mb-6 title-playful">
-              Envíanos un Mensaje
-            </h3>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-nutrition-black mb-2">
-                  Nombre completo
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-nutrition-green-light rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent transition-all"
-                  placeholder="Tu nombre completo"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-nutrition-black mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-nutrition-green-light rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent transition-all"
-                  placeholder="tu@email.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-nutrition-black mb-2">
-                  Teléfono (opcional)
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-nutrition-green-light rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent transition-all"
-                  placeholder="+34 123 456 789"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-nutrition-black mb-2">
-                  Mensaje
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  className="w-full px-4 py-3 border border-nutrition-green-light rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent transition-all resize-none"
-                  placeholder="Cuéntanos sobre tus objetivos y cómo podemos ayudarte..."
-                />
-              </div>
-
-              <Button 
-                type="submit"
-                className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
-              >
-                <Send className="w-5 h-5 mr-2" />
-                Enviar Mensaje
-              </Button>
-            </form>
+          {/* Map */}
+          <div className="h-96 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-nutrition-green-light">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.4449145084494!2d-3.7025765!3d40.4165001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd42287b9b3d7b37%3A0xa1c0b8c6e4f5d9c6!2sMadrid%2C%20Spain!5e0!3m2!1sen!2sus!4v1234567890123"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación José Antonio Dietética"
+            ></iframe>
           </div>
         </div>
       </div>
