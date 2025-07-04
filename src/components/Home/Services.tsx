@@ -85,7 +85,7 @@ const Services: React.FC = () => {
             ))}
           </div>
 
-          <div className="mt-16 bg-gradient-to-r from-nutrition-green-lighter/80 to-nutrition-green-light/80 backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
+          <div className="mt-16 bg-white/90 backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
             <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
               ¿Necesitas algo más específico?
             </h3>
@@ -110,7 +110,7 @@ const Services: React.FC = () => {
           </div>
 
           {/* New Communication Section */}
-          <div className="mt-16 bg-gradient-to-r from-nutrition-green-lighter/80 to-nutrition-green-light/80 backdrop-blur-sm rounded-2xl shadow-lg border border-nutrition-green-light overflow-hidden">
+          <div className="mt-16 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-nutrition-green-light overflow-hidden">
             <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
               {/* Text Content */}
               <div className="order-2 lg:order-1">
@@ -154,9 +154,9 @@ const Services: React.FC = () => {
                 </div>
               </div>
 
-              {/* WhatsApp Phone Mockup */}
+              {/* WhatsApp Phone Mockup - Rotated and without decoration */}
               <div className="order-1 lg:order-2 flex justify-center">
-                <div className="relative">
+                <div className="relative transform rotate-6">
                   {/* Phone Frame */}
                   <div className="relative w-64 h-[520px] bg-black rounded-[2.5rem] p-2 shadow-2xl">
                     {/* Screen */}
@@ -180,32 +180,24 @@ const Services: React.FC = () => {
                       </div>
                       
                       {/* Chat Content */}
-                      <div className="flex-1 p-4 space-y-3 bg-gray-50">
-                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%]">
-                          <p className="text-xs text-gray-600 mb-1">Hola Preciosa!!! Para el ver la báscula la vif me ha dado un poco de bajón, pero al comprar las fuerzas báscula de casa sin parar... Una semana he notado muchísimo cambio y esto es la semana a menos se ve semanejado en la báscula</p>
+                      <div className="flex-1 p-4 space-y-3 bg-gray-50 h-full">
+                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
+                          <p className="text-xs text-gray-700">Hola, tenía que decírtelo... ¡Estoy flipando! 😍 me está encantando el menú, por fin como bien sin sentir que estoy a dieta.</p>
+                          <p className="text-xs text-gray-400 mt-1 text-right">8:27</p>
                         </div>
                         
-                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%]">
-                          <p className="text-xs text-gray-600 mb-1">Estoy súper contenta la vd, me noto muchísima el cambio y ya estoy viendo a descender algunas depende mis caras gomas cansadas sedes y ayer fue a cenarful con una camiseta ajustada que llevaba mucho tiempo sin atreverme y me sentía GENIAL</p>
+                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
+                          <p className="text-xs text-gray-700">Me preparé las tostadas que me indicaste, probé las combinaciones y el boniato... ¡riquísimo y no paso hambre!</p>
+                          <p className="text-xs text-gray-400 mt-1 text-right">8:28</p>
                         </div>
                         
-                        <div className="self-end bg-nutrition-green text-white p-3 rounded-lg shadow-sm max-w-[85%] ml-auto">
-                          <p className="text-xs mb-1">¡Y mil gracias por el reconocimiento que tienes hacia mí sobre mis resultados que es sentirte realmente a seguir! 💗🥹💗💗</p>
-                        </div>
-                        
-                        <div className="self-end bg-nutrition-green text-white p-3 rounded-lg shadow-sm max-w-[85%] ml-auto">
-                          <p className="text-xs mb-1">Ay me alegra tanto leer estos mensajes al final que vosotras os deis cuenta de lo que estáis consiguiendo es lo más importante!! que sigais así!!! 💪💪</p>
-                        </div>
-                        
-                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%]">
-                          <p className="text-xs text-gray-600 mb-1">Sin vosotros nada de esto sería posible!!! Estoy encantadísima</p>
+                        <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
+                          <p className="text-xs text-gray-700">¡Desde la última vez bajé ya 2 kg sin darme cuenta! Gracias 🙏 💚</p>
+                          <p className="text-xs text-gray-400 mt-1 text-right">8:29</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Pink circle decoration */}
-                  <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-20 h-20 bg-pink-300 rounded-full opacity-60 -z-10"></div>
                 </div>
               </div>
             </div>
