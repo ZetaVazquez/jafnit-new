@@ -90,14 +90,14 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 2: Foto en el centro con opiniones a los lados */}
-        <div className="mb-8 md:mb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
-            {/* Opiniones izquierda */}
-            <div className="hidden lg:block lg:col-span-1">
-              <div className="space-y-6">
+        {/* FILA 2: Foto en el centro con opiniones a los extremos laterales */}
+        <div className="mb-8 md:mb-12 relative">
+          <div className="flex justify-center items-center relative">
+            {/* Opiniones extremo izquierdo */}
+            <div className="absolute left-0 top-0 hidden 2xl:block w-72 -translate-x-12">
+              <div className="space-y-8">
                 {/* Primera opinión izquierda */}
-                <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                <div className="transform -rotate-6 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
@@ -114,7 +114,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 </div>
 
                 {/* Segunda opinión izquierda */}
-                <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div className="transform rotate-4 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
@@ -133,40 +133,33 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
 
             {/* Foto central */}
-            <div className="lg:col-span-3 flex flex-col items-center">
-              <div className="relative">
-                <div className="absolute inset-0 hidden md:flex items-center justify-center">
-                  <div className="w-[26rem] h-[26rem] rounded-full border-2 border-nutrition-green-light opacity-30 animate-pulse"></div>
-                </div>
-                <div className="absolute inset-0 hidden md:flex items-center justify-center">
-                  <div className="w-[30rem] h-[30rem] rounded-full border-1 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
-                </div>
-                
-                <div className="relative z-10 w-56 h-56 md:w-[26rem] md:h-[26rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 mb-4 md:mb-6">
+            <div className="flex flex-col items-center z-10">
+              <div className="relative mb-6 md:mb-8">
+                <div className="w-56 h-56 md:w-[26rem] md:h-[26rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
                   <img
                     src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
                     alt="José Antonio - Tu Dietista y Entrenador Personal"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
-                <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <div className="flex items-center space-x-3 md:space-x-4">
-                    <div className="w-3 h-3 md:w-4 md:h-4 bg-nutrition-green rounded-full animate-pulse"></div>
-                    <div>
-                      <h4 className="font-bold text-nutrition-green text-base md:text-xl title-playful">José Antonio</h4>
-                      <p className="text-nutrition-gray text-sm md:text-lg">Dietista y Entrenador</p>
-                    </div>
+              </div>
+              
+              <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 relative z-20">
+                <div className="flex items-center space-x-3 md:space-x-4">
+                  <div className="w-3 h-3 md:w-4 md:h-4 bg-nutrition-green rounded-full animate-pulse"></div>
+                  <div>
+                    <h4 className="font-bold text-nutrition-green text-base md:text-xl title-playful">José Antonio</h4>
+                    <p className="text-nutrition-gray text-sm md:text-lg">Dietista y Entrenador</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Opiniones derecha */}
-            <div className="hidden lg:block lg:col-span-1">
-              <div className="space-y-6">
+            {/* Opiniones extremo derecho */}
+            <div className="absolute right-0 top-0 hidden 2xl:block w-72 translate-x-12">
+              <div className="space-y-8">
                 {/* Primera opinión derecha */}
-                <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                <div className="transform rotate-5 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
@@ -183,7 +176,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 </div>
 
                 {/* Segunda opinión derecha */}
-                <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div className="transform -rotate-4 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
                       <div>
