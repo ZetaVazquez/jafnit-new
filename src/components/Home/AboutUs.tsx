@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Award, Users, Heart, Target } from 'lucide-react';
+import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface AboutUsProps {
@@ -15,22 +14,46 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
     { icon: Target, value: '100+', label: 'Objetivos Alcanzados' }
   ];
 
+  const testimonials = [
+    {
+      name: 'María González',
+      comment: 'José Antonio me ayudó a transformar completamente mi estilo de vida. En 6 meses perdí 15 kilos y gané mucha confianza.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b1a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+    },
+    {
+      name: 'Carlos Rodríguez',
+      comment: 'El plan personalizado de entrenamiento y nutrición superó todas mis expectativas. Recomiendo 100% sus servicios.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+    },
+    {
+      name: 'Ana Martín',
+      comment: 'Profesional, dedicado y con resultados reales. Mi salud y energía mejoraron significativamente.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+    },
+    {
+      name: 'David López',
+      comment: 'La mejor inversión que he hecho en mi salud. El seguimiento personalizado marca la diferencia.',
+      rating: 5,
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+    }
+  ];
+
   return (
     <section id="about" className="py-8 md:py-16 dynamic-background relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Círculos grandes */}
         <div className="geometric-shape circle-shape w-16 h-16 md:w-32 md:h-32 top-10 left-10 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-1/2 right-20 animate-bounce-gentle"></div>
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
         
-        {/* Círculos medianos */}
         <div className="geometric-shape circle-shape w-14 h-14 md:w-28 md:h-28 top-1/3 left-1/2 animate-float"></div>
         <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
         
-        {/* Triángulos */}
         <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
@@ -45,8 +68,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* FILA 1: Cuadro de texto arriba a la izquierda solamente */}
-        <div className="mb-8 md:mb-16">
+        {/* FILA 1: Cuadro de texto arriba a la izquierda solamente + Opiniones arriba derecha */}
+        <div className="mb-8 md:mb-16 relative">
           <div className="flex justify-start">
             <div className="w-full max-w-3xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-10 shadow-xl border border-nutrition-green-light">
@@ -68,13 +91,61 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
             </div>
           </div>
+
+          {/* Opiniones arriba derecha - centradas */}
+          <div className="absolute top-0 right-4 md:right-8 hidden lg:block">
+            <div className="space-y-4">
+              {/* Primera opinión arriba derecha - rotada hacia la derecha */}
+              <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
+                  <div className="flex items-center mb-3">
+                    <img
+                      src={testimonials[0].image}
+                      alt={testimonials[0].name}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[0].name}</h4>
+                      <div className="flex">
+                        {[...Array(testimonials[0].rating)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[0].comment}"</p>
+                </div>
+              </div>
+
+              {/* Segunda opinión arriba derecha - rotada hacia la izquierda */}
+              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-8">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
+                  <div className="flex items-center mb-3">
+                    <img
+                      src={testimonials[1].image}
+                      alt={testimonials[1].name}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[1].name}</h4>
+                      <div className="flex">
+                        {[...Array(testimonials[1].rating)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[1].comment}"</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* FILA 2: Foto en el centro con cuadrito de info AL LADO */}
         <div className="mb-8 md:mb-16">
           <div className="flex flex-col md:flex-row justify-center items-center">
             <div className="relative flex flex-col md:flex-row items-center justify-center md:space-x-12">
-              {/* Decorative rings around the image - Hidden on mobile */}
               <div className="absolute left-0 inset-y-0 hidden md:flex items-center justify-center">
                 <div className="w-[36rem] h-[36rem] rounded-full border-2 border-nutrition-green-light opacity-30 animate-pulse"></div>
               </div>
@@ -82,7 +153,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <div className="w-[40rem] h-[40rem] rounded-full border-1 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
               </div>
               
-              {/* Main image container - Responsive sizes */}
               <div className="relative z-10 w-64 h-64 md:w-[32rem] md:h-[32rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 mb-4 md:mb-0">
                 <img
                   src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
@@ -91,7 +161,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 />
               </div>
               
-              {/* Floating info card - Responsive positioning and sizing */}
               <div className="bg-white p-3 md:p-4 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 md:ml-8 md:mt-16">
                 <div className="flex items-center space-x-2 md:space-x-3">
                   <div className="w-2 h-2 md:w-3 md:h-3 bg-nutrition-green rounded-full animate-pulse"></div>
@@ -105,8 +174,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 3: Cuadro de texto abajo a la derecha solamente */}
-        <div className="mb-8 md:mb-16">
+        {/* FILA 3: Cuadro de texto abajo a la derecha solamente + Opiniones abajo izquierda */}
+        <div className="mb-8 md:mb-16 relative">
           <div className="flex justify-end">
             <div className="w-full max-w-3xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-10 shadow-xl border border-nutrition-green-light">
@@ -122,6 +191,55 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <p className="text-base md:text-xl text-nutrition-green-dark leading-relaxed font-semibold">
                   No más extremos. Solo resultados reales y duraderos 🏆.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Opiniones abajo izquierda - centradas */}
+          <div className="absolute bottom-0 left-4 md:left-8 hidden lg:block">
+            <div className="space-y-4">
+              {/* Primera opinión abajo izquierda - rotada hacia la izquierda */}
+              <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
+                  <div className="flex items-center mb-3">
+                    <img
+                      src={testimonials[2].image}
+                      alt={testimonials[2].name}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[2].name}</h4>
+                      <div className="flex">
+                        {[...Array(testimonials[2].rating)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[2].comment}"</p>
+                </div>
+              </div>
+
+              {/* Segunda opinión abajo izquierda - rotada hacia la derecha */}
+              <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-8">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
+                  <div className="flex items-center mb-3">
+                    <img
+                      src={testimonials[3].image}
+                      alt={testimonials[3].name}
+                      className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[3].name}</h4>
+                      <div className="flex">
+                        {[...Array(testimonials[3].rating)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[3].comment}"</p>
+                </div>
               </div>
             </div>
           </div>
