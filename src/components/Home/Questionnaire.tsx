@@ -3,67 +3,172 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { QuestionnaireQuestion } from '@/types';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useQuestionnaire } from '@/hooks/useQuestionnaire';
+import { useToast } from '@/hooks/use-toast';
 
 interface QuestionnaireProps {
   onComplete: () => void;
   onClose: () => void;
 }
 
+interface QuestionnaireQuestion {
+  id: string;
+  step: string;
+  question: string;
+  type: 'multiple-choice' | 'text' | 'form';
+  options?: string[];
+  required: boolean;
+  fields?: { name: string; label: string; type: string; required: boolean }[];
+}
+
 const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const { saveQuestionnaireResponse, loading } = useQuestionnaire();
+  const { toast } = useToast();
 
   const questions: QuestionnaireQuestion[] = [
     {
       id: '1',
-      question: '¿Cuál es tu objetivo principal?',
+      step: '🧭 Paso 1: Definimos tu objetivo',
+      question: '¿Qué meta te gustaría alcanzar primero?',
       type: 'multiple-choice',
-      options: ['Perder peso', 'Ganar masa muscular', 'Mantener peso actual', 'Mejorar rendimiento deportivo'],
+      options: [
+        '🔥 Quiero perder grasa y sentirme más ágil.',
+        '💪 Quiero ganar músculo y fuerza sin perder mi estilo de vida.',
+        '🌱 Quiero llevar un estilo de vida saludable y equilibrado mientras mejoro mi físico.'
+      ],
       required: true
     },
     {
       id: '2',
-      question: '¿Cuántos días a la semana puedes entrenar?',
+      step: '🧠 Paso 2: ¿Dónde estás hoy?',
+      question: '¿Con cuál de estas situaciones te identificas mejor?',
       type: 'multiple-choice',
-      options: ['1-2 días', '3-4 días', '5-6 días', 'Todos los días'],
+      options: [
+        '🙇‍♂️ He intentado varias veces cambiar, pero siempre vuelvo a lo mismo.',
+        '🧩 Tengo buenos hábitos, pero no termino de ver resultados.',
+        '🎯 Es la primera vez que quiero hacerlo de forma seria y con ayuda profesional.'
+      ],
       required: true
     },
     {
       id: '3',
-      question: '¿Tienes alguna restricción alimentaria?',
+      step: '⏰ Paso 3: Tu compromiso',
+      question: '¿Estás dispuesto/a a invertir tu tiempo y energía en un cambio real?',
       type: 'multiple-choice',
-      options: ['Ninguna', 'Vegetariano', 'Vegano', 'Intolerancia a la lactosa', 'Celiaco', 'Otras'],
+      options: [
+        '✅ Sí, estoy listo/a para priorizarme y avanzar de verdad.',
+        '🤔 No estoy seguro/a todavía.'
+      ],
       required: true
     },
     {
       id: '4',
-      question: '¿Cuál es tu nivel de experiencia en el gimnasio?',
+      step: '📊 Paso 4: ¿Cómo es tu día a día?',
+      question: 'Actualmente, tu vida se parece más a…',
       type: 'multiple-choice',
-      options: ['Principiante', 'Intermedio', 'Avanzado', 'Nunca he ido al gimnasio'],
+      options: [
+        '💼 Trabajo a jornada completa.',
+        '🎓 Estudio o estoy opositando.',
+        '🔄 Estoy en transición laboral o con tiempo limitado.',
+        '🧘‍♀️ Trabajo desde casa con flexibilidad.'
+      ],
       required: true
     },
     {
       id: '5',
-      question: '¿Cuánto tiempo puedes dedicar por sesión de entrenamiento?',
+      step: '💸 Paso 5: Nivel de compromiso',
+      question: '¿Estás preparado/a para invertir en ti también económicamente, con un programa personalizado y guiado?',
       type: 'multiple-choice',
-      options: ['30 minutos', '45 minutos', '60 minutos', '90 minutos o más'],
+      options: [
+        '💳 Sí, valoro un acompañamiento profesional y estoy listo/a para dar el paso.',
+        '🕒 Aún no estoy en ese momento, pero me interesa saber más.'
+      ],
       required: true
+    },
+    {
+      id: '6',
+      step: '✍️ Paso 6: Personaliza tu experiencia',
+      question: '¿Qué te ha llevado a querer empezar con nosotros y qué te gustaría lograr?',
+      type: 'text',
+      required: true
+    },
+    {
+      id: '7',
+      step: '📇 Paso 7: Tus datos para poder ayudarte mejor',
+      question: 'Déjame tus datos de contacto para enviarte una propuesta personalizada.',
+      type: 'form',
+      required: true,
+      fields: [
+        { name: 'name', label: 'Nombre y apellidos', type: 'text', required: true },
+        { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
+        { name: 'phone', label: 'Teléfono', type: 'tel', required: true },
+        { name: 'country', label: 'País de residencia', type: 'text', required: true },
+        { name: 'instagram', label: 'Tu cuenta de Instagram (opcional pero recomendado)', type: 'text', required: false }
+      ]
     }
   ];
 
-  const handleAnswer = (answer: string) => {
+  const handleAnswer = (answer: string | Record<string, string>) => {
     setAnswers(prev => ({
       ...prev,
       [questions[currentQuestion].id]: answer
     }));
   };
 
-  const nextQuestion = () => {
+  const handleTextAnswer = (text: string) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questions[currentQuestion].id]: text
+    }));
+  };
+
+  const handleFormAnswer = (fieldName: string, value: string) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questions[currentQuestion].id]: {
+        ...((prev[questions[currentQuestion].id] as Record<string, string>) || {}),
+        [fieldName]: value
+      }
+    }));
+  };
+
+  const nextQuestion = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      onComplete();
+      // Guardar respuestas y completar cuestionario
+      try {
+        const responses = {
+          health_goals: answers['1'] || '',
+          current_situation: answers['2'] || '',
+          commitment_level: answers['3'] || '',
+          daily_life: answers['4'] || '',
+          investment_readiness: answers['5'] || '',
+          personal_motivation: answers['6'] || '',
+          contact_info: JSON.stringify(answers['7'] || {})
+        };
+
+        await saveQuestionnaireResponse(responses);
+        
+        toast({
+          title: "¡Cuestionario completado!",
+          description: "Gracias por completar el cuestionario. Te contactaremos pronto.",
+        });
+
+        onComplete();
+      } catch (error) {
+        console.error('Error saving questionnaire:', error);
+        toast({
+          title: "Error",
+          description: "Hubo un problema al guardar tus respuestas. Por favor, inténtalo de nuevo.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -74,15 +179,102 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
   };
 
   const currentQuestionData = questions[currentQuestion];
-  const isAnswered = answers[currentQuestionData.id];
+  const isAnswered = () => {
+    const answer = answers[currentQuestionData.id];
+    if (currentQuestionData.type === 'form') {
+      const formData = answer as Record<string, string> || {};
+      const requiredFields = currentQuestionData.fields?.filter(field => field.required) || [];
+      return requiredFields.every(field => formData[field.name]?.trim());
+    }
+    if (currentQuestionData.type === 'text') {
+      return answer && (answer as string).trim().length > 0;
+    }
+    return !!answer;
+  };
+
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const isLastQuestion = currentQuestion === questions.length - 1;
+
+  const renderQuestionContent = () => {
+    if (currentQuestionData.type === 'multiple-choice') {
+      return (
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600 mb-6">🔻 Selecciona una opción:</p>
+          {currentQuestionData.options?.map((option, index) => (
+            <button
+              key={index}
+              onClick={() => handleAnswer(option)}
+              className={`w-full p-5 text-left rounded-xl border-2 transition-all duration-300 font-medium ${
+                answers[currentQuestionData.id] === option
+                  ? 'border-nutrition-green-emerald bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light text-nutrition-green-forest shadow-lg scale-105'
+                  : 'border-gray-200 hover:border-nutrition-green-emerald hover:bg-nutrition-green-lighter hover:bg-opacity-50 hover:scale-102 hover:shadow-md'
+              }`}
+            >
+              <div className="flex items-center">
+                <div className={`w-4 h-4 rounded-full border-2 mr-4 ${
+                  answers[currentQuestionData.id] === option
+                    ? 'bg-nutrition-green border-nutrition-green'
+                    : 'border-gray-300'
+                }`}></div>
+                {option}
+              </div>
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    if (currentQuestionData.type === 'text') {
+      return (
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600 mb-4">✏️ Campo de texto libre para responder (máx. 500 caracteres).</p>
+          <Textarea
+            placeholder="Escribe tu respuesta aquí..."
+            value={(answers[currentQuestionData.id] as string) || ''}
+            onChange={(e) => handleTextAnswer(e.target.value)}
+            maxLength={500}
+            className="min-h-[120px] resize-none"
+          />
+          <p className="text-xs text-gray-500 text-right">
+            {((answers[currentQuestionData.id] as string) || '').length}/500 caracteres
+          </p>
+        </div>
+      );
+    }
+
+    if (currentQuestionData.type === 'form') {
+      const formData = (answers[currentQuestionData.id] as Record<string, string>) || {};
+      return (
+        <div className="space-y-6">
+          <p className="text-sm text-gray-600 mb-6">📍 Campos:</p>
+          {currentQuestionData.fields?.map((field, index) => (
+            <div key={index} className="space-y-2">
+              <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                {field.label}
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+              </Label>
+              <Input
+                id={field.name}
+                type={field.type}
+                value={formData[field.name] || ''}
+                onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                className="w-full"
+                required={field.required}
+              />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <div className="fixed inset-0 dynamic-background flex items-center justify-center z-50 p-4 overflow-hidden">
       {/* Decorative background elements con más círculos y triángulos */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Círculos */}
         <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
         <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
@@ -90,7 +282,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
         <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
         <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
         
-        {/* Triángulos */}
         <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
@@ -122,35 +313,19 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
 
         <CardContent>
           <div className="mb-8">
-            <h3 className="text-2xl font-bold mb-8 text-nutrition-black title-playful leading-tight">
-              {currentQuestionData.question}
-            </h3>
-
-            <div className="space-y-4">
-              {currentQuestionData.options?.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswer(option)}
-                  className={`w-full p-5 text-left rounded-xl border-2 transition-all duration-300 font-medium ${
-                    answers[currentQuestionData.id] === option
-                      ? 'border-nutrition-green-emerald bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light text-nutrition-green-forest shadow-lg scale-105'
-                      : 'border-gray-200 hover:border-nutrition-green-emerald hover:bg-nutrition-green-lighter hover:bg-opacity-50 hover:scale-102 hover:shadow-md'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <div className={`w-4 h-4 rounded-full border-2 mr-4 ${
-                      answers[currentQuestionData.id] === option
-                        ? 'bg-nutrition-green border-nutrition-green'
-                        : 'border-gray-300'
-                    }`}></div>
-                    {option}
-                  </div>
-                </button>
-              ))}
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-nutrition-green-emerald mb-2 title-playful">
+                {currentQuestionData.step}
+              </h3>
+              <h4 className="text-xl font-bold mb-6 text-nutrition-black title-playful leading-tight">
+                {currentQuestionData.question}
+              </h4>
             </div>
 
+            {renderQuestionContent()}
+
             {/* Mensaje especial en la última pregunta */}
-            {isLastQuestion && isAnswered && (
+            {isLastQuestion && isAnswered() && (
               <div className="mt-10 p-8 bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl border-l-4 border-nutrition-green-emerald shadow-lg">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-nutrition-green rounded-full flex items-center justify-center mx-auto mb-4">
@@ -180,10 +355,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
 
             <Button
               onClick={nextQuestion}
-              disabled={!isAnswered}
+              disabled={!isAnswered() || loading}
               className="flex items-center space-x-2 px-8 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span>{currentQuestion === questions.length - 1 ? 'Finalizar' : 'Siguiente'}</span>
+              <span>{loading ? 'Guardando...' : (currentQuestion === questions.length - 1 ? 'Finalizar' : 'Siguiente')}</span>
               <ChevronRight className="w-5 h-5" />
             </Button>
           </div>
