@@ -233,7 +233,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
             value={(answers[currentQuestionData.id] as string) || ''}
             onChange={(e) => handleTextAnswer(e.target.value)}
             maxLength={500}
-            className="min-h-[120px] resize-none"
+            className="min-h-[120px] resize-none bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
           />
           <p className="text-xs text-gray-500 text-right">
             {((answers[currentQuestionData.id] as string) || '').length}/500 caracteres
@@ -247,23 +247,25 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
       return (
         <div className="space-y-6">
           <p className="text-sm text-gray-600 mb-6">📍 Campos:</p>
-          {currentQuestionData.fields?.map((field, index) => (
-            <div key={index} className="space-y-2">
-              <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                {field.label}
-                {field.required && <span className="text-red-500 ml-1">*</span>}
-              </Label>
-              <Input
-                id={field.name}
-                type={field.type}
-                value={formData[field.name] || ''}
-                onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                className="w-full"
-                required={field.required}
-              />
-            </div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {currentQuestionData.fields?.map((field, index) => (
+              <div key={index} className={`space-y-2 ${field.name === 'instagram' ? 'md:col-span-2' : ''}`}>
+                <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                  {field.label}
+                  {field.required && <span className="text-red-500 ml-1">*</span>}
+                </Label>
+                <Input
+                  id={field.name}
+                  type={field.type}
+                  value={formData[field.name] || ''}
+                  onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                  placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                  className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                  required={field.required}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       );
     }
@@ -288,7 +290,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
         <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
       </div>
 
-      <Card className="w-full max-w-2xl bg-white/90 backdrop-blur-sm border border-nutrition-green-light shadow-2xl relative z-10">
+      <Card className="w-full max-w-4xl bg-white/90 backdrop-blur-sm border border-nutrition-green-light shadow-2xl relative z-10 max-h-[90vh] overflow-y-auto">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent title-main">
@@ -347,7 +349,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
               variant="outline"
               onClick={prevQuestion}
               disabled={currentQuestion === 0}
-              className="flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black border-none"
             >
               <ChevronLeft className="w-5 h-5" />
               <span>Anterior</span>
