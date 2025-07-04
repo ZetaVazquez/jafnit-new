@@ -64,7 +64,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             {/* Left Side - Content */}
             <div className="text-white text-left order-2 lg:order-1">
               {/* Logo and Brand */}
-              <div className="flex items-center space-x-4 mb-6">
+              <div className="flex flex-col items-center lg:items-start space-y-4 mb-6">
                 <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
                   <img 
                     src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
@@ -72,8 +72,8 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div>
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-white drop-shadow-lg">
+                <div className="text-center lg:text-left">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white drop-shadow-lg">
                     JAFNFIT
                   </h1>
                 </div>
@@ -105,7 +105,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
       {/* Silhouette positioned at bottom right corner */}
       <div className="absolute bottom-0 right-0 pointer-events-none">
         <img 
-          src="/lovable-uploads/a0cdee08-42e1-4aef-b245-e58ac85bf290.png" 
+          src="/lovable-uploads/7ef270ff-62f2-4ce7-a2cb-494f6e9f3218.png" 
           alt="José Antonio - Entrenador Personal" 
           className="w-48 h-60 md:w-64 md:h-80 lg:w-80 lg:h-96 xl:w-96 xl:h-[500px] object-contain object-bottom drop-shadow-2xl"
         />
