@@ -73,16 +73,16 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <h3 className="text-xl md:text-2xl lg:text-4xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
                   💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
                 </h3>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
                   Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
                   🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
                   ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark font-semibold">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark font-semibold">
                   Hasta que el cuerpo dijo basta.
                 </p>
               </div>
