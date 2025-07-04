@@ -60,7 +60,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       <div className="container mx-auto px-2 md:px-6 lg:px-8 relative z-10 max-w-7xl">
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-nutrition-black mb-4 md:mb-6 title-main tracking-tight">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-4 md:mb-6 title-main tracking-tight">
             Sobre Mi
           </h2>
         </div>

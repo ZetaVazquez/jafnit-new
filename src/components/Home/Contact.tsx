@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Phone, Mail, MapPin, Calendar } from 'lucide-react';
@@ -28,7 +29,7 @@ const Contact: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-nutrition-black mb-4 title-main">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
             Contáctame
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">

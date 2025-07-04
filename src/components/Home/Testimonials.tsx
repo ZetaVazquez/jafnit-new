@@ -127,7 +127,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10 max-w-7xl">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-nutrition-black mb-4 md:mb-6 title-main">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-4 md:mb-6 title-main">
             Opiniones de Nuestros Clientes
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
