@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { PricingPlan } from '@/types';
 
 interface PricingProps {
@@ -12,35 +12,52 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
   const plans: PricingPlan[] = [
     {
       id: '1',
-      name: 'Plan Mensual',
-      duration: '1 mes',
+      name: 'Plan Vú Básico',
+      duration: 'Pago único',
       price: '€75',
       features: [
-        'Evaluación inicial completa',
-        'Plan de alimentación personalizado',
-        'Rutina de ejercicios básica',
-        'Seguimiento semanal',
-        'Soporte por WhatsApp',
-        'Acceso a recursos básicos'
+        'Dirigido a principiantes que quieren orden',
+        'Nutrición personalizada con menú adaptado',
+        'Entrenamiento no incluido',
+        'Hábitos con guías básicas',
+        'Seguimiento: 1 revisión por mensaje',
+        'Sin análisis',
+        'Sin soporte',
+        'Extras: Guía de compras y batch cooking'
       ]
     },
     {
       id: '2',
-      name: 'Plan Trimestral',
-      duration: '3 meses',
-      price: '€210',
+      name: 'Plan Premium',
+      duration: 'Por mes',
+      price: '€120',
       features: [
-        'Todo lo del plan mensual',
-        'Evaluación médica avanzada',
-        'Plan de suplementación',
-        'Rutina de ejercicios avanzada',
-        'Seguimiento bisemanal',
-        'Recetas personalizadas',
-        'Acceso a la app móvil premium',
-        '2 sesiones de entrenamiento personal',
-        'Ahorro de €15 al mes'
+        'Dirigido a personas que buscan mejorar composición corporal',
+        'Nutrición incluida + organización de comidas',
+        'Entrenamiento: Plan para casa o gimnasio',
+        'Hábitos: Plan estructurado + herramientas',
+        'Seguimiento: 1 consulta online o presencial mensual',
+        'Sin análisis',
+        'Soporte: Acceso básico a herramientas',
+        'Extras: Plantillas de control y rutinas'
       ],
       highlighted: true
+    },
+    {
+      id: '3',
+      name: 'Plan PRO',
+      duration: 'Duración mínima 3 meses',
+      price: '€300',
+      features: [
+        'Dirigido a personas comprometidas con un cambio completo',
+        'Nutrición incluida + revisión y ajustes avanzados',
+        'Entrenamiento completo, progresivo y evaluado',
+        'Hábitos: Fases inicio - media - consolidación',
+        'Seguimiento: Revisión quincenal por vídeo o mensaje',
+        'Análisis: Informe mensual con métricas y feedback',
+        'Soporte directo por WhatsApp (24h hábiles)',
+        'Extras: Retos, comunidad privada y evolución total'
+      ]
     }
   ];
 
@@ -77,22 +94,28 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 border-nutrition-green-light hover:border-nutrition-green"
+              className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 ${
+                plan.highlighted 
+                  ? 'border-nutrition-green ring-4 ring-nutrition-green/20' 
+                  : 'border-nutrition-green-light hover:border-nutrition-green'
+              }`}
             >
-              <div className="p-8">
+              <div className="p-6">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold mb-2 text-nutrition-black title-playful">
+                  <h3 className="text-xl font-bold mb-2 text-nutrition-black title-playful">
                     {plan.name}
                   </h3>
-                  <p className="text-lg mb-4 text-nutrition-gray">
+                  <p className="text-sm mb-4 text-nutrition-gray">
                     {plan.duration}
                   </p>
-                  <div className="text-4xl font-bold mb-6 text-nutrition-green title-main">
+                  <div className="text-3xl font-bold mb-4 text-nutrition-green title-main">
                     {plan.price}
+                    {plan.id === '2' && <span className="text-sm text-nutrition-gray">/mes</span>}
+                    {plan.id === '3' && <span className="text-sm text-nutrition-gray">/mes</span>}
                   </div>
                   {plan.highlighted && (
                     <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
@@ -101,20 +124,31 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
                   )}
                 </div>
 
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <Check className="w-5 h-5 mr-3 mt-0.5 text-nutrition-green" />
-                      <span className="text-sm text-nutrition-gray">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
+                <ul className="space-y-2 mb-6">
+                  {plan.features.map((feature, index) => {
+                    const isNegative = feature.includes('no incluido') || feature.includes('Sin');
+                    return (
+                      <li key={index} className="flex items-start">
+                        {isNegative ? (
+                          <X className="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0" />
+                        ) : (
+                          <Check className="w-4 h-4 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
+                        )}
+                        <span className={`text-xs ${isNegative ? 'text-red-600' : 'text-nutrition-gray'}`}>
+                          {feature}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <Button
                   onClick={onStartQuestionnaire}
-                  className="w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
+                  className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
+                    plan.highlighted
+                      ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
+                      : 'bg-nutrition-green-light hover:bg-nutrition-green text-nutrition-green-dark hover:text-white'
+                  }`}
                 >
                   Elegir Plan
                 </Button>
