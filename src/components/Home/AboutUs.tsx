@@ -39,7 +39,22 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
   ];
 
   return (
-    <section id="about" className="py-8 md:py-12 dynamic-background relative overflow-hidden">
+    <section id="about" className="py-8 md:py-12 relative overflow-hidden" style={{
+      background: 'linear-gradient(135deg, rgba(187, 247, 208, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%)',
+      position: 'relative'
+    }}>
+      {/* Unified background overlay for consistency */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: `
+          radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(5, 150, 105, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 40% 70%, rgba(132, 204, 22, 0.12) 0%, transparent 50%),
+          radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+          radial-gradient(circle at 10% 90%, rgba(187, 247, 208, 0.2) 0%, transparent 50%)
+        `,
+        pointerEvents: 'none'
+      }}></div>
+
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="geometric-shape circle-shape w-16 h-16 md:w-32 md:h-32 top-10 left-10 animate-pulse-slow"></div>
