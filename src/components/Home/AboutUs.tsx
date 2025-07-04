@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -89,12 +88,12 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones arriba derecha - movidas al extremo derecho */}
-          <div className="absolute top-8 md:top-12 -right-8 md:-right-16 lg:-right-20 hidden lg:block">
-            <div className="space-y-6">
+          {/* Opiniones arriba derecha - movidas MUCHO más al extremo derecho */}
+          <div className="absolute top-8 md:top-12 -right-12 md:-right-32 lg:-right-48 xl:-right-64 hidden xl:block">
+            <div className="space-y-8">
               {/* Primera opinión arriba derecha - rotada hacia la derecha */}
               <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-sm">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[0].name}</h4>
@@ -110,8 +109,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
 
               {/* Segunda opinión arriba derecha - rotada hacia la izquierda */}
-              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-16">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-sm">
+              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-20">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[1].name}</h4>
@@ -182,12 +181,12 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones abajo izquierda - movidas al extremo izquierdo */}
-          <div className="absolute bottom-0 -left-8 md:-left-16 lg:-left-20 hidden lg:block">
-            <div className="space-y-6">
+          {/* Opiniones abajo izquierda - movidas MUCHO más al extremo izquierdo */}
+          <div className="absolute bottom-0 -left-12 md:-left-32 lg:-left-48 xl:-left-64 hidden xl:block">
+            <div className="space-y-8">
               {/* Primera opinión abajo izquierda - rotada hacia la izquierda */}
               <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-sm">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[2].name}</h4>
@@ -203,8 +202,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
 
               {/* Segunda opinión abajo izquierda - rotada hacia la derecha */}
-              <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-16">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-sm">
+              <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-20">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[3].name}</h4>
