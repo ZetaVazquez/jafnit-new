@@ -12,19 +12,16 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
   const slides = [
     {
-      image: "/lovable-uploads/7ef270ff-62f2-4ce7-a2cb-494f6e9f3218.png",
       title: "¿Cansado de intentar y no conseguir resultados? Yo pasé por exactamente lo mismo que tú estás viviendo ahora",
       subtitle: "Yo estuve donde tú estás en este momento. Perdí 30 kilos sin destruir mi salud ni mi vida social, y lo más importante: sin volver a recuperar el peso perdido. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen y la confianza que necesitan para vivir la vida que realmente quieren.",
       buttonText: "🔥 COMENZAR MI TRANSFORMACIÓN"
     },
     {
-      image: "/lovable-uploads/4ecf9313-d7ff-45b8-9b65-f74a7d809a03.png", 
       title: "Transforma tu cuerpo con un plan diseñado específicamente para ti",
       subtitle: "Nada de dietas extremas ni entrenamientos que no puedes mantener. Mi método se adapta a tu estilo de vida para que consigas resultados reales y duraderos.",
       buttonText: "✨ EMPEZAR AHORA"
     },
     {
-      image: "/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png",
       title: "Únete a cientos de personas que ya han transformado su vida",
       subtitle: "No estás solo en este proceso. Te acompaño paso a paso para que consigas el cuerpo que quieres y, más importante, para que mantengas los resultados para siempre.",
       buttonText: "🚀 QUIERO EMPEZAR"
@@ -40,7 +37,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   };
 
   return (
-    <section className="relative min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
+    <section className="relative min-h-[70vh] lg:min-h-[80vh] overflow-hidden bg-gradient-to-br from-green-500 to-green-600">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -48,15 +45,6 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(${slide.image})`,
-            }}
-          >
-            <div className="absolute inset-0 bg-black/20"></div>
-          </div>
-          
           <div className="relative h-full flex items-center">
             <div className="container mx-auto px-4 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh] lg:min-h-[80vh]">
@@ -70,20 +58,20 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                       />
                     </div>
                     <div className="text-center lg:text-left">
-                      <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold title-main mb-2 lg:mb-4">
+                      <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold title-main mb-2 lg:mb-4 text-white">
                         JAFNFIT
                       </h1>
-                      <p className="text-lg lg:text-xl text-white/90 font-medium">
+                      <p className="text-lg lg:text-xl text-yellow-300 font-medium">
                         Dietética y Entrenamiento Personal
                       </p>
                     </div>
                   </div>
 
                   <div className="space-y-4 lg:space-y-6 text-center lg:text-left">
-                    <h2 className="text-2xl lg:text-4xl xl:text-5xl font-bold leading-tight">
+                    <h2 className="text-2xl lg:text-4xl xl:text-5xl font-bold leading-tight text-white">
                       {slide.title}
                     </h2>
-                    <p className="text-base lg:text-lg xl:text-xl text-white/90 leading-relaxed max-w-2xl">
+                    <p className="text-base lg:text-lg xl:text-xl text-white leading-relaxed max-w-2xl">
                       {slide.subtitle}
                     </p>
                   </div>
@@ -100,7 +88,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 </div>
 
                 <div className="hidden lg:block">
-                  {/* Space for image - content is in background */}
+                  {/* Right side for person image - will be styled background */}
                 </div>
               </div>
             </div>
