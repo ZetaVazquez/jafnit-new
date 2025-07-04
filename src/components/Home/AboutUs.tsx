@@ -69,7 +69,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* FILA 1: Cuadro de texto arriba a la izquierda solamente + Opiniones arriba derecha */}
+        {/* FILA 1: Cuadro de texto arriba a la izquierda solamente + Opiniones arriba derecha más alejadas */}
         <div className="mb-6 md:mb-10 relative">
           <div className="flex justify-start">
             <div className="w-full max-w-5xl">
@@ -93,8 +93,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones arriba derecha - más bajas */}
-          <div className="absolute top-8 md:top-12 right-4 md:right-8 hidden lg:block">
+          {/* Opiniones arriba derecha - movidas más hacia el extremo derecho */}
+          <div className="absolute top-8 md:top-12 right-0 md:right-2 hidden lg:block">
             <div className="space-y-4">
               {/* Primera opinión arriba derecha - rotada hacia la derecha */}
               <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
@@ -175,7 +175,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 3: Cuadro de texto abajo a la derecha solamente + Opiniones abajo izquierda */}
+        {/* FILA 3: Cuadro de texto abajo a la derecha solamente + Opiniones abajo izquierda más alejadas */}
         <div className="mb-6 md:mb-10 relative">
           <div className="flex justify-end">
             <div className="w-full max-w-5xl">
@@ -196,8 +196,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones abajo izquierda - centradas */}
-          <div className="absolute bottom-0 left-4 md:left-8 hidden lg:block">
+          {/* Opiniones abajo izquierda - movidas más hacia el extremo izquierdo */}
+          <div className="absolute bottom-0 left-0 md:left-2 hidden lg:block">
             <div className="space-y-4">
               {/* Primera opinión abajo izquierda - rotada hacia la izquierda */}
               <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
