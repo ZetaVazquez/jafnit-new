@@ -12,7 +12,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
   const plans: PricingPlan[] = [
     {
       id: '1',
-      name: 'Plan Vú Básico',
+      name: 'Plan Básico',
       duration: 'Pago único',
       price: '€75',
       features: [

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,28 +16,24 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
   const testimonials = [
     {
-      name: 'María González',
-      comment: 'José Antonio me ayudó a transformar completamente mi estilo de vida. En 6 meses perdí 15 kilos y gané mucha confianza.',
-      rating: 5,
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b1a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+      name: '🧍‍♀️ Laura Jiménez (32 años)',
+      comment: 'Nunca pensé que una dieta pudiera ser así de fácil de seguir. ¡No paso hambre, me encanta lo que como y ya bajé 4 kilos! Gracias por enseñarme a disfrutar comiendo 🙌🍝',
+      rating: 4
     },
     {
-      name: 'Carlos Rodríguez',
-      comment: 'El plan personalizado de entrenamiento y nutrición superó todas mis expectativas. Recomiendo 100% sus servicios.',
-      rating: 5,
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+      name: '🧍‍♂️ Pablo Moreno (36 años)',
+      comment: 'Estoy sorprendido de lo mucho que he avanzado sin pasarme horas en el gym. El entrenamiento es personalizado y me encanta que puedo hacerlo en casa o en el parque 🏋️‍♂️🏡.',
+      rating: 5
     },
     {
-      name: 'Ana Martín',
-      comment: 'Profesional, dedicado y con resultados reales. Mi salud y energía mejoraron significativamente.',
-      rating: 5,
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+      name: '🧍‍♀️ Alba Fernández (29 años)',
+      comment: 'Me sentí escuchada desde el primer día. Cada duda que tengo, me la responden rápido. Siento que no estoy sola en esto y eso me da tranquilidad 🙏📩.',
+      rating: 4
     },
     {
-      name: 'David López',
-      comment: 'La mejor inversión que he hecho en mi salud. El seguimiento personalizado marca la diferencia.',
-      rating: 5,
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'
+      name: '🧍‍♂️ Iván Gutiérrez (30 años)',
+      comment: 'Volví a usar ropa que no me ponía hace años, pero lo que más valoro es que ahora tengo energía para todo. Este cambio me ha devuelto las ganas de vivir al 100%.',
+      rating: 5
     }
   ];
 
@@ -100,11 +95,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
-                    <img
-                      src={testimonials[0].image}
-                      alt={testimonials[0].name}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[0].name}</h4>
                       <div className="flex">
@@ -122,11 +112,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-12">
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
-                    <img
-                      src={testimonials[1].image}
-                      alt={testimonials[1].name}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[1].name}</h4>
                       <div className="flex">
@@ -203,11 +188,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
-                    <img
-                      src={testimonials[2].image}
-                      alt={testimonials[2].name}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[2].name}</h4>
                       <div className="flex">
@@ -225,11 +205,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-12">
                 <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light max-w-xs">
                   <div className="flex items-center mb-3">
-                    <img
-                      src={testimonials[3].image}
-                      alt={testimonials[3].name}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
                     <div>
                       <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[3].name}</h4>
                       <div className="flex">
