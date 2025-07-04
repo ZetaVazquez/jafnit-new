@@ -24,11 +24,6 @@ const Footer: React.FC = () => {
     <footer className="bg-nutrition-black text-white py-12">
       <div className="container mx-auto px-4">
         <div className="text-center">
-          {/* Logo */}
-          <h3 className="text-2xl font-bold text-nutrition-green mb-6">
-            José Antonio Dietética y Entrenamiento
-          </h3>
-
           {/* Social Media Icons */}
           <div className="flex justify-center space-x-6 mb-8">
             {socialLinks.map((social, index) => (
@@ -48,7 +43,7 @@ const Footer: React.FC = () => {
           {/* Copyright */}
           <div className="border-t border-gray-600 pt-6">
             <p className="text-gray-400 text-sm">
-              © {currentYear} José Antonio Dietética y Entrenamiento. Todos los derechos reservados.
+              © {currentYear} Todos los derechos reservados.
             </p>
             <p className="text-gray-500 text-xs mt-2">
               Diseñado para transformar vidas a través de la nutrición y el entrenamiento personalizado.
