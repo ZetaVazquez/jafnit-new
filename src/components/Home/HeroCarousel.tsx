@@ -106,12 +106,12 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         </div>
       </div>
 
-      {/* Silhouette positioned smaller, more separated from left, and touching bottom */}
-      <div className="absolute bottom-0 right-0 pointer-events-none overflow-hidden">
+      {/* Silhouette positioned more towards left and bottom */}
+      <div className="absolute bottom-4 right-12 md:bottom-6 md:right-16 lg:bottom-8 lg:right-24 pointer-events-none overflow-hidden">
         <img 
           src="/lovable-uploads/1ef2ec72-6a8a-4e2c-a3f9-72fc43a1ce69.png"
           alt="José Antonio - Entrenador Personal" 
-          className="w-[350px] h-[450px] md:w-[400px] md:h-[520px] lg:w-[450px] lg:h-[580px] xl:w-[500px] xl:h-[650px] object-cover object-bottom drop-shadow-2xl transform translate-x-0 md:translate-x-4 lg:translate-x-8 xl:translate-x-12"
+          className="w-[350px] h-[450px] md:w-[400px] md:h-[520px] lg:w-[450px] lg:h-[580px] xl:w-[500px] xl:h-[650px] object-cover object-bottom drop-shadow-2xl"
           style={{ objectPosition: 'center bottom' }}
         />
       </div>
