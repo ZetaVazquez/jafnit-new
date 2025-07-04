@@ -54,7 +54,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
               backgroundImage: `url(${slide.image})`,
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-nutrition-green/90 to-nutrition-green-emerald/80"></div>
+            <div className="absolute inset-0 bg-black/20"></div>
           </div>
           
           <div className="relative h-full flex items-center">
