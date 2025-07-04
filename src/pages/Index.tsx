@@ -15,6 +15,7 @@ import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
 import { useAuth } from '@/hooks/useAuth';
+import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -67,28 +68,30 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen dynamic-background">
-      <Header 
-        isLoggedIn={!!user}
-        onLogin={handleLogin}
-        onRegister={handleRegister}
-        onLogout={handleLogout}
-        onNavigateToHome={handleBackToHome}
-        onNavigateToDashboard={handleGoToDashboard}
-        onStartQuestionnaire={handleStartQuestionnaire}
-      />
-      <main>
-        <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
-        <AboutUs />
-        <Services />
-        <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
-        <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
-        <BMICalculator />
-        <News />
-        <FAQ />
-        <Contact />
-      </main>
-      <Footer />
+    <div className="min-h-screen">
+      <DynamicBackground>
+        <Header 
+          isLoggedIn={!!user}
+          onLogin={handleLogin}
+          onRegister={handleRegister}
+          onLogout={handleLogout}
+          onNavigateToHome={handleBackToHome}
+          onNavigateToDashboard={handleGoToDashboard}
+          onStartQuestionnaire={handleStartQuestionnaire}
+        />
+        <main>
+          <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
+          <AboutUs />
+          <Services />
+          <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
+          <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
+          <BMICalculator />
+          <News />
+          <FAQ />
+          <Contact />
+        </main>
+        <Footer />
+      </DynamicBackground>
     </div>
   );
 };
