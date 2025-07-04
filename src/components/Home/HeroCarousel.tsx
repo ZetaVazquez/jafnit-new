@@ -85,22 +85,22 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         </div>
       </div>
 
-      {/* Centered Title and Logo - Positioned higher up in the viewport */}
-      <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+      {/* Centered Title and Logo - Positioned at the very top */}
+      <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-20">
         <div className="flex flex-col items-center justify-center space-y-2">
           <div className="flex items-center justify-center space-x-4">
-            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
+            <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
               <img 
                 src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
                 alt="JAFNFIT Logo" 
                 className="w-full h-full object-cover"
               />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white drop-shadow-lg">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-white drop-shadow-lg">
               JAFNFIT
             </h1>
           </div>
-          <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-yellow-300 drop-shadow-md text-center">
+          <h2 className="text-sm md:text-base lg:text-lg font-bold text-yellow-300 drop-shadow-md text-center">
             Dietética y Entrenamiento Personal
           </h2>
         </div>
