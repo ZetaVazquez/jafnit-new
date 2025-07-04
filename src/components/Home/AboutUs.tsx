@@ -60,7 +60,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       <div className="container mx-auto px-2 md:px-6 lg:px-8 relative z-10 max-w-7xl">
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4 md:mb-6 title-main tracking-tight">
+          <h2 className="text-5xl font-bold text-nutrition-black mb-4 md:mb-6 title-main tracking-tight">
             Sobre Mi
           </h2>
         </div>
@@ -70,7 +70,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           <div className="flex justify-center">
             <div className="w-full max-w-5xl lg:max-w-6xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
-                <h3 className="text-xl md:text-2xl lg:text-4xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
                   💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
                 </h3>
                 <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
@@ -201,16 +201,16 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           <div className="flex justify-center">
             <div className="w-full max-w-5xl lg:max-w-6xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
-                <h4 className="text-xl md:text-2xl lg:text-4xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
+                <h4 className="text-lg md:text-xl lg:text-2xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
                   🎯 Mi método: Simple, efectivo y sostenible
                 </h4>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark leading-relaxed mb-4 md:mb-5">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark leading-relaxed mb-4 md:mb-5">
                   Créeme cuando te digo que he probado de todo: dietas extremas, suplementos "milagro", rutinas imposibles 🔄.
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark leading-relaxed mb-4 md:mb-5">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark leading-relaxed mb-4 md:mb-5">
                   Lo que funciona de verdad es un enfoque equilibrado que puedas mantener en el tiempo 📈.
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark leading-relaxed font-semibold">
+                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark leading-relaxed font-semibold">
                   No más extremos. Solo resultados reales y duraderos 🏆.
                 </p>
               </div>
