@@ -12,16 +12,19 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
   const slides = [
     {
+      image: "/lovable-uploads/7ef270ff-62f2-4ce7-a2cb-494f6e9f3218.png",
       title: "¿Cansado de intentar y no conseguir resultados? Yo pasé por exactamente lo mismo que tú estás viviendo ahora",
       subtitle: "Yo estuve donde tú estás en este momento. Perdí 30 kilos sin destruir mi salud ni mi vida social, y lo más importante: sin volver a recuperar el peso perdido. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen y la confianza que necesitan para vivir la vida que realmente quieren.",
       buttonText: "🔥 COMENZAR MI TRANSFORMACIÓN"
     },
     {
+      image: "/lovable-uploads/4ecf9313-d7ff-45b8-9b65-f74a7d809a03.png", 
       title: "Transforma tu cuerpo con un plan diseñado específicamente para ti",
       subtitle: "Nada de dietas extremas ni entrenamientos que no puedes mantener. Mi método se adapta a tu estilo de vida para que consigas resultados reales y duraderos.",
       buttonText: "✨ EMPEZAR AHORA"
     },
     {
+      image: "/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png",
       title: "Únete a cientos de personas que ya han transformado su vida",
       subtitle: "No estás solo en este proceso. Te acompaño paso a paso para que consigas el cuerpo que quieres y, más importante, para que mantengas los resultados para siempre.",
       buttonText: "🚀 QUIERO EMPEZAR"
@@ -37,7 +40,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   };
 
   return (
-    <section className="relative min-h-[70vh] lg:min-h-[80vh] overflow-hidden bg-gradient-to-br from-green-500 to-green-600">
+    <section className="relative min-h-[90vh] lg:min-h-screen overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
@@ -45,9 +48,18 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url(${slide.image})`,
+            }}
+          >
+            <div className="absolute inset-0 bg-green-600/70"></div>
+          </div>
+          
           <div className="relative h-full flex items-center">
             <div className="container mx-auto px-4 lg:px-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh] lg:min-h-[80vh]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[90vh] lg:min-h-screen">
                 <div className="text-white space-y-6 lg:space-y-8">
                   <div className="space-y-4 lg:space-y-6 mt-4 lg:mt-8">
                     <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden border-4 border-white/30 mx-auto lg:mx-0">
@@ -87,8 +99,14 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                   </div>
                 </div>
 
-                <div className="hidden lg:block">
-                  {/* Right side for person image - will be styled background */}
+                <div className="hidden lg:block relative">
+                  <div className="absolute bottom-0 right-0 w-80 h-96">
+                    <img 
+                      src="/lovable-uploads/4d9ad9e4-a814-4469-b756-3e46df99f4b2.png"
+                      alt="Trainer silhouette" 
+                      className="w-full h-full object-contain object-bottom"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
