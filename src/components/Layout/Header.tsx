@@ -132,12 +132,11 @@ const Header: React.FC<HeaderProps> = ({
                     </Button>
                   )}
                   
-                  {/* My Account Button */}
+                  {/* My Account Button with updated colors */}
                   {onNavigateToDashboard && (
                     <Button
                       onClick={onNavigateToDashboard}
-                      variant="outline"
-                      className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                      className="hidden lg:flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                     >
                       <User className="w-4 h-4" />
                       <span>Mi Cuenta</span>
@@ -155,10 +154,10 @@ const Header: React.FC<HeaderProps> = ({
                 </>
               ) : (
                 <div className="hidden lg:flex items-center space-x-2">
+                  {/* Login button with updated colors */}
                   <Button
                     onClick={onLogin}
-                    variant="outline"
-                    className="border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                    className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                   >
                     Iniciar Sesión
                   </Button>
@@ -224,14 +223,14 @@ const Header: React.FC<HeaderProps> = ({
                         Página Principal
                       </Button>
                     )}
+                    {/* Mobile My Account button with updated colors */}
                     {onNavigateToDashboard && (
                       <Button
                         onClick={() => {
                           onNavigateToDashboard();
                           setIsMenuOpen(false);
                         }}
-                        variant="outline"
-                        className="w-full border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                        className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                       >
                         <User className="w-4 h-4 mr-2" />
                         Mi Cuenta
@@ -250,13 +249,13 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
                 ) : (
                   <div className="px-4 mt-4 space-y-2">
+                    {/* Mobile Login button with updated colors */}
                     <Button
                       onClick={() => {
                         onLogin();
                         setIsMenuOpen(false);
                       }}
-                      variant="outline"
-                      className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                     >
                       Iniciar Sesión
                     </Button>
