@@ -61,8 +61,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             <div className="container mx-auto px-4 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh] lg:min-h-[80vh]">
                 <div className="text-white space-y-6 lg:space-y-8">
-                  {/* Increased top margin for better spacing from navbar */}
-                  <div className="space-y-4 lg:space-y-6 mt-8 lg:mt-12">
+                  <div className="space-y-4 lg:space-y-6 mt-4 lg:mt-8">
                     <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden border-4 border-white/30 mx-auto lg:mx-0">
                       <img 
                         src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
