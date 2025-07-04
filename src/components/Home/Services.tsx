@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
@@ -112,41 +113,41 @@ const Services: React.FC = () => {
             {/* Text Content */}
             <div className="order-2 lg:order-1">
               <h3 className="text-2xl md:text-3xl font-bold text-nutrition-green-dark mb-6 title-playful">
-                💬 LA COMUNICACIÓN ES CLAVE PARA QUE LOGRES TUS OBJETIVOS Y PODAMOS CONOCER TUS NECESIDADES
+                💬 EL DIÁLOGO CONSTANTE ES FUNDAMENTAL PARA ALCANZAR TUS METAS Y ENTENDER TUS REQUERIMIENTOS
               </h3>
               <div className="space-y-4 text-nutrition-green-dark">
                 <p className="text-lg leading-relaxed">
-                  Nuestro trabajo es conocer tu caso lo mejor posible para poder guiarte y acompañarte.
+                  Mi objetivo es comprender tu situación de manera completa para ofrecerte la mejor orientación y apoyo.
                 </p>
                 <p className="text-lg leading-relaxed font-semibold">
-                  Sin tus mensajes, no podemos cambiarte y mejorarte el plan.
+                  La comunicación es esencial para personalizar y optimizar tu plan de forma efectiva.
                 </p>
                 <p className="text-lg leading-relaxed">
-                  Necesitamos que te comuniques siempre con nosotros para que demos el 100% en nuestro trabajo.
+                  Mantén el contacto conmigo para que pueda brindarte el máximo valor en mi asesoramiento.
                 </p>
                 <p className="text-lg leading-relaxed">
-                  No importa lo que quieras cambiar, <span className="font-bold">SIEMPRE</span> hay otra opción y <span className="font-bold">SIEMPRE</span> hay una solución para todo lo que no te gusta.
+                  Cualquier ajuste que necesites, <span className="font-bold">SIEMPRE</span> existe una alternativa y <span className="font-bold">SIEMPRE</span> encontramos la mejor solución para ti.
                 </p>
                 <p className="text-lg leading-relaxed">
-                  Nuestra prioridad es que te guste y puedas seguirlo.
+                  Mi enfoque se centra en que te sientas cómodo y puedas mantener el plan a largo plazo.
                 </p>
                 <p className="text-lg leading-relaxed font-semibold">
-                  Si quieres aprovechar al máximo el servicio, habla con nosotros siempre que lo necesites!
+                  Para maximizar los beneficios de nuestro trabajo conjunto, mantente en contacto cuando lo requieras!
                 </p>
               </div>
               
               <div className="mt-8 space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-nutrition-green-dark font-medium">Escríbenos cuando lo necesites</span>
+                  <span className="text-nutrition-green-dark font-medium">Contáctame cuando lo necesites</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-nutrition-green-dark font-medium">Apoyo y motivación a diario</span>
+                  <span className="text-nutrition-green-dark font-medium">Soporte y motivación diarios</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-nutrition-green-dark font-medium">Vídeos y documentos educativos</span>
+                  <span className="text-nutrition-green-dark font-medium">Material educativo y recursos</span>
                 </div>
               </div>
             </div>

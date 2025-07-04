@@ -62,7 +62,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 items-center h-full">
             {/* Left Side - Content */}
-            <div className="text-white text-left order-2 lg:order-1">
+            <div className="text-white text-left order-2 lg:order-1 z-10">
               {/* Logo and Brand */}
               <div className="flex flex-col items-center lg:items-start space-y-4 mb-6">
                 <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
@@ -102,12 +102,13 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         </div>
       </div>
 
-      {/* Silhouette positioned at bottom right corner */}
+      {/* Silhouette positioned at bottom right corner - larger and at edge */}
       <div className="absolute bottom-0 right-0 pointer-events-none">
         <img 
           src="/lovable-uploads/1ef2ec72-6a8a-4e2c-a3f9-72fc43a1ce69.png"
           alt="José Antonio - Entrenador Personal" 
-          className="w-56 h-72 md:w-72 md:h-96 lg:w-80 lg:h-[450px] xl:w-96 xl:h-[500px] object-contain object-bottom drop-shadow-2xl"
+          className="w-72 h-96 md:w-96 md:h-[500px] lg:w-[450px] lg:h-[580px] xl:w-[500px] xl:h-[650px] object-contain object-bottom-right drop-shadow-2xl transform translate-x-8 md:translate-x-12 lg:translate-x-16"
+          style={{ objectPosition: 'bottom right' }}
         />
       </div>
 
