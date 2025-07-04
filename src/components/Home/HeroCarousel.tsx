@@ -57,15 +57,15 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         <div className="absolute inset-0 bg-gradient-to-br from-nutrition-green/85 via-nutrition-green-emerald/80 to-nutrition-green-sage/75"></div>
       </div>
 
-      {/* Diagonal Split Overlay - Hidden on screens smaller than 1110px */}
-      <div className="absolute inset-0 hidden xl:[1110px]:block">
-        {/* Left Side with Content */}
-        <div className="absolute inset-0 diagonal-split bg-gradient-to-br from-nutrition-green/95 via-nutrition-green-emerald/90 to-nutrition-green-sage/85">
-          <div className="flex items-center justify-start h-full pl-8 lg:pl-16">
-            <div className="text-white max-w-2xl">
+      {/* Main Content Layout */}
+      <div className="absolute inset-0 flex items-center">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 items-center h-full">
+            {/* Left Side - Content */}
+            <div className="text-white text-left order-2 lg:order-1">
               {/* Logo and Brand */}
               <div className="flex items-center space-x-4 mb-8">
-                <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
                   <img 
                     src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
                     alt="JAFNFIT Logo" 
@@ -79,82 +79,53 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 </div>
               </div>
               
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-yellow-300 drop-shadow-md">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-yellow-300 drop-shadow-md">
                 Dietética y Entrenamiento Personal
               </h2>
-              <h3 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 text-yellow-100 font-bold drop-shadow-md leading-tight">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-6 text-yellow-100 font-bold drop-shadow-md leading-tight">
                 {slides[currentSlide].title}
               </h3>
-              <p className="text-lg md:text-xl lg:text-2xl mb-10 text-yellow-100 font-medium drop-shadow-sm leading-relaxed max-w-xl">
+              <p className="text-lg md:text-xl lg:text-2xl mb-10 text-yellow-100 font-medium drop-shadow-sm leading-relaxed max-w-2xl">
                 {slides[currentSlide].subtitle}
               </p>
               <Button
                 onClick={onStartQuestionnaire}
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-10 py-5 text-xl font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-8 lg:px-10 py-4 lg:py-5 text-lg lg:text-xl font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 🎯 COMENZAR MI TRANSFORMACIÓN
               </Button>
             </div>
-          </div>
-        </div>
 
-        {/* Right Side */}
-        <div className="absolute inset-0 diagonal-split-right"></div>
-      </div>
-
-      {/* Content for mobile/tablet - shown on screens smaller than 1110px */}
-      <div className="absolute inset-0 xl:[1110px]:hidden flex items-center justify-center">
-        <div className="text-white max-w-4xl text-center px-4 sm:px-6">
-          {/* Logo and Brand */}
-          <div className="flex items-center justify-center space-x-3 mb-4 sm:mb-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
-              <img 
-                src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
-                alt="JAFNFIT Logo" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-white drop-shadow-lg">
-                JAFNFIT
-              </h1>
+            {/* Right Side - Silhouette Image */}
+            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/a0cdee08-42e1-4aef-b245-e58ac85bf290.png" 
+                  alt="José Antonio - Entrenador Personal" 
+                  className="w-64 h-80 md:w-80 md:h-96 lg:w-96 lg:h-[500px] object-cover object-center drop-shadow-2xl"
+                />
+              </div>
             </div>
           </div>
-          
-          <h2 className="text-lg sm:text-xl md:text-3xl font-bold mb-4 sm:mb-6 text-yellow-300 drop-shadow-md">
-            Dietética y Entrenamiento Personal
-          </h2>
-          <h3 className="text-sm sm:text-base md:text-xl lg:text-2xl mb-3 sm:mb-4 text-yellow-100 font-bold drop-shadow-md leading-tight px-2">
-            {slides[currentSlide].title}
-          </h3>
-          <p className="text-xs sm:text-sm md:text-lg mb-6 sm:mb-8 text-yellow-100 font-medium drop-shadow-sm leading-relaxed px-2">
-            {slides[currentSlide].subtitle}
-          </p>
-          <Button
-            onClick={onStartQuestionnaire}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-nutrition-green-darker px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            🎯 COMENZAR MI TRANSFORMACIÓN
-          </Button>
         </div>
       </div>
 
-      {/* Navigation Arrows - Hidden on screens smaller than 1110px */}
+      {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10 hidden xl:[1110px]:block"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10 hidden lg:block"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10 hidden xl:[1110px]:block"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-40 text-white p-3 rounded-full transition-all duration-200 z-10 hidden lg:block"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* Slide Indicators - Hidden on screens smaller than 1110px */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 hidden xl:[1110px]:flex">
+      {/* Slide Indicators */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 hidden lg:flex">
         {slides.map((_, index) => (
           <button
             key={index}
