@@ -1,13 +1,7 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calculator, AlertTriangle } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Calculator } from 'lucide-react';
 
 const BMICalculator: React.FC = () => {
   const [height, setHeight] = useState<string>('');
@@ -50,95 +44,6 @@ const BMICalculator: React.FC = () => {
     setRecommendation('');
   };
 
-  const ObesityConsequencesModal = () => (
-    <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-      <DialogHeader>
-        <DialogTitle className="text-2xl font-bold text-red-600 flex items-center">
-          <AlertTriangle className="w-6 h-6 mr-2" />
-          Consecuencias de la Obesidad
-        </DialogTitle>
-      </DialogHeader>
-      <div className="space-y-6">
-        {/* Obesidad Grado I */}
-        <div className="bg-orange-50 p-6 rounded-lg border-l-4 border-orange-500">
-          <h3 className="text-xl font-bold text-orange-600 mb-3">🟠 OBESIDAD GRADO I (IMC 30 – 34,9)</h3>
-          <p className="font-semibold mb-3">Muchos cambios ya han comenzado:</p>
-          <ul className="space-y-2 text-sm mb-4">
-            <li>• Tu cuerpo resiste la insulina y se acerca a la diabetes tipo 2 🍬</li>
-            <li>• Aumenta la tensión arterial y la carga sobre tu corazón ❤️</li>
-            <li>• Aparece el cansancio constante, problemas de sueño 😴 y menos energía ⚡</li>
-            <li>• Dolor articular, inflamación crónica y menos agilidad 🤕</li>
-            <li>• Ansiedad, frustración y desmotivación 😟</li>
-          </ul>
-          <div className="bg-white p-4 rounded-md mb-4">
-            <p className="text-sm font-medium">🔑 Estás a tiempo de revertirlo sin complicaciones graves. Este es el punto donde un pequeño cambio marca una gran diferencia.</p>
-            <p className="text-sm font-bold text-green-600 mt-2">🟢 Mensaje clave: No esperes a que tu cuerpo grite lo que hoy ya te está susurrando.</p>
-          </div>
-          <div>
-            <p className="font-semibold mb-2">✅ ¿Qué puedes hacer?</p>
-            <ul className="text-sm space-y-1">
-              <li>• 🍴 Crear un déficit calórico moderado, con saciedad</li>
-              <li>• 💪 Proteger masa muscular con fuerza y proteína</li>
-              <li>• 🧘 Trabajar el estrés y el descanso</li>
-              <li>• 🎯 Medir progreso más allá del peso</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Obesidad Grado II */}
-        <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-400">
-          <h3 className="text-xl font-bold text-red-500 mb-3">🔶 OBESIDAD GRADO II (IMC 35 – 39,9)</h3>
-          <p className="font-semibold mb-3">Los riesgos se intensifican. El sistema metabólico está más comprometido:</p>
-          <ul className="space-y-2 text-sm mb-4">
-            <li>• Alta probabilidad de diabetes tipo 2, hígado graso y colesterol elevado 🩸</li>
-            <li>• Afectación pulmonar: ronquidos, apnea del sueño, cansancio crónico 🫁</li>
-            <li>• Mayor riesgo de cáncer (mama, colon, hígado) 🎗️</li>
-            <li>• Disminuye la movilidad, aumentan los dolores y baja la calidad de vida ⚖️</li>
-          </ul>
-          <div className="bg-white p-4 rounded-md mb-4">
-            <p className="text-sm font-medium">🔑 Tu cuerpo ya está sufriendo las consecuencias, aunque no siempre lo notes. Con intervención adecuada, puedes recuperar el control.</p>
-            <p className="text-sm font-bold text-green-600 mt-2">🟢 Mensaje clave: Tu salud no necesita perfección, necesita acción.</p>
-          </div>
-          <div>
-            <p className="font-semibold mb-2">✅ ¿Qué puedes hacer?</p>
-            <ul className="text-sm space-y-1">
-              <li>• 👨‍⚕️ Abordaje multidisciplinar (nutrición, entrenamiento y apoyo emocional)</li>
-              <li>• 🥑 Alimentación real, rica en proteína y fibra</li>
-              <li>• 🚶‍♂️ Ejercicio adaptado a tu movilidad</li>
-              <li>• 📊 Seguimiento constante para sostener el cambio</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Obesidad Grado III */}
-        <div className="bg-red-100 p-6 rounded-lg border-l-4 border-red-600">
-          <h3 className="text-xl font-bold text-red-700 mb-3">🔴 OBESIDAD GRADO III (IMC ≥ 40)</h3>
-          <p className="font-semibold mb-3">Ya no se trata solo de salud. Se trata de supervivencia.</p>
-          <ul className="space-y-2 text-sm mb-4">
-            <li>• Alta probabilidad de insuficiencia cardíaca, diabetes grave, enfermedades respiratorias 🚑</li>
-            <li>• Riesgo duplicado de infartos o muerte prematura 💔</li>
-            <li>• Limitación en la autonomía personal y mayor aislamiento social 🧍</li>
-            <li>• La esperanza de vida puede reducirse hasta 10 años ⏳</li>
-          </ul>
-          <div className="bg-white p-4 rounded-md mb-4">
-            <p className="text-sm font-medium">🔑 Este no es un momento para ignorar lo que pasa. Es el momento de priorizarte.</p>
-            <p className="text-sm font-bold text-green-600 mt-2">🟢 Mensaje clave: No es tarde. No estás solo. Tu cuerpo merece otra oportunidad.</p>
-          </div>
-          <div>
-            <p className="font-semibold mb-2">✅ ¿Qué puedes hacer?</p>
-            <ul className="text-sm space-y-1">
-              <li>• 🔁 Transformación profunda pero acompañada</li>
-              <li>• 🥗 Plan nutricional sin juicios ni prohibiciones</li>
-              <li>• 🏋️‍♀️ Movimiento adaptado, real y progresivo</li>
-              <li>• 🧠 Intervención psicológica o emocional si es necesario</li>
-              <li>• 📆 Seguimiento profesional comprometido contigo</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </DialogContent>
-  );
-
   return (
     <section id="bmi" className="py-20 dynamic-background relative overflow-hidden">
       {/* Decorative background elements */}
@@ -164,7 +69,7 @@ const BMICalculator: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-nutrition-black mb-4 title-main">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
             Calculadora de IMC
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -217,7 +122,8 @@ const BMICalculator: React.FC = () => {
               </Button>
               <Button
                 onClick={reset}
-                className="px-6 bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                variant="outline"
+                className="px-6 border-gray-300 text-gray-600 hover:bg-gray-50"
               >
                 Reset
               </Button>
@@ -233,20 +139,9 @@ const BMICalculator: React.FC = () => {
                   </p>
                 </div>
                 <div className="border-t pt-4">
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                  <p className="text-sm text-gray-600 leading-relaxed">
                     {recommendation}
                   </p>
-                  {bmi >= 30 && (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
-                          <AlertTriangle className="w-4 h-4 mr-2" />
-                          Consecuencias de la obesidad
-                        </Button>
-                      </DialogTrigger>
-                      <ObesityConsequencesModal />
-                    </Dialog>
-                  )}
                 </div>
               </div>
             )}

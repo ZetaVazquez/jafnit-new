@@ -1,68 +1,68 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Zap, Crown, Star } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import { PricingPlan } from '@/types';
 
 interface PricingProps {
   onStartQuestionnaire: () => void;
 }
 
 const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
-  const plans = [
+  const plans: PricingPlan[] = [
     {
+      id: '1',
       name: 'Plan Básico',
-      price: '49',
-      period: '/mes',
-      description: 'Perfecto para empezar tu transformación',
+      duration: 'Pago único',
+      price: '€75',
       features: [
-        'Plan nutricional personalizado',
-        'Recetas adaptadas a ti',
-        'Lista de equivalencias',
-        'Soporte por WhatsApp',
-        'Ajustes mensuales'
-      ],
-      icon: <Zap className="w-8 h-8" />,
-      popular: false,
-      buttonText: '¡Empezar ahora!'
+        'Dirigido a principiantes que quieren orden',
+        'Nutrición personalizada con menú adaptado',
+        'Entrenamiento no incluido',
+        'Hábitos con guías básicas',
+        'Seguimiento: 1 revisión por mensaje',
+        'Sin análisis',
+        'Sin soporte',
+        'Extras: Guía de compras y batch cooking'
+      ]
     },
     {
-      name: 'Plan Completo',
-      price: '79',
-      period: '/mes',
-      description: 'La opción más popular para resultados completos',
-      features: [
-        'Todo del Plan Básico',
-        'Rutina de entrenamiento personalizada',
-        'Videos explicativos de ejercicios',
-        'Seguimiento semanal detallado',
-        'Ajuste de macros en tiempo real',
-        'Grupo privado de apoyo'
-      ],
-      icon: <Star className="w-8 h-8" />,
-      popular: true,
-      buttonText: '¡Lo quiero!'
-    },
-    {
+      id: '2',
       name: 'Plan Premium',
-      price: '129',
-      period: '/mes',
-      description: 'El máximo nivel de acompañamiento personalizado',
+      duration: 'Por mes',
+      price: '€120',
       features: [
-        'Todo del Plan Completo',
-        'Llamadas semanales 1:1',
-        'Menú familiar adaptado',
-        'Plan de suplementación',
-        'Acceso 24/7 para consultas urgentes',
-        'Seguimiento de composición corporal',
-        'Plan de mantenimiento post-objetivo'
+        'Dirigido a personas que buscan mejorar composición corporal',
+        'Nutrición incluida + organización de comidas',
+        'Entrenamiento: Plan para casa o gimnasio',
+        'Hábitos: Plan estructurado + herramientas',
+        'Seguimiento: 1 consulta online o presencial mensual',
+        'Sin análisis',
+        'Soporte: Acceso básico a herramientas',
+        'Extras: Plantillas de control y rutinas'
       ],
-      icon: <Crown className="w-8 h-8" />,
-      popular: false,
-      buttonText: '¡Quiero el Premium!'
+      highlighted: true
+    },
+    {
+      id: '3',
+      name: 'Plan PRO',
+      duration: 'Duración mínima 3 meses',
+      price: '€300',
+      features: [
+        'Dirigido a personas comprometidas con un cambio completo',
+        'Nutrición incluida + revisión y ajustes avanzados',
+        'Entrenamiento completo, progresivo y evaluado',
+        'Hábitos: Fases inicio - media - consolidación',
+        'Seguimiento: Revisión quincenal por vídeo o mensaje',
+        'Análisis: Informe mensual con métricas y feedback',
+        'Soporte directo por WhatsApp (24h hábiles)',
+        'Extras: Retos, comunidad privada y evolución total'
+      ]
     }
   ];
 
   return (
-    <section id="pricing" className="py-12 dynamic-background relative overflow-hidden">
+    <section id="pricing" className="py-32 relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}
@@ -86,108 +86,75 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-nutrition-black mb-4 title-main">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
             Planes y Precios
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Elige el plan que mejor se adapte a tus objetivos y estilo de vida
+          <p className="text-xl text-nutrition-gray max-w-2xl mx-auto">
+            Elige el plan que mejor se adapte a tus objetivos y presupuesto
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {plans.map((plan, index) => (
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {plans.map((plan) => (
             <div
-              key={index}
-              className={`relative rounded-2xl p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 ${
-                plan.popular
-                  ? 'bg-gradient-to-br from-nutrition-green to-nutrition-green-dark text-white border-2 border-nutrition-green'
-                  : 'bg-white border border-gray-200'
+              key={plan.id}
+              className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 ${
+                plan.highlighted 
+                  ? 'border-nutrition-green ring-4 ring-nutrition-green/20' 
+                  : 'border-nutrition-green-light hover:border-nutrition-green'
               }`}
             >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-nutrition-orange text-white px-4 py-2 rounded-full text-sm font-bold">
-                    ¡MÁS POPULAR!
-                  </span>
-                </div>
-              )}
-
-              <div className="text-center mb-6">
-                <div className={`inline-flex p-3 rounded-full mb-4 ${
-                  plan.popular ? 'bg-white/20' : 'bg-nutrition-green-lighter'
-                }`}>
-                  <div className={plan.popular ? 'text-white' : 'text-nutrition-green'}>
-                    {plan.icon}
+              <div className="p-6">
+                <div className="text-center">
+                  <h3 className="text-xl font-bold mb-2 text-nutrition-black title-playful">
+                    {plan.name}
+                  </h3>
+                  <p className="text-sm mb-4 text-nutrition-gray">
+                    {plan.duration}
+                  </p>
+                  <div className="text-3xl font-bold mb-4 text-nutrition-green title-main">
+                    {plan.price}
+                    {plan.id === '2' && <span className="text-sm text-nutrition-gray">/mes</span>}
+                    {plan.id === '3' && <span className="text-sm text-nutrition-gray">/mes</span>}
                   </div>
+                  {plan.highlighted && (
+                    <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
+                      Más Popular
+                    </div>
+                  )}
                 </div>
-                <h3 className={`text-2xl font-bold mb-2 ${
-                  plan.popular ? 'text-white' : 'text-nutrition-black'
-                }`}>
-                  {plan.name}
-                </h3>
-                <p className={`text-sm ${
-                  plan.popular ? 'text-white/80' : 'text-gray-600'
-                }`}>
-                  {plan.description}
-                </p>
+
+                <ul className="space-y-2 mb-6">
+                  {plan.features.map((feature, index) => {
+                    const isNegative = feature.includes('no incluido') || feature.includes('Sin');
+                    return (
+                      <li key={index} className="flex items-start">
+                        {isNegative ? (
+                          <X className="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0" />
+                        ) : (
+                          <Check className="w-4 h-4 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
+                        )}
+                        <span className={`text-xs ${isNegative ? 'text-red-600' : 'text-nutrition-gray'}`}>
+                          {feature}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                <Button
+                  onClick={onStartQuestionnaire}
+                  className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
+                    plan.highlighted
+                      ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
+                      : 'bg-nutrition-green-light hover:bg-nutrition-green text-nutrition-green-dark hover:text-white'
+                  }`}
+                >
+                  Elegir Plan
+                </Button>
               </div>
-
-              <div className="text-center mb-8">
-                <div className="flex justify-center items-baseline">
-                  <span className={`text-5xl font-bold ${
-                    plan.popular ? 'text-white' : 'text-nutrition-green'
-                  }`}>
-                    €{plan.price}
-                  </span>
-                  <span className={`text-lg ml-1 ${
-                    plan.popular ? 'text-white/80' : 'text-gray-500'
-                  }`}>
-                    {plan.period}
-                  </span>
-                </div>
-              </div>
-
-              <ul className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-start">
-                    <Check className={`w-5 h-5 mr-3 mt-0.5 flex-shrink-0 ${
-                      plan.popular ? 'text-white' : 'text-nutrition-green'
-                    }`} />
-                    <span className={`text-sm ${
-                      plan.popular ? 'text-white' : 'text-gray-700'
-                    }`}>
-                      {feature}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                onClick={onStartQuestionnaire}
-                variant={plan.popular ? "secondary" : "default"}
-                className={`w-full py-3 font-bold transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-white text-nutrition-green hover:bg-gray-100'
-                    : 'bg-nutrition-green text-white hover:bg-nutrition-green-dark'
-                }`}
-              >
-                {plan.buttonText}
-              </Button>
             </div>
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">
-            ¿No estás seguro de qué plan elegir?
-          </p>
-          <Button
-            onClick={onStartQuestionnaire}
-            variant="outline"
-            className="border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
-          >
-            Haz nuestro test personalizado
-          </Button>
         </div>
       </div>
     </section>
