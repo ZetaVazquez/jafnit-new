@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -64,9 +65,9 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </h2>
         </div>
 
-        {/* FILA 1: Cuadro de texto arriba a la izquierda más ancho + Opiniones arriba derecha más extremas */}
-        <div className="mb-8 md:mb-12 relative">
-          <div className="flex justify-start">
+        {/* FILA 1: Cuadro de texto arriba sin opiniones */}
+        <div className="mb-8 md:mb-12">
+          <div className="flex justify-center">
             <div className="w-full max-w-5xl lg:max-w-6xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
                 <h3 className="text-xl md:text-2xl lg:text-4xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
@@ -87,72 +88,114 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
             </div>
           </div>
-
-          {/* Opiniones arriba derecha - movidas MUCHO más al extremo derecho */}
-          <div className="absolute top-8 md:top-12 -right-12 md:-right-32 lg:-right-48 xl:-right-64 hidden xl:block">
-            <div className="space-y-8">
-              {/* Primera opinión arriba derecha - rotada hacia la derecha */}
-              <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
-                  <div className="flex items-center mb-3">
-                    <div>
-                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[0].name}</h4>
-                      <div className="flex">
-                        {[...Array(testimonials[0].rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-nutrition-green-dark text-sm leading-relaxed">"{testimonials[0].comment}"</p>
-                </div>
-              </div>
-
-              {/* Segunda opinión arriba derecha - rotada hacia la izquierda */}
-              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300 ml-20">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
-                  <div className="flex items-center mb-3">
-                    <div>
-                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[1].name}</h4>
-                      <div className="flex">
-                        {[...Array(testimonials[1].rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-nutrition-green-dark text-sm leading-relaxed">"{testimonials[1].comment}"</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* FILA 2: Foto en el centro con cuadrito de info AL LADO */}
+        {/* FILA 2: Foto en el centro con opiniones a los lados */}
         <div className="mb-8 md:mb-12">
-          <div className="flex flex-col md:flex-row justify-center items-center">
-            <div className="relative flex flex-col md:flex-row items-center justify-center md:space-x-16">
-              <div className="absolute left-0 inset-y-0 hidden md:flex items-center justify-center">
-                <div className="w-[26rem] h-[26rem] rounded-full border-2 border-nutrition-green-light opacity-30 animate-pulse"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+            {/* Opiniones izquierda */}
+            <div className="hidden lg:block lg:col-span-1">
+              <div className="space-y-6">
+                {/* Primera opinión izquierda */}
+                <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+                    <div className="flex items-center mb-3">
+                      <div>
+                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[0].name}</h4>
+                        <div className="flex">
+                          {[...Array(testimonials[0].rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[0].comment}"</p>
+                  </div>
+                </div>
+
+                {/* Segunda opinión izquierda */}
+                <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+                    <div className="flex items-center mb-3">
+                      <div>
+                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[1].name}</h4>
+                        <div className="flex">
+                          {[...Array(testimonials[1].rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[1].comment}"</p>
+                  </div>
+                </div>
               </div>
-              <div className="absolute left-0 inset-y-0 hidden md:flex items-center justify-center">
-                <div className="w-[30rem] h-[30rem] rounded-full border-1 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+            </div>
+
+            {/* Foto central */}
+            <div className="lg:col-span-3 flex flex-col items-center">
+              <div className="relative">
+                <div className="absolute inset-0 hidden md:flex items-center justify-center">
+                  <div className="w-[26rem] h-[26rem] rounded-full border-2 border-nutrition-green-light opacity-30 animate-pulse"></div>
+                </div>
+                <div className="absolute inset-0 hidden md:flex items-center justify-center">
+                  <div className="w-[30rem] h-[30rem] rounded-full border-1 border-nutrition-accent opacity-20 animate-pulse delay-300"></div>
+                </div>
+                
+                <div className="relative z-10 w-56 h-56 md:w-[26rem] md:h-[26rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 mb-4 md:mb-6">
+                  <img
+                    src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
+                    alt="José Antonio - Tu Dietista y Entrenador Personal"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  <div className="flex items-center space-x-3 md:space-x-4">
+                    <div className="w-3 h-3 md:w-4 md:h-4 bg-nutrition-green rounded-full animate-pulse"></div>
+                    <div>
+                      <h4 className="font-bold text-nutrition-green text-base md:text-xl title-playful">José Antonio</h4>
+                      <p className="text-nutrition-gray text-sm md:text-lg">Dietista y Entrenador</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              
-              <div className="relative z-10 w-56 h-56 md:w-[26rem] md:h-[26rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 mb-4 md:mb-0">
-                <img
-                  src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
-                  alt="José Antonio - Tu Dietista y Entrenador Personal"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              
-              <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 md:ml-12 md:mt-16">
-                <div className="flex items-center space-x-3 md:space-x-4">
-                  <div className="w-3 h-3 md:w-4 md:h-4 bg-nutrition-green rounded-full animate-pulse"></div>
-                  <div>
-                    <h4 className="font-bold text-nutrition-green text-base md:text-xl title-playful">José Antonio</h4>
-                    <p className="text-nutrition-gray text-sm md:text-lg">Dietista y Entrenador</p>
+            </div>
+
+            {/* Opiniones derecha */}
+            <div className="hidden lg:block lg:col-span-1">
+              <div className="space-y-6">
+                {/* Primera opinión derecha */}
+                <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+                    <div className="flex items-center mb-3">
+                      <div>
+                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[2].name}</h4>
+                        <div className="flex">
+                          {[...Array(testimonials[2].rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[2].comment}"</p>
+                  </div>
+                </div>
+
+                {/* Segunda opinión derecha */}
+                <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+                    <div className="flex items-center mb-3">
+                      <div>
+                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[3].name}</h4>
+                        <div className="flex">
+                          {[...Array(testimonials[3].rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[3].comment}"</p>
                   </div>
                 </div>
               </div>
@@ -160,9 +203,9 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 3: Cuadro de texto abajo a la derecha más ancho + Opiniones abajo izquierda más extremas */}
-        <div className="mb-8 md:mb-12 relative">
-          <div className="flex justify-end">
+        {/* FILA 3: Cuadro de texto abajo sin opiniones */}
+        <div className="mb-8 md:mb-12">
+          <div className="flex justify-center">
             <div className="w-full max-w-5xl lg:max-w-6xl">
               <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
                 <h4 className="text-xl md:text-2xl lg:text-4xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
@@ -177,45 +220,6 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark leading-relaxed font-semibold">
                   No más extremos. Solo resultados reales y duraderos 🏆.
                 </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Opiniones abajo izquierda - movidas MUCHO más al extremo izquierdo */}
-          <div className="absolute bottom-0 -left-12 md:-left-32 lg:-left-48 xl:-left-64 hidden xl:block">
-            <div className="space-y-8">
-              {/* Primera opinión abajo izquierda - rotada hacia la izquierda */}
-              <div className="transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
-                  <div className="flex items-center mb-3">
-                    <div>
-                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[2].name}</h4>
-                      <div className="flex">
-                        {[...Array(testimonials[2].rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-nutrition-green-dark text-sm leading-relaxed">"{testimonials[2].comment}"</p>
-                </div>
-              </div>
-
-              {/* Segunda opinión abajo izquierda - rotada hacia la derecha */}
-              <div className="transform rotate-2 hover:rotate-0 transition-transform duration-300 ml-20">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-5 shadow-lg border border-nutrition-green-light max-w-xs">
-                  <div className="flex items-center mb-3">
-                    <div>
-                      <h4 className="font-bold text-nutrition-black text-sm title-playful">{testimonials[3].name}</h4>
-                      <div className="flex">
-                        {[...Array(testimonials[3].rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-nutrition-green-dark text-sm leading-relaxed">"{testimonials[3].comment}"</p>
-                </div>
               </div>
             </div>
           </div>
