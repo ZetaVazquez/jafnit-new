@@ -62,7 +62,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
   ];
 
   return (
-    <section id="pricing" className="py-12 relative overflow-hidden">
+    <section id="pricing" className="pt-4 pb-12 relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}
@@ -86,7 +86,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
+          <h2 className="section-title text-nutrition-black mb-4">
             Planes y Precios
           </h2>
           <p className="text-xl text-nutrition-gray max-w-2xl mx-auto">
