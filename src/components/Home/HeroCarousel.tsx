@@ -19,8 +19,8 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
     },
     {
       image: "/lovable-uploads/216ce35e-6565-456f-939a-869be82c0695.png", 
-      title: "Deja de vivir en el cuerpo que ya no quieres y empieza a construir la versión más fuerte de ti mismo",
-      subtitle: "Transforma tu físico y tu mentalidad con un plan que realmente funciona, diseñado específicamente para personas como tú que han intentado todo sin éxito. Sin dietas imposibles de seguir, sin entrenamientos de 3 horas que no puedes mantener. Solo resultados reales y duraderos que te harán sentir orgulloso cada vez que te mires al espejo.",
+      title: "¿Cansado de intentar y no conseguir resultados? Yo pasé por exactamente lo mismo que tú estás viviendo ahora",
+      subtitle: "Yo estuve donde tú estás en este momento. Perdí 30 kilos sin destruir mi salud ni mi vida social, y lo más importante: sin volver a recuperar el peso perdido. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen y la confianza que necesitan para vivir la vida que realmente quieren.",
       buttonText: "QUIERO COMENZAR MI TRANSFORMACION"
     },
     {
@@ -69,9 +69,9 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           <div className="relative h-full flex items-center">
             <div className="container mx-auto px-4 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full">
-                <div className="text-white space-y-6 lg:space-y-8 pb-8 lg:pb-0">
-                  <div className="space-y-4 lg:space-y-6">
-                    <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden border-4 border-white/30 mx-auto lg:mx-0">
+                <div className="text-white space-y-4 lg:space-y-6 pb-12 lg:pb-16">
+                  <div className="space-y-3 lg:space-y-4">
+                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden border-4 border-white/30 mx-auto lg:mx-0">
                       <img 
                         src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
                         alt="JAFNFIT Logo" 
@@ -79,29 +79,29 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                       />
                     </div>
                     <div className="text-center lg:text-left">
-                      <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold title-main mb-2 lg:mb-4 text-white">
+                      <h1 className="text-2xl lg:text-4xl xl:text-5xl font-bold title-main mb-1 lg:mb-2 text-white">
                         JAFNFIT
                       </h1>
-                      <p className="text-lg lg:text-xl text-yellow-300 font-medium">
+                      <p className="text-base lg:text-lg text-yellow-300 font-medium">
                         Dietética y Entrenamiento Personal
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-4 lg:space-y-6 text-center lg:text-left">
-                    <h2 className="text-2xl lg:text-4xl xl:text-5xl font-bold leading-tight text-white">
+                  <div className="space-y-3 lg:space-y-4 text-center lg:text-left">
+                    <h2 className="text-xl lg:text-3xl xl:text-4xl font-bold leading-tight text-white">
                       {slide.title}
                     </h2>
-                    <p className="text-base lg:text-lg xl:text-xl text-white leading-relaxed max-w-2xl">
+                    <p className="text-sm lg:text-base xl:text-lg text-white leading-relaxed max-w-2xl">
                       {slide.subtitle}
                     </p>
                   </div>
 
-                  <div className="flex justify-center lg:justify-start">
+                  <div className="flex justify-center lg:justify-start pt-2">
                     <Button
                       onClick={onStartQuestionnaire}
                       size="lg"
-                      className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-base lg:text-lg px-6 lg:px-8 py-3 lg:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                      className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-sm lg:text-base px-6 lg:px-8 py-3 lg:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                     >
                       {slide.buttonText}
                     </Button>
@@ -109,19 +109,24 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 </div>
 
                 <div className="hidden lg:block relative h-full">
-                  <div className="absolute bottom-0 right-0 w-80 h-full flex items-end">
-                    <img 
-                      src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
-                      alt="Trainer silhouette" 
-                      className="w-full h-auto object-contain"
-                    />
-                  </div>
+                  {/* Trainer silhouette fija */}
                 </div>
               </div>
             </div>
           </div>
         </div>
       ))}
+
+      {/* Silueta del entrenador fija - fuera del contenido de los slides */}
+      <div className="hidden lg:block absolute bottom-0 right-8 xl:right-16 w-80 h-full pointer-events-none">
+        <div className="absolute bottom-0 right-0 w-full h-full flex items-end">
+          <img 
+            src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
+            alt="Trainer silhouette" 
+            className="w-full h-auto object-contain"
+          />
+        </div>
+      </div>
 
       {/* Navigation Arrows */}
       <Button
