@@ -12,19 +12,19 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
   const slides = [
     {
-      image: "/lovable-uploads/7ef270ff-62f2-4ce7-a2cb-494f6e9f3218.png",
+      image: "/lovable-uploads/192c284d-8bd6-439a-8232-72f7436198a5.png",
       title: "¿Cansado de intentar y no conseguir resultados? Yo pasé por exactamente lo mismo que tú estás viviendo ahora",
       subtitle: "Yo estuve donde tú estás en este momento. Perdí 30 kilos sin destruir mi salud ni mi vida social, y lo más importante: sin volver a recuperar el peso perdido. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen y la confianza que necesitan para vivir la vida que realmente quieren.",
       buttonText: "🔥 COMENZAR MI TRANSFORMACIÓN"
     },
     {
-      image: "/lovable-uploads/4ecf9313-d7ff-45b8-9b65-f74a7d809a03.png", 
+      image: "/lovable-uploads/216ce35e-6565-456f-939a-869be82c0695.png", 
       title: "Transforma tu cuerpo con un plan diseñado específicamente para ti",
       subtitle: "Nada de dietas extremas ni entrenamientos que no puedes mantener. Mi método se adapta a tu estilo de vida para que consigas resultados reales y duraderos.",
       buttonText: "✨ EMPEZAR AHORA"
     },
     {
-      image: "/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png",
+      image: "/lovable-uploads/bba1525e-dc69-41bb-acb5-238e1469290f.png",
       title: "Únete a cientos de personas que ya han transformado su vida",
       subtitle: "No estás solo en este proceso. Te acompaño paso a paso para que consigas el cuerpo que quieres y, más importante, para que mantengas los resultados para siempre.",
       buttonText: "🚀 QUIERO EMPEZAR"
@@ -102,7 +102,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 <div className="hidden lg:block relative">
                   <div className="absolute bottom-0 right-0 w-80 h-96">
                     <img 
-                      src="/lovable-uploads/4d9ad9e4-a814-4469-b756-3e46df99f4b2.png"
+                      src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
                       alt="Trainer silhouette" 
                       className="w-full h-full object-contain object-bottom"
                     />
