@@ -92,8 +92,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
           </div>
 
-          {/* Opiniones arriba derecha - centradas */}
-          <div className="absolute top-0 right-4 md:right-8 hidden lg:block">
+          {/* Opiniones arriba derecha - más bajas */}
+          <div className="absolute top-16 md:top-24 right-4 md:right-8 hidden lg:block">
             <div className="space-y-4">
               {/* Primera opinión arriba derecha - rotada hacia la derecha */}
               <div className="transform rotate-3 hover:rotate-0 transition-transform duration-300">
