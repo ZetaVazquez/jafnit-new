@@ -138,9 +138,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
         {/* Render each testimonial section */}
         {testimonialSections.map((section, sectionIndex) => (
           <div key={sectionIndex} className="mb-16 md:mb-20">
-            {/* Section Title */}
+            {/* Section Title - Made smaller */}
             <div className="text-center mb-8 md:mb-12">
-              <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-nutrition-green mb-4 title-playful">
+              <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-nutrition-green mb-4 title-playful">
                 {section.title}
               </h3>
             </div>

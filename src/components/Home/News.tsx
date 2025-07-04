@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Calendar, Instagram } from 'lucide-react';
 import { NewsItem } from '@/types';
@@ -64,7 +63,7 @@ const News: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-nutrition-black mb-4 title-main">
             Noticias y Actualizaciones
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
