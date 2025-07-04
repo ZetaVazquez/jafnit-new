@@ -13,21 +13,21 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   const slides = [
     {
       image: "/lovable-uploads/192c284d-8bd6-439a-8232-72f7436198a5.png",
-      title: "¿Cansado de intentar y no conseguir resultados? Yo pasé por exactamente lo mismo que tú estás viviendo ahora",
-      subtitle: "Yo estuve donde tú estás en este momento. Perdí 30 kilos sin destruir mi salud ni mi vida social, y lo más importante: sin volver a recuperar el peso perdido. Ahora ayudo a personas como tú a conseguir el cuerpo que merecen y la confianza que necesitan para vivir la vida que realmente quieren.",
-      buttonText: "🔥 COMENZAR MI TRANSFORMACIÓN"
+      title: "El problema no eres tú, no es tu fuerza de voluntad, no es tu genética. Es tu método y nadie te lo había explicado antes",
+      subtitle: "Planes personalizados que se adaptan a tu vida real, no a la vida perfecta que no tienes. Nada de copiar y pegar rutinas de internet que no funcionan para ti. Tu cuerpo es único, tus objetivos son únicos, tu ritmo de vida es único, y por eso tu plan debe ser único también.",
+      buttonText: "QUIERO COMENZAR MI TRANSFORMACION"
     },
     {
       image: "/lovable-uploads/216ce35e-6565-456f-939a-869be82c0695.png", 
-      title: "Transforma tu cuerpo con un plan diseñado específicamente para ti",
-      subtitle: "Nada de dietas extremas ni entrenamientos que no puedes mantener. Mi método se adapta a tu estilo de vida para que consigas resultados reales y duraderos.",
-      buttonText: "✨ EMPEZAR AHORA"
+      title: "Deja de vivir en el cuerpo que ya no quieres y empieza a construir la versión más fuerte de ti mismo",
+      subtitle: "Transforma tu físico y tu mentalidad con un plan que realmente funciona, diseñado específicamente para personas como tú que han intentado todo sin éxito. Sin dietas imposibles de seguir, sin entrenamientos de 3 horas que no puedes mantener. Solo resultados reales y duraderos que te harán sentir orgulloso cada vez que te mires al espejo.",
+      buttonText: "QUIERO COMENZAR MI TRANSFORMACION"
     },
     {
       image: "/lovable-uploads/bba1525e-dc69-41bb-acb5-238e1469290f.png",
-      title: "Únete a cientos de personas que ya han transformado su vida",
-      subtitle: "No estás solo en este proceso. Te acompaño paso a paso para que consigas el cuerpo que quieres y, más importante, para que mantengas los resultados para siempre.",
-      buttonText: "🚀 QUIERO EMPEZAR"
+      title: "Deja de vivir en el cuerpo que ya no quieres y empieza a construir la versión más fuerte de ti mismo",
+      subtitle: "Transforma tu físico y tu mentalidad con un plan que realmente funciona, diseñado específicamente para personas como tú que han intentado todo sin éxito. Sin dietas imposibles de seguir, sin entrenamientos de 3 horas que no puedes mantener. Solo resultados reales y duraderos que te harán sentir orgulloso cada vez que te mires al espejo.",
+      buttonText: "QUIERO COMENZAR MI TRANSFORMACION"
     }
   ];
 
@@ -69,7 +69,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           <div className="relative h-full flex items-center">
             <div className="container mx-auto px-4 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full">
-                <div className="text-white space-y-6 lg:space-y-8">
+                <div className="text-white space-y-6 lg:space-y-8 pb-8 lg:pb-0">
                   <div className="space-y-4 lg:space-y-6">
                     <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden border-4 border-white/30 mx-auto lg:mx-0">
                       <img 
