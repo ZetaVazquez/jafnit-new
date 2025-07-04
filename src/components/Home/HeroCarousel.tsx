@@ -63,9 +63,6 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           <div className="grid lg:grid-cols-2 gap-8 items-center h-full">
             {/* Left Side - Content */}
             <div className="text-white text-left order-2 lg:order-1 z-10">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-bold mb-6 text-yellow-300 drop-shadow-md text-left">
-                Dietética y Entrenamiento Personal
-              </h2>
               <h3 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 text-yellow-100 font-bold drop-shadow-md leading-tight text-left">
                 {slides[currentSlide].title}
               </h3>
@@ -88,28 +85,33 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
         </div>
       </div>
 
-      {/* Centered Title and Logo - Positioned absolutely in the center */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-        <div className="flex items-center justify-center space-x-4">
-          <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
-            <img 
-              src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
-              alt="JAFNFIT Logo" 
-              className="w-full h-full object-cover"
-            />
+      {/* Centered Title and Logo - Positioned higher up in the viewport */}
+      <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="flex items-center justify-center space-x-4">
+            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden shadow-lg border-4 border-white/20">
+              <img 
+                src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
+                alt="JAFNFIT Logo" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white drop-shadow-lg">
+              JAFNFIT
+            </h1>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-white drop-shadow-lg">
-            JAFNFIT
-          </h1>
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-yellow-300 drop-shadow-md text-center">
+            Dietética y Entrenamiento Personal
+          </h2>
         </div>
       </div>
 
-      {/* Silhouette positioned to extend beyond the right edge and bottom */}
+      {/* Silhouette positioned smaller, more separated from left, and touching bottom */}
       <div className="absolute bottom-0 right-0 pointer-events-none overflow-hidden">
         <img 
           src="/lovable-uploads/1ef2ec72-6a8a-4e2c-a3f9-72fc43a1ce69.png"
           alt="José Antonio - Entrenador Personal" 
-          className="w-[450px] h-[580px] md:w-[550px] md:h-[700px] lg:w-[650px] lg:h-[820px] xl:w-[750px] xl:h-[950px] object-cover object-bottom drop-shadow-2xl transform translate-x-8 md:translate-x-12 lg:translate-x-16 xl:translate-x-20 translate-y-4 md:translate-y-6 lg:translate-y-8"
+          className="w-[350px] h-[450px] md:w-[400px] md:h-[520px] lg:w-[450px] lg:h-[580px] xl:w-[500px] xl:h-[650px] object-cover object-bottom drop-shadow-2xl transform translate-x-0 md:translate-x-4 lg:translate-x-8 xl:translate-x-12"
           style={{ objectPosition: 'center bottom' }}
         />
       </div>
