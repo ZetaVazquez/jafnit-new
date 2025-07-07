@@ -91,7 +91,7 @@ const Contact: React.FC = () => {
           {/* Map */}
           <div className="h-96 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-nutrition-green-light">
             <iframe
-              src="https://www.google.com/maps/dir//R%C3%BAa+Leopoldo+Calvo+Sotelo,+152,+27400+Monforte+de+Lemos,+Lugo/@42.5284481,-7.5087694,16.32z/data=!4m8!4m7!1m0!1m5!1m1!1s0xd30132c14ab188f:0xe6e45c384c5284f8!2m2!1d-7.5045955!2d42.5279197?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
+              src="https://www.google.com/maps/dir//R%C3%BAa+Leopoldo+Calvo+Sotelo,+152,+27400+Monforte+de+Lemos,+Lugo/@42.527893,-7.5870038,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0xd30132c14ab188f:0xe6e45c384c5284f8!2m2!1d-7.5045955!2d42.5279197?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
               width="100%"
               height="100%"
               style={{ border: 0 }}
