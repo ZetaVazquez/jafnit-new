@@ -36,7 +36,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-8 title-main">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-10 title-main">
             Sobre Mí
           </h2>
           <p className="text-xl text-nutrition-green font-bold mb-8">
@@ -72,15 +72,11 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="w-1/2 pr-8">
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
-                    <div className="text-4xl mb-4">🏋️‍♀️</div>
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
-                     NO NECESITAS QUE TODO SEA PERFECTO.SOLO NECESITAS EMPEZAR
+                      MI HISTORIA
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Ya has probado de todo pero nunca lo habías hecho con estrategia, guía y seguimiento de verdad…
-                      AUNQUE… Llevas tiempo pensando que algo tiene que cambiar. Y lo sabes. Este programa no va de dejar de comer o pasarte el día entrenando. Va de construir un cuerpo y unos hábitos que puedas mantener PARA SIEMPRE.
-                      Olvida las dietas que no aguantas ni dos semanas. Empieza a entrenar con un plan que tenga sentido para ti.
-                      🔹 No necesitas tener todo perfecto. Solo necesitas empezar. Yo te guío, tú te comprometes. Y el cambio llega.
+                      Me llamo <span className="font-bold text-nutrition-green">José Antonio</span>, soy dietista-nutricionista y entrenador personal. Durante años luché contra el sobrepeso, probé mil dietas diferentes, me apunté a gimnasios que abandonaba a los pocos meses...
                     </p>
                   </div>
                 </div>
@@ -100,8 +96,9 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="w-1/2 pl-8">
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
+                   
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
-                      ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴
+                      EL DESCUBRIMIENTO
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
                       <span className="font-bold text-nutrition-accent">La diferencia no estaba en encontrar la dieta perfecta o el entrenamiento más duro.</span> Estaba en entender que cada persona es única y necesita un enfoque completamente personalizado.
@@ -117,13 +114,19 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
-                      NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO 🏋️‍♂️
+                      🎯 EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE 🧠📈
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                     Si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.Tu cuerpo puede mucho más de lo que crees.
-                     💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.
-                     👉 Entrenarás con estrategia, con técnica y con confianza.🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.
-                      Nada de rutinas copiadas, nada de ejercicios que no entiendes. Aquí todo tiene sentido y propósito.
+                      Esto no es una carrera de 30 días ni de una semana.Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.
+                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más.
+                       Así ajustamos el plan y seguimos avanzando.
+                      🧭 ¿Te vas de vacaciones o has tenido una mala semana?
+                      No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.
+                       ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.
+                      🔁 Esto va más allá del físico
+                      Mi objetivo es que cambies tu forma de ver el fitness.
+                       Que construyas un cuerpo que te guste sin obsesiones, sin extremos.
+                       Y sobre todo: que te dure para siempre.
                     </p>
                   </div>
                 </div>
@@ -144,10 +147,19 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
-                      SIN COMUNICACIÓN, NO HAY RESULTADOS 📲💬
+                      AHORA TE TOCA A TI .🎯
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Llevas tiempo pensándolo, sabes que necesitas un cambio y ya no te vale hacerlo solo, sin guía ni resultados. Este programa no va de castigar tu cuerpo.
+                        Llevas tiempo pensándolo.. sabes que necesitas un cambio…y ya no te vale hacerlo solo, sin guía ni resultados.Este programa no va de castigar tu cuerpo.
+                        Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.🎯 Aquí no hay fórmulas mágicas.
+                        Solo lo que funciona, adaptado a tu estilo de vida.
+                        📌 ¿Para quién es esto?
+                         ✅ Para quien está cansado de hacer todo bien… pero no ver resultados.
+                         ✅ Para quien entrena, pero no sabe si lo está haciendo bien.
+                         ✅ Para quien quiere dejar atrás la ansiedad con la comida.
+                         ✅ Para quien quiere recuperar su autoestima y su energía.
+                        🔥 Si estás listo para dejar de improvisar, y empezar de verdad…
+                        👉 Rellena el formulario ahora y empieza tu cambio real.                    
                     </p>
                   </div>
                 </div>
@@ -158,25 +170,16 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           {/* Final Call to Action Section */}
           <div className="text-center mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
             <div className="mb-6">
-              <span className="text-4xl">👊AHORA TE TOCA A TI 💥</span>
+              <span className="text-4xl">👊</span>
             </div>
             <p className="text-2xl font-bold text-nutrition-green mb-6">
-              Llevas tiempo pensándolo.. sabes que necesitas un cambio… y ya no te vale hacerlo solo, sin guía ni resultados.
-              Este programa no va de castigar tu cuerpo. Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.
-              🎯 Aquí no hay fórmulas mágicas. Solo lo que funciona, adaptado a tu estilo de vida.📌 ¿Para quién es esto?
-              ✅ Para quien está cansado de hacer todo bien… pero no ver resultados.
-              ✅ Para quien entrena, pero no sabe si lo está haciendo bien.
-              ✅ Para quien quiere dejar atrás la ansiedad con la comida.
-              ✅ Para quien quiere recuperar su autoestima y su energía.
-              🔥 Si estás listo para dejar de improvisar, y empezar de verdad…
-              👉 Rellena el formulario ahora y empieza tu cambio real.
-
+              Yo estuve ahí. Y salí. Ahora te toca a ti.
             </p>
             <Button 
               onClick={onQuestionnaireOpen}
               className="bg-nutrition-accent hover:bg-nutrition-accent-dark text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE 🧠📈
+              ✨ Quiero Cambiar
             </Button>
           </div>
 
