@@ -158,12 +158,21 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="w-1/2 pl-8">
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
-                    <div className="text-4xl mb-4">🚀</div>
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
-                      AHORA TE TOCA A TI
+                     EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE 🧠📈
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Llevas tiempo pensándolo, sabes que necesitas un cambio y ya no te vale hacerlo solo, sin guía ni resultados. Este programa no va de castigar tu cuerpo.
+                      Esto no es una carrera de 30 días ni de una semana.
+                       Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.
+                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más.
+                       Así ajustamos el plan y seguimos avanzando.
+                      🧭 ¿Te vas de vacaciones o has tenido una mala semana?
+                      No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.
+                       ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.
+                      🔁 Esto va más allá del físico
+                      Mi objetivo es que cambies tu forma de ver el fitness.
+                       Que construyas un cuerpo que te guste sin obsesiones, sin extremos.
+                       Y sobre todo: que te dure para siempre.
                     </p>
                   </div>
                 </div>
