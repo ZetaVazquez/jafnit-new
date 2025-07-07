@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -38,7 +39,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
   ];
 
   return (
-    <section id="sobre-mi" className="py-8 md:py-12 relative overflow-hidden" style={{
+    <section id="about" className="py-8 md:py-12 relative overflow-hidden" style={{
       background: 'linear-gradient(135deg, rgba(187, 247, 208, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%)',
       position: 'relative'
     }}>
@@ -104,12 +105,13 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* FILA 2: Foto en el centro con opiniones a los extremos laterales */}
+        {/* FILA 2: Foto en el centro con opiniones a los extremos laterales - Ahora visible desde tablet */}
         <div className="mb-8 md:mb-12 relative">
           <div className="flex justify-center items-center relative">
-            {/* Opiniones extremo izquierdo */}
+            {/* Opiniones extremo izquierdo - Ahora visible desde xl en adelante */}
             <div className="absolute left-0 top-0 hidden xl:block w-80 -translate-x-20">
               <div className="space-y-8">
+                {/* Primera opinión izquierda */}
                 <div className="transform -rotate-12 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
@@ -126,6 +128,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                   </div>
                 </div>
 
+                {/* Segunda opinión izquierda */}
                 <div className="transform rotate-8 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
@@ -167,9 +170,10 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               </div>
             </div>
 
-            {/* Opiniones extremo derecho */}
+            {/* Opiniones extremo derecho - Ahora más ladeadas y visibles desde xl */}
             <div className="absolute right-0 top-0 hidden xl:block w-80 translate-x-20">
               <div className="space-y-8">
+                {/* Primera opinión derecha - Más ladeada */}
                 <div className="transform rotate-15 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
@@ -186,6 +190,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                   </div>
                 </div>
 
+                {/* Segunda opinión derecha - Más ladeada */}
                 <div className="transform -rotate-12 hover:rotate-0 transition-transform duration-300">
                   <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
                     <div className="flex items-center mb-3">
@@ -250,7 +255,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
                   Si estás cansado de no reconocerte en el espejo, de probar y fallar, de sentir que ya nada funciona…
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-5 md:mb-8 leading-relaxed font-semibold text-nutrition-green text-center">
+                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-5 md:mb-8 leading-relaxed font-semibold text-nutrition-green">
                   👉 Yo estuve ahí. Y salí. Ahora te toca a ti.
                 </p>
                 
@@ -267,7 +272,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats Section - también más ancho */}
         <div className="bg-white backdrop-blur-sm rounded-2xl md:rounded-3xl p-5 md:p-10 shadow-xl border border-nutrition-green-light">
           <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-nutrition-green mb-8 md:mb-10 title-main">
             Resultados Que Hablan Por Sí Solos

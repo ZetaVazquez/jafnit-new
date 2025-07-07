@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import LoginModal from '@/components/Auth/LoginModal';
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -32,11 +31,10 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const navigationItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Sobre Mi', href: '#sobre-mi' },
+    { label: 'Sobre Nosotros', href: '#sobre-nosotros' },
     { label: 'Servicios', href: '#servicios' },
     { label: 'Portfolio', href: '#portfolio' },
     { label: 'Noticias', href: '#noticias' },
@@ -58,11 +56,6 @@ const Header: React.FC<HeaderProps> = ({
     { label: 'Cambiar mi Plan', icon: CreditCard, action: onNavigateToChangePlan },
   ];
 
-  const handleLoginClick = () => {
-    setShowLoginModal(true);
-    setIsMenuOpen(false);
-  };
-
   const handleRegisterClick = () => {
     if (onStartQuestionnaire) {
       onStartQuestionnaire();
@@ -76,6 +69,7 @@ const Header: React.FC<HeaderProps> = ({
     window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank');
   };
 
+  // Check if we're on the public page (assuming currentView is not passed as prop, we'll check URL or state)
   const isOnPublicPage = window.location.pathname === '/' && window.location.hash === '';
 
   return (
@@ -114,6 +108,7 @@ const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center space-x-3">
               {isLoggedIn ? (
                 <>
+                  {/* Chat with Trainer Button */}
                   <Button
                     onClick={handleChatWithTrainer}
                     variant="ghost"
@@ -124,6 +119,7 @@ const Header: React.FC<HeaderProps> = ({
                     <span>Chat</span>
                   </Button>
                   
+                  {/* Back to Public Page - Only show when NOT on public page */}
                   {!isOnPublicPage && (
                     <Button
                       onClick={onNavigateToHome}
@@ -136,6 +132,7 @@ const Header: React.FC<HeaderProps> = ({
                     </Button>
                   )}
                   
+                  {/* My Account Button with updated colors */}
                   {onNavigateToDashboard && (
                     <Button
                       onClick={onNavigateToDashboard}
@@ -157,8 +154,9 @@ const Header: React.FC<HeaderProps> = ({
                 </>
               ) : (
                 <div className="hidden lg:flex items-center space-x-2">
+                  {/* Login button with updated colors */}
                   <Button
-                    onClick={handleLoginClick}
+                    onClick={onLogin}
                     className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                   >
                     Iniciar Sesión
@@ -172,6 +170,7 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               )}
 
+              {/* Mobile Menu Button */}
               <Button
                 variant="ghost"
                 size="sm"
@@ -224,6 +223,7 @@ const Header: React.FC<HeaderProps> = ({
                         Página Principal
                       </Button>
                     )}
+                    {/* Mobile My Account button with updated colors */}
                     {onNavigateToDashboard && (
                       <Button
                         onClick={() => {
@@ -249,8 +249,12 @@ const Header: React.FC<HeaderProps> = ({
                   </div>
                 ) : (
                   <div className="px-4 mt-4 space-y-2">
+                    {/* Mobile Login button with updated colors */}
                     <Button
-                      onClick={handleLoginClick}
+                      onClick={() => {
+                        onLogin();
+                        setIsMenuOpen(false);
+                      }}
                       className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                     >
                       Iniciar Sesión
@@ -268,15 +272,6 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </header>
-
-      {/* Login Modal */}
-      {showLoginModal && (
-        <LoginModal
-          onClose={() => setShowLoginModal(false)}
-          onLogin={onLogin}
-          initialMode="login"
-        />
-      )}
 
       {/* Sidebar for logged-in users */}
       {isSidebarOpen && (
