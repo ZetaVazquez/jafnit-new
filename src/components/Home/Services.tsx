@@ -1,203 +1,104 @@
-
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
+import { Heart, Dumbbell, Users, Calendar, Target, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-const Services: React.FC = () => {
+interface ServicesProps {
+  onStartQuestionnaire?: () => void;
+}
+
+const Services: React.FC<ServicesProps> = ({ onStartQuestionnaire }) => {
   const services = [
     {
-      icon: Apple,
+      icon: Heart,
       title: 'Planes Nutricionales Personalizados',
-      description: 'Diseñamos planes de alimentación adaptados a tus objetivos, preferencias y estilo de vida.',
-      features: ['Análisis nutricional completo', 'Menús semanales', 'Lista de compras', 'Recetas saludables']
+      description: 'Alimentación equilibrada adaptada a tus necesidades, gustos y estilo de vida.',
+      features: ['Menús semanales detallados', 'Lista de compras incluida', 'Recetas fáciles y deliciosas', 'Seguimiento nutricional']
     },
     {
       icon: Dumbbell,
       title: 'Entrenamiento Personalizado',
-      description: 'Rutinas de ejercicio complementarias a tu plan nutricional para maximizar resultados.',
-      features: ['Rutinas adaptadas', 'Videos explicativos', 'Progress tracking', 'Ajustes semanales']
+      description: 'Rutinas de ejercicio diseñadas específicamente para tus objetivos y disponibilidad.',
+      features: ['Ejercicios para casa o gimnasio', 'Videos explicativos', 'Progresión adaptada', 'Seguimiento de rendimiento']
     },
     {
       icon: Users,
-      title: 'Seguimiento Individualizado',
-      description: 'Acompañamiento personalizado con revisiones regulares y ajustes según tu progreso.',
-      features: ['Consultas regulares', 'Análisis de progreso', 'Ajustes del plan', 'Soporte continuo']
-    },
-    {
-      icon: Calendar,
-      title: 'Planificación de Comidas',
-      description: 'Organización completa de tus comidas con horarios y preparación anticipada.',
-      features: ['Calendario de comidas', 'Meal prep', 'Horarios optimizados', 'Preparación por lotes']
-    },
-    {
-      icon: MessageCircle,
-      title: 'Soporte 24/7',
-      description: 'Comunicación directa con tu nutricionista para resolver dudas y mantenerte motivado.',
-      features: ['Chat directo', 'Respuesta rápida', 'Motivación constante', 'Resolución de dudas']
-    },
-    {
-      icon: BarChart3,
-      title: 'Análisis de Progreso',
-      description: 'Seguimiento detallado de tu evolución con métricas y gráficos personalizados.',
-      features: ['Métricas corporales', 'Gráficos de progreso', 'Reportes mensuales', 'Análisis de tendencias']
+      title: 'Acompañamiento Personal',
+      description: 'Soporte continuo y motivación para mantener tu progreso hacia tus objetivos.',
+      features: ['Consultas semanales', 'WhatsApp directo', 'Ajustes en tiempo real', 'Motivación constante']
     }
   ];
 
   return (
-    <section id="services" className="py-20">
-      <div className="container mx-auto px-4">
+    <section id="servicios" className="py-20 dynamic-background relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        
+        {/* Círculos medianos */}
+        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
+        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
+        
+        {/* Triángulos */}
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
             Nuestros Servicios
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ofrecemos un enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Transforma tu vida con nuestros servicios integrales de nutrición y entrenamiento personalizado
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           {services.map((service, index) => (
-            <Card key={index} className="h-full bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-4 border-nutrition-green shadow-lg">
-              <CardHeader className="text-center pb-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
-                  <service.icon className="w-8 h-8" />
-                </div>
-                <CardTitle className="text-xl text-nutrition-black title-playful">
-                  {service.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-nutrition-gray mb-6">
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-nutrition-gray">
-                      <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            <div key={index} className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-nutrition-green-light">
+              <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-6 mx-auto">
+                <service.icon className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-nutrition-black mb-4 text-center title-playful">
+                {service.title}
+              </h3>
+              <p className="text-gray-600 mb-6 text-center leading-relaxed">
+                {service.description}
+              </p>
+              <ul className="space-y-3">
+                {service.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-center text-nutrition-green-dark">
+                    <CheckCircle className="w-5 h-5 text-nutrition-green mr-3 flex-shrink-0" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
 
-        <div className="mt-16 bg-white/90 backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
-          <h3 className="text-2xl font-bold text-nutrition-green-dark mb-4 title-playful">
-            ¿Necesitas algo más específico?
-          </h3>
-          <p className="text-nutrition-gray mb-6 max-w-2xl mx-auto">
-            Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva, 
-            trastornos alimentarios, alergias e intolerancias, y mucho más.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
-              Nutrición Deportiva
-            </span>
-            <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
-              Pérdida de Peso
-            </span>
-            <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
-              Ganancia Muscular
-            </span>
-            <span className="bg-white/90 text-nutrition-green px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
-              Alergias e Intolerancias
-            </span>
-          </div>
-        </div>
-
-        {/* Communication Section */}
-        <div className="mt-16 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-nutrition-green-light overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
-            {/* Text Content */}
-            <div className="order-2 lg:order-1">
-              <h3 className="text-2xl md:text-3xl font-bold text-nutrition-green-dark mb-6 title-playful">
-                💬 EL DIÁLOGO CONSTANTE ES FUNDAMENTAL PARA ALCANZAR TUS METAS Y ENTENDER TUS REQUERIMIENTOS
-              </h3>
-              <div className="space-y-4 text-nutrition-green-dark">
-                <p className="text-lg leading-relaxed">
-                  Mi objetivo es comprender tu situación de manera completa para ofrecerte la mejor orientación y apoyo.
-                </p>
-                <p className="text-lg leading-relaxed font-semibold">
-                  La comunicación es esencial para personalizar y optimizar tu plan de forma efectiva.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  Mantén el contacto conmigo para que pueda brindarte el máximo valor en mi asesoramiento.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  Cualquier ajuste que necesites, <span className="font-bold">SIEMPRE</span> existe una alternativa y <span className="font-bold">SIEMPRE</span> encontramos la mejor solución para ti.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  Mi enfoque se centra en que te sientas cómodo y puedas mantener el plan a largo plazo.
-                </p>
-                <p className="text-lg leading-relaxed font-semibold">
-                  Para maximizar los beneficios de nuestro trabajo conjunto, mantente en contacto cuando lo requieras!
-                </p>
-              </div>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-nutrition-green-dark font-medium">Contáctame cuando lo necesites</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-nutrition-green-dark font-medium">Soporte y motivación diarios</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-nutrition-green-dark font-medium">Material educativo y recursos</span>
-                </div>
-              </div>
-            </div>
-
-            {/* WhatsApp Phone Mockup */}
-            <div className="order-1 lg:order-2 flex justify-center">
-              <div className="relative transform rotate-6">
-                {/* Phone Frame */}
-                <div className="relative w-64 h-[520px] bg-black rounded-[2.5rem] p-2 shadow-2xl">
-                  {/* Screen */}
-                  <div className="w-full h-full bg-white rounded-[2rem] overflow-hidden relative">
-                    {/* Status Bar */}
-                    <div className="flex justify-between items-center px-6 pt-3 pb-1 bg-gray-50">
-                      <span className="text-sm font-medium">13:17</span>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-4 h-2 bg-gray-800 rounded-sm"></div>
-                        <div className="w-1 h-3 bg-gray-800 rounded-full"></div>
-                      </div>
-                    </div>
-                    
-                    {/* WhatsApp Header */}
-                    <div className="bg-nutrition-green p-4 flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-                      <div>
-                        <h4 className="text-white font-semibold text-sm">JAFNFIT - José Antonio</h4>
-                        <p className="text-green-100 text-xs">en línea</p>
-                      </div>
-                    </div>
-                    
-                    {/* Chat Content */}
-                    <div className="flex-1 p-4 space-y-3 bg-gray-50 h-full">
-                      <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
-                        <p className="text-xs text-gray-700">Hola, tenía que decírtelo... ¡Estoy flipando! 😍 me está encantando el menú, por fin como bien sin sentir que estoy a dieta.</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">8:27</p>
-                      </div>
-                      
-                      <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
-                        <p className="text-xs text-gray-700">Me preparé las tostadas que me indicaste, probé las combinaciones y el boniato... ¡riquísimo y no paso hambre!</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">8:28</p>
-                      </div>
-                      
-                      <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
-                        <p className="text-xs text-gray-700">¡Desde la última vez bajé ya 2 kg sin darme cuenta! Gracias 🙏 💚</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">8:29</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="text-center">
+          <div className="bg-white rounded-2xl p-8 shadow-xl border border-nutrition-green-light max-w-4xl mx-auto">
+            <h3 className="text-2xl font-bold text-nutrition-green mb-4 title-playful">
+              ¿Listo para Comenzar tu Transformación?
+            </h3>
+            <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+              Únete a más de 30 personas que ya han transformado su vida con nuestros planes personalizados
+            </p>
+            <Button 
+              onClick={onStartQuestionnaire}
+              className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              <Target className="w-5 h-5 mr-2" />
+              Quiero Mi Plan Personalizado
+            </Button>
           </div>
         </div>
       </div>
