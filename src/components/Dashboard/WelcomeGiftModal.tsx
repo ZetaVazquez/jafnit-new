@@ -11,17 +11,25 @@ interface WelcomeGiftModalProps {
 
 const WelcomeGiftModal: React.FC<WelcomeGiftModalProps> = ({ isOpen, onClose }) => {
   const handleDownloadGift = () => {
-    // AQUÍ DEBES INSERTAR TU ARCHIVO PDF
-    // Reemplaza '/path/to/your/gift.pdf' con la ruta real de tu archivo PDF
-    const pdfPath = '/gifts/welcome-gift.pdf';
-    
-    // Crear un enlace temporal para descargar el archivo
-    const link = document.createElement('a');
-    link.href = pdfPath;
-    link.download = 'JAFN-Gift-Welcome.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      // Crear un enlace temporal para descargar el archivo
+      const link = document.createElement('a');
+      link.href = '/gifts/welcome-gift.pdf';
+      link.download = 'JAFN-Gift-Welcome.pdf';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      
+      // Añadir al DOM temporalmente para hacer click
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      console.log('Descarga iniciada para el PDF de regalo');
+    } catch (error) {
+      console.error('Error al descargar el archivo:', error);
+      // Fallback: abrir en nueva pestaña
+      window.open('/gifts/welcome-gift.pdf', '_blank');
+    }
   };
 
   return (

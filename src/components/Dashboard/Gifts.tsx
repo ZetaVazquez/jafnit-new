@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Gift, Download } from 'lucide-react';
+import { ArrowLeft, Gift, Download, ExternalLink } from 'lucide-react';
 
 interface GiftsProps {
   onGoBack: () => void;
@@ -10,17 +10,30 @@ interface GiftsProps {
 
 const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
   const handleDownloadGift = () => {
-    // AQUÍ DEBES INSERTAR TU ARCHIVO PDF
-    // Reemplaza '/path/to/your/gift.pdf' con la ruta real de tu archivo PDF
-    const pdfPath = '/gifts/welcome-gift.pdf';
-    
-    // Crear un enlace temporal para descargar el archivo
-    const link = document.createElement('a');
-    link.href = pdfPath;
-    link.download = 'JAFN-Gift-Welcome.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      // Crear un enlace temporal para descargar el archivo
+      const link = document.createElement('a');
+      link.href = '/gifts/welcome-gift.pdf';
+      link.download = 'JAFN-Gift-Welcome.pdf';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      
+      // Añadir al DOM temporalmente para hacer click
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      console.log('Descarga iniciada para el PDF de regalo');
+    } catch (error) {
+      console.error('Error al descargar el archivo:', error);
+      // Fallback: abrir en nueva pestaña
+      window.open('/gifts/welcome-gift.pdf', '_blank');
+    }
+  };
+
+  const handleViewGift = () => {
+    // Abrir el PDF en una nueva pestaña para visualización
+    window.open('/gifts/welcome-gift.pdf', '_blank');
   };
 
   return (
@@ -75,13 +88,24 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
                 </div>
               </div>
 
-              <Button
-                onClick={handleDownloadGift}
-                className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Descargar Mi Regalo
-              </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  onClick={handleViewGift}
+                  variant="outline"
+                  className="border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white font-bold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <ExternalLink className="w-5 h-5 mr-2" />
+                  Ver Online
+                </Button>
+
+                <Button
+                  onClick={handleDownloadGift}
+                  className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Descargar
+                </Button>
+              </div>
 
               <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p className="text-sm text-yellow-800">
