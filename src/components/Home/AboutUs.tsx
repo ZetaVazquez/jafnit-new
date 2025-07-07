@@ -51,21 +51,51 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
         {/* Vertical Journey Path */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Central serpentine dotted path */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2">
+          {/* Dynamic serpentine path with gradient and animation */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-20 transform -translate-x-1/2 pointer-events-none">
             <svg 
               className="w-full h-full" 
-              viewBox="0 0 40 800" 
+              viewBox="0 0 80 1000" 
               preserveAspectRatio="none"
               fill="none" 
               xmlns="http://www.w3.org/2000/svg"
             >
+              <defs>
+                <linearGradient id="pathGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{stopColor: 'rgba(34, 197, 94, 0.8)', stopOpacity: 1}} />
+                  <stop offset="25%" style={{stopColor: 'rgba(5, 150, 105, 0.9)', stopOpacity: 1}} />
+                  <stop offset="50%" style={{stopColor: 'rgba(132, 204, 22, 0.8)', stopOpacity: 1}} />
+                  <stop offset="75%" style={{stopColor: 'rgba(34, 197, 94, 0.9)', stopOpacity: 1}} />
+                  <stop offset="100%" style={{stopColor: 'rgba(5, 150, 105, 0.8)', stopOpacity: 1}} />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge> 
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              
+              {/* Background glow path */}
               <path 
-                d="M20 0 C20 40, 10 80, 30 120 C50 160, 10 200, 30 240 C50 280, 10 320, 30 360 C50 400, 10 440, 30 480 C50 520, 10 560, 30 600 C50 640, 20 680, 20 720 L20 800" 
-                stroke="rgba(34, 197, 94, 0.4)" 
-                strokeWidth="3" 
-                strokeDasharray="8,8"
+                d="M40 0 C60 50, 20 100, 60 150 C20 200, 60 250, 20 300 C60 350, 20 400, 60 450 C20 500, 60 550, 20 600 C60 650, 20 700, 60 750 C20 800, 60 850, 40 900 L40 1000" 
+                stroke="url(#pathGradient)" 
+                strokeWidth="8" 
+                strokeDasharray="12,8"
                 strokeLinecap="round"
+                filter="url(#glow)"
+                opacity="0.7"
+              />
+              
+              {/* Main animated path */}
+              <path 
+                d="M40 0 C60 50, 20 100, 60 150 C20 200, 60 250, 20 300 C60 350, 20 400, 60 450 C20 500, 60 550, 20 600 C60 650, 20 700, 60 750 C20 800, 60 850, 40 900 L40 1000" 
+                stroke="url(#pathGradient)" 
+                strokeWidth="4" 
+                strokeDasharray="12,8"
+                strokeLinecap="round"
+                className="animate-pulse"
               />
             </svg>
           </div>
@@ -91,7 +121,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative shadow-lg">
                 01
               </div>
               <div className="w-1/2 pl-8"></div>
@@ -100,7 +130,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             {/* Step 2 - Right side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8"></div>
-              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative shadow-lg">
                 02
               </div>
               <div className="w-1/2 pl-8">
@@ -143,7 +173,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative shadow-lg">
                 03
               </div>
               <div className="w-1/2 pl-8"></div>
@@ -152,7 +182,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             {/* Step 4 - Right side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8"></div>
-              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative shadow-lg">
                 04
               </div>
               <div className="w-1/2 pl-8">
