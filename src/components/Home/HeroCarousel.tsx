@@ -49,7 +49,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   };
 
   return (
-    <section className="relative h-[75vh] lg:h-[80vh] overflow-hidden">
+    <section id="inicio" className="relative h-[75vh] lg:h-[80vh] overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={index}
