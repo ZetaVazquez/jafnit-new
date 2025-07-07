@@ -45,18 +45,18 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         </div>
 
         {/* Vertical Journey Path */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Central dotted serpentine path */}
+        <div className="relative max-w-5xl mx-auto">
+          {/* Central serpentine dotted path */}
           <div className="absolute left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2">
             <svg 
               className="w-full h-full" 
-              viewBox="0 0 20 1000" 
+              viewBox="0 0 40 800" 
               preserveAspectRatio="none"
               fill="none" 
               xmlns="http://www.w3.org/2000/svg"
             >
               <path 
-                d="M10 0 C10 50, 5 100, 15 150 C25 200, 5 250, 15 300 C25 350, 5 400, 15 450 C25 500, 5 550, 15 600 C25 650, 5 700, 15 750 C25 800, 10 850, 10 900 L10 1000" 
+                d="M20 0 C20 40, 10 80, 30 120 C50 160, 10 200, 30 240 C50 280, 10 320, 30 360 C50 400, 10 440, 30 480 C50 520, 10 560, 30 600 C50 640, 20 680, 20 720 L20 800" 
                 stroke="rgba(34, 197, 94, 0.4)" 
                 strokeWidth="3" 
                 strokeDasharray="8,8"
@@ -65,21 +65,19 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </svg>
           </div>
 
-          {/* Journey Steps */}
-          <div className="space-y-32">
+          {/* Journey Steps with reduced spacing */}
+          <div className="space-y-16">
             {/* Step 1 - Left side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-md">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
                     <div className="text-4xl mb-4">🏋️‍♀️</div>
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       MI HISTORIA
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Me llamo <span className="font-bold text-nutrition-green">José Antonio</span>, soy dietista-nutricionista y entrenador personal. 
-                      Durante años luché contra el sobrepeso, probé mil dietas diferentes, 
-                      me apunté a gimnasios que abandonaba a los pocos meses...
+                      Me llamo <span className="font-bold text-nutrition-green">José Antonio</span>, soy dietista-nutricionista y entrenador personal. Durante años luché contra el sobrepeso, probé mil dietas diferentes, me apunté a gimnasios que abandonaba a los pocos meses...
                     </p>
                   </div>
                 </div>
@@ -97,16 +95,14 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 02
               </div>
               <div className="w-1/2 pl-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-md">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
                     <div className="text-4xl mb-4">💡</div>
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       EL DESCUBRIMIENTO
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      <span className="font-bold text-nutrition-accent">La diferencia no estaba en encontrar la dieta perfecta 
-                      o el entrenamiento más duro.</span> Estaba en entender que cada persona es única 
-                      y necesita un enfoque completamente personalizado.
+                      <span className="font-bold text-nutrition-accent">La diferencia no estaba en encontrar la dieta perfecta o el entrenamiento más duro.</span> Estaba en entender que cada persona es única y necesita un enfoque completamente personalizado.
                     </p>
                   </div>
                 </div>
@@ -116,16 +112,14 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             {/* Step 3 - Left side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-md">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
                     <div className="text-4xl mb-4">🎯</div>
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       LA TRANSFORMACIÓN
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Después de perder 30 kilos y mantener mi peso ideal durante años, 
-                      me dedico a ayudar a personas como tú a conseguir sus objetivos 
-                      sin sacrificar su vida social ni su salud mental.
+                      Después de perder 30 kilos y mantener mi peso ideal durante años, me dedico a ayudar a personas como tú a conseguir sus objetivos sin sacrificar su vida social ni su salud mental.
                     </p>
                   </div>
                 </div>
@@ -143,16 +137,14 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 04
               </div>
               <div className="w-1/2 pl-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-md">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
                     <div className="text-4xl mb-4">🚀</div>
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       AHORA TE TOCA A TI
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Llevas tiempo pensándolo, sabes que necesitas un cambio 
-                      y ya no te vale hacerlo solo, sin guía ni resultados.
-                      Este programa no va de castigar tu cuerpo.
+                      Llevas tiempo pensándolo, sabes que necesitas un cambio y ya no te vale hacerlo solo, sin guía ni resultados. Este programa no va de castigar tu cuerpo.
                     </p>
                   </div>
                 </div>
@@ -161,7 +153,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
 
           {/* Final Call to Action Section */}
-          <div className="text-center mt-24 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
+          <div className="text-center mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
             <div className="mb-6">
               <span className="text-4xl">👊</span>
             </div>
