@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface AboutUsProps {
@@ -8,41 +7,8 @@ interface AboutUsProps {
 }
 
 const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
-  const stats = [
-    { icon: Users, value: '30+', label: 'Clientes en Seguimiento' },
-    { icon: Award, value: '6', label: 'Meses de Experiencia' },
-    { icon: Heart, value: '100%', label: 'Compromiso Personal' },
-    { icon: Target, value: '100+', label: 'Objetivos Alcanzados' }
-  ];
-
-  const testimonials = [
-    {
-      name: '🧍‍♀️ Laura Jiménez (32 años)',
-      comment: 'Nunca pensé que una dieta pudiera ser así de fácil de seguir. ¡No paso hambre, me encanta lo que como y ya bajé 4 kilos! Gracias por enseñarme a disfrutar comiendo 🙌🍝',
-      rating: 4
-    },
-    {
-      name: '🧍‍♂️ Pablo Moreno (36 años)',
-      comment: 'Estoy sorprendido de lo mucho que he avanzado sin pasarme horas en el gym. El entrenamiento es personalizado y me encanta que puedo hacerlo en casa o en el parque 🏋️‍♂️🏡.',
-      rating: 5
-    },
-    {
-      name: '🧍‍♀️ Alba Fernández (29 años)',
-      comment: 'Me sentí escuchada desde el primer día. Cada duda que tengo, me la responden rápido. Siento que no estoy sola en esto y eso me da tranquilidad 🙏📩.',
-      rating: 4
-    },
-    {
-      name: '🧍‍♂️ Iván Gutiérrez (30 años)',
-      comment: 'Volví a usar ropa que no me ponía hace años, pero lo que más valoro es que ahora tengo energía para todo. Este cambio me ha devuelto las ganas de vivir al 100%.',
-      rating: 5
-    }
-  ];
-
   return (
-    <section id="about" className="py-8 md:py-12 relative overflow-hidden" style={{
-      background: 'linear-gradient(135deg, rgba(187, 247, 208, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%)',
-      position: 'relative'
-    }}>
+    <section id="sobre-mi" className="py-16 bg-gradient-to-br from-nutrition-green-lighter via-white to-nutrition-green-lighter relative overflow-hidden">
       {/* Unified background overlay for consistency */}
       <div className="absolute inset-0" style={{
         backgroundImage: `
@@ -62,231 +28,203 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
         
-        <div className="geometric-shape circle-shape w-14 h-14 md:w-28 md:h-28 top-1/3 left-1/2 animate-float"></div>
-        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
-        
         <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
       </div>
 
-      <div className="container mx-auto px-2 md:px-6 lg:px-8 relative z-10 max-w-7xl">
-        <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-5xl font-bold text-nutrition-black mb-4 md:mb-6 title-main tracking-tight">
-            Sobre Mi
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-nutrition-black mb-8 title-main">
+            Sobre Mí
           </h2>
+          <p className="text-xl text-nutrition-green font-bold mb-8">
+            🎯 ES TU TURNO ⭐
+          </p>
+          <p className="text-sm text-nutrition-gray leading-relaxed">
+            Ya has probado de todo pero nunca lo habías hecho con estrategia, guía y seguimiento de verdad…
+            AUNQUE… Llevas tiempo pensando que algo tiene que cambiar. Y lo sabes. Este programa no va de dejar de comer o pasarte el día entrenando. Va de construir un cuerpo y unos hábitos que puedas mantener PARA SIEMPRE.
+            Olvida las dietas que no aguantas ni dos semanas. Empieza a entrenar con un plan que tenga sentido para ti.
+            🔹 No necesitas tener todo perfecto. Solo necesitas empezar. Yo te guío, tú te comprometes. Y el cambio llega.                    </p>
         </div>
 
-        {/* FILA 1: Cuadro de texto arriba sin opiniones */}
-        <div className="mb-8 md:mb-12">
-          <div className="flex justify-center">
-            <div className="w-full max-w-5xl lg:max-w-6xl">
-              <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
-                  💢 De odiar mi reflejo a cambiar mi vida (y ahora la tuya)
+        {/* Vertical Journey Path */}
+        <div className="relative max-w-5xl mx-auto">
+          {/* Central serpentine dotted path */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2">
+            <svg 
+              className="w-full h-full" 
+              viewBox="0 0 40 800" 
+              preserveAspectRatio="none"
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M20 0 C20 40, 10 80, 30 120 C50 160, 10 200, 30 240 C50 280, 10 320, 30 360 C50 400, 10 440, 30 480 C50 520, 10 560, 30 600 C50 640, 20 680, 20 720 L20 800" 
+                stroke="rgba(34, 197, 94, 0.4)" 
+                strokeWidth="3" 
+                strokeDasharray="8,8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+
+          {/* Journey Steps with reduced spacing */}
+          <div className="space-y-16">
+            {/* Step 1 - Left side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
+                  <div className="text-center">
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.
+                       👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer.
+                      Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.
+                      Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados. Punto.
+                      🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.
+                      Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.                 
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                01
+              </div>
+              <div className="w-1/2 pl-8"></div>
+            </div>
+
+            {/* Step 2 - Right side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8"></div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                02
+              </div>
+              <div className="w-1/2 pl-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
+                  <div className="text-center">
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO 🏋️‍♂️                   
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                        O si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.
+                        Tu cuerpo puede mucho más de lo que crees.
+                         💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.
+                        👉 Entrenarás con estrategia, con técnica y con confianza.
+                        🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.
+                        Nada de rutinas copiadas, nada de ejercicios que no entiendes. Aquí todo tiene sentido y propósito.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 - Left side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
+                  <div className="text-center">
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                     SIN COMUNICACIÓN, NO HAY RESULTADOS 📲💬
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      No es solo un plan. Es un proceso en equipo con un SEGUIMIENTO INDIVIDUALIZADO.
+                      Para que logres tus objetivos, necesito saber cómo estás, qué necesitas y cómo te estás sintiendo.
+                      👉 Sin tus mensajes, no puedo ayudarte ni ajustar tu plan.
+                       Este no es un servicio enlatado: es un acompañamiento real y constante.
+                      💡 Siempre hay otra opción que sí se adapta a ti
+                      No importa si algo no te gusta o se te complica.
+                       🔁 Siempre hay una solución. Siempre hay una alternativa.
+                      Lo importante es que te guste, te funcione y lo mantengas.                    
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                03
+              </div>
+              <div className="w-1/2 pl-8"></div>
+            </div>
+
+            {/* Step 4 - Right side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8"></div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                04
+              </div>
+              <div className="w-1/2 pl-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
+                  <div className="text-center">
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                     EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE 🧠📈
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      Esto no es una carrera de 30 días ni de una semana.
+                       Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.
+                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más.
+                       Así ajustamos el plan y seguimos avanzando.
+                      🧭 ¿Te vas de vacaciones o has tenido una mala semana?
+                      No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.
+                       ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.
+                      🔁 Esto va más allá del físico
+                      Mi objetivo es que cambies tu forma de ver el fitness.
+                       Que construyas un cuerpo que te guste sin obsesiones, sin extremos.
+                       Y sobre todo: que te dure para siempre.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Final Call to Action Section */}
+          <div className="text-center mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
+            <div className="mb-6">
+                <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      AHORA TE TOCA A TI  💥
                 </h3>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
-                  Durante años, el sobrepeso fue parte de mí. A los 14 años pesaba más de 100 kg 🧍‍♂️. Me pasaba horas en el gimnasio 💥 intentando compensar cada comida cargada de culpa.
-                </p>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
-                  🥶 Dejé de comer. Entrené como un loco. Me exigí hasta los límites.
-                </p>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
-                  ¿Resultados? Bajé peso, sí… pero también perdí salud, energía y ganas de vivir.
-                </p>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark font-semibold">
-                  Hasta que el cuerpo dijo basta.
-                </p>
-              </div>
             </div>
+            <p className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                Llevas tiempo pensándolo.. sabes que necesitas un cambio… y ya no te vale hacerlo solo, sin guía ni resultados.
+                Este programa no va de castigar tu cuerpo. Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.
+                🎯 Aquí no hay fórmulas mágicas.Solo lo que funciona, adaptado a tu estilo de vida.
+                📌 ¿Para quién es esto?
+                 ✅ Para quien está cansado de hacer todo bien… pero no ver resultados.
+                 ✅ Para quien entrena, pero no sabe si lo está haciendo bien.
+                 ✅ Para quien quiere dejar atrás la ansiedad con la comida.
+                 ✅ Para quien quiere recuperar su autoestima y su energía.
+                🔥 Si estás listo para dejar de improvisar, y empezar de verdad…
+                👉 Rellena el formulario ahora y empieza tu cambio real.
+             </p>
+            <Button 
+              onClick={onQuestionnaireOpen}
+              className="bg-nutrition-accent hover:bg-nutrition-accent-dark text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              ✨ Quiero Cambiar
+            </Button>
           </div>
-        </div>
 
-        {/* FILA 2: Foto en el centro con opiniones a los extremos laterales - Ahora visible desde tablet */}
-        <div className="mb-8 md:mb-12 relative">
-          <div className="flex justify-center items-center relative">
-            {/* Opiniones extremo izquierdo - Ahora visible desde xl en adelante */}
-            <div className="absolute left-0 top-0 hidden xl:block w-80 -translate-x-20">
-              <div className="space-y-8">
-                {/* Primera opinión izquierda */}
-                <div className="transform -rotate-12 hover:rotate-0 transition-transform duration-300">
-                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-                    <div className="flex items-center mb-3">
-                      <div>
-                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[0].name}</h4>
-                        <div className="flex">
-                          {[...Array(testimonials[0].rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[0].comment}"</p>
-                  </div>
-                </div>
-
-                {/* Segunda opinión izquierda */}
-                <div className="transform rotate-8 hover:rotate-0 transition-transform duration-300">
-                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-                    <div className="flex items-center mb-3">
-                      <div>
-                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[1].name}</h4>
-                        <div className="flex">
-                          {[...Array(testimonials[1].rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[1].comment}"</p>
-                  </div>
-                </div>
-              </div>
+          {/* Stats Section */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+              <div className="text-2xl font-bold text-nutrition-black">30+</div>
+              <div className="text-sm text-nutrition-gray">Clientes en Seguimiento</div>
             </div>
-
-            {/* Foto central */}
-            <div className="flex flex-col items-center z-20">
-              <div className="relative mb-6 md:mb-8">
-                <div className="w-56 h-56 md:w-[26rem] md:h-[26rem] rounded-full border-2 md:border-4 border-white shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
-                  <img
-                    src="/lovable-uploads/892d4c06-55ec-40c8-b958-b611e50b191c.png"
-                    alt="José Antonio - Tu Dietista y Entrenador Personal"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              
-              <div className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl border border-nutrition-green-light hover:shadow-2xl transition-all duration-300 hover:scale-105 relative z-30">
-                <div className="flex items-center space-x-3 md:space-x-4">
-                  <div className="w-3 h-3 md:w-4 md:h-4 bg-nutrition-green rounded-full animate-pulse"></div>
-                  <div>
-                    <h4 className="font-bold text-nutrition-green text-base md:text-xl title-playful">José Antonio</h4>
-                    <p className="text-nutrition-gray text-sm md:text-lg">Dietista y Entrenador</p>
-                  </div>
-                </div>
-              </div>
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+              <div className="text-2xl font-bold text-nutrition-black">6</div>
+              <div className="text-sm text-nutrition-gray">Meses de Experiencia</div>
             </div>
-
-            {/* Opiniones extremo derecho - Ahora más ladeadas y visibles desde xl */}
-            <div className="absolute right-0 top-0 hidden xl:block w-80 translate-x-20">
-              <div className="space-y-8">
-                {/* Primera opinión derecha - Más ladeada */}
-                <div className="transform rotate-15 hover:rotate-0 transition-transform duration-300">
-                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-                    <div className="flex items-center mb-3">
-                      <div>
-                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[2].name}</h4>
-                        <div className="flex">
-                          {[...Array(testimonials[2].rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[2].comment}"</p>
-                  </div>
-                </div>
-
-                {/* Segunda opinión derecha - Más ladeada */}
-                <div className="transform -rotate-12 hover:rotate-0 transition-transform duration-300">
-                  <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-                    <div className="flex items-center mb-3">
-                      <div>
-                        <h4 className="font-bold text-nutrition-black text-xs title-playful">{testimonials[3].name}</h4>
-                        <div className="flex">
-                          {[...Array(testimonials[3].rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-current text-nutrition-green" />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-nutrition-green-dark text-xs leading-relaxed">"{testimonials[3].comment}"</p>
-                  </div>
-                </div>
-              </div>
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+              <div className="text-2xl font-bold text-nutrition-black">100%</div>
+              <div className="text-sm text-nutrition-gray">Compromiso Personal</div>
             </div>
-          </div>
-        </div>
-
-        {/* FILA 3: Cuadro de texto abajo sin opiniones */}
-        <div className="mb-8 md:mb-12">
-          <div className="flex justify-center">
-            <div className="w-full max-w-5xl lg:max-w-6xl">
-              <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
-                <h4 className="text-lg md:text-xl lg:text-2xl font-bold text-nutrition-green mb-4 md:mb-6 title-playful">
-                  🎯 Mi método: Simple, efectivo y sostenible
-                </h4>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark leading-relaxed mb-4 md:mb-5">
-                  Créeme cuando te digo que he probado de todo: dietas extremas, suplementos "milagro", rutinas imposibles 🔄.
-                </p>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark leading-relaxed mb-4 md:mb-5">
-                  Lo que funciona de verdad es un enfoque equilibrado que puedas mantener en el tiempo 📈.
-                </p>
-                <p className="text-sm md:text-base lg:text-lg text-nutrition-green-dark leading-relaxed font-semibold">
-                  No más extremos. Solo resultados reales y duraderos 🏆.
-                </p>
-              </div>
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+              <div className="text-2xl font-bold text-nutrition-black">100+</div>
+              <div className="text-sm text-nutrition-gray">Objetivos Alcanzados</div>
             </div>
-          </div>
-        </div>
-
-        {/* FILA 4: Cuadro centrado con call to action más ancho */}
-        <div className="mb-8 md:mb-12">
-          <div className="flex justify-center">
-            <div className="w-full max-w-7xl">
-              <div className="bg-white backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 shadow-xl border border-nutrition-green-light">
-                <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-5 md:mb-8">
-                  <div className="flex items-center text-base md:text-lg lg:text-xl text-nutrition-green-dark">
-                    <span className="text-nutrition-green font-semibold mr-3 md:mr-4 text-xl md:text-2xl">🔥</span>
-                    Sin dietas imposibles
-                  </div>
-                  <div className="flex items-center text-base md:text-lg lg:text-xl text-nutrition-green-dark">
-                    <span className="text-nutrition-green font-semibold mr-3 md:mr-4 text-xl md:text-2xl">🏋️‍♂️</span>
-                    Sin rutinas de 3 horas al día
-                  </div>
-                  <div className="flex items-center text-base md:text-lg lg:text-xl text-nutrition-green-dark">
-                    <span className="text-nutrition-green font-semibold mr-3 md:mr-4 text-xl md:text-2xl">🧊</span>
-                    Sin perder el norte
-                  </div>
-                </div>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-4 md:mb-5 leading-relaxed">
-                  Si estás cansado de no reconocerte en el espejo, de probar y fallar, de sentir que ya nada funciona…
-                </p>
-                <p className="text-base md:text-lg lg:text-xl text-nutrition-green-dark mb-5 md:mb-8 leading-relaxed font-semibold text-nutrition-green">
-                  👉 Yo estuve ahí. Y salí. Ahora te toca a ti.
-                </p>
-                
-                <div className="text-center">
-                  <Button 
-                    onClick={onQuestionnaireOpen}
-                    className="bg-nutrition-green hover:bg-nutrition-green-dark text-white px-6 md:px-10 lg:px-12 py-4 md:py-5 text-lg md:text-xl lg:text-2xl font-bold rounded-lg md:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full sm:w-auto"
-                  >
-                    🎯 QUIERO CAMBIAR
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Section - también más ancho */}
-        <div className="bg-white backdrop-blur-sm rounded-2xl md:rounded-3xl p-5 md:p-10 shadow-xl border border-nutrition-green-light">
-          <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-nutrition-green mb-8 md:mb-10 title-main">
-            Resultados Que Hablan Por Sí Solos
-          </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className="inline-flex items-center justify-center w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 md:mb-6 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <stat.icon className="w-8 h-8 md:w-12 md:h-12" />
-                </div>
-                <div className="text-2xl md:text-4xl lg:text-5xl font-bold text-nutrition-green mb-2 md:mb-3 title-main">{stat.value}</div>
-                <div className="text-nutrition-gray font-medium text-sm md:text-lg">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

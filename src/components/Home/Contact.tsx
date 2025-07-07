@@ -5,7 +5,7 @@ import { Phone, Mail, MapPin, Calendar } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-32 relative overflow-hidden">
+    <section id="contacto" className="py-32 relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}
@@ -45,7 +45,7 @@ const Contact: React.FC = () => {
                 <Phone className="w-6 h-6 text-nutrition-green mt-1" />
                 <div>
                   <h4 className="font-bold text-nutrition-black mb-1 title-playful">Teléfono</h4>
-                  <p className="text-gray-600">+34 697 75 48 23</p>
+                  <p className="text-gray-600">+34 697754823</p>
                   <p className="text-sm text-gray-500">Lunes a Viernes, 9:00 - 20:00</p>
                 </div>
               </div>
@@ -67,7 +67,7 @@ const Contact: React.FC = () => {
                 <MapPin className="w-6 h-6 text-nutrition-green mt-1" />
                 <div>
                   <h4 className="font-bold text-nutrition-black mb-1 title-playful">Dirección</h4>
-                  <p className="text-gray-600">Contacte con el entrenador</p>
+                  <p className="text-gray-600">Consulta con el entrenador</p>
                
                 </div>
               </div>
@@ -91,7 +91,7 @@ const Contact: React.FC = () => {
           {/* Map */}
           <div className="h-96 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-nutrition-green-light">
             <iframe
-              src="https://www.google.com/maps/dir//R%C3%BAa+Leopoldo+Calvo+Sotelo,+152,+27400+Monforte+de+Lemos,+Lugo/@42.527893,-7.5870038,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0xd30132c14ab188f:0xe6e45c384c5284f8!2m2!1d-7.5045955!2d42.5279197?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
+              src="https://www.google.com/maps/place/R%C3%BAa+Leopoldo+Calvo+Sotelo,+152,+27400+Monforte+de+Lemos,+Lugo/@42.5278967,-7.5052014,19z/data=!3m1!4b1!4m6!3m5!1s0xd3013ece030a6ab:0xba2b1ece6eaaa9ba!8m2!3d42.5278957!4d-7.5045577!16s%2Fg%2F11tg0qttd6?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
               width="100%"
               height="100%"
               style={{ border: 0 }}

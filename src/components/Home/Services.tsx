@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
@@ -44,7 +43,7 @@ const Services: React.FC = () => {
   ];
 
   return (
-    <section id="services" className="py-20">
+    <section id="servicios" className="py-16 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
