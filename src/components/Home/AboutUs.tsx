@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Award, Users, Heart, Target, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface AboutUsProps {
@@ -29,15 +28,10 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
         
-        <div className="geometric-shape circle-shape w-14 h-14 md:w-28 md:h-28 top-1/3 left-1/2 animate-float"></div>
-        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
-        
         <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -50,92 +44,124 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </p>
         </div>
 
-        {/* Journey Map Layout */}
-        <div className="relative max-w-6xl mx-auto">
-          {/* Dotted Path */}
-          <div className="absolute top-1/2 left-0 w-full h-1 border-t-4 border-dashed border-nutrition-green-light transform -translate-y-1/2 hidden lg:block"></div>
-          
+        {/* Vertical Journey Path */}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Central dotted serpentine path */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2">
+            <svg 
+              className="w-full h-full" 
+              viewBox="0 0 20 1000" 
+              preserveAspectRatio="none"
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M10 0 C10 50, 5 100, 15 150 C25 200, 5 250, 15 300 C25 350, 5 400, 15 450 C25 500, 5 550, 15 600 C25 650, 5 700, 15 750 C25 800, 10 850, 10 900 L10 1000" 
+                stroke="rgba(34, 197, 94, 0.4)" 
+                strokeWidth="3" 
+                strokeDasharray="8,8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+
           {/* Journey Steps */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-4">
-            {/* Step 1 */}
-            <div className="relative">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center justify-center w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg mb-4 mx-auto">
-                  01
+          <div className="space-y-32">
+            {/* Step 1 - Left side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-md">
+                  <div className="text-center">
+                    <div className="text-4xl mb-4">🏋️‍♀️</div>
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      MI HISTORIA
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      Me llamo <span className="font-bold text-nutrition-green">José Antonio</span>, soy dietista-nutricionista y entrenador personal. 
+                      Durante años luché contra el sobrepeso, probé mil dietas diferentes, 
+                      me apunté a gimnasios que abandonaba a los pocos meses...
+                    </p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-nutrition-black mb-3">
-                    🏋️‍♀️ MI HISTORIA
-                  </h3>
-                  <p className="text-sm text-nutrition-gray leading-relaxed">
-                    Me llamo <span className="font-bold text-nutrition-green">José Antonio</span>, soy dietista-nutricionista y entrenador personal. 
-                    Durante años luché contra el sobrepeso, probé mil dietas diferentes, 
-                    me apunté a gimnasios que abandonaba a los pocos meses...
-                  </p>
+              </div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                01
+              </div>
+              <div className="w-1/2 pl-8"></div>
+            </div>
+
+            {/* Step 2 - Right side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8"></div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                02
+              </div>
+              <div className="w-1/2 pl-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-md">
+                  <div className="text-center">
+                    <div className="text-4xl mb-4">💡</div>
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      EL DESCUBRIMIENTO
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      <span className="font-bold text-nutrition-accent">La diferencia no estaba en encontrar la dieta perfecta 
+                      o el entrenamiento más duro.</span> Estaba en entender que cada persona es única 
+                      y necesita un enfoque completamente personalizado.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Step 2 */}
-            <div className="relative lg:mt-16">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center justify-center w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg mb-4 mx-auto">
-                  02
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-nutrition-black mb-3">
-                    💡 EL DESCUBRIMIENTO
-                  </h3>
-                  <p className="text-sm text-nutrition-gray leading-relaxed">
-                    <span className="font-bold text-nutrition-accent">La diferencia no estaba en encontrar la dieta perfecta 
-                    o el entrenamiento más duro.</span> Estaba en entender que cada persona es única 
-                    y necesita un enfoque completamente personalizado.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center justify-center w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg mb-4 mx-auto">
-                  03
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-nutrition-black mb-3">
-                    🎯 LA TRANSFORMACIÓN
-                  </h3>
-                  <p className="text-sm text-nutrition-gray leading-relaxed">
-                    Después de perder 30 kilos y mantener mi peso ideal durante años, 
-                    me dedico a ayudar a personas como tú a conseguir sus objetivos 
-                    sin sacrificar su vida social ni su salud mental.
-                  </p>
+            {/* Step 3 - Left side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-md">
+                  <div className="text-center">
+                    <div className="text-4xl mb-4">🎯</div>
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      LA TRANSFORMACIÓN
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      Después de perder 30 kilos y mantener mi peso ideal durante años, 
+                      me dedico a ayudar a personas como tú a conseguir sus objetivos 
+                      sin sacrificar su vida social ni su salud mental.
+                    </p>
+                  </div>
                 </div>
               </div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                03
+              </div>
+              <div className="w-1/2 pl-8"></div>
             </div>
 
-            {/* Step 4 */}
-            <div className="relative lg:mt-16">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                <div className="flex items-center justify-center w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg mb-4 mx-auto">
-                  04
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-nutrition-black mb-3">
-                    🚀 AHORA TE TOCA A TI
-                  </h3>
-                  <p className="text-sm text-nutrition-gray leading-relaxed">
-                    Llevas tiempo pensándolo, sabes que necesitas un cambio 
-                    y ya no te vale hacerlo solo, sin guía ni resultados.
-                    Este programa no va de castigar tu cuerpo.
-                  </p>
+            {/* Step 4 - Right side */}
+            <div className="flex items-center">
+              <div className="w-1/2 pr-8"></div>
+              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative">
+                04
+              </div>
+              <div className="w-1/2 pl-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-md">
+                  <div className="text-center">
+                    <div className="text-4xl mb-4">🚀</div>
+                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                      AHORA TE TOCA A TI
+                    </h3>
+                    <p className="text-sm text-nutrition-gray leading-relaxed">
+                      Llevas tiempo pensándolo, sabes que necesitas un cambio 
+                      y ya no te vale hacerlo solo, sin guía ni resultados.
+                      Este programa no va de castigar tu cuerpo.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Call to Action Section */}
-          <div className="text-center mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
+          {/* Final Call to Action Section */}
+          <div className="text-center mt-24 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
             <div className="mb-6">
               <span className="text-4xl">👊</span>
             </div>
@@ -153,22 +179,18 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
             <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-              <Users className="w-8 h-8 text-nutrition-green mx-auto mb-2" />
               <div className="text-2xl font-bold text-nutrition-black">30+</div>
               <div className="text-sm text-nutrition-gray">Clientes en Seguimiento</div>
             </div>
             <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-              <Award className="w-8 h-8 text-nutrition-green mx-auto mb-2" />
               <div className="text-2xl font-bold text-nutrition-black">6</div>
               <div className="text-sm text-nutrition-gray">Meses de Experiencia</div>
             </div>
             <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-              <Heart className="w-8 h-8 text-nutrition-green mx-auto mb-2" />
               <div className="text-2xl font-bold text-nutrition-black">100%</div>
               <div className="text-sm text-nutrition-gray">Compromiso Personal</div>
             </div>
             <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
-              <Target className="w-8 h-8 text-nutrition-green mx-auto mb-2" />
               <div className="text-2xl font-bold text-nutrition-black">100+</div>
               <div className="text-sm text-nutrition-gray">Objetivos Alcanzados</div>
             </div>
