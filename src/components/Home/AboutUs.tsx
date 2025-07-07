@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -208,7 +209,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
 
           {/* Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
             <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
               <div className="text-2xl font-bold text-nutrition-black">30+</div>
               <div className="text-sm text-nutrition-gray">Clientes en Seguimiento</div>
