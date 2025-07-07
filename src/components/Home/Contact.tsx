@@ -45,7 +45,7 @@ const Contact: React.FC = () => {
                 <Phone className="w-6 h-6 text-nutrition-green mt-1" />
                 <div>
                   <h4 className="font-bold text-nutrition-black mb-1 title-playful">Teléfono</h4>
-                  <p className="text-gray-600">+34 600 123 456</p>
+                  <p className="text-gray-600">+34 697 75 48 23</p>
                   <p className="text-sm text-gray-500">Lunes a Viernes, 9:00 - 20:00</p>
                 </div>
               </div>
@@ -56,7 +56,7 @@ const Contact: React.FC = () => {
                 <Mail className="w-6 h-6 text-nutrition-green mt-1" />
                 <div>
                   <h4 className="font-bold text-nutrition-black mb-1 title-playful">Email</h4>
-                  <p className="text-gray-600">info@joseantoniodiet.com</p>
+                  <p className="text-gray-600">consultajafn@gmail.com</p>
                   <p className="text-sm text-gray-500">Respuesta en 24 horas</p>
                 </div>
               </div>
@@ -67,8 +67,8 @@ const Contact: React.FC = () => {
                 <MapPin className="w-6 h-6 text-nutrition-green mt-1" />
                 <div>
                   <h4 className="font-bold text-nutrition-black mb-1 title-playful">Dirección</h4>
-                  <p className="text-gray-600">Calle de la Salud, 123</p>
-                  <p className="text-gray-600">28001 Madrid, España</p>
+                  <p className="text-gray-600">Contacte con el entrenador</p>
+               
                 </div>
               </div>
             </div>
