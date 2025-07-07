@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,7 +14,8 @@ import {
   Bell,
   MessageCircle,
   Home,
-  Newspaper
+  Newspaper,
+  Gift
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import MyGoals from './MyGoals';
@@ -24,6 +25,8 @@ import MyWorkouts from './MyWorkouts';
 import UserProfile from './UserProfile';
 import MySchedule from './MySchedule';
 import News from './News';
+import Gifts from './Gifts';
+import WelcomeGiftModal from './WelcomeGiftModal';
 import { useToast } from '@/hooks/use-toast';
 
 interface ClientDashboardProps {
@@ -32,9 +35,27 @@ interface ClientDashboardProps {
 }
 
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, hasActiveSubscription } = useAuth();
   const [currentView, setCurrentView] = useState<string>('dashboard');
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { toast } = useToast();
+
+  // Verificar si debe mostrar el modal de bienvenida
+  useEffect(() => {
+    if (user && hasActiveSubscription) {
+      const hasSeenWelcomeGift = localStorage.getItem(`welcome_gift_seen_${user.id}`);
+      if (!hasSeenWelcomeGift) {
+        setShowWelcomeModal(true);
+      }
+    }
+  }, [user, hasActiveSubscription]);
+
+  const handleCloseWelcomeModal = () => {
+    setShowWelcomeModal(false);
+    if (user) {
+      localStorage.setItem(`welcome_gift_seen_${user.id}`, 'true');
+    }
+  };
 
   const handleSignOut = async () => {
     try {
@@ -92,8 +113,18 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     return <News onGoBack={() => setCurrentView('dashboard')} />;
   }
 
+  if (currentView === 'gifts') {
+    return <Gifts onGoBack={() => setCurrentView('dashboard')} />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+      {/* Welcome Gift Modal */}
+      <WelcomeGiftModal 
+        isOpen={showWelcomeModal} 
+        onClose={handleCloseWelcomeModal} 
+      />
+
       {/* Header */}
       <header className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4">
@@ -221,6 +252,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
+          {/* Goals Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('goals')}
@@ -241,6 +273,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
+          {/* Progress Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('progress')}
@@ -261,6 +294,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
+          {/* Diets Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('diets')}
@@ -281,6 +315,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
+          {/* Workouts Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('workouts')}
@@ -301,6 +336,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
+          {/* Schedule Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('schedule')}
@@ -321,7 +357,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* New News Card */}
+          {/* News Card */}
           <Card 
             className="cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => setCurrentView('news')}
@@ -338,6 +374,27 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
               </p>
               <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
                 Ver Noticias
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* NEW: Gifts Card */}
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300"
+            onClick={() => setCurrentView('gifts')}
+          >
+            <CardHeader>
+              <CardTitle className="flex items-center text-orange-600">
+                <Gift className="w-5 h-5 mr-2" />
+                Gifts 🎁
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-orange-700 mb-4">
+                Accede a tus regalos exclusivos y descargas especiales.
+              </p>
+              <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold">
+                Ver Regalos
               </Button>
             </CardContent>
           </Card>
