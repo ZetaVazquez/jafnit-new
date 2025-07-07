@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Star } from 'lucide-react';
 
@@ -102,7 +103,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
   ];
 
   return (
-    <section id="testimonios" className="py-16 bg-gradient-to-br from-nutrition-green-lighter via-white to-nutrition-accent-light relative overflow-hidden">
+    <section id="testimonials" className="py-16 md:py-24 relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}

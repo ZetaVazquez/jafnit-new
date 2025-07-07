@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calculator, X } from 'lucide-react';
@@ -53,95 +54,118 @@ const BMICalculator: React.FC = () => {
   const isObesity = bmi && bmi >= 30;
 
   return (
-    <section id="portfolio" className="py-16 bg-gradient-to-br from-nutrition-green-lighter to-white relative overflow-hidden">
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
-            Calculadora de IMC
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Calcula tu Índice de Masa Corporal y descubre qué es lo que más te conviene
-          </p>
+    <>
+      <section id="bmi" className="py-20 dynamic-background relative overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Círculos grandes */}
+          <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+          <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+          <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+          <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+          
+          {/* Círculos medianos */}
+          <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
+          <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
+          <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
+          
+          {/* Triángulos */}
+          <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+          <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+          <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+          <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+          <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
         </div>
 
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
-          <div className="flex items-center justify-center mb-6">
-            <Calculator className="w-8 h-8 text-nutrition-green mr-3" />
-            <h3 className="text-2xl font-bold text-nutrition-black">IMC Calculator</h3>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-nutrition-black mb-4">
+              Calculadora de IMC
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Calcula tu Índice de Masa Corporal y descubre qué es lo que más te conviene
+            </p>
           </div>
 
-          <div className="space-y-6">
-            <div>
-              <label htmlFor="height" className="block text-sm font-medium text-gray-700 mb-2">
-                Altura (cm)
-              </label>
-              <input
-                type="number"
-                id="height"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
-                placeholder="Ej: 170"
-              />
+          <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+            <div className="flex items-center justify-center mb-6">
+              <Calculator className="w-8 h-8 text-nutrition-green mr-3" />
+              <h3 className="text-2xl font-bold text-nutrition-black">IMC Calculator</h3>
             </div>
 
-            <div>
-              <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-2">
-                Peso (kg)
-              </label>
-              <input
-                type="number"
-                id="weight"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
-                placeholder="Ej: 70"
-              />
-            </div>
-
-            <div className="flex space-x-3">
-              <Button
-                onClick={calculateBMI}
-                disabled={!height || !weight}
-                className="flex-1 bg-nutrition-green hover:bg-nutrition-green-dark text-white py-3"
-              >
-                Calcular IMC
-              </Button>
-              <Button
-                onClick={reset}
-                className="px-6 bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white py-3"
-              >
-                Reset
-              </Button>
-            </div>
-
-            {bmi && (
-              <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-                <div className="text-center mb-4">
-                  <p className="text-lg text-gray-600">Tu IMC es:</p>
-                  <p className="text-4xl font-bold text-nutrition-green">{bmi}</p>
-                  <p className={`text-lg font-semibold ${getBMICategory(bmi).color}`}>
-                    {getBMICategory(bmi).category}
-                  </p>
-                </div>
-                <div className="border-t pt-4">
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                    {recommendation}
-                  </p>
-                  {isObesity && (
-                    <Button
-                      onClick={() => setShowObesityModal(true)}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white py-2"
-                    >
-                      Consecuencias de la obesidad
-                    </Button>
-                  )}
-                </div>
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="height" className="block text-sm font-medium text-gray-700 mb-2">
+                  Altura (cm)
+                </label>
+                <input
+                  type="number"
+                  id="height"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
+                  placeholder="Ej: 170"
+                />
               </div>
-            )}
+
+              <div>
+                <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-2">
+                  Peso (kg)
+                </label>
+                <input
+                  type="number"
+                  id="weight"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
+                  placeholder="Ej: 70"
+                />
+              </div>
+
+              <div className="flex space-x-3">
+                <Button
+                  onClick={calculateBMI}
+                  disabled={!height || !weight}
+                  className="flex-1 bg-nutrition-green hover:bg-nutrition-green-dark text-white py-3"
+                >
+                  Calcular IMC
+                </Button>
+                <Button
+                  onClick={reset}
+                  className="px-6 bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white py-3"
+                >
+                  Reset
+                </Button>
+              </div>
+
+              {bmi && (
+                <div className="mt-8 p-6 bg-gray-50 rounded-lg">
+                  <div className="text-center mb-4">
+                    <p className="text-lg text-gray-600">Tu IMC es:</p>
+                    <p className="text-4xl font-bold text-nutrition-green">{bmi}</p>
+                    <p className={`text-lg font-semibold ${getBMICategory(bmi).color}`}>
+                      {getBMICategory(bmi).category}
+                    </p>
+                  </div>
+                  <div className="border-t pt-4">
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                      {recommendation}
+                    </p>
+                    {isObesity && (
+                      <Button
+                        onClick={() => setShowObesityModal(true)}
+                        className="w-full bg-red-600 hover:bg-red-700 text-white py-2"
+                      >
+                        Consecuencias de la obesidad
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Modal de consecuencias de la obesidad */}
       <Dialog open={showObesityModal} onOpenChange={setShowObesityModal}>
@@ -246,7 +270,7 @@ const BMICalculator: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </section>
+    </>
   );
 };
 

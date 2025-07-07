@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { FAQ as FAQType } from '@/types';
@@ -94,7 +95,7 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-16 bg-white relative overflow-hidden">
+    <section id="faq" className="py-32 relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}

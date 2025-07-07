@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import LoginModal from '@/components/Auth/LoginModal';
 
 interface HeaderProps {
   isLoggedIn: boolean;
@@ -32,11 +31,10 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const navigationItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Sobre Mi', href: '#sobre-mi' },
+    { label: 'Sobre Nosotros', href: '#sobre-nosotros' },
     { label: 'Servicios', href: '#servicios' },
     { label: 'Portfolio', href: '#portfolio' },
     { label: 'Noticias', href: '#noticias' },
@@ -65,21 +63,6 @@ const Header: React.FC<HeaderProps> = ({
       onRegister();
     }
     setIsMenuOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    setShowLoginModal(true);
-    setIsMenuOpen(false);
-  };
-
-  const handleLoginModalClose = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleLoginSubmit = (email: string, password: string) => {
-    console.log('Login attempt:', { email, password });
-    onLogin();
-    setShowLoginModal(false);
   };
 
   const handleChatWithTrainer = () => {
@@ -173,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({
                 <div className="hidden lg:flex items-center space-x-2">
                   {/* Login button with updated colors */}
                   <Button
-                    onClick={handleLoginClick}
+                    onClick={onLogin}
                     className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                   >
                     Iniciar Sesión
@@ -268,7 +251,10 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="px-4 mt-4 space-y-2">
                     {/* Mobile Login button with updated colors */}
                     <Button
-                      onClick={handleLoginClick}
+                      onClick={() => {
+                        onLogin();
+                        setIsMenuOpen(false);
+                      }}
                       className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
                     >
                       Iniciar Sesión
@@ -286,15 +272,6 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </header>
-
-      {/* Login Modal */}
-      {showLoginModal && (
-        <LoginModal
-          onClose={handleLoginModalClose}
-          onLogin={handleLoginSubmit}
-          initialMode="login"
-        />
-      )}
 
       {/* Sidebar for logged-in users */}
       {isSidebarOpen && (
