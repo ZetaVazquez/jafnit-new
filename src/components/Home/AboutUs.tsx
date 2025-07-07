@@ -52,10 +52,10 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         {/* Vertical Journey Path */}
         <div className="relative max-w-5xl mx-auto">
           {/* Dynamic serpentine path with gradient and animation */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-20 transform -translate-x-1/2 pointer-events-none">
+          <div className="absolute left-1/2 top-0 w-20 transform -translate-x-1/2 pointer-events-none" style={{ height: '90%' }}>
             <svg 
               className="w-full h-full" 
-              viewBox="0 0 80 1000" 
+              viewBox="0 0 80 900" 
               preserveAspectRatio="none"
               fill="none" 
               xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               
               {/* Background glow path */}
               <path 
-                d="M40 0 C60 50, 20 100, 60 150 C20 200, 60 250, 20 300 C60 350, 20 400, 60 450 C20 500, 60 550, 20 600 C60 650, 20 700, 60 750 C20 800, 60 850, 40 900 L40 1000" 
+                d="M40 0 C60 60, 20 120, 60 180 C20 240, 60 300, 20 360 C60 420, 20 480, 60 540 C20 600, 60 660, 20 720 C60 780, 20 840, 40 900" 
                 stroke="url(#pathGradient)" 
                 strokeWidth="8" 
                 strokeDasharray="12,8"
@@ -90,7 +90,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               
               {/* Main animated path */}
               <path 
-                d="M40 0 C60 50, 20 100, 60 150 C20 200, 60 250, 20 300 C60 350, 20 400, 60 450 C20 500, 60 550, 20 600 C60 650, 20 700, 60 750 C20 800, 60 850, 40 900 L40 1000" 
+                d="M40 0 C60 60, 20 120, 60 180 C20 240, 60 300, 20 360 C60 420, 20 480, 60 540 C20 600, 60 660, 20 720 C60 780, 20 840, 40 900" 
                 stroke="url(#pathGradient)" 
                 strokeWidth="4" 
                 strokeDasharray="12,8"
