@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import TestimonialsModal from './TestimonialsModal';
 
 interface TestimonialsProps {
   onStartQuestionnaire: () => void;
 }
 
 const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const testimonialSections = [
     {
       title: "ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴",
@@ -134,37 +137,46 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
           </p>
         </div>
 
-        {/* Render each testimonial section */}
-        {testimonialSections.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="mb-16 md:mb-20">
-            {/* Section Title - Made smaller */}
-            <div className="text-center mb-8 md:mb-12">
-              <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-nutrition-green mb-4 title-playful">
-                {section.title}
-              </h3>
-            </div>
-
-            {/* Testimonials Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {section.testimonials.map((testimonial) => (
-                <div key={testimonial.id} className="bg-white/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <div className="flex items-center mb-4">
-                    <div>
-                      <h4 className="font-bold text-nutrition-black text-sm md:text-base title-playful mb-2">{testimonial.name}</h4>
-                      <div className="flex">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-current text-nutrition-green" />
-                        ))}
-                      </div>
+        {/* Show only 4 testimonials (one from each section) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-12">
+          {testimonialSections.map((section, sectionIndex) => {
+            // Take the first testimonial from each section
+            const testimonial = section.testimonials[0];
+            return (
+              <div key={testimonial.id} className="bg-white/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <div className="flex items-center mb-4">
+                  <div>
+                    <h4 className="font-bold text-nutrition-black text-sm md:text-base title-playful mb-2">{testimonial.name}</h4>
+                    <div className="flex">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current text-nutrition-green" />
+                      ))}
                     </div>
                   </div>
-                  <p className="text-nutrition-green-dark text-sm md:text-base leading-relaxed">"{testimonial.comment}"</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
+                <p className="text-nutrition-green-dark text-sm md:text-base leading-relaxed">"{testimonial.comment}"</p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* More Testimonials Button */}
+        <div className="text-center">
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            MÁS COMENTARIOS
+          </Button>
+        </div>
       </div>
+
+      {/* Testimonials Modal */}
+      <TestimonialsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        testimonialSections={testimonialSections}
+      />
     </section>
   );
 };

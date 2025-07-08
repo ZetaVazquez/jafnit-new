@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, FileText, Dumbbell, DollarSign, TrendingUp, Calendar, Home, LogOut, Clock, PlusCircle } from 'lucide-react';
+import { Users, FileText, Dumbbell, DollarSign, TrendingUp, Calendar, Home, LogOut, Clock, PlusCircle, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AdminClientsTable from './AdminClientsTable';
@@ -10,6 +10,7 @@ import AdminWorkoutManager from './AdminWorkoutManager';
 import AdminEarnings from './AdminEarnings';
 import AdminPendingPayments from './AdminPendingPayments';
 import AdminNewsManager from './AdminNewsManager';
+import AdminTestimonials from './AdminTestimonials';
 import { useToast } from '@/hooks/use-toast';
 
 interface AdminDashboardProps {
@@ -18,7 +19,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials'>('overview');
   const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
@@ -110,6 +111,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
         return <AdminPendingPayments onGoBack={() => setCurrentView('overview')} />;
       case 'news':
         return <AdminNewsManager onGoBack={() => setCurrentView('overview')} />;
+      case 'testimonials':
+        return <AdminTestimonials />;
       default:
         return (
           <div className="container mx-auto px-4 py-8">
@@ -216,6 +219,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold text-nutrition-black">Creación de Noticias</h3>
                       <p className="text-nutrition-gray">{totalNews} noticias creadas</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('testimonials')}>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="p-3 bg-indigo-100 rounded-lg">
+                      <MessageSquare className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="text-lg font-semibold text-nutrition-black">Gestión de Comentarios</h3>
+                      <p className="text-nutrition-gray">Revisar testimonios</p>
                     </div>
                   </div>
                 </CardContent>
