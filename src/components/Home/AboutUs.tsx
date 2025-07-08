@@ -199,7 +199,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                        Así ajustamos el plan y seguimos avanzando.<br />
                       🧭 ¿Te vas de vacaciones o has tenido una mala semana?
                       No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.<br />
-                       ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.
+                       ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.<br />
                       🔁 Esto va más allá del físico
                       Mi objetivo es que cambies tu forma de ver el fitness.<br />
                        Que construyas un cuerpo que te guste sin obsesiones, sin extremos.
