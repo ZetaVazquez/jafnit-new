@@ -220,8 +220,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
             <p className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                 Llevas tiempo pensándolo.. sabes que necesitas un cambio… y ya no te vale hacerlo solo, sin guía ni resultados.
-                Este programa no va de castigar tu cuerpo. Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.\n
-                🎯 Aquí no hay fórmulas mágicas.Solo lo que funciona, adaptado a tu estilo de vida.
+                Este programa no va de castigar tu cuerpo. Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.<br />
+                🎯 Aquí no hay fórmulas mágicas.Solo lo que funciona, adaptado a tu estilo de vida.<br />
                 📌 ¿Para quién es esto?<br />
                  ✅ Para quien está cansado de hacer todo bien… pero no ver resultados.<br />
                  ✅ Para quien entrena, pero no sabe si lo está haciendo bien.<br />
