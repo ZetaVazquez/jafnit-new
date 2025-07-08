@@ -43,10 +43,11 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             🎯 ES TU TURNO ⭐
           </p>
           <p className="text-sm text-nutrition-gray leading-relaxed">
-            Ya has probado de todo pero nunca lo habías hecho con estrategia, guía y seguimiento de verdad…
-            AUNQUE… Llevas tiempo pensando que algo tiene que cambiar. Y lo sabes. Este programa no va de dejar de comer o pasarte el día entrenando. Va de construir un cuerpo y unos hábitos que puedas mantener PARA SIEMPRE.
-            Olvida las dietas que no aguantas ni dos semanas. Empieza a entrenar con un plan que tenga sentido para ti.
-            🔹 No necesitas tener todo perfecto. Solo necesitas empezar. Yo te guío, tú te comprometes. Y el cambio llega.                    </p>
+            Ya has probado de todo pero nunca lo habías hecho con estrategia, guía y seguimiento de verdad…</br>
+            AUNQUE… Llevas tiempo pensando que algo tiene que cambiar. Y lo sabes. Este programa no va de dejar de comer o pasarte el día entrenando. Va de construir un cuerpo y unos hábitos que puedas mantener PARA SIEMPRE.</br>
+            Olvida las dietas que no aguantas ni dos semanas. Empieza a entrenar con un plan que tenga sentido para ti.</br>
+            🔹 No necesitas tener todo perfecto. Solo necesitas empezar. Yo te guío, tú te comprometes. Y el cambio llega.</br>
+          </p>
         </div>
 
         {/* Vertical Journey Path */}
@@ -111,11 +112,11 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                       ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.
-                       👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer.
-                      Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.
-                      Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados. Punto.
-                      🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.
+                      Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.</br>
+                       👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer</br>.
+                      Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.</br>
+                      Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.</br>
+                      🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.</br>
                       Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.                 
                     </p>
                   </div>
@@ -140,11 +141,11 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                       NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO 🏋️‍♂️                   
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                        O si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.
-                        Tu cuerpo puede mucho más de lo que crees.
-                         💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.
-                        👉 Entrenarás con estrategia, con técnica y con confianza.
-                        🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.
+                        O si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.</br>
+                        Tu cuerpo puede mucho más de lo que crees.</br>
+                         💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.</br>
+                        👉 Entrenarás con estrategia, con técnica y con confianza.</br>
+                        🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.</br>
                         Nada de rutinas copiadas, nada de ejercicios que no entiendes. Aquí todo tiene sentido y propósito.
                     </p>
                   </div>
@@ -161,13 +162,13 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                      SIN COMUNICACIÓN, NO HAY RESULTADOS 📲💬
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      No es solo un plan. Es un proceso en equipo con un SEGUIMIENTO INDIVIDUALIZADO.
-                      Para que logres tus objetivos, necesito saber cómo estás, qué necesitas y cómo te estás sintiendo.
-                      👉 Sin tus mensajes, no puedo ayudarte ni ajustar tu plan.
-                       Este no es un servicio enlatado: es un acompañamiento real y constante.
-                      💡 Siempre hay otra opción que sí se adapta a ti
+                      No es solo un plan. Es un proceso en equipo con un SEGUIMIENTO INDIVIDUALIZADO.</br>
+                      Para que logres tus objetivos, necesito saber cómo estás, qué necesitas y cómo te estás sintiendo.</br>
+                      👉 Sin tus mensajes, no puedo ayudarte ni ajustar tu plan.</br>
+                       Este no es un servicio enlatado: es un acompañamiento real y constante.</br>
+                      💡 Siempre hay otra opción que sí se adapta a ti.</br>
                       No importa si algo no te gusta o se te complica.
-                       🔁 Siempre hay una solución. Siempre hay una alternativa.
+                       🔁 Siempre hay una solución. Siempre hay una alternativa.</br>
                       Lo importante es que te guste, te funcione y lo mantengas.                    
                     </p>
                   </div>
@@ -192,17 +193,17 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                      EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE 🧠📈
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Esto no es una carrera de 30 días ni de una semana.
-                       Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.
-                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más.
-                       Así ajustamos el plan y seguimos avanzando.
+                      Esto no es una carrera de 30 días ni de una semana.</br>
+                       Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.</br>
+                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más.</br>
+                       Así ajustamos el plan y seguimos avanzando.</br>
                       🧭 ¿Te vas de vacaciones o has tenido una mala semana?
-                      No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.
+                      No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.</br>
                        ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.
                       🔁 Esto va más allá del físico
-                      Mi objetivo es que cambies tu forma de ver el fitness.
+                      Mi objetivo es que cambies tu forma de ver el fitness.</br>
                        Que construyas un cuerpo que te guste sin obsesiones, sin extremos.
-                       Y sobre todo: que te dure para siempre.
+                       Y sobre todo: que te dure para siempre.</br>
                     </p>
                   </div>
                 </div>
@@ -219,15 +220,15 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </div>
             <p className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                 Llevas tiempo pensándolo.. sabes que necesitas un cambio… y ya no te vale hacerlo solo, sin guía ni resultados.
-                Este programa no va de castigar tu cuerpo. Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.
+                Este programa no va de castigar tu cuerpo. Va de construir un físico del que estés orgulloso, con estrategias que realmente encajan contigo.\n
                 🎯 Aquí no hay fórmulas mágicas.Solo lo que funciona, adaptado a tu estilo de vida.
-                📌 ¿Para quién es esto?
-                 ✅ Para quien está cansado de hacer todo bien… pero no ver resultados.
-                 ✅ Para quien entrena, pero no sabe si lo está haciendo bien.
-                 ✅ Para quien quiere dejar atrás la ansiedad con la comida.
-                 ✅ Para quien quiere recuperar su autoestima y su energía.
-                🔥 Si estás listo para dejar de improvisar, y empezar de verdad…
-                👉 Rellena el formulario ahora y empieza tu cambio real.
+                📌 ¿Para quién es esto?</br>
+                 ✅ Para quien está cansado de hacer todo bien… pero no ver resultados.</br>
+                 ✅ Para quien entrena, pero no sabe si lo está haciendo bien.</br>
+                 ✅ Para quien quiere dejar atrás la ansiedad con la comida.</br>
+                 ✅ Para quien quiere recuperar su autoestima y su energía.</br>
+                🔥 Si estás listo para dejar de improvisar, y empezar de verdad…</br>
+                👉 Rellena el formulario ahora y empieza tu cambio real.</br>
              </p>
             <Button 
               onClick={onQuestionnaireOpen}
