@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, Check, X, Trash2 } from 'lucide-react';
+import { Star, Check, X, Trash2, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -24,7 +24,11 @@ interface UserTestimonial {
   user_id: string;
 }
 
-const AdminTestimonials: React.FC = () => {
+interface AdminTestimonialsProps {
+  onBack?: () => void;
+}
+
+const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
   const [testimonials, setTestimonials] = useState<UserTestimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -151,7 +155,20 @@ const AdminTestimonials: React.FC = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>Gestión de Comentarios</span>
+          <div className="flex items-center gap-4">
+            {onBack && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onBack}
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Volver
+              </Button>
+            )}
+            <span>Gestión de Comentarios</span>
+          </div>
           <Badge variant="outline">
             {testimonials.filter(t => t.status === 'pending').length} pendientes
           </Badge>

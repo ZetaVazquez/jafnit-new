@@ -112,7 +112,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
       case 'news':
         return <AdminNewsManager onGoBack={() => setCurrentView('overview')} />;
       case 'testimonials':
-        return <AdminTestimonials />;
+        return <AdminTestimonials onBack={() => setCurrentView('overview')} />;
       default:
         return (
           <div className="container mx-auto px-4 py-8">
