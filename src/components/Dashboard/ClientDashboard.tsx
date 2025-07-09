@@ -27,6 +27,7 @@ import MySchedule from './MySchedule';
 import News from './News';
 import Gifts from './Gifts';
 import WelcomeGiftModal from './WelcomeGiftModal';
+import SubscriptionInfo from './SubscriptionInfo';
 import { useToast } from '@/hooks/use-toast';
 
 interface ClientDashboardProps {
@@ -227,6 +228,11 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Subscription Info */}
+        <div className="mb-8">
+          <SubscriptionInfo />
         </div>
 
         {/* Main Dashboard Cards */}

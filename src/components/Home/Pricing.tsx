@@ -3,12 +3,51 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Check, X } from 'lucide-react';
 import { PricingPlan } from '@/types';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface PricingProps {
   onStartQuestionnaire: () => void;
 }
 
 const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  
+  const handleSelectPlan = async (planType: string) => {
+    if (!user) {
+      // If not authenticated, redirect to questionnaire first
+      onStartQuestionnaire();
+      return;
+    }
+
+    try {
+      toast({
+        title: "Procesando...",
+        description: "Redirigiendo a Stripe Checkout"
+      });
+
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { planType }
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        // Open Stripe checkout in a new tab
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo procesar el pago. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const plans: PricingPlan[] = [
     {
       id: '1',
@@ -46,7 +85,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
     {
       id: '3',
       name: 'Plan PRO',
-      duration: 'Duración mínima 3 meses',
+      duration: 'Duración mínima 6 meses',
       price: '€300',
       features: [
         'Dirigido a personas comprometidas con un cambio completo',
@@ -143,14 +182,17 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
                 </ul>
 
                 <Button
-                  onClick={onStartQuestionnaire}
+                  onClick={() => {
+                    const planType = plan.id === '1' ? 'basic' : plan.id === '2' ? 'premium' : 'pro';
+                    user ? handleSelectPlan(planType) : onStartQuestionnaire();
+                  }}
                   className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
                     plan.highlighted
                       ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
                       : 'bg-nutrition-green-light hover:bg-nutrition-green text-nutrition-green-dark hover:text-white'
                   }`}
                 >
-                  Elegir Plan
+                  {user ? 'Contratar Plan' : 'Elegir Plan'}
                 </Button>
               </div>
             </div>
