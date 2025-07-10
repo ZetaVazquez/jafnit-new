@@ -14,6 +14,7 @@ import BMICalculator from '@/components/Home/BMICalculator';
 import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
+import SubscriptionGuard from '@/components/SubscriptionGuard';
 import { useAuth } from '@/hooks/useAuth';
 import DynamicBackground from '@/components/Layout/DynamicBackground';
 
@@ -54,7 +55,9 @@ const Index = () => {
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
-      <ClientDashboard onNavigateToHome={handleBackToHome} />
+      <SubscriptionGuard strictMode={true}>
+        <ClientDashboard onNavigateToHome={handleBackToHome} />
+      </SubscriptionGuard>
     );
   }
 

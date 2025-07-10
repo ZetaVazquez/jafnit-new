@@ -7,19 +7,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ForcedPaymentModal from './ForcedPaymentModal';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: 'login' | 'register';
   onSuccess?: () => void;
+  onRegistrationSuccess?: () => void;
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ 
   isOpen, 
   onClose, 
   initialTab = 'login',
-  onSuccess 
+  onSuccess,
+  onRegistrationSuccess 
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +33,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
     confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
@@ -115,7 +119,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
           description: "Tu cuenta ha sido creada correctamente.",
         });
         onClose();
-        onSuccess?.();
+        // Mostrar modal de pago forzoso después del registro
+        setShowPaymentModal(true);
+        onRegistrationSuccess?.();
       }
     } catch (error) {
       toast({
@@ -132,7 +138,23 @@ const AuthModal: React.FC<AuthModalProps> = ({
     setActiveTab(initialTab);
   }, [initialTab]);
 
+  const handlePaymentCompleted = () => {
+    setShowPaymentModal(false);
+    onSuccess?.();
+  };
+
+  const handleAccountClosure = () => {
+    setShowPaymentModal(false);
+    // El usuario será redirigido al inicio automáticamente por el signOut
+  };
+
   return (
+    <>
+      <ForcedPaymentModal
+        isOpen={showPaymentModal}
+        onPaymentCompleted={handlePaymentCompleted}
+        onAccountClosure={handleAccountClosure}
+      />
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -265,6 +287,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
         </Tabs>
       </DialogContent>
     </Dialog>
+    </>
   );
 };
 

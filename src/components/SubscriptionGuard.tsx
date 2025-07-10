@@ -1,18 +1,34 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/hooks/useAuth';
 import PlanRecommendationModal from '@/components/Dashboard/PlanRecommendationModal';
+import ForcedPaymentModal from '@/components/Auth/ForcedPaymentModal';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
+  strictMode?: boolean; // Para activar modo estricto con temporizador
 }
 
 const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({ 
   children, 
-  fallback 
+  fallback,
+  strictMode = false 
 }) => {
-  const { hasActiveSubscription, loading, isExpired } = useSubscription();
+  const { hasActiveSubscription, loading, isExpired, refreshSubscription } = useSubscription();
+  const { user, signOut } = useAuth();
+
+  // Verificar suscripción cada 30 segundos en modo estricto
+  useEffect(() => {
+    if (!strictMode || !user) return;
+
+    const interval = setInterval(() => {
+      refreshSubscription();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [strictMode, user, refreshSubscription]);
 
   if (loading) {
     return (
@@ -25,11 +41,32 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
     );
   }
 
+  const handlePaymentCompleted = () => {
+    refreshSubscription();
+  };
+
+  const handleAccountClosure = async () => {
+    await signOut();
+    window.location.href = '/';
+  };
+
   if (!hasActiveSubscription || isExpired) {
     if (fallback) {
       return <>{fallback}</>;
     }
 
+    // En modo estricto, mostrar modal de pago forzoso
+    if (strictMode) {
+      return (
+        <ForcedPaymentModal
+          isOpen={true}
+          onPaymentCompleted={handlePaymentCompleted}
+          onAccountClosure={handleAccountClosure}
+        />
+      );
+    }
+
+    // En modo normal, mostrar modal de recomendación
     return (
       <PlanRecommendationModal
         isOpen={true}
