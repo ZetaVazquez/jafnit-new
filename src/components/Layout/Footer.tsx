@@ -1,9 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
+import TermsModal from '@/components/Auth/TermsModal';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   const socialLinks = [
     { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
@@ -40,6 +42,16 @@ const Footer: React.FC = () => {
             ))}
           </div>
 
+          {/* Legal Links */}
+          <div className="mb-6">
+            <button
+              onClick={() => setIsTermsModalOpen(true)}
+              className="text-gray-400 hover:text-nutrition-green text-sm underline transition-colors"
+            >
+              Términos y Condiciones y Política de Privacidad
+            </button>
+          </div>
+
           {/* Copyright */}
           <div className="border-t border-gray-600 pt-6">
             <p className="text-gray-400 text-sm">
@@ -51,6 +63,11 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <TermsModal 
+        isOpen={isTermsModalOpen} 
+        onClose={() => setIsTermsModalOpen(false)} 
+      />
     </footer>
   );
 };
