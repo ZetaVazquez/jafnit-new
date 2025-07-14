@@ -80,22 +80,24 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               
               {/* Background glow path */}
               <path 
-                d="M40 0 C60 60, 20 120, 60 180 C20 240, 60 300, 20 360 C60 420, 20 480, 60 540 C20 600, 60 660, 20 720 C60 780, 20 840, 40 900" 
+                d="M40 0 L10 100 L70 200 L5 300 L75 400 L8 500 L72 600 L10 700 L70 800 L40 900" 
                 stroke="url(#pathGradient)" 
                 strokeWidth="8" 
                 strokeDasharray="12,8"
                 strokeLinecap="round"
+                strokeLinejoin="round"
                 filter="url(#glow)"
                 opacity="0.7"
               />
               
               {/* Main animated path */}
               <path 
-                d="M40 0 C60 60, 20 120, 60 180 C20 240, 60 300, 20 360 C60 420, 20 480, 60 540 C20 600, 60 660, 20 720 C60 780, 20 840, 40 900" 
+                d="M40 0 L10 100 L70 200 L5 300 L75 400 L8 500 L72 600 L10 700 L70 800 L40 900" 
                 stroke="url(#pathGradient)" 
                 strokeWidth="4" 
                 strokeDasharray="12,8"
                 strokeLinecap="round"
+                strokeLinejoin="round"
                 className="animate-pulse"
               />
             </svg>
