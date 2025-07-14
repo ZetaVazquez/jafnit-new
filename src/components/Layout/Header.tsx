@@ -46,6 +46,15 @@ const Header: React.FC<HeaderProps> = ({
     { label: 'Contacto', href: '#contacto' },
   ];
 
+  const handleNavClick = (href: string) => {
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
   const sidebarItems = [
     { label: 'Mi Perfil', icon: User, href: '#profile' },
     { label: 'Configuraciones', icon: Settings, href: '#settings' },
@@ -111,13 +120,13 @@ const Header: React.FC<HeaderProps> = ({
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
               {navigationItems.map((item) => (
-                <a
+                <button
                   key={item.label}
-                  href={item.href}
+                  onClick={() => handleNavClick(item.href)}
                   className="text-sm xl:text-base text-nutrition-black hover:text-nutrition-green-emerald transition-colors duration-200 font-medium"
                 >
                   {item.label}
-                </a>
+                </button>
               ))}
             </nav>
 
@@ -204,14 +213,13 @@ const Header: React.FC<HeaderProps> = ({
             <div className="lg:hidden border-t bg-white">
               <nav className="py-4 space-y-2">
                 {navigationItems.map((item) => (
-                  <a
+                  <button
                     key={item.label}
-                    href={item.href}
-                    className="block px-4 py-2 text-nutrition-black hover:text-nutrition-green-emerald hover:bg-gray-50 transition-colors duration-200"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => handleNavClick(item.href)}
+                    className="block w-full text-left px-4 py-2 text-nutrition-black hover:text-nutrition-green-emerald hover:bg-gray-50 transition-colors duration-200"
                   >
                     {item.label}
-                  </a>
+                  </button>
                 ))}
                 
                 {isLoggedIn ? (

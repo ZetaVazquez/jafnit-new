@@ -15,12 +15,14 @@ import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
+import AuthModal from '@/components/Auth/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
 import DynamicBackground from '@/components/Layout/DynamicBackground';
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showRegistrationAfterQuestionnaire, setShowRegistrationAfterQuestionnaire] = useState(false);
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
@@ -31,7 +33,17 @@ const Index = () => {
     setShowQuestionnaire(false);
   };
 
+  const handleQuestionnaireComplete = () => {
+    setShowQuestionnaire(false);
+    setShowRegistrationAfterQuestionnaire(true);
+  };
+
   const handleGoToDashboard = () => {
+    setShowDashboard(true);
+  };
+
+  const handleRegistrationComplete = () => {
+    setShowRegistrationAfterQuestionnaire(false);
     setShowDashboard(true);
   };
 
@@ -65,8 +77,31 @@ const Index = () => {
     return (
       <Questionnaire 
         onClose={handleCloseQuestionnaire}
-        onComplete={handleGoToDashboard}
+        onComplete={handleQuestionnaireComplete}
       />
+    );
+  }
+
+  if (showRegistrationAfterQuestionnaire) {
+    return (
+      <div className="min-h-screen">
+        <DynamicBackground>
+          <Header 
+            isLoggedIn={!!user}
+            onLogin={handleLogin}
+            onRegister={handleRegister}
+            onLogout={handleLogout}
+            onNavigateToHome={handleBackToHome}
+            onNavigateToDashboard={handleGoToDashboard}
+          />
+          <AuthModal 
+            isOpen={true}
+            onClose={() => setShowRegistrationAfterQuestionnaire(false)}
+            onSuccess={handleRegistrationComplete}
+            initialTab="register"
+          />
+        </DynamicBackground>
+      </div>
     );
   }
 
