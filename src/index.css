@@ -7,11 +7,11 @@
 
 @layer base {
   :root {
-    --background: 255 255 255;
-    --foreground: 17 24 39;
-    --border: 229 231 235;
-    --input: 229 231 235;
-    --ring: 34 197 94;
+    --background: 0 0% 100%;
+    --foreground: 222 84% 4.9%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 142 76% 36%;
     --radius: 0.5rem;
   }
 
