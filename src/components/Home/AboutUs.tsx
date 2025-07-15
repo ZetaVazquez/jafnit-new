@@ -103,8 +103,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             </svg>
           </div>
 
-          {/* Journey Steps with reduced spacing */}
-          <div className="space-y-16">
+          {/* Journey Steps with compact spacing */}
+          <div className="space-y-8">
             {/* Step 1 - Left side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8">
