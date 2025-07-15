@@ -107,7 +107,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           <div className="space-y-2">
             {/* Step 1 - Left side */}
             <div className="flex items-center">
-              <div className="w-1/2 pr-8">
+              <div className="w-2/2 pr-8">
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
@@ -115,7 +115,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                     </h3>
                     <p className="text-sm text-nutrition-gray leading-relaxed">
                       Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.<br />
-                       👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer<br />
+                       👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer
                       Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.<br />
                       Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.<br />
                       🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.<br />
@@ -197,11 +197,8 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                     <p className="text-sm text-nutrition-gray leading-relaxed">
                       Esto no es una carrera de 30 días ni de una semana.<br />
                        Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.<br />
-                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más.<br />
-                       Así ajustamos el plan y seguimos avanzando.<br />
-                      🧭 ¿Te vas de vacaciones o has tenido una mala semana?
-                      No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.<br />
-                       ¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.<br />
+                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más. Así ajustamos el plan y seguimos avanzando.<br />
+                      🧭 ¿Te vas de vacaciones o has tenido una mala semana? No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.<br />
                       🔁 Esto va más allá del físico
                       Mi objetivo es que cambies tu forma de ver el fitness.<br />
                        Que construyas un cuerpo que te guste sin obsesiones, sin extremos.
