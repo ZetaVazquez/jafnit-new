@@ -53,7 +53,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         {/* Vertical Journey Path */}
         <div className="relative max-w-5xl mx-auto">
           {/* Dynamic serpentine path with gradient and animation */}
-          <div className="absolute left-1/2 top-0 w-20 transform -translate-x-1/2 pointer-events-none" style={{ height: '90%' }}>
+          <div className="absolute left-1/2 top-0 w-20 transform -translate-x-1/2 pointer-events-none" style={{ height: '70%' }}>
             <svg 
               className="w-full h-full" 
               viewBox="0 0 80 900" 
@@ -104,7 +104,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
 
           {/* Journey Steps with compact spacing */}
-          <div className="space-y-8">
+          <div className="space-y-2">
             {/* Step 1 - Left side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8">
