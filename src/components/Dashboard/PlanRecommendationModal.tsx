@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Check, Star } from 'lucide-react';
-import BizumPaymentProcess from './BizumPaymentProcess';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 interface PlanRecommendationModalProps {
   isOpen: boolean;
@@ -20,13 +22,14 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   recommendedPlan
 }) => {
   const [selectedPlan, setSelectedPlan] = useState(recommendedPlan);
-  const [showPaymentProcess, setShowPaymentProcess] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   const plans = {
     monthly: {
-      name: 'Plan Mensual',
+      name: 'Plan Básico',
       price: '€75',
-      duration: '1 mes',
+      duration: 'Pago único',
       features: [
         'Evaluación inicial completa',
         'Plan de alimentación personalizado',
@@ -37,9 +40,9 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       ]
     },
     quarterly: {
-      name: 'Plan Trimestral',
-      price: '€210',
-      duration: '3 meses',
+      name: 'Plan Premium',
+      price: '€120',
+      duration: 'Por mes',
       features: [
         'Todo lo del plan mensual',
         'Evaluación médica avanzada',
@@ -49,23 +52,52 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
         'Recetas personalizadas',
         'Acceso a la app móvil premium',
         '2 sesiones de entrenamiento personal',
-        'Ahorro de €15 al mes'
+        'Seguimiento mensual personalizado'
       ]
     }
   };
 
-  const handlePayment = () => {
-    setShowPaymentProcess(true);
-  };
+  const handleStripePayment = async () => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "Debes estar logueado para realizar el pago.",
+        variant: "destructive"
+      });
+      return;
+    }
 
-  const handlePaymentClose = () => {
-    setShowPaymentProcess(false);
-    onClose();
+    try {
+      toast({
+        title: "Procesando...",
+        description: "Redirigiendo a Stripe Checkout"
+      });
+
+      const planType = selectedPlan === 'monthly' ? 'basic' : 'premium';
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { planType }
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        // Open Stripe checkout in a new tab
+        window.open(data.url, '_blank');
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo procesar el pago. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
     <>
-      <Dialog open={isOpen && !showPaymentProcess} onOpenChange={onClose}>
+      <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto dynamic-background relative">
           {/* Decorative background elements reducidos para el modal */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
@@ -135,12 +167,12 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                 <h3 className="font-bold text-nutrition-green-dark mb-2 title-playful">Método de Pago</h3>
                 <div className="flex items-center space-x-2">
                   <div className="bg-white p-2 rounded">
-                    <span className="text-nutrition-green font-bold">Bizum</span>
+                    <span className="text-nutrition-green font-bold">Stripe</span>
                   </div>
-                  <span className="text-nutrition-gray">Pago seguro y rápido</span>
+                  <span className="text-nutrition-gray">Pago seguro con tarjeta</span>
                 </div>
                 <p className="text-sm text-nutrition-gray mt-2">
-                  Realiza el pago por Bizum y envíanos el comprobante para activar tu suscripción
+                  Pago seguro procesado por Stripe con activación inmediata
                 </p>
               </div>
 
@@ -153,10 +185,10 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                   Decidir Más Tarde
                 </Button>
                 <Button
-                  onClick={handlePayment}
+                  onClick={handleStripePayment}
                   className="flex-1"
                 >
-                  Pagar con Bizum
+                  Pagar con Stripe
                 </Button>
               </div>
             </div>
@@ -164,12 +196,6 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
         </DialogContent>
       </Dialog>
 
-      <BizumPaymentProcess
-        isOpen={showPaymentProcess}
-        onClose={handlePaymentClose}
-        selectedPlan={selectedPlan}
-        planDetails={plans[selectedPlan]}
-      />
     </>
   );
 };
