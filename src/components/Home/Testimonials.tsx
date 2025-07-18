@@ -105,7 +105,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
   ];
 
   return (
-    <section id="testimonios" className="py-16 bg-gradient-to-br from-nutrition-green-lighter via-white to-nutrition-accent-light relative overflow-hidden">
+    <section id="testimonios" className="py-16 bg-white relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}
@@ -143,7 +143,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
             // Take the first testimonial from each section
             const testimonial = section.testimonials[0];
             return (
-              <div key={testimonial.id} className="bg-white/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div key={testimonial.id} className="bg-gray-50/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300 hover:scale-105">
                 <div className="flex items-center mb-4">
                   <div>
                     <h4 className="font-bold text-nutrition-black text-sm md:text-base title-playful mb-2">{testimonial.name}</h4>

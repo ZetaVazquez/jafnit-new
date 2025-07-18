@@ -49,7 +49,20 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   };
 
   return (
-    <section id="inicio" className="relative h-[75vh] lg:h-[80vh] overflow-hidden">
+    <section id="inicio" className="relative h-[75vh] lg:h-[80vh] overflow-hidden bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+      </div>
+
       {slides.map((slide, index) => (
         <div
           key={index}

@@ -101,7 +101,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
   ];
 
   return (
-    <section id="pricing" className="py-12 relative overflow-hidden">
+    <section id="pricing" className="py-12 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}
@@ -124,11 +124,24 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+          <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+          <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+          <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+          
+          <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+          <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+          <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+          <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+        </div>
+
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
+          <h2 className="text-4xl font-bold text-white mb-4">
             Planes y Precios
           </h2>
-          <p className="text-xl text-nutrition-gray max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Elige el plan que mejor se adapte a tus objetivos y presupuesto
           </p>
         </div>

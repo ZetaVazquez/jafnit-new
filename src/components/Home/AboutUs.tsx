@@ -8,7 +8,7 @@ interface AboutUsProps {
 
 const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
   return (
-    <section id="sobre-mi" className="py-16 bg-gradient-to-br from-nutrition-green-lighter via-white to-nutrition-green-lighter relative overflow-hidden">
+    <section id="sobre-mi" className="py-16 bg-white relative overflow-hidden">
       {/* Unified background overlay for consistency */}
       <div className="absolute inset-0" style={{
         backgroundImage: `
@@ -108,7 +108,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             {/* Step 1 - Left side */}
             <div className="flex items-center">
               <div className="w-2/2 pr-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
+                <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴
@@ -137,7 +137,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 02
               </div>
               <div className="w-1/2 pl-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
+                <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO 🏋️‍♂️                   
@@ -158,7 +158,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
             {/* Step 3 - Left side */}
             <div className="flex items-center">
               <div className="w-1/2 pr-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
+                <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                      SIN COMUNICACIÓN, NO HAY RESULTADOS 📲💬
@@ -189,7 +189,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
                 04
               </div>
               <div className="w-1/2 pl-8">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
+                <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-w-lg">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                      EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE 🧠📈
@@ -211,7 +211,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
 
           {/* Final Call to Action Section */}
-          <div className="text-center mt-16 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
+          <div className="text-center mt-16 bg-gray-50/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border-2 border-nutrition-green-light">
             <div className="mb-6">
                 <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
                       AHORA TE TOCA A TI  💥
@@ -239,19 +239,19 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
           {/* Stats Section */}
          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+            <div className="text-center bg-gray-50/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
               <div className="text-2xl font-bold text-nutrition-black">30+</div>
               <div className="text-sm text-nutrition-gray">Clientes en Seguimiento</div>
             </div>
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+            <div className="text-center bg-gray-50/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
               <div className="text-2xl font-bold text-nutrition-black">6</div>
               <div className="text-sm text-nutrition-gray">Meses de Experiencia</div>
             </div>
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+            <div className="text-center bg-gray-50/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
               <div className="text-2xl font-bold text-nutrition-black">100%</div>
               <div className="text-sm text-nutrition-gray">Compromiso Personal</div>
             </div>
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
+            <div className="text-center bg-gray-50/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-nutrition-green-light">
               <div className="text-2xl font-bold text-nutrition-black">100+</div>
               <div className="text-sm text-nutrition-gray">Objetivos Alcanzados</div>
             </div>

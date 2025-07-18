@@ -53,7 +53,20 @@ const BMICalculator: React.FC = () => {
   const isObesity = bmi && bmi >= 30;
 
   return (
-    <section id="portfolio" className="py-16 bg-gradient-to-br from-nutrition-green-lighter to-white relative overflow-hidden">
+    <section id="portfolio" className="py-16 bg-white relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+      </div>
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-nutrition-black mb-4">
@@ -64,7 +77,7 @@ const BMICalculator: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div className="max-w-md mx-auto bg-gray-50 rounded-lg shadow-lg p-8 border border-nutrition-green-light">
           <div className="flex items-center justify-center mb-6">
             <Calculator className="w-8 h-8 text-nutrition-green mr-3" />
             <h3 className="text-2xl font-bold text-nutrition-black">IMC Calculator</h3>

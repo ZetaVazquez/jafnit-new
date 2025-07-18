@@ -51,7 +51,7 @@ const News: React.FC = () => {
   };
 
   return (
-    <section id="noticias" className="py-16 bg-white relative overflow-hidden">
+    <section id="noticias" className="py-16 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Círculos grandes */}
@@ -75,10 +75,10 @@ const News: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
+          <h2 className="text-4xl font-bold text-white mb-4 title-main">
             Noticias y Actualizaciones
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
           </p>
         </div>
@@ -101,10 +101,10 @@ const News: React.FC = () => {
                   <Calendar className="w-4 h-4 mr-2" />
                   {new Date(item.date).toLocaleDateString('es-ES')}
                 </div>
-                <h3 className="text-xl font-bold text-nutrition-black mb-3">
+                <h3 className="text-xl font-bold text-white mb-3">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
+                <p className="text-white/80 mb-4 leading-relaxed flex-grow">
                   {item.content}
                 </p>
                 <Button

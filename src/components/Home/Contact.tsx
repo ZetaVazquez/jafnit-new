@@ -5,7 +5,7 @@ import { Phone, Mail, MapPin, Calendar } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contacto" className="py-32 relative overflow-hidden">
+    <section id="contacto" className="py-32 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark relative overflow-hidden">
       {/* Formas geométricas animadas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes */}
@@ -29,10 +29,10 @@ const Contact: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4 title-main">
+          <h2 className="text-4xl font-bold text-white mb-4 title-main">
             Contáctame
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
             ¿Listo para comenzar tu transformación? Ponte en contacto conmigo
           </p>
         </div>
@@ -40,46 +40,46 @@ const Contact: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Information */}
           <div className="space-y-8">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
               <div className="flex items-start space-x-4">
-                <Phone className="w-6 h-6 text-nutrition-green mt-1" />
+                <Phone className="w-6 h-6 text-white mt-1" />
                 <div>
-                  <h4 className="font-bold text-nutrition-black mb-1 title-playful">Teléfono</h4>
-                  <p className="text-gray-600">+34 697754823</p>
-                  <p className="text-sm text-gray-500">Lunes a Viernes, 9:00 - 20:00</p>
+                  <h4 className="font-bold text-white mb-1 title-playful">Teléfono</h4>
+                  <p className="text-white/80">+34 697754823</p>
+                  <p className="text-sm text-white/60">Lunes a Viernes, 9:00 - 20:00</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
               <div className="flex items-start space-x-4">
-                <Mail className="w-6 h-6 text-nutrition-green mt-1" />
+                <Mail className="w-6 h-6 text-white mt-1" />
                 <div>
-                  <h4 className="font-bold text-nutrition-black mb-1 title-playful">Email</h4>
-                  <p className="text-gray-600">consultajafn@gmail.com</p>
-                  <p className="text-sm text-gray-500">Respuesta en 24 horas</p>
+                  <h4 className="font-bold text-white mb-1 title-playful">Email</h4>
+                  <p className="text-white/80">consultajafn@gmail.com</p>
+                  <p className="text-sm text-white/60">Respuesta en 24 horas</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
               <div className="flex items-start space-x-4">
-                <MapPin className="w-6 h-6 text-nutrition-green mt-1" />
+                <MapPin className="w-6 h-6 text-white mt-1" />
                 <div>
-                  <h4 className="font-bold text-nutrition-black mb-1 title-playful">Dirección</h4>
-                  <p className="text-gray-600">Consulta con el entrenador</p>
+                  <h4 className="font-bold text-white mb-1 title-playful">Dirección</h4>
+                  <p className="text-white/80">Consulta con el entrenador</p>
                
                 </div>
               </div>
             </div>
 
             {/* Appointment Button */}
-            <div className="bg-nutrition-green/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-nutrition-green-light">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
               <div className="flex items-center mb-4">
-                <Calendar className="w-6 h-6 text-nutrition-green mr-3" />
-                <h4 className="font-bold text-nutrition-black title-playful">¿Reservamos una cita?</h4>
+                <Calendar className="w-6 h-6 text-white mr-3" />
+                <h4 className="font-bold text-white title-playful">¿Reservamos una cita?</h4>
               </div>
-              <p className="text-gray-600 mb-4">
+              <p className="text-white/80 mb-4">
                 Agenda una consulta personalizada para conocer tus objetivos y diseñar tu plan ideal.
               </p>
               <Button className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white">
@@ -89,7 +89,7 @@ const Contact: React.FC = () => {
           </div>
 
           {/* Map */}
-          <div className="h-96 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-nutrition-green-light">
+          <div className="h-96 bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-white/20">
             <iframe
               src="https://www.google.com/maps/place/R%C3%BAa+Leopoldo+Calvo+Sotelo,+152,+27400+Monforte+de+Lemos,+Lugo/@42.5278967,-7.5052014,19z/data=!3m1!4b1!4m6!3m5!1s0xd3013ece030a6ab:0xba2b1ece6eaaa9ba!8m2!3d42.5278957!4d-7.5045577!16s%2Fg%2F11tg0qttd6?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
               width="100%"
