@@ -82,7 +82,10 @@ const Contact: React.FC = () => {
               <p className="text-white/80 mb-4">
                 Agenda una consulta personalizada para conocer tus objetivos y diseñar tu plan ideal.
               </p>
-              <Button className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white">
+              <Button 
+                className="bg-nutrition-orange hover:bg-nutrition-orange-dark text-white"
+                onClick={() => window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank')}
+              >
                 ¿Tenemos una cita?
               </Button>
             </div>
@@ -91,7 +94,7 @@ const Contact: React.FC = () => {
           {/* Map */}
           <div className="h-96 bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-white/20">
             <iframe
-              src="https://www.google.com/maps/place/R%C3%BAa+Leopoldo+Calvo+Sotelo,+152,+27400+Monforte+de+Lemos,+Lugo/@42.5278967,-7.5052014,19z/data=!3m1!4b1!4m6!3m5!1s0xd3013ece030a6ab:0xba2b1ece6eaaa9ba!8m2!3d42.5278957!4d-7.5045577!16s%2Fg%2F11tg0qttd6?entry=ttu&g_ep=EgoyMDI1MDYzMC4wIKXMDSoASAFQAw%3D%3D"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2397.5!2d-7.5044837!3d42.5279291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDMxJzQwLjUiTiA3wrAzMCcxNi4xIlc!5e0!3m2!1ses!2ses!4v1642000000000!5m2!1ses!2ses"
               width="100%"
               height="100%"
               style={{ border: 0 }}
