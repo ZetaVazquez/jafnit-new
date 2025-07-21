@@ -150,12 +150,26 @@
   .geometric-shape {
     position: absolute;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.8;
+  }
+
+  /* Figuras más visibles para fondos verdes */
+  .bg-nutrition-green .geometric-shape,
+  .bg-gradient-to-br .geometric-shape,
+  [class*="bg-nutrition-green"] .geometric-shape {
+    opacity: 0.9;
   }
 
   .circle-shape {
     border-radius: 50%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Círculos para fondos blancos */
+  .bg-white .circle-shape {
     background: linear-gradient(45deg, rgba(34, 197, 94, 0.2), rgba(5, 150, 105, 0.15));
+    border: 2px solid rgba(34, 197, 94, 0.25);
   }
 
   .triangle-shape {
@@ -167,13 +181,22 @@
   .triangle-up {
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-bottom: 26px solid rgba(34, 197, 94, 0.2);
+    border-bottom: 26px solid rgba(255, 255, 255, 0.3);
   }
 
   .triangle-down {
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-top: 26px solid rgba(5, 150, 105, 0.15);
+    border-top: 26px solid rgba(255, 255, 255, 0.25);
+  }
+
+  /* Triángulos para fondos blancos */
+  .bg-white .triangle-up {
+    border-bottom-color: rgba(34, 197, 94, 0.3);
+  }
+
+  .bg-white .triangle-down {
+    border-top-color: rgba(5, 150, 105, 0.25);
   }
 }
 

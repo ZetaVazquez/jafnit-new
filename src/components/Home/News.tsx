@@ -101,10 +101,10 @@ const News: React.FC = () => {
                   <Calendar className="w-4 h-4 mr-2" />
                   {new Date(item.date).toLocaleDateString('es-ES')}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">
+                <h3 className="text-xl font-bold text-gray-800 mb-3">
                   {item.title}
                 </h3>
-                <p className="text-white/80 mb-4 leading-relaxed flex-grow">
+                <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
                   {item.content}
                 </p>
                 <Button
