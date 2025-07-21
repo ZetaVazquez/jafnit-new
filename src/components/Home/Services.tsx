@@ -82,23 +82,23 @@ const Services: React.FC = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="h-full bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-4 border-nutrition-green shadow-lg">
+            <Card key={index} className="h-full bg-white backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-2 border-nutrition-green-light shadow-lg">
               <CardHeader className="text-center pb-4">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
                   <service.icon className="w-8 h-8" />
                 </div>
-                <CardTitle className="text-xl text-white title-playful">
+                <CardTitle className="text-xl text-gray-800 title-playful">
                   {service.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-white/80 mb-6">
+                <p className="text-gray-700 mb-6">
                   {service.description}
                 </p>
                 <ul className="space-y-2">
                   {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-white/70">
-                      <div className="w-2 h-2 bg-white rounded-full mr-3 flex-shrink-0"></div>
+                    <li key={featureIndex} className="flex items-center text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
                       {feature}
                     </li>
                   ))}
@@ -108,39 +108,39 @@ const Services: React.FC = () => {
           ))}
         </div>
 
-        <div className="mt-16 bg-white/90 backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
-          <h3 className="text-2xl font-bold text-white mb-4 title-playful">
+        <div className="mt-16 bg-white backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
+          <h3 className="text-2xl font-bold text-gray-800 mb-4 title-playful">
             ¿Necesitas algo más específico?
           </h3>
-          <p className="text-white/90 mb-6 max-w-2xl mx-auto">
+          <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
             Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva, 
             trastornos alimentarios, alergias e intolerancias, y mucho más.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/30">
+            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
               Nutrición Deportiva
             </span>
-            <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/30">
+            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
               Pérdida de Peso
             </span>
-            <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/30">
+            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
               Ganancia Muscular
             </span>
-            <span className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/30">
+            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
               Alergias e Intolerancias
             </span>
           </div>
         </div>
 
         {/* Communication Section */}
-        <div className="mt-16 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-nutrition-green-light overflow-hidden">
+        <div className="mt-16 bg-white backdrop-blur-sm rounded-2xl shadow-lg border border-nutrition-green-light overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
             {/* Text Content */}
             <div className="order-2 lg:order-1">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-6 title-playful">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 title-playful">
                 💬 EL DIÁLOGO CONSTANTE ES FUNDAMENTAL PARA ALCANZAR TUS METAS Y ENTENDER TUS REQUERIMIENTOS
               </h3>
-              <div className="space-y-4 text-white/90">
+              <div className="space-y-4 text-gray-700">
                 <p className="text-lg leading-relaxed">
                   Mi objetivo es comprender tu situación de manera completa para ofrecerte la mejor orientación y apoyo.
                 </p>
@@ -163,16 +163,16 @@ const Services: React.FC = () => {
               
               <div className="mt-8 space-y-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
-                  <span className="text-white font-medium">Contáctame cuando lo necesites</span>
+                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
+                  <span className="text-gray-800 font-medium">Contáctame cuando lo necesites</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
-                  <span className="text-white font-medium">Soporte y motivación diarios</span>
+                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
+                  <span className="text-gray-800 font-medium">Soporte y motivación diarios</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
-                  <span className="text-white font-medium">Material educativo y recursos</span>
+                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
+                  <span className="text-gray-800 font-medium">Material educativo y recursos</span>
                 </div>
               </div>
             </div>

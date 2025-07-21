@@ -53,19 +53,19 @@ export default {
 					DEFAULT: '#ffffff',
 					foreground: '#0f172a'
 				},
-				// Nueva paleta de colores más armoniosa para nutrición
+				// Nueva paleta de colores más armoniosa para nutrición - Verde más claro
 				nutrition: {
-					green: '#16a34a',        // Green-600 - Principal
+					green: '#22c55e',        // Green-500 - Principal (más claro)
 					'green-light': '#4ade80', // Green-400 - Suave
 					'green-lighter': '#bbf7d0', // Green-200 - Muy suave
-					'green-dark': '#15803d',   // Green-700 - Oscuro
-					'green-darker': '#166534', // Green-800 - Muy oscuro
-					'green-emerald': '#059669', // Emerald-600 - Para acentos
+					'green-dark': '#16a34a',   // Green-600 - Oscuro (ahora el verde anterior)
+					'green-darker': '#15803d', // Green-700 - Muy oscuro
+					'green-emerald': '#10b981', // Emerald-500 - Para acentos (más claro)
 					'green-sage': '#84cc16',   // Lime-500 - Verde sabio
 					'green-forest': '#14532d', // Green-900 - Verde bosque
-					accent: '#059669',         // Emerald-600 - Acento principal
+					accent: '#10b981',         // Emerald-500 - Acento principal (más claro)
 					'accent-light': '#34d399', // Emerald-400
-					'accent-dark': '#047857',  // Emerald-700
+					'accent-dark': '#059669',  // Emerald-600
 					black: '#0f172a',         // Slate-900
 					white: '#ffffff',
 					gray: '#64748b',          // Slate-500
