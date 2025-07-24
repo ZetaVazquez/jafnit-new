@@ -195,8 +195,8 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
               }`}
             >
               {plan.popular && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-nutrition-green text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                  <div className="bg-nutrition-green text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center space-x-1 shadow-lg">
                     <Trophy className="w-4 h-4" />
                     <span>MÁS POPULAR</span>
                   </div>
