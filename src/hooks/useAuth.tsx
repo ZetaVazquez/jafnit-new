@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               }
 
               // Fetch subscription status (only for non-admin users)
-              const adminEmails = ['josefiguenu@gmail.com', 'consultajafn@gmail.com', 'zaidav347@gmail.com'];
+              const adminEmails = ['josefiguenu@gmail.com', 'consultajafn@gmail.com', 'zaiidav347@gmail.com'];
               if (!adminEmails.includes(session.user.email || '')) {
                 await refreshSubscriptionStatus();
               } else {
