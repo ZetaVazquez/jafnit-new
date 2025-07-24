@@ -131,55 +131,51 @@ const FAQ: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
+        <div className="grid lg:grid-cols-12 gap-8">
           {/* Category Buttons */}
-          <ScrollReveal direction="left" delay={400}>
-            <div className="lg:col-span-1">
-              <div className="space-y-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 ${
-                      selectedCategory === category
-                        ? 'bg-nutrition-green text-white'
-                        : 'bg-white/80 backdrop-blur-sm text-nutrition-black hover:bg-nutrition-green hover:text-white'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
+          <div className="lg:col-span-2">
+            <div className="space-y-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 ${
+                    selectedCategory === category
+                      ? 'bg-nutrition-green text-white'
+                      : 'bg-white/80 backdrop-blur-sm text-nutrition-black hover:bg-nutrition-green hover:text-white'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* FAQ Items */}
-          <ScrollReveal direction="right" delay={600}>
-            <div className="lg:col-span-3">
-              <div className="space-y-4">
-                {filteredFAQs.map((faq) => (
-                  <div key={faq.id} className="bg-white backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-nutrition-green-light w-full">
-                    <button
-                      onClick={() => toggleQuestion(faq.id)}
-                      className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors duration-200"
-                    >
-                      <span className="font-semibold text-nutrition-black title-playful flex-1 pr-4">{faq.question}</span>
-                      {openQuestion === faq.id ? (
-                        <ChevronUp className="w-5 h-5 text-nutrition-green flex-shrink-0" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-nutrition-green flex-shrink-0" />
-                      )}
-                    </button>
-                    {openQuestion === faq.id && (
-                      <div className="px-6 pb-4 bg-white">
-                        <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
-                      </div>
+          <div className="lg:col-span-10">
+            <div className="space-y-4">
+              {filteredFAQs.map((faq) => (
+                <div key={faq.id} className="bg-white backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-nutrition-green-light w-full">
+                  <button
+                    onClick={() => toggleQuestion(faq.id)}
+                    className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors duration-200"
+                  >
+                    <span className="font-semibold text-nutrition-black title-playful flex-1 pr-4">{faq.question}</span>
+                    {openQuestion === faq.id ? (
+                      <ChevronUp className="w-5 h-5 text-nutrition-green flex-shrink-0" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-nutrition-green flex-shrink-0" />
                     )}
-                  </div>
-                ))}
-              </div>
+                  </button>
+                  {openQuestion === faq.id && (
+                    <div className="px-6 pb-4 bg-white">
+                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </div>
     </section>
