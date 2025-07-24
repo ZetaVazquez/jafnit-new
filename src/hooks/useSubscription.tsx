@@ -22,19 +22,53 @@ export const useSubscription = () => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke('check-subscription');
+      // First check traditional subscriptions using the RPC function
+      const { data: status, error: statusError } = await supabase
+        .rpc('get_user_subscription_status', { user_uuid: user.id });
 
-      if (error) {
-        console.error('Error checking subscription:', error);
+      if (statusError) {
+        console.error('Error checking subscription status:', statusError);
         setSubscriptionStatus('inactive');
         setPlanType(null);
         setSubscriptionEnd(null);
         setIsBasicPlan(false);
       } else {
-        setSubscriptionStatus(data.subscribed ? 'active' : 'inactive');
-        setPlanType(data.plan_type);
-        setSubscriptionEnd(data.subscription_end);
-        setIsBasicPlan(data.is_basic_plan || false);
+        // If traditional subscription is active, use it
+        if (status === 'active') {
+          // Get subscription details from traditional table
+          const { data: subscription } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('status', 'active')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (subscription) {
+            setSubscriptionStatus('active');
+            setPlanType(subscription.plan_type);
+            setSubscriptionEnd(subscription.end_date);
+            setIsBasicPlan(subscription.plan_type === 'basic');
+            return;
+          }
+        }
+
+        // If no traditional subscription, check Stripe
+        const { data: stripeData, error: stripeError } = await supabase.functions.invoke('check-subscription');
+        
+        if (stripeError) {
+          console.error('Error checking Stripe subscription:', stripeError);
+          setSubscriptionStatus(status || 'inactive');
+          setPlanType(null);
+          setSubscriptionEnd(null);
+          setIsBasicPlan(false);
+        } else {
+          setSubscriptionStatus(stripeData.subscribed ? 'active' : (status || 'inactive'));
+          setPlanType(stripeData.plan_type);
+          setSubscriptionEnd(stripeData.subscription_end);
+          setIsBasicPlan(stripeData.is_basic_plan || false);
+        }
       }
     } catch (error) {
       console.error('Error:', error);

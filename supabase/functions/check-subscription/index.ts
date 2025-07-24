@@ -21,8 +21,11 @@ serve(async (req) => {
     logStep("Function started");
 
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
-    logStep("Stripe key verified");
+    if (!stripeKey) {
+      logStep("ERROR: STRIPE_SECRET_KEY is not set");
+      throw new Error("STRIPE_SECRET_KEY is not set");
+    }
+    logStep("Stripe key verified", { keyExists: !!stripeKey, keyPrefix: stripeKey.substring(0, 7) });
 
     // Use service role key for database operations
     const supabaseClient = createClient(
@@ -32,7 +35,10 @@ serve(async (req) => {
     );
 
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("No authorization header provided");
+    if (!authHeader) {
+      logStep("ERROR: No authorization header provided");
+      throw new Error("No authorization header provided");
+    }
     logStep("Authorization header found");
 
     const token = authHeader.replace("Bearer ", "");
@@ -43,15 +49,24 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
     
+    logStep("Attempting user authentication");
     const { data: userData, error: userError } = await authClient.auth.getUser(token);
-    if (userError) throw new Error(`Authentication error: ${userError.message}`);
+    if (userError) {
+      logStep("ERROR: Authentication failed", { error: userError.message });
+      throw new Error(`Authentication error: ${userError.message}`);
+    }
     const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
+    if (!user?.email) {
+      logStep("ERROR: User not authenticated or email not available");
+      throw new Error("User not authenticated or email not available");
+    }
     logStep("User authenticated", { userId: user.id, email: user.email });
 
+    logStep("Initializing Stripe client");
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
 
     // Check if customer exists in Stripe
+    logStep("Checking for Stripe customer", { email: user.email });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     
     if (customers.data.length === 0) {
