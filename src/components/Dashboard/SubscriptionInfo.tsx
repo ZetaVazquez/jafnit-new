@@ -59,6 +59,10 @@ const SubscriptionInfo: React.FC = () => {
         return 'Plan Premium';
       case 'pro':
         return 'Plan PRO';
+      case 'quarterly':
+        return 'Plan Trimestral';
+      case 'monthly':
+        return 'Plan Mensual';
       default:
         return 'Sin plan activo';
     }
