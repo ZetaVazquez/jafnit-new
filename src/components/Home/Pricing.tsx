@@ -6,6 +6,7 @@ import { PricingPlan } from '@/types';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface PricingProps {
   onStartQuestionnaire: () => void;
@@ -138,77 +139,82 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
         </div>
 
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Planes y Precios
-          </h2>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Elige el plan que mejor se adapte a tus objetivos y presupuesto
-          </p>
+          <ScrollReveal direction="down">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Planes y Precios
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Elige el plan que mejor se adapte a tus objetivos y presupuesto
+            </p>
+          </ScrollReveal>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 ${
-                plan.highlighted 
-                  ? 'border-nutrition-green ring-4 ring-nutrition-green/20' 
-                  : 'border-nutrition-green-light hover:border-nutrition-green'
-              }`}
-            >
-              <div className="p-6">
-                <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2 text-nutrition-black title-playful">
-                    {plan.name}
-                  </h3>
-                  <p className="text-sm mb-4 text-nutrition-gray">
-                    {plan.duration}
-                  </p>
-                  <div className="text-3xl font-bold mb-4 text-nutrition-green title-main">
-                    {plan.price}
-                    {plan.id === '2' && <span className="text-sm text-nutrition-gray">/mes</span>}
-                    {plan.id === '3' && <span className="text-sm text-nutrition-gray">/mes</span>}
-                  </div>
-                  {plan.highlighted && (
-                    <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
-                      Más Popular
+          {plans.map((plan, index) => (
+            <ScrollReveal key={plan.id} direction="up" delay={index * 200}>
+              <div
+                className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 ${
+                  plan.highlighted 
+                    ? 'border-nutrition-green ring-4 ring-nutrition-green/20' 
+                    : 'border-nutrition-green-light hover:border-nutrition-green'
+                }`}
+              >
+                <div className="p-6">
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold mb-2 text-nutrition-black title-playful">
+                      {plan.name}
+                    </h3>
+                    <p className="text-sm mb-4 text-nutrition-gray">
+                      {plan.duration}
+                    </p>
+                    <div className="text-3xl font-bold mb-4 text-nutrition-green title-main">
+                      {plan.price}
+                      {plan.id === '2' && <span className="text-sm text-nutrition-gray">/mes</span>}
+                      {plan.id === '3' && <span className="text-sm text-nutrition-gray">/mes</span>}
                     </div>
-                  )}
+                    {plan.highlighted && (
+                      <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
+                        Más Popular
+                      </div>
+                    )}
+                  </div>
+
+                  <ul className="space-y-2 mb-6">
+                    {plan.features.map((feature, index) => {
+                      const isNegative = feature.includes('no incluido') || feature.includes('Sin');
+                      return (
+                        <li key={index} className="flex items-start">
+                          {isNegative ? (
+                            <X className="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0" />
+                          ) : (
+                            <Check className="w-4 h-4 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
+                          )}
+                          <span className={`text-xs ${isNegative ? 'text-red-600' : 'text-nutrition-gray'}`}>
+                            {feature}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                  <Button
+                    onClick={() => {
+                      const planType = plan.id === '1' ? 'basic' : plan.id === '2' ? 'premium' : 'pro';
+                      user ? handleSelectPlan(planType) : onStartQuestionnaire();
+                    }}
+                    className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
+                      plan.highlighted
+                        ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
+                        : 'bg-nutrition-green-light hover:bg-nutrition-green text-nutrition-green-dark hover:text-white'
+                    }`}
+                  >
+                    {user ? 'Contratar Plan' : 'Elegir Plan'}
+                  </Button>
                 </div>
-
-                <ul className="space-y-2 mb-6">
-                  {plan.features.map((feature, index) => {
-                    const isNegative = feature.includes('no incluido') || feature.includes('Sin');
-                    return (
-                      <li key={index} className="flex items-start">
-                        {isNegative ? (
-                          <X className="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0" />
-                        ) : (
-                          <Check className="w-4 h-4 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
-                        )}
-                        <span className={`text-xs ${isNegative ? 'text-red-600' : 'text-nutrition-gray'}`}>
-                          {feature}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-
-                <Button
-                  onClick={() => {
-                    const planType = plan.id === '1' ? 'basic' : plan.id === '2' ? 'premium' : 'pro';
-                    user ? handleSelectPlan(planType) : onStartQuestionnaire();
-                  }}
-                  className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
-                    plan.highlighted
-                      ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
-                      : 'bg-nutrition-green-light hover:bg-nutrition-green text-nutrition-green-dark hover:text-white'
-                  }`}
-                >
-                  {user ? 'Contratar Plan' : 'Elegir Plan'}
-                </Button>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

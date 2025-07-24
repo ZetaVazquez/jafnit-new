@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TestimonialsModal from './TestimonialsModal';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface TestimonialsProps {
   onStartQuestionnaire: () => void;
@@ -129,12 +130,16 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10 max-w-7xl">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4 md:mb-6 title-main">
-            Opiniones de Nuestros Clientes
-          </h2>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Descubre lo que dicen las personas que han transformado su vida con nosotros
-          </p>
+          <ScrollReveal direction="down">
+            <h2 className="text-4xl font-bold text-nutrition-black mb-4 md:mb-6 title-main">
+              Opiniones de Nuestros Clientes
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              Descubre lo que dicen las personas que han transformado su vida con nosotros
+            </p>
+          </ScrollReveal>
         </div>
 
         {/* Show only 4 testimonials (one from each section) */}
@@ -143,32 +148,36 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
             // Take the first testimonial from each section
             const testimonial = section.testimonials[0];
             return (
-              <div key={testimonial.id} className="bg-gray-50/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="flex items-center mb-4">
-                  <div>
-                    <h4 className="font-bold text-nutrition-black text-sm md:text-base title-playful mb-2">{testimonial.name}</h4>
-                    <div className="flex">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current text-nutrition-green" />
-                      ))}
+              <ScrollReveal key={testimonial.id} direction="up" delay={sectionIndex * 150}>
+                <div className="bg-gray-50/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-5 md:p-6 shadow-lg border border-nutrition-green-light hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <div className="flex items-center mb-4">
+                    <div>
+                      <h4 className="font-bold text-nutrition-black text-sm md:text-base title-playful mb-2">{testimonial.name}</h4>
+                      <div className="flex">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current text-nutrition-green" />
+                        ))}
+                      </div>
                     </div>
                   </div>
+                  <p className="text-nutrition-green-dark text-sm md:text-base leading-relaxed">"{testimonial.comment}"</p>
                 </div>
-                <p className="text-nutrition-green-dark text-sm md:text-base leading-relaxed">"{testimonial.comment}"</p>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* More Testimonials Button */}
-        <div className="text-center">
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            MÁS COMENTARIOS
-          </Button>
-        </div>
+        <ScrollReveal direction="up" delay={600}>
+          <div className="text-center">
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              MÁS COMENTARIOS
+            </Button>
+          </div>
+        </ScrollReveal>
       </div>
 
       {/* Testimonials Modal */}

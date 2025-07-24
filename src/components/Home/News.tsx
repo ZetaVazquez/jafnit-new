@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 const News: React.FC = () => {
   const newsItems: NewsItem[] = [
@@ -75,47 +76,53 @@ const News: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4 title-main">
-            Noticias y Actualizaciones
-          </h2>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
-          </p>
+          <ScrollReveal direction="down">
+            <h2 className="text-4xl font-bold text-white mb-4 title-main">
+              Noticias y Actualizaciones
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
+            </p>
+          </ScrollReveal>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
           {newsItems.map((item, index) => (
-            <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
-              <div className="relative">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-4 right-4">
-                  <Instagram className="w-6 h-6 text-pink-500 bg-white p-1 rounded-full" />
+            <ScrollReveal key={item.id} direction="up" delay={index * 200}>
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
+                <div className="relative">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <Instagram className="w-6 h-6 text-pink-500 bg-white p-1 rounded-full" />
+                  </div>
+                </div>
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex items-center text-sm text-gray-500 mb-2">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    {new Date(item.date).toLocaleDateString('es-ES')}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
+                    {item.content}
+                  </p>
+                  <Button
+                    onClick={() => handleInstagramClick(index)}
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto"
+                  >
+                    <Instagram className="w-4 h-4" />
+                    Ver en Instagram
+                  </Button>
                 </div>
               </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center text-sm text-gray-500 mb-2">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  {new Date(item.date).toLocaleDateString('es-ES')}
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
-                  {item.content}
-                </p>
-                <Button
-                  onClick={() => handleInstagramClick(index)}
-                  className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto"
-                >
-                  <Instagram className="w-4 h-4" />
-                  Ver en Instagram
-                </Button>
-              </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

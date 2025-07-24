@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 const BMICalculator: React.FC = () => {
   const [height, setHeight] = useState<string>('');
@@ -69,91 +70,97 @@ const BMICalculator: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-4">
-            Calculadora de IMC
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Calcula tu Índice de Masa Corporal y descubre qué es lo que más te conviene
-          </p>
+          <ScrollReveal direction="down">
+            <h2 className="text-4xl font-bold text-nutrition-black mb-4">
+              Calculadora de IMC
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Calcula tu Índice de Masa Corporal y descubre qué es lo que más te conviene
+            </p>
+          </ScrollReveal>
         </div>
 
-        <div className="max-w-md mx-auto bg-gray-50 rounded-lg shadow-lg p-8 border border-nutrition-green-light">
-          <div className="flex items-center justify-center mb-6">
-            <Calculator className="w-8 h-8 text-nutrition-green mr-3" />
-            <h3 className="text-2xl font-bold text-nutrition-black">IMC Calculator</h3>
-          </div>
-
-          <div className="space-y-6">
-            <div>
-              <label htmlFor="height" className="block text-sm font-medium text-gray-700 mb-2">
-                Altura (cm)
-              </label>
-              <input
-                type="number"
-                id="height"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
-                placeholder="Ej: 170"
-              />
+        <ScrollReveal direction="up" delay={400}>
+          <div className="max-w-md mx-auto bg-gray-50 rounded-lg shadow-lg p-8 border border-nutrition-green-light">
+            <div className="flex items-center justify-center mb-6">
+              <Calculator className="w-8 h-8 text-nutrition-green mr-3" />
+              <h3 className="text-2xl font-bold text-nutrition-black">IMC Calculator</h3>
             </div>
 
-            <div>
-              <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-2">
-                Peso (kg)
-              </label>
-              <input
-                type="number"
-                id="weight"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
-                placeholder="Ej: 70"
-              />
-            </div>
-
-            <div className="flex space-x-3">
-              <Button
-                onClick={calculateBMI}
-                disabled={!height || !weight}
-                className="flex-1 bg-nutrition-green hover:bg-nutrition-green-dark text-white py-3"
-              >
-                Calcular IMC
-              </Button>
-              <Button
-                onClick={reset}
-                className="px-6 bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white py-3"
-              >
-                Reset
-              </Button>
-            </div>
-
-            {bmi && (
-              <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-                <div className="text-center mb-4">
-                  <p className="text-lg text-gray-600">Tu IMC es:</p>
-                  <p className="text-4xl font-bold text-nutrition-green">{bmi}</p>
-                  <p className={`text-lg font-semibold ${getBMICategory(bmi).color}`}>
-                    {getBMICategory(bmi).category}
-                  </p>
-                </div>
-                <div className="border-t pt-4">
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                    {recommendation}
-                  </p>
-                  {isObesity && (
-                    <Button
-                      onClick={() => setShowObesityModal(true)}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white py-2"
-                    >
-                      Consecuencias de la obesidad
-                    </Button>
-                  )}
-                </div>
+            <div className="space-y-6">
+              <div>
+                <label htmlFor="height" className="block text-sm font-medium text-gray-700 mb-2">
+                  Altura (cm)
+                </label>
+                <input
+                  type="number"
+                  id="height"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
+                  placeholder="Ej: 170"
+                />
               </div>
-            )}
+
+              <div>
+                <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-2">
+                  Peso (kg)
+                </label>
+                <input
+                  type="number"
+                  id="weight"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nutrition-green focus:border-transparent"
+                  placeholder="Ej: 70"
+                />
+              </div>
+
+              <div className="flex space-x-3">
+                <Button
+                  onClick={calculateBMI}
+                  disabled={!height || !weight}
+                  className="flex-1 bg-nutrition-green hover:bg-nutrition-green-dark text-white py-3"
+                >
+                  Calcular IMC
+                </Button>
+                <Button
+                  onClick={reset}
+                  className="px-6 bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white py-3"
+                >
+                  Reset
+                </Button>
+              </div>
+
+              {bmi && (
+                <div className="mt-8 p-6 bg-gray-50 rounded-lg">
+                  <div className="text-center mb-4">
+                    <p className="text-lg text-gray-600">Tu IMC es:</p>
+                    <p className="text-4xl font-bold text-nutrition-green">{bmi}</p>
+                    <p className={`text-lg font-semibold ${getBMICategory(bmi).color}`}>
+                      {getBMICategory(bmi).category}
+                    </p>
+                  </div>
+                  <div className="border-t pt-4">
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                      {recommendation}
+                    </p>
+                    {isObesity && (
+                      <Button
+                        onClick={() => setShowObesityModal(true)}
+                        className="w-full bg-red-600 hover:bg-red-700 text-white py-2"
+                      >
+                        Consecuencias de la obesidad
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
 
       {/* Modal de consecuencias de la obesidad */}
