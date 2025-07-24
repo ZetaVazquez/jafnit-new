@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 const Services: React.FC = () => {
   const services = [
@@ -72,39 +73,45 @@ const Services: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4 title-main">
-            Nuestros Servicios
-          </h2>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto">
-            Ofrecemos un enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
-          </p>
+          <ScrollReveal direction="down">
+            <h2 className="text-4xl font-bold text-white mb-4 title-main">
+              Nuestros Servicios
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={300}>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Ofrecemos un enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
+            </p>
+          </ScrollReveal>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="h-full bg-white backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-2 border-nutrition-green-light shadow-lg">
-              <CardHeader className="text-center pb-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
-                  <service.icon className="w-8 h-8" />
-                </div>
-                <CardTitle className="text-xl text-gray-800 title-playful">
-                  {service.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-gray-700 mb-6">
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            <ScrollReveal key={index} direction="up" delay={index * 150}>
+              <Card className="h-full bg-white backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-2 border-nutrition-green-light shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
+                    <service.icon className="w-8 h-8" />
+                  </div>
+                  <CardTitle className="text-xl text-gray-800 title-playful">
+                    {service.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-gray-700 mb-6">
+                    {service.description}
+                  </p>
+                  <ul className="space-y-2">
+                    {service.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center text-sm text-gray-600">
+                        <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </ScrollReveal>
           ))}
         </div>
 

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface HeroCarouselProps {
   onStartQuestionnaire: () => void;
@@ -102,23 +103,29 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                   </div>
 
                   <div className="space-y-3 lg:space-y-4 text-center lg:text-left">
-                    <h2 className="text-xl lg:text-3xl xl:text-4xl font-bold leading-tight text-white">
-                      {slide.title}
-                    </h2>
-                    <p className="text-sm lg:text-base xl:text-lg text-white leading-relaxed max-w-2xl">
-                      {slide.subtitle}
-                    </p>
+                    <ScrollReveal direction="left" delay={300}>
+                      <h2 className="text-xl lg:text-3xl xl:text-4xl font-bold leading-tight text-white">
+                        {slide.title}
+                      </h2>
+                    </ScrollReveal>
+                    <ScrollReveal direction="left" delay={500}>
+                      <p className="text-sm lg:text-base xl:text-lg text-white leading-relaxed max-w-2xl">
+                        {slide.subtitle}
+                      </p>
+                    </ScrollReveal>
                   </div>
 
-                  <div className="flex justify-center lg:justify-start pt-2">
-                    <Button
-                      onClick={onStartQuestionnaire}
-                      size="lg"
-                      className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-sm lg:text-base px-6 lg:px-8 py-3 lg:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                    >
-                      {slide.buttonText}
-                    </Button>
-                  </div>
+                  <ScrollReveal direction="up" delay={700}>
+                    <div className="flex justify-center lg:justify-start pt-2">
+                      <Button
+                        onClick={onStartQuestionnaire}
+                        size="lg"
+                        className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold text-sm lg:text-base px-6 lg:px-8 py-3 lg:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                      >
+                        {slide.buttonText}
+                      </Button>
+                    </div>
+                  </ScrollReveal>
                 </div>
 
                 <div className="hidden lg:block relative h-full">

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface AboutUsProps {
   onQuestionnaireOpen?: () => void;
@@ -36,18 +37,24 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-nutrition-black mb-8 title-main">
-            Sobre Mí
-          </h2>
-          <p className="text-xl text-nutrition-green font-bold mb-8">
-            🎯 ES TU TURNO ⭐
-          </p>
-          <p className="text-sm text-nutrition-gray leading-relaxed">
-            Ya has probado de todo pero nunca lo habías hecho con estrategia, guía y seguimiento de verdad…<br />
-            AUNQUE… Llevas tiempo pensando que algo tiene que cambiar. Y lo sabes. Este programa no va de dejar de comer o pasarte el día entrenando. Va de construir un cuerpo y unos hábitos que puedas mantener PARA SIEMPRE.<br />
-            Olvida las dietas que no aguantas ni dos semanas. Empieza a entrenar con un plan que tenga sentido para ti.<br />
-            🔹 No necesitas tener todo perfecto. Solo necesitas empezar. Yo te guío, tú te comprometes. Y el cambio llega.<br />
-          </p>
+          <ScrollReveal direction="down">
+            <h2 className="text-4xl font-bold text-nutrition-black mb-8 title-main">
+              Sobre Mí
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-xl text-nutrition-green font-bold mb-8">
+              🎯 ES TU TURNO ⭐
+            </p>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={400}>
+            <p className="text-sm text-nutrition-gray leading-relaxed">
+              Ya has probado de todo pero nunca lo habías hecho con estrategia, guía y seguimiento de verdad…<br />
+              AUNQUE… Llevas tiempo pensando que algo tiene que cambiar. Y lo sabes. Este programa no va de dejar de comer o pasarte el día entrenando. Va de construir un cuerpo y unos hábitos que puedas mantener PARA SIEMPRE.<br />
+              Olvida las dietas que no aguantas ni dos semanas. Empieza a entrenar con un plan que tenga sentido para ti.<br />
+              🔹 No necesitas tener todo perfecto. Solo necesitas empezar. Yo te guío, tú te comprometes. Y el cambio llega.<br />
+            </p>
+          </ScrollReveal>
         </div>
 
         {/* Vertical Journey Path */}
@@ -106,29 +113,31 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           {/* Journey Steps with compact spacing */}
           <div className="space-y-2">
             {/* Step 1 - Left side */}
-            <div className="flex items-center">
-              <div className="w-2/2 pr-8">
-                <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
-                  <div className="text-center">
-                    <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
-                      ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴
-                    </h3>
-                    <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.<br />
-                       👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer
-                      Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.<br />
-                      Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.<br />
-                      🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.<br />
-                      Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.
-                    </p>
+            <ScrollReveal direction="right" delay={100}>
+              <div className="flex items-center">
+                <div className="w-2/2 pr-8">
+                  <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105 ml-auto max-w-lg">
+                    <div className="text-center">
+                      <h3 className="text-lg font-bold text-nutrition-black mb-3 title-playful">
+                        ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES 💪🍴
+                      </h3>
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.<br />
+                         👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer
+                        Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.<br />
+                        Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.<br />
+                        🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.<br />
+                        Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative shadow-lg">
+                  01
+                </div>
+                <div className="w-1/2 pl-8"></div>
               </div>
-              <div className="flex-shrink-0 w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg flex items-center justify-center z-10 relative shadow-lg">
-                01
-              </div>
-              <div className="w-1/2 pl-8"></div>
-            </div>
+            </ScrollReveal>
 
             {/* Step 2 - Right side */}
             <div className="flex items-center">
