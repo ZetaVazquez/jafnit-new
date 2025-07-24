@@ -66,10 +66,16 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
       console.log('Client dashboard logout initiated...');
       await signOut();
       
+      // Clear any stored data
+      localStorage.clear();
+      
       // Call the onLogout callback if provided
       if (onLogout) {
         onLogout();
       }
+      
+      // Force reload to ensure clean state
+      window.location.href = '/';
       
       toast({
         title: "Sesión cerrada",
@@ -82,6 +88,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         description: "Hubo un problema al cerrar sesión",
         variant: "destructive",
       });
+      
+      // Force logout even if there's an error
+      localStorage.clear();
+      window.location.href = '/';
     }
   };
 

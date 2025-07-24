@@ -68,7 +68,7 @@ const Index = () => {
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
       <SubscriptionGuard strictMode={true}>
-        <ClientDashboard onNavigateToHome={handleBackToHome} />
+        <ClientDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
       </SubscriptionGuard>
     );
   }
