@@ -23,8 +23,11 @@ export const useSubscription = () => {
 
     try {
       // First check traditional subscriptions using the RPC function
+      console.log('Checking subscription for user:', user.id);
       const { data: status, error: statusError } = await supabase
         .rpc('get_user_subscription_status', { user_uuid: user.id });
+
+      console.log('RPC result:', { status, error: statusError });
 
       if (statusError) {
         console.error('Error checking subscription status:', statusError);

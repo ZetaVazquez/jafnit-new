@@ -626,6 +626,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_modal_interactions: {
+        Row: {
+          created_at: string
+          id: string
+          modal_type: string
+          shown_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          modal_type: string
+          shown_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          modal_type?: string
+          shown_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

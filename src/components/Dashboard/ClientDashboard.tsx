@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -46,18 +47,52 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
 
   // Verificar si debe mostrar el modal de bienvenida
   useEffect(() => {
-    if (user && hasActiveSubscription) {
-      const hasSeenWelcomeGift = localStorage.getItem(`welcome_gift_seen_${user.id}`);
-      if (!hasSeenWelcomeGift) {
-        setShowWelcomeModal(true);
+    const checkWelcomeModalStatus = async () => {
+      if (user && hasActiveSubscription) {
+        try {
+          // Verificar en la base de datos si ya se mostró el modal
+          const { data: modalInteraction } = await supabase
+            .from('user_modal_interactions')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('modal_type', 'welcome_gift')
+            .maybeSingle();
+
+          if (!modalInteraction) {
+            setShowWelcomeModal(true);
+          }
+        } catch (error) {
+          console.error('Error checking welcome modal status:', error);
+          // Fallback a localStorage
+          const hasSeenWelcomeGift = localStorage.getItem(`welcome_gift_seen_${user.id}`);
+          if (!hasSeenWelcomeGift) {
+            setShowWelcomeModal(true);
+          }
+        }
       }
-    }
+    };
+
+    checkWelcomeModalStatus();
   }, [user, hasActiveSubscription]);
 
-  const handleCloseWelcomeModal = () => {
+  const handleCloseWelcomeModal = async () => {
     setShowWelcomeModal(false);
     if (user) {
-      localStorage.setItem(`welcome_gift_seen_${user.id}`, 'true');
+      try {
+        // Guardar en la base de datos que ya se mostró el modal
+        await supabase
+          .from('user_modal_interactions')
+          .upsert({
+            user_id: user.id,
+            modal_type: 'welcome_gift'
+          }, { 
+            onConflict: 'user_id,modal_type' 
+          });
+      } catch (error) {
+        console.error('Error saving welcome modal interaction:', error);
+        // Fallback a localStorage
+        localStorage.setItem(`welcome_gift_seen_${user.id}`, 'true');
+      }
     }
   };
 
