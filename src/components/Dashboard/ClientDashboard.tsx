@@ -15,9 +15,11 @@ import {
   MessageCircle,
   Home,
   Newspaper,
-  Gift
+  Gift,
+  Lock
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useSubscription } from '@/hooks/useSubscription';
 import MyGoals from './MyGoals';
 import MyProgress from './MyProgress';
 import MyDiets from './MyDiets';
@@ -36,7 +38,8 @@ interface ClientDashboardProps {
 }
 
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const { user, profile, signOut, hasActiveSubscription } = useAuth();
+  const { user, profile, signOut } = useAuth();
+  const { hasActiveSubscription, loading: subscriptionLoading } = useSubscription();
   const [currentView, setCurrentView] = useState<string>('dashboard');
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { toast } = useToast();
@@ -83,7 +86,28 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   };
 
   const handleChatWithTrainer = () => {
+    if (!hasActiveSubscription) {
+      toast({
+        title: "Suscripción requerida",
+        description: "Necesitas una suscripción activa para acceder al chat con el entrenador",
+        variant: "destructive"
+      });
+      return;
+    }
     alert('Abriendo chat con tu entrenador personal...');
+  };
+
+  // Función para verificar acceso a secciones premium
+  const handlePremiumView = (view: string) => {
+    if (!hasActiveSubscription) {
+      toast({
+        title: "Suscripción requerida",
+        description: "Esta función está disponible solo para usuarios con suscripción activa",
+        variant: "destructive"
+      });
+      return;
+    }
+    setCurrentView(view);
   };
 
   if (currentView === 'goals') {
@@ -302,63 +326,93 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
 
           {/* Diets Card */}
           <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('diets')}
+            className={`cursor-pointer hover:shadow-lg transition-shadow ${
+              !hasActiveSubscription ? 'opacity-75' : ''
+            }`}
+            onClick={() => handlePremiumView('diets')}
           >
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
                 <Apple className="w-5 h-5 mr-2" />
                 Mi Plan Nutricional
+                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
                 Accede a tu plan de alimentación personalizado y recetas.
               </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Plan
+              <Button 
+                className={`w-full ${
+                  hasActiveSubscription 
+                    ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
+                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                }`}
+                disabled={!hasActiveSubscription}
+              >
+                {hasActiveSubscription ? 'Ver Plan' : 'Suscripción Requerida'}
               </Button>
             </CardContent>
           </Card>
 
           {/* Workouts Card */}
           <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('workouts')}
+            className={`cursor-pointer hover:shadow-lg transition-shadow ${
+              !hasActiveSubscription ? 'opacity-75' : ''
+            }`}
+            onClick={() => handlePremiumView('workouts')}
           >
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
                 <Dumbbell className="w-5 h-5 mr-2" />
                 Mis Entrenamientos
+                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
                 Descubre y sigue tus rutinas de ejercicios personalizadas.
               </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Entrenamientos
+              <Button 
+                className={`w-full ${
+                  hasActiveSubscription 
+                    ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
+                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                }`}
+                disabled={!hasActiveSubscription}
+              >
+                {hasActiveSubscription ? 'Ver Entrenamientos' : 'Suscripción Requerida'}
               </Button>
             </CardContent>
           </Card>
 
           {/* Schedule Card */}
           <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('schedule')}
+            className={`cursor-pointer hover:shadow-lg transition-shadow ${
+              !hasActiveSubscription ? 'opacity-75' : ''
+            }`}
+            onClick={() => handlePremiumView('schedule')}
           >
             <CardHeader>
               <CardTitle className="flex items-center text-nutrition-green">
                 <Calendar className="w-5 h-5 mr-2" />
                 Mi Agenda
+                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-nutrition-gray mb-4">
                 Registra tu progreso diario con un calendario editable.
               </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Agenda
+              <Button 
+                className={`w-full ${
+                  hasActiveSubscription 
+                    ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
+                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                }`}
+                disabled={!hasActiveSubscription}
+              >
+                {hasActiveSubscription ? 'Ver Agenda' : 'Suscripción Requerida'}
               </Button>
             </CardContent>
           </Card>
@@ -384,23 +438,33 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
             </CardContent>
           </Card>
 
-          {/* NEW: Gifts Card */}
+          {/* Gifts Card */}
           <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300"
-            onClick={() => setCurrentView('gifts')}
+            className={`cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 ${
+              !hasActiveSubscription ? 'opacity-75' : ''
+            }`}
+            onClick={() => hasActiveSubscription ? setCurrentView('gifts') : handlePremiumView('gifts')}
           >
             <CardHeader>
               <CardTitle className="flex items-center text-orange-600">
                 <Gift className="w-5 h-5 mr-2" />
                 Gifts 🎁
+                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-orange-700 mb-4">
                 Accede a tus regalos exclusivos y descargas especiales.
               </p>
-              <Button className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold">
-                Ver Regalos
+              <Button 
+                className={`w-full font-bold ${
+                  hasActiveSubscription 
+                    ? 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white'
+                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                }`}
+                disabled={!hasActiveSubscription}
+              >
+                {hasActiveSubscription ? 'Ver Regalos' : 'Suscripción Requerida'}
               </Button>
             </CardContent>
           </Card>
