@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Clock, Users, Trophy, Zap } from 'lucide-react';
+import { Check, Clock, Users, Trophy, Zap, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
@@ -44,6 +44,23 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleCloseModal = async () => {
+    try {
+      await signOut();
+      localStorage.clear();
+      window.location.href = '/';
+      toast({
+        title: "Modal cerrado",
+        description: "Redirigiendo a la página principal...",
+      });
+    } catch (error) {
+      console.error('Error closing modal:', error);
+      // Force redirect even if there's an error
+      localStorage.clear();
+      window.location.href = '/';
+    }
   };
 
   const handleAccountClosure = async () => {
@@ -164,8 +181,18 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
   ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => {}} modal={true}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+    <Dialog open={isOpen} onOpenChange={handleCloseModal} modal={true}>
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-nutrition-green-lighter to-white">
+        {/* Botón de cerrar personalizado */}
+        <Button
+          onClick={handleCloseModal}
+          variant="ghost"
+          size="icon"
+          className="absolute right-4 top-4 z-50 hover:bg-red-100 text-gray-500 hover:text-red-600"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+
         <DialogHeader>
           <DialogTitle className="text-center text-3xl font-bold text-nutrition-green mb-2">
             ¡Bienvenido a tu transformación! 🎉
