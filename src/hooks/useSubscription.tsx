@@ -43,7 +43,7 @@ export const useSubscription = () => {
             .eq('status', 'active')
             .order('created_at', { ascending: false })
             .limit(1)
-            .single();
+            .maybeSingle();
 
           if (subscription) {
             setSubscriptionStatus('active');
