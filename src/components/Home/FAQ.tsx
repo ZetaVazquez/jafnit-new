@@ -131,7 +131,7 @@ const FAQ: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
+        <div className="grid lg:grid-cols-5 gap-8">
           {/* Category Buttons */}
           <ScrollReveal direction="left" delay={400}>
             <div className="lg:col-span-1">
@@ -155,7 +155,7 @@ const FAQ: React.FC = () => {
 
           {/* FAQ Items */}
           <ScrollReveal direction="right" delay={600}>
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-4">
               <div className="space-y-4">
                 {filteredFAQs.map((faq) => (
                   <div key={faq.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-nutrition-green-light">
@@ -163,16 +163,16 @@ const FAQ: React.FC = () => {
                       onClick={() => toggleQuestion(faq.id)}
                       className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors duration-200"
                     >
-                      <span className="font-semibold text-nutrition-black title-playful">{faq.question}</span>
+                      <span className="font-semibold text-nutrition-black title-playful pr-4">{faq.question}</span>
                       {openQuestion === faq.id ? (
-                        <ChevronUp className="w-5 h-5 text-nutrition-green" />
+                        <ChevronUp className="w-5 h-5 text-nutrition-green flex-shrink-0" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-nutrition-green" />
+                        <ChevronDown className="w-5 h-5 text-nutrition-green flex-shrink-0" />
                       )}
                     </button>
                     {openQuestion === faq.id && (
                       <div className="px-6 pb-4">
-                        <p className="text-gray-600">{faq.answer}</p>
+                        <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
                       </div>
                     )}
                   </div>
