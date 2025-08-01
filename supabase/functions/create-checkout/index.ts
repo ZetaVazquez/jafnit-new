@@ -78,8 +78,9 @@ serve(async (req) => {
       basic: {
         amount: 7500, // €75.00
         name: "Plan Básico",
-        description: "Evaluación inicial completa y plan básico",
-        mode: "payment" as const,
+        description: "Plan mensual básico con seguimiento",
+        mode: "subscription" as const,
+        recurring: { interval: "month" as const },
       },
       premium: {
         amount: 12000, // €120.00
