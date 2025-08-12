@@ -56,11 +56,11 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const sidebarItems = [
-    { label: 'Mi Perfil', icon: User, href: '#profile' },
-    { label: 'Configuraciones', icon: Settings, href: '#settings' },
-    { label: 'Mis Dietas', icon: BookOpen, href: '#diets' },
-    { label: 'Mis Entrenamientos', icon: Dumbbell, href: '#workouts' },
-    { label: 'Calendario', icon: Calendar, href: '#calendar' },
+    { label: 'Mi Perfil', icon: User, section: 'profile' },
+    { label: 'Configuraciones', icon: Settings, section: 'settings' },
+    { label: 'Mis Dietas', icon: BookOpen, section: 'diets' },
+    { label: 'Mis Entrenamientos', icon: Dumbbell, section: 'workouts' },
+    { label: 'Calendario', icon: Calendar, section: 'calendar' },
     { label: 'Página de Visitantes', icon: Home, action: onNavigateToHome },
     { label: 'Portfolio', icon: Camera, action: onNavigateToPortfolio },
     { label: 'Noticias para Ti', icon: FileText, action: onNavigateToNews },
@@ -175,7 +175,7 @@ const Header: React.FC<HeaderProps> = ({
                     className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
                   >
                     <Settings className="w-4 h-4" />
-                    <span>Configuración</span>
+                    <span>Menú</span>
                   </Button>
                 </>
               ) : (
@@ -269,7 +269,7 @@ const Header: React.FC<HeaderProps> = ({
                       variant="outline"
                       className="w-full border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
                     >
-                      Configuración
+                      Menú
                     </Button>
                   </div>
                 ) : (
@@ -311,7 +311,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-right">
             <div className="p-6">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xl font-bold text-nutrition-green-emerald">Configuración</h2>
+                <h2 className="text-xl font-bold text-nutrition-green-emerald">Menú</h2>
                 <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
                   <X className="w-5 h-5" />
                 </Button>
@@ -319,21 +319,23 @@ const Header: React.FC<HeaderProps> = ({
 
               <nav className="space-y-2">
                 {sidebarItems.map((item) => (
-                  <a
+                  <button
                     key={item.label}
-                    href={item.href}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-nutrition-green-lighter text-nutrition-black hover:text-nutrition-green-forest transition-colors duration-200"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-nutrition-green-lighter text-nutrition-black hover:text-nutrition-green-forest transition-colors duration-200 w-full text-left"
                     onClick={(e) => {
+                      e.preventDefault();
                       if (item.action) {
-                        e.preventDefault();
                         item.action();
+                      } else if (item.section) {
+                        // Dispatch custom event to trigger section change in dashboard
+                        window.dispatchEvent(new CustomEvent('navigate-to-section', { detail: item.section }));
                       }
                       setIsSidebarOpen(false);
                     }}
                   >
                     <item.icon className="w-5 h-5" />
                     <span>{item.label}</span>
-                  </a>
+                  </button>
                 ))}
               </nav>
 

@@ -46,6 +46,38 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { toast } = useToast();
 
+  // Escuchar eventos de navegación del menú lateral
+  useEffect(() => {
+    const handleSectionNavigation = (event: CustomEvent) => {
+      const section = event.detail;
+      console.log('Navigating to section:', section);
+      
+      // Mapear las secciones a las vistas correctas
+      const sectionMapping: { [key: string]: string } = {
+        'profile': 'profile',
+        'settings': 'profile', // Configuraciones también va al perfil por ahora
+        'diets': 'diets',
+        'workouts': 'workouts',
+        'calendar': 'schedule'
+      };
+
+      const targetView = sectionMapping[section];
+      if (targetView) {
+        if (['diets', 'workouts', 'schedule'].includes(targetView)) {
+          handlePremiumView(targetView);
+        } else {
+          setCurrentView(targetView);
+        }
+      }
+    };
+
+    window.addEventListener('navigate-to-section', handleSectionNavigation as EventListener);
+    
+    return () => {
+      window.removeEventListener('navigate-to-section', handleSectionNavigation as EventListener);
+    };
+  }, [hasActiveSubscription]);
+
   // Verificar si debe mostrar el modal de bienvenida
   useEffect(() => {
     const checkWelcomeModalStatus = async () => {
