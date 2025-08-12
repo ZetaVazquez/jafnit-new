@@ -31,6 +31,7 @@ import News from './News';
 import Gifts from './Gifts';
 import WelcomeGiftModal from './WelcomeGiftModal';
 import SubscriptionInfo from './SubscriptionInfo';
+import { TodayGoalsWidget, WorkoutStatsWidget, ActiveDaysWidget } from './DashboardWidgets';
 import { useToast } from '@/hooks/use-toast';
 
 interface ClientDashboardProps {
@@ -262,41 +263,9 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
       <main className="container mx-auto px-4 py-8">
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald text-white">
-            <CardContent className="py-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/80 text-sm">Objetivos de Hoy</p>
-                  <p className="text-2xl font-bold">3/4</p>
-                </div>
-                <Target className="w-8 h-8 text-white/80" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <CardContent className="py-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/80 text-sm">Entrenamientos</p>
-                  <p className="text-2xl font-bold">12</p>
-                </div>
-                <Dumbbell className="w-8 h-8 text-white/80" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-            <CardContent className="py-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/80 text-sm">Días Activos</p>
-                  <p className="text-2xl font-bold">7</p>
-                </div>
-                <TrendingUp className="w-8 h-8 text-white/80" />
-              </div>
-            </CardContent>
-          </Card>
+          <TodayGoalsWidget />
+          <WorkoutStatsWidget />
+          <ActiveDaysWidget />
         </div>
 
         {/* Subscription Info */}

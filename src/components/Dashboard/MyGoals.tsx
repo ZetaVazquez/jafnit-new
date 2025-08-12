@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Target, Plus, CheckCircle, PartyPopper } from 'lucide-react';
+import { ArrowLeft, CheckCircle, PartyPopper } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { DailyGoal, DailyProgress } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
 
 interface MyGoalsProps {
@@ -14,8 +13,7 @@ interface MyGoalsProps {
 
 const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
   const { user } = useAuth();
-  const [goals, setGoals] = useState<DailyGoal[]>([]);
-  const [todayProgress, setTodayProgress] = useState<DailyProgress[]>([]);
+  const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [showCongratulations, setShowCongratulations] = useState(false);
 
@@ -24,24 +22,24 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
   // Definir objetivos predefinidos
   const defaultHabits = [
     // ALIMENTACIÓN
-    { id: 'food_1', category: 'ALIMENTACIÓN', icon: '🍽️', title: '¿Has hecho todas tus comidas del día sin saltarte ninguna?' },
-    { id: 'food_2', category: 'ALIMENTACIÓN', icon: '🍽️', title: '¿Comiste con calma, sin distracciones y sin culpa?' },
-    { id: 'food_3', category: 'ALIMENTACIÓN', icon: '🍽️', title: '¿Incluiste alimentos reales y balanceados (proteína, verdura, buenos hidratos)?' },
+    { id: 'alimentacion_1', category: 'ALIMENTACIÓN', icon: '🍽️', title: '¿Has hecho todas tus comidas del día sin saltarte ninguna?' },
+    { id: 'alimentacion_2', category: 'ALIMENTACIÓN', icon: '🍽️', title: '¿Comiste con calma, sin distracciones y sin culpa?' },
+    { id: 'alimentacion_3', category: 'ALIMENTACIÓN', icon: '🍽️', title: '¿Incluiste alimentos reales y balanceados (proteína, verdura, buenos hidratos)?' },
     
     // MOVIMIENTO
-    { id: 'movement_1', category: 'MOVIMIENTO', icon: '🚶', title: '¿Has entrenado o te has movido al menos 30-60 min hoy?' },
-    { id: 'movement_2', category: 'MOVIMIENTO', icon: '🚶', title: '¿Superaste los pasos diarios marcados?' },
-    { id: 'movement_3', category: 'MOVIMIENTO', icon: '🚶', title: '¿Has evitado pasar demasiadas horas seguidas sentado/a?' },
+    { id: 'movimiento_1', category: 'MOVIMIENTO', icon: '🚶', title: '¿Has entrenado o te has movido al menos 30-60 min hoy?' },
+    { id: 'movimiento_2', category: 'MOVIMIENTO', icon: '🚶', title: '¿Superaste los pasos diarios marcados?' },
+    { id: 'movimiento_3', category: 'MOVIMIENTO', icon: '🚶', title: '¿Has evitado pasar demasiadas horas seguidas sentado/a?' },
     
     // HIDRATACIÓN
-    { id: 'hydration_1', category: 'HIDRATACIÓN', icon: '💧', title: '¿Has bebido al menos 8 vasos de agua?' },
-    { id: 'hydration_2', category: 'HIDRATACIÓN', icon: '💧', title: '¿Has empezado el día con un vaso de agua en ayunas?' },
-    { id: 'hydration_3', category: 'HIDRATACIÓN', icon: '💧', title: '¿Evitaste refrescos azucarados o bebidas innecesarias?' },
+    { id: 'hidratacion_1', category: 'HIDRATACIÓN', icon: '💧', title: '¿Has bebido al menos 8 vasos de agua?' },
+    { id: 'hidratacion_2', category: 'HIDRATACIÓN', icon: '💧', title: '¿Has empezado el día con un vaso de agua en ayunas?' },
+    { id: 'hidratacion_3', category: 'HIDRATACIÓN', icon: '💧', title: '¿Evitaste refrescos azucarados o bebidas innecesarias?' },
     
     // DESCANSO
-    { id: 'rest_1', category: 'DESCANSO', icon: '😴', title: '¿Cenaste con tiempo antes de irte a dormir?' },
-    { id: 'rest_2', category: 'DESCANSO', icon: '😴', title: '¿Desconectaste pantallas al menos 30 min antes de dormir?' },
-    { id: 'rest_3', category: 'DESCANSO', icon: '😴', title: '¿Te sientes descansado/a al final del día?' }
+    { id: 'descanso_1', category: 'DESCANSO', icon: '😴', title: '¿Cenaste con tiempo antes de irte a dormir?' },
+    { id: 'descanso_2', category: 'DESCANSO', icon: '😴', title: '¿Desconectaste pantallas al menos 30 min antes de dormir?' },
+    { id: 'descanso_3', category: 'DESCANSO', icon: '😴', title: '¿Te sientes descansado/a al final del día?' }
   ];
 
   useEffect(() => {
@@ -49,19 +47,31 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
       if (!user) return;
 
       try {
-        // Fetch today's progress
+        // Obtener logs de hábitos completados del día
         const { data: progressData, error: progressError } = await supabase
-          .from('daily_progress')
+          .from('activity_logs')
           .select('*')
           .eq('user_id', user.id)
-          .eq('date', today);
+          .eq('activity_type', 'habit_completed')
+          .gte('created_at', `${today}T00:00:00.000Z`)
+          .lt('created_at', `${today}T23:59:59.999Z`);
 
         if (progressError) {
           console.error('Error fetching progress:', progressError);
           return;
         }
 
-        setTodayProgress(progressData || []);
+        // Extraer los IDs de hábitos completados
+        const completedIds = (progressData || [])
+          .map(log => {
+            if (typeof log.metadata === 'object' && log.metadata && 'habit_id' in log.metadata) {
+              return log.metadata.habit_id as string;
+            }
+            return null;
+          })
+          .filter((id): id is string => id !== null);
+
+        setCompletedHabits(new Set(completedIds));
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -76,65 +86,51 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
     if (!user) return;
 
     try {
-      const existingProgress = todayProgress.find(p => p.goal_id === goalId);
+      if (completed) {
+        if (!completedHabits.has(goalId)) {
+          // Crear nuevo log de actividad para el hábito completado
+          const { error } = await supabase
+            .from('activity_logs')
+            .insert({
+              user_id: user.id,
+              activity_type: 'habit_completed',
+              description: `Hábito completado: ${defaultHabits.find(h => h.id === goalId)?.title}`,
+              metadata: { habit_id: goalId }
+            });
 
-      if (existingProgress) {
-        // Update existing progress
-        const { error } = await supabase
-          .from('daily_progress')
-          .update({
-            completed,
-            completed_at: completed ? new Date().toISOString() : null
-          })
-          .eq('id', existingProgress.id);
+          if (error) {
+            console.error('Error creating progress:', error);
+            return;
+          }
 
-        if (error) {
-          console.error('Error updating progress:', error);
-          return;
-        }
+          const newCompletedHabits = new Set(completedHabits).add(goalId);
+          setCompletedHabits(newCompletedHabits);
 
-        const updatedProgress = todayProgress.map(p =>
-          p.id === existingProgress.id
-            ? { ...p, completed, completed_at: completed ? new Date().toISOString() : null }
-            : p
-        );
-        setTodayProgress(updatedProgress);
-
-        // Check if all goals are completed
-        if (completed) {
-          const completedCount = updatedProgress.filter(p => p.completed).length;
-          if (completedCount === defaultHabits.length) {
+          // Check if all goals are completed
+          if (newCompletedHabits.size === defaultHabits.length) {
             setShowCongratulations(true);
           }
         }
       } else {
-        // Create new progress entry
-        const { data, error } = await supabase
-          .from('daily_progress')
-          .insert({
-            user_id: user.id,
-            goal_id: goalId,
-            date: today,
-            completed,
-            completed_at: completed ? new Date().toISOString() : null
-          })
-          .select()
-          .single();
+        if (completedHabits.has(goalId)) {
+          // Eliminar el log de actividad más reciente para este hábito
+          const { error } = await supabase
+            .from('activity_logs')
+            .delete()
+            .eq('user_id', user.id)
+            .eq('activity_type', 'habit_completed')
+            .contains('metadata', { habit_id: goalId })
+            .gte('created_at', `${today}T00:00:00.000Z`)
+            .lt('created_at', `${today}T23:59:59.999Z`);
 
-        if (error) {
-          console.error('Error creating progress:', error);
-          return;
-        }
-
-        const updatedProgress = [...todayProgress, data];
-        setTodayProgress(updatedProgress);
-
-        // Check if all goals are completed
-        if (completed) {
-          const completedCount = updatedProgress.filter(p => p.completed).length;
-          if (completedCount === defaultHabits.length) {
-            setShowCongratulations(true);
+          if (error) {
+            console.error('Error removing progress:', error);
+            return;
           }
+
+          const newCompletedHabits = new Set(completedHabits);
+          newCompletedHabits.delete(goalId);
+          setCompletedHabits(newCompletedHabits);
         }
       }
     } catch (error) {
@@ -142,17 +138,17 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
     }
   };
 
-  const getGoalProgress = (goalId: string) => {
-    return todayProgress.find(p => p.goal_id === goalId);
+  const isHabitCompleted = (goalId: string) => {
+    return completedHabits.has(goalId);
   };
 
-  const groupedHabits = defaultHabits.reduce((acc, habit) => {
-    if (!acc[habit.category]) {
-      acc[habit.category] = [];
+  const groupedHabits: Record<string, Array<{ id: string; category: string; icon: string; title: string }>> = {};
+  defaultHabits.forEach(habit => {
+    if (!groupedHabits[habit.category]) {
+      groupedHabits[habit.category] = [];
     }
-    acc[habit.category].push(habit);
-    return acc;
-  }, {} as Record<string, typeof defaultHabits>);
+    groupedHabits[habit.category].push(habit);
+  });
 
   if (loading) {
     return (
@@ -165,7 +161,7 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
     );
   }
 
-  const completedToday = todayProgress.filter(p => p.completed).length;
+  const completedToday = completedHabits.size;
   const totalGoals = defaultHabits.length;
   const completionPercentage = totalGoals > 0 ? Math.round((completedToday / totalGoals) * 100) : 0;
 
@@ -185,6 +181,7 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
           <h1 className="text-3xl font-bold text-nutrition-black">✅ TU CHECKLIST DIARIA DE HÁBITOS 🔁</h1>
           <p className="text-nutrition-gray mt-2">La clave no es hacerlo perfecto. Es hacerlo constante.</p>
           <p className="text-nutrition-gray">Cada día cuenta. Usa esta lista como guía para mantenerte en tu camino, sin agobios, sin castigos. Solo tú contigo. Y con tu objetivo claro.</p>
+          <p className="text-sm text-nutrition-green font-semibold mt-2">NOTA: Solo marcar las casillas si la respuesta es SÍ</p>
         </div>
       </header>
 
@@ -219,8 +216,7 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
               <CardContent className="py-4">
                 <div className="space-y-3">
                   {habits.map((habit) => {
-                    const progress = getGoalProgress(habit.id);
-                    const isCompleted = progress?.completed || false;
+                    const isCompleted = isHabitCompleted(habit.id);
 
                     return (
                       <div key={habit.id} className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${isCompleted ? 'bg-green-50 border border-green-200' : 'hover:bg-gray-50'}`}>
@@ -229,9 +225,14 @@ const MyGoals: React.FC<MyGoalsProps> = ({ onGoBack }) => {
                           onCheckedChange={(checked) => handleGoalToggle(habit.id, checked as boolean)}
                           className="w-5 h-5"
                         />
-                        <p className={`flex-1 ${isCompleted ? 'text-green-800 line-through' : 'text-nutrition-black'}`}>
-                          {habit.title}
-                        </p>
+                        <div className="flex-1">
+                          <p className={`${isCompleted ? 'text-green-800 line-through' : 'text-nutrition-black'}`}>
+                            ☐ {habit.title}
+                          </p>
+                          <p className="text-xs text-nutrition-gray mt-1">
+                            (Marca solo si la respuesta es SÍ)
+                          </p>
+                        </div>
                         {isCompleted && <CheckCircle className="w-5 h-5 text-green-600" />}
                       </div>
                     );
