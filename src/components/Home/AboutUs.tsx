@@ -29,10 +29,9 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
         
-        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/4 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
