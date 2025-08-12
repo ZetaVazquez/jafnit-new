@@ -57,10 +57,10 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </ScrollReveal>
         </div>
 
-        {/* Journey Path with straight line */}
+        {/* Journey Path with straight vertical line */}
         <div className="relative max-w-6xl mx-auto">
-          {/* Straight horizontal line */}
-          <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 h-1 bg-gradient-to-r from-nutrition-green via-nutrition-accent to-nutrition-green opacity-80 z-0"></div>
+          {/* Straight vertical line */}
+          <div className="absolute left-1/2 top-0 bottom-0 transform -translate-x-1/2 w-1 bg-gradient-to-b from-nutrition-green via-nutrition-accent to-nutrition-green opacity-80 z-0"></div>
 
           {/* Journey Steps with alternating layout */}
           <div className="space-y-16">
