@@ -111,11 +111,11 @@ export const WorkoutStatsWidget: React.FC = () => {
       if (!user) return;
 
       try {
+        // Contar planes de entrenamiento asignados al usuario
         const { data: workoutData, error: workoutError } = await supabase
-          .from('activity_logs')
+          .from('workout_plans')
           .select('*')
-          .eq('user_id', user.id)
-          .eq('activity_type', 'workout_completed');
+          .eq('user_id', user.id);
 
         if (workoutError) {
           console.error('Error fetching workout stats:', workoutError);
@@ -134,13 +134,13 @@ export const WorkoutStatsWidget: React.FC = () => {
 
     // Set up real-time updates
     const channel = supabase
-      .channel('workout-updates')
+      .channel('workout-plans-updates')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'activity_logs',
+          table: 'workout_plans',
           filter: `user_id=eq.${user?.id}`
         },
         () => {
