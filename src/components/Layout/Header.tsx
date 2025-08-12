@@ -11,8 +11,6 @@ interface HeaderProps {
   onRegister: () => void;
   onLogout: () => void;
   onNavigateToHome?: () => void;
-  onNavigateToPortfolio?: () => void;
-  onNavigateToNews?: () => void;
   onNavigateToChangePlan?: () => void;
   onStartQuestionnaire?: () => void;
   onNavigateToDashboard?: () => void;
@@ -21,6 +19,7 @@ interface HeaderProps {
   onNavigateToDiets?: () => void;
   onNavigateToWorkouts?: () => void;
   onNavigateToSchedule?: () => void;
+  showDashboard?: boolean; // Nueva prop para saber si estamos en el dashboard
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -29,8 +28,6 @@ const Header: React.FC<HeaderProps> = ({
   onRegister, 
   onLogout,
   onNavigateToHome,
-  onNavigateToPortfolio,
-  onNavigateToNews,
   onNavigateToChangePlan,
   onStartQuestionnaire,
   onNavigateToDashboard,
@@ -38,7 +35,8 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToGoals,
   onNavigateToDiets,
   onNavigateToWorkouts,
-  onNavigateToSchedule
+  onNavigateToSchedule,
+  showDashboard = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -71,9 +69,6 @@ const Header: React.FC<HeaderProps> = ({
     { label: 'Mis Dietas', icon: BookOpen, action: onNavigateToDiets },
     { label: 'Mis Entrenamientos', icon: Dumbbell, action: onNavigateToWorkouts },
     { label: 'Calendario', icon: Calendar, action: onNavigateToSchedule },
-    { label: 'Página de Visitantes', icon: Home, action: onNavigateToHome },
-    { label: 'Portfolio', icon: Camera, action: onNavigateToPortfolio },
-    { label: 'Noticias para Ti', icon: FileText, action: onNavigateToNews },
     { label: 'Cambiar mi Plan', icon: CreditCard, action: onNavigateToChangePlan },
   ];
 
@@ -105,8 +100,8 @@ const Header: React.FC<HeaderProps> = ({
     window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank');
   };
 
-  // Check if we're on the public page (assuming currentView is not passed as prop, we'll check URL or state)
-  const isOnPublicPage = window.location.pathname === '/' && window.location.hash === '';
+  // Check if we're on the dashboard (not the public page)
+  const isOnDashboard = window.location.hash === '#settings' || showDashboard;
 
   return (
     <>
@@ -155,8 +150,8 @@ const Header: React.FC<HeaderProps> = ({
                     <span>Chat</span>
                   </Button>
                   
-                  {/* Back to Public Page - Only show when NOT on public page */}
-                  {!isOnPublicPage && (
+                  {/* Back to Public Page - Only show when IN the dashboard */}
+                  {showDashboard && onNavigateToHome && (
                     <Button
                       onClick={onNavigateToHome}
                       variant="outline"
@@ -245,10 +240,10 @@ const Header: React.FC<HeaderProps> = ({
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Chat con Entrenador
                     </Button>
-                    {!isOnPublicPage && (
+                    {showDashboard && onNavigateToHome && (
                       <Button
                         onClick={() => {
-                          onNavigateToHome?.();
+                          onNavigateToHome();
                           setIsMenuOpen(false);
                         }}
                         variant="outline"

@@ -91,19 +91,9 @@ const Index = () => {
     setShowDashboard(true);
   };
 
-  const handleNavigateToNews = () => {
-    setDashboardView('news');
-    setShowDashboard(true);
-  };
-
   const handleNavigateToChangePlan = () => {
     // Logic for changing plan
     console.log('Navigate to change plan');
-  };
-
-  const handleNavigateToPortfolio = () => {
-    // Logic for portfolio
-    console.log('Navigate to portfolio');
   };
 
   const handleLogin = () => {
@@ -154,9 +144,8 @@ const Index = () => {
             onNavigateToDiets={handleNavigateToDiets}
             onNavigateToWorkouts={handleNavigateToWorkouts}
             onNavigateToSchedule={handleNavigateToSchedule}
-            onNavigateToNews={handleNavigateToNews}
             onNavigateToChangePlan={handleNavigateToChangePlan}
-            onNavigateToPortfolio={handleNavigateToPortfolio}
+            showDashboard={showRegistrationAfterQuestionnaire}
           />
           <AuthModal 
             isOpen={true}
@@ -185,9 +174,8 @@ const Index = () => {
             onNavigateToDiets={handleNavigateToDiets}
             onNavigateToWorkouts={handleNavigateToWorkouts}
             onNavigateToSchedule={handleNavigateToSchedule}
-            onNavigateToNews={handleNavigateToNews}
             onNavigateToChangePlan={handleNavigateToChangePlan}
-            onNavigateToPortfolio={handleNavigateToPortfolio}
+            showDashboard={showClientForm}
           />
           <ClientFormModal 
             isOpen={true}
@@ -215,9 +203,8 @@ const Index = () => {
           onNavigateToDiets={handleNavigateToDiets}
           onNavigateToWorkouts={handleNavigateToWorkouts}
           onNavigateToSchedule={handleNavigateToSchedule}
-          onNavigateToNews={handleNavigateToNews}
           onNavigateToChangePlan={handleNavigateToChangePlan}
-          onNavigateToPortfolio={handleNavigateToPortfolio}
+          showDashboard={showDashboard}
         />
         <main>
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
