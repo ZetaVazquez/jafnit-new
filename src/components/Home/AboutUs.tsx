@@ -24,14 +24,22 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
+        {/* Circles */}
         <div className="geometric-shape circle-shape w-16 h-16 md:w-32 md:h-32 top-10 left-10 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-1/2 right-20 animate-bounce-gentle"></div>
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-14 h-14 md:w-28 md:h-28 top-3/4 left-16 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-1/3 left-3/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-32 right-12 animate-pulse-slow"></div>
         
+        {/* Triangles */}
         <div className="geometric-shape triangle-shape triangle-up top-40 left-1/4 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-2/3 right-1/3 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up bottom-1/3 left-3/4 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-1/6 left-2/3 animate-pulse-slow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
