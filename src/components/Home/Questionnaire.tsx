@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQuestionnaire } from '@/hooks/useQuestionnaire';
 import { useToast } from '@/hooks/use-toast';
 
@@ -21,7 +22,7 @@ interface QuestionnaireQuestion {
   type: 'multiple-choice' | 'text' | 'form';
   options?: string[];
   required: boolean;
-  fields?: { name: string; label: string; type: string; required: boolean }[];
+  fields?: { name: string; label: string; type: string; required: boolean; options?: string[] }[];
 }
 
 const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) => {
@@ -99,16 +100,61 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
     },
     {
       id: '7',
-      step: '📇 Paso 7: Tus datos para poder ayudarte mejor',
-      question: 'Déjame tus datos de contacto para enviarte una propuesta personalizada.',
+      step: '🗂️ Paso 7: Ficha del Cliente - JAFNFIT',
+      question: 'Complete su información personal para crear su perfil personalizado.',
       type: 'form',
       required: true,
       fields: [
-        { name: 'name', label: 'Nombre y apellidos', type: 'text', required: true },
+        // Datos Generales
+        { name: 'full_name', label: 'Nombre completo', type: 'text', required: true },
+        { name: 'birth_date', label: 'Fecha de nacimiento', type: 'date', required: true },
+        { name: 'age', label: 'Edad', type: 'number', required: true },
+        { name: 'gender', label: 'Sexo', type: 'select', required: true, options: ['Masculino', 'Femenino', 'Otro'] },
+        { name: 'phone', label: 'Teléfono / WhatsApp', type: 'tel', required: true },
         { name: 'email', label: 'Correo electrónico', type: 'email', required: true },
-        { name: 'phone', label: 'Teléfono', type: 'tel', required: true },
-        { name: 'country', label: 'País de residencia', type: 'text', required: true },
-        { name: 'instagram', label: 'Tu cuenta de Instagram (opcional pero recomendado)', type: 'text', required: false }
+        { name: 'dni_nie', label: 'DNI/NIE (opcional)', type: 'text', required: false },
+        { name: 'address', label: 'Dirección', type: 'text', required: true },
+        { name: 'city', label: 'Ciudad', type: 'text', required: true },
+        { name: 'start_date', label: 'Fecha de inicio', type: 'date', required: true },
+        { name: 'contracted_program', label: 'Programa contratado', type: 'select', required: true, options: ['Básico (75€)', 'Premium (120€)', 'Pro trimestral (300€)'] },
+        { name: 'payment_method', label: 'Forma de pago', type: 'select', required: true, options: ['Tarjeta', 'Bizum', 'Transferencia', 'Web'] },
+        { name: 'next_renewal', label: 'Próxima renovación', type: 'date', required: false },
+        { name: 'acquisition_source', label: 'Fuente de captación', type: 'select', required: true, options: ['Instagram', 'Recomendación', 'WhatsApp', 'Página web', 'Otro'] },
+        
+        // Objetivos y Motivación
+        { name: 'main_objective', label: 'Objetivo principal', type: 'select', required: true, options: ['Pérdida de grasa', 'Rendimiento (oposiciones)', 'Ganancia muscular', 'Recomposición corporal'] },
+        { name: 'secondary_objectives', label: 'Objetivos secundarios', type: 'textarea', required: false },
+        { name: 'personal_motivation', label: 'Motivación / Razón personal', type: 'textarea', required: true },
+        { name: 'commitment_time', label: 'Tiempo estimado de compromiso', type: 'text', required: true },
+        { name: 'ninety_day_goal', label: 'Objetivo a 90 días', type: 'textarea', required: true },
+        
+        // Datos físicos
+        { name: 'initial_weight', label: 'Peso (kg)', type: 'number', required: true },
+        { name: 'height_cm', label: 'Altura (cm)', type: 'number', required: true },
+        { name: 'bmi', label: 'IMC', type: 'number', required: false },
+        { name: 'waist_perimeter', label: 'Perímetro cintura (cm)', type: 'number', required: false },
+        { name: 'hip_perimeter', label: 'Perímetro cadera (cm)', type: 'number', required: false },
+        { name: 'body_fat_percentage', label: 'Grasa corporal estimada (%)', type: 'number', required: false },
+        { name: 'resting_heart_rate', label: 'Frecuencia cardíaca en reposo', type: 'number', required: false },
+        { name: 'measurements_date', label: 'Fecha de mediciones', type: 'date', required: true },
+        
+        // Información de actividad
+        { name: 'daily_activity_level', label: 'Nivel de actividad diaria (NEAT)', type: 'select', required: true, options: ['Sedentario', 'Moderado', 'Activo'] },
+        { name: 'current_training', label: 'Entrenamiento actual', type: 'textarea', required: false },
+        { name: 'physical_limitations', label: 'Limitaciones físicas o lesiones', type: 'textarea', required: false },
+        { name: 'training_availability', label: 'Disponibilidad para entrenar', type: 'textarea', required: false },
+        
+        // Hábitos alimentarios
+        { name: 'meals_per_day', label: 'Número de comidas al día', type: 'number', required: false },
+        { name: 'current_diet_type', label: 'Tipo de alimentación actual', type: 'textarea', required: false },
+        { name: 'food_restrictions', label: 'Alimentos que no consume o restringe', type: 'textarea', required: false },
+        { name: 'current_supplements', label: 'Suplementación actual', type: 'textarea', required: false },
+        { name: 'intolerances_allergies', label: 'Intolerancias / Alergias', type: 'textarea', required: false },
+        { name: 'pathologies', label: 'Patologías', type: 'textarea', required: false },
+        { name: 'daily_water_intake', label: 'Hidratación diaria (agua)', type: 'text', required: false },
+        
+        // Notas adicionales
+        { name: 'professional_notes', label: 'Notas adicionales del profesional', type: 'textarea', required: false }
       ]
     }
   ];
@@ -245,26 +291,227 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
     if (currentQuestionData.type === 'form') {
       const formData = (answers[currentQuestionData.id] as Record<string, string>) || {};
       return (
-        <div className="space-y-6">
-          <p className="text-sm text-gray-600 mb-6">📍 Campos:</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {currentQuestionData.fields?.map((field, index) => (
-              <div key={index} className={`space-y-2 ${field.name === 'instagram' ? 'md:col-span-2' : ''}`}>
-                <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                  {field.label}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
-                </Label>
-                <Input
-                  id={field.name}
-                  type={field.type}
-                  value={formData[field.name] || ''}
-                  onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                  placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                  className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
-                  required={field.required}
-                />
-              </div>
-            ))}
+        <div className="space-y-6 max-h-[60vh] overflow-y-auto">
+          <p className="text-sm text-gray-600 mb-6">📍 Complete todos los campos requeridos:</p>
+          
+          {/* Datos Generales */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">📅 Datos Generales</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {currentQuestionData.fields?.slice(0, 14).map((field, index) => (
+                <div key={index} className={`space-y-2 ${['address', 'secondary_objectives', 'personal_motivation', 'ninety_day_goal'].includes(field.name) ? 'md:col-span-2' : ''}`}>
+                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  {field.type === 'select' ? (
+                    <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
+                      <SelectTrigger className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green">
+                        <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options?.map((option, optIndex) => (
+                          <SelectItem key={optIndex} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : field.type === 'textarea' ? (
+                    <Textarea
+                      id={field.name}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
+                      rows={3}
+                    />
+                  ) : (
+                    <Input
+                      id={field.name}
+                      type={field.type}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                      required={field.required}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Objetivos y Motivación */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">🧠 Objetivos y Motivación</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {currentQuestionData.fields?.slice(14, 19).map((field, index) => (
+                <div key={index} className={`space-y-2 ${field.type === 'textarea' ? 'md:col-span-2' : ''}`}>
+                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  {field.type === 'select' ? (
+                    <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
+                      <SelectTrigger className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green">
+                        <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options?.map((option, optIndex) => (
+                          <SelectItem key={optIndex} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : field.type === 'textarea' ? (
+                    <Textarea
+                      id={field.name}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
+                      rows={3}
+                    />
+                  ) : (
+                    <Input
+                      id={field.name}
+                      type={field.type}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                      required={field.required}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Datos Físicos */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">📏 Datos Físicos</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {currentQuestionData.fields?.slice(19, 27).map((field, index) => (
+                <div key={index} className="space-y-2">
+                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  <Input
+                    id={field.name}
+                    type={field.type}
+                    value={formData[field.name] || ''}
+                    onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                    placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                    className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                    required={field.required}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Información de Actividad */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">🏋️‍♀️ Información de Actividad</h3>
+            <div className="grid grid-cols-1 gap-4">
+              {currentQuestionData.fields?.slice(27, 31).map((field, index) => (
+                <div key={index} className="space-y-2">
+                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  {field.type === 'select' ? (
+                    <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
+                      <SelectTrigger className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green">
+                        <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options?.map((option, optIndex) => (
+                          <SelectItem key={optIndex} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : field.type === 'textarea' ? (
+                    <Textarea
+                      id={field.name}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
+                      rows={3}
+                    />
+                  ) : (
+                    <Input
+                      id={field.name}
+                      type={field.type}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                      required={field.required}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hábitos Alimentarios */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">🍽️ Hábitos Alimentarios</h3>
+            <div className="grid grid-cols-1 gap-4">
+              {currentQuestionData.fields?.slice(31, 38).map((field, index) => (
+                <div key={index} className="space-y-2">
+                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  {field.type === 'textarea' ? (
+                    <Textarea
+                      id={field.name}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
+                      rows={3}
+                    />
+                  ) : (
+                    <Input
+                      id={field.name}
+                      type={field.type}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+                      required={field.required}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Notas Adicionales */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">💬 Notas Adicionales</h3>
+            <div className="space-y-4">
+              {currentQuestionData.fields?.slice(38).map((field, index) => (
+                <div key={index} className="space-y-2">
+                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
+                    {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  <Textarea
+                    id={field.name}
+                    value={formData[field.name] || ''}
+                    onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+                    placeholder="Observaciones psicológicas, motivacionales, barreras detectadas, etc."
+                    className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[100px]"
+                    rows={4}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       );
