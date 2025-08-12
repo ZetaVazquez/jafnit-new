@@ -16,6 +16,7 @@ import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
 import AuthModal from '@/components/Auth/AuthModal';
+import { ClientFormModal } from '@/components/Auth/ClientFormModal';
 import { useAuth } from '@/hooks/useAuth';
 import DynamicBackground from '@/components/Layout/DynamicBackground';
 
@@ -23,6 +24,7 @@ const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [showRegistrationAfterQuestionnaire, setShowRegistrationAfterQuestionnaire] = useState(false);
+  const [showClientForm, setShowClientForm] = useState(false);
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
@@ -44,6 +46,11 @@ const Index = () => {
 
   const handleRegistrationComplete = () => {
     setShowRegistrationAfterQuestionnaire(false);
+    setShowClientForm(true);
+  };
+
+  const handleClientFormComplete = () => {
+    setShowClientForm(false);
     setShowDashboard(true);
   };
 
@@ -99,6 +106,28 @@ const Index = () => {
             onClose={() => setShowRegistrationAfterQuestionnaire(false)}
             onSuccess={handleRegistrationComplete}
             initialTab="register"
+          />
+        </DynamicBackground>
+      </div>
+    );
+  }
+
+  if (showClientForm) {
+    return (
+      <div className="min-h-screen">
+        <DynamicBackground>
+          <Header 
+            isLoggedIn={!!user}
+            onLogin={handleLogin}
+            onRegister={handleRegister}
+            onLogout={handleLogout}
+            onNavigateToHome={handleBackToHome}
+            onNavigateToDashboard={handleGoToDashboard}
+          />
+          <ClientFormModal 
+            isOpen={true}
+            onClose={() => setShowClientForm(false)}
+            onSuccess={handleClientFormComplete}
           />
         </DynamicBackground>
       </div>
