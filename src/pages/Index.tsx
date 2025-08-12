@@ -25,6 +25,7 @@ const Index = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const [showRegistrationAfterQuestionnaire, setShowRegistrationAfterQuestionnaire] = useState(false);
   const [showClientForm, setShowClientForm] = useState(false);
+  const [dashboardView, setDashboardView] = useState<string>('dashboard');
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
@@ -56,10 +57,53 @@ const Index = () => {
 
   const handleBackToHome = () => {
     setShowDashboard(false);
+    setDashboardView('dashboard'); // Reset dashboard view
   };
 
   const handleLogout = () => {
     setShowDashboard(false);
+    setDashboardView('dashboard'); // Reset dashboard view
+  };
+
+  // Navigation functions for sidebar
+  const handleNavigateToProfile = () => {
+    setDashboardView('profile');
+    setShowDashboard(true);
+  };
+
+  const handleNavigateToGoals = () => {
+    setDashboardView('goals');
+    setShowDashboard(true);
+  };
+
+  const handleNavigateToDiets = () => {
+    setDashboardView('diets');
+    setShowDashboard(true);
+  };
+
+  const handleNavigateToWorkouts = () => {
+    setDashboardView('workouts');
+    setShowDashboard(true);
+  };
+
+  const handleNavigateToSchedule = () => {
+    setDashboardView('schedule');
+    setShowDashboard(true);
+  };
+
+  const handleNavigateToNews = () => {
+    setDashboardView('news');
+    setShowDashboard(true);
+  };
+
+  const handleNavigateToChangePlan = () => {
+    // Logic for changing plan
+    console.log('Navigate to change plan');
+  };
+
+  const handleNavigateToPortfolio = () => {
+    // Logic for portfolio
+    console.log('Navigate to portfolio');
   };
 
   const handleLogin = () => {
@@ -75,7 +119,12 @@ const Index = () => {
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
       <SubscriptionGuard strictMode={true}>
-        <ClientDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
+        <ClientDashboard 
+          onNavigateToHome={handleBackToHome} 
+          onLogout={handleLogout}
+          initialView={dashboardView}
+          onViewChange={setDashboardView}
+        />
       </SubscriptionGuard>
     );
   }
@@ -100,6 +149,14 @@ const Index = () => {
             onLogout={handleLogout}
             onNavigateToHome={handleBackToHome}
             onNavigateToDashboard={handleGoToDashboard}
+            onNavigateToProfile={handleNavigateToProfile}
+            onNavigateToGoals={handleNavigateToGoals}
+            onNavigateToDiets={handleNavigateToDiets}
+            onNavigateToWorkouts={handleNavigateToWorkouts}
+            onNavigateToSchedule={handleNavigateToSchedule}
+            onNavigateToNews={handleNavigateToNews}
+            onNavigateToChangePlan={handleNavigateToChangePlan}
+            onNavigateToPortfolio={handleNavigateToPortfolio}
           />
           <AuthModal 
             isOpen={true}
@@ -123,6 +180,14 @@ const Index = () => {
             onLogout={handleLogout}
             onNavigateToHome={handleBackToHome}
             onNavigateToDashboard={handleGoToDashboard}
+            onNavigateToProfile={handleNavigateToProfile}
+            onNavigateToGoals={handleNavigateToGoals}
+            onNavigateToDiets={handleNavigateToDiets}
+            onNavigateToWorkouts={handleNavigateToWorkouts}
+            onNavigateToSchedule={handleNavigateToSchedule}
+            onNavigateToNews={handleNavigateToNews}
+            onNavigateToChangePlan={handleNavigateToChangePlan}
+            onNavigateToPortfolio={handleNavigateToPortfolio}
           />
           <ClientFormModal 
             isOpen={true}
@@ -145,6 +210,14 @@ const Index = () => {
           onNavigateToHome={handleBackToHome}
           onNavigateToDashboard={handleGoToDashboard}
           onStartQuestionnaire={handleStartQuestionnaire}
+          onNavigateToProfile={handleNavigateToProfile}
+          onNavigateToGoals={handleNavigateToGoals}
+          onNavigateToDiets={handleNavigateToDiets}
+          onNavigateToWorkouts={handleNavigateToWorkouts}
+          onNavigateToSchedule={handleNavigateToSchedule}
+          onNavigateToNews={handleNavigateToNews}
+          onNavigateToChangePlan={handleNavigateToChangePlan}
+          onNavigateToPortfolio={handleNavigateToPortfolio}
         />
         <main>
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />

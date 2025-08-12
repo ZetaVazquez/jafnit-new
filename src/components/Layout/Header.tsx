@@ -16,6 +16,11 @@ interface HeaderProps {
   onNavigateToChangePlan?: () => void;
   onStartQuestionnaire?: () => void;
   onNavigateToDashboard?: () => void;
+  onNavigateToProfile?: () => void;
+  onNavigateToGoals?: () => void;
+  onNavigateToDiets?: () => void;
+  onNavigateToWorkouts?: () => void;
+  onNavigateToSchedule?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -28,7 +33,12 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToNews,
   onNavigateToChangePlan,
   onStartQuestionnaire,
-  onNavigateToDashboard
+  onNavigateToDashboard,
+  onNavigateToProfile,
+  onNavigateToGoals,
+  onNavigateToDiets,
+  onNavigateToWorkouts,
+  onNavigateToSchedule
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -56,11 +66,11 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const sidebarItems = [
-    { label: 'Mi Perfil', icon: User, section: 'profile' },
-    { label: 'Configuraciones', icon: Settings, section: 'settings' },
-    { label: 'Mis Dietas', icon: BookOpen, section: 'diets' },
-    { label: 'Mis Entrenamientos', icon: Dumbbell, section: 'workouts' },
-    { label: 'Calendario', icon: Calendar, section: 'calendar' },
+    { label: 'Mi Perfil', icon: User, action: onNavigateToProfile },
+    { label: 'Configuraciones', icon: Settings, action: onNavigateToProfile }, // Por ahora va al perfil
+    { label: 'Mis Dietas', icon: BookOpen, action: onNavigateToDiets },
+    { label: 'Mis Entrenamientos', icon: Dumbbell, action: onNavigateToWorkouts },
+    { label: 'Calendario', icon: Calendar, action: onNavigateToSchedule },
     { label: 'Página de Visitantes', icon: Home, action: onNavigateToHome },
     { label: 'Portfolio', icon: Camera, action: onNavigateToPortfolio },
     { label: 'Noticias para Ti', icon: FileText, action: onNavigateToNews },
@@ -326,9 +336,6 @@ const Header: React.FC<HeaderProps> = ({
                       e.preventDefault();
                       if (item.action) {
                         item.action();
-                      } else if (item.section) {
-                        // Dispatch custom event to trigger section change in dashboard
-                        window.dispatchEvent(new CustomEvent('navigate-to-section', { detail: item.section }));
                       }
                       setIsSidebarOpen(false);
                     }}
