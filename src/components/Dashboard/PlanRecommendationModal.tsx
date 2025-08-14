@@ -75,7 +75,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
     }
   };
 
-  const handleStripePayment = () => {
+  const handlePlanSelection = (planType: 'basic' | 'premium' | 'pro') => {
     if (!user) {
       toast({
         title: "Error",
@@ -92,7 +92,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       'pro': 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02'
     };
 
-    const url = planUrls[selectedPlan];
+    const url = planUrls[planType];
     if (url) {
       window.open(url, '_blank');
       toast({
@@ -162,7 +162,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                       <p className="text-nutrition-gray text-sm">{plan.duration}</p>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-2">
+                      <ul className="space-y-2 mb-4">
                         {plan.features.map((feature, index) => (
                           <li key={index} className="flex items-start text-xs">
                             <Check className="w-3 h-3 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
@@ -170,40 +170,27 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                           </li>
                         ))}
                       </ul>
+                      <Button
+                        onClick={() => handlePlanSelection(key as 'basic' | 'premium' | 'pro')}
+                        className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold"
+                      >
+                        Quiero este plan
+                      </Button>
                     </CardContent>
                   </Card>
                 ))}
               </div>
 
-              <div className="bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light p-4 rounded-lg backdrop-blur-sm">
-                <h3 className="font-bold text-nutrition-green-dark mb-3 title-playful">Método de Pago</h3>
-                <div className="flex items-center space-x-3">
-                  <div className="bg-white p-2 rounded-lg shadow-sm">
-                    <span className="text-nutrition-green font-bold">Stripe</span>
-                  </div>
-                  <span className="text-nutrition-gray">Pago seguro con tarjeta</span>
-                </div>
-                <p className="text-xs text-nutrition-gray mt-2">
-                  Pago seguro procesado por Stripe con activación inmediata
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex justify-center">
                 <Button
                   variant="outline"
                   onClick={() => {
                     onDecideLater();
                     window.location.href = '/';
                   }}
-                  className="flex-1 py-2"
+                  className="px-8 py-2"
                 >
                   Decidir Más Tarde
-                </Button>
-                <Button
-                  onClick={handleStripePayment}
-                  className="flex-1 py-2 bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold"
-                >
-                  Pagar con Stripe
                 </Button>
               </div>
             </div>
