@@ -19,6 +19,21 @@ interface Client {
   end_date: string | null;
   created_at: string;
   subscription_id?: string;
+  source?: string;
+}
+
+interface StripeSubscription {
+  id: string;
+  status: string;
+  plan_type: string;
+  current_period_end: string;
+}
+
+interface TraditionalSubscription {
+  id: string;
+  status: string;
+  plan_type: string;
+  end_date: string;
 }
 
 interface AdminClientsTableProps {
@@ -62,6 +77,12 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
             status,
             plan_type,
             end_date
+          ),
+          stripe_subscriptions (
+            id,
+            status,
+            plan_type,
+            current_period_end
           )
         `)
         .neq('email', 'josefiguenu@gmail.com')
@@ -70,16 +91,35 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
       if (error) throw error;
 
-      const clientsData = data?.map(profile => ({
-        id: profile.id,
-        name: profile.name,
-        email: profile.email,
-        created_at: profile.created_at,
-        subscription_status: profile.subscriptions?.[0]?.status || 'inactive',
-        plan_type: profile.subscriptions?.[0]?.plan_type || 'none',
-        end_date: profile.subscriptions?.[0]?.end_date || null,
-        subscription_id: profile.subscriptions?.[0]?.id || null
-      })) || [];
+      const clientsData = data?.map((profile: any) => {
+        // Priorizar suscripciones de Stripe si existen y están activas
+        const stripeSubscription = profile.stripe_subscriptions?.[0];
+        const traditionalSubscription = profile.subscriptions?.[0];
+        
+        let finalSubscription: any = traditionalSubscription;
+        
+        // Si hay suscripción de Stripe activa, usar esa
+        if (stripeSubscription && (stripeSubscription.status === 'active' || stripeSubscription.status === 'trialing')) {
+          finalSubscription = {
+            id: stripeSubscription.id,
+            status: stripeSubscription.status,
+            plan_type: stripeSubscription.plan_type,
+            end_date: stripeSubscription.current_period_end
+          };
+        }
+
+        return {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          created_at: profile.created_at,
+          subscription_status: finalSubscription?.status || 'inactive',
+          plan_type: finalSubscription?.plan_type || 'none',
+          end_date: finalSubscription?.end_date || null,
+          subscription_id: finalSubscription?.id || null,
+          source: stripeSubscription && (stripeSubscription.status === 'active' || stripeSubscription.status === 'trialing') ? 'stripe' : 'traditional'
+        };
+      }) || [];
 
       setClients(clientsData);
     } catch (error) {
