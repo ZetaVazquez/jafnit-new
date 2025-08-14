@@ -224,6 +224,7 @@ const Index = () => {
           onClose={() => setShowPlanModal(false)}
           onDecideLater={() => setShowPlanModal(false)}
           recommendedPlan="premium"
+          fromQuestionnaire={false}
         />
       </DynamicBackground>
     </div>

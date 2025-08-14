@@ -268,6 +268,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
         onClose={() => setShowPlansModal(false)}
         onDecideLater={() => setShowPlansModal(false)}
         recommendedPlan="premium"
+        fromQuestionnaire={false}
       />
     </div>
   );

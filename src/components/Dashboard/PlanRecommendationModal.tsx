@@ -13,13 +13,15 @@ interface PlanRecommendationModalProps {
   onClose: () => void;
   onDecideLater: () => void;
   recommendedPlan: 'basic' | 'premium' | 'pro';
+  fromQuestionnaire?: boolean;
 }
 
 const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   isOpen,
   onClose,
   onDecideLater,
-  recommendedPlan
+  recommendedPlan,
+  fromQuestionnaire = false
 }) => {
   const [selectedPlan, setSelectedPlan] = useState(recommendedPlan);
   const { user } = useAuth();
@@ -125,7 +127,10 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
             <div className="space-y-8">
               <div className="text-center">
                 <p className="text-lg text-nutrition-gray">
-                  Basándote en tus respuestas del cuestionario, hemos seleccionado el mejor plan para ti:
+                  {fromQuestionnaire 
+                    ? "Basándote en tus respuestas del cuestionario, hemos seleccionado el mejor plan para ti:"
+                    : "¿Qué plan quieres comprar?"
+                  }
                 </p>
               </div>
 

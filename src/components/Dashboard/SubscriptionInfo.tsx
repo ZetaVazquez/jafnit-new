@@ -168,6 +168,7 @@ const SubscriptionInfo: React.FC = () => {
         onClose={() => setShowPlansModal(false)}
         onDecideLater={() => setShowPlansModal(false)}
         recommendedPlan="premium"
+        fromQuestionnaire={false}
       />
     </Card>
   );
