@@ -57,7 +57,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
     }
   };
 
-  const handleStripePayment = async () => {
+  const handleStripePayment = () => {
     if (!user) {
       toast({
         title: "Error",
@@ -67,32 +67,15 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       return;
     }
 
-    try {
-      toast({
-        title: "Procesando...",
-        description: "Redirigiendo a Stripe Checkout"
-      });
-
-      const planType = selectedPlan === 'monthly' ? 'basic' : 'premium';
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType }
-      });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        // Open Stripe checkout in a new tab
-        window.open(data.url, '_blank');
-        onClose();
-      }
-    } catch (error) {
-      console.error('Error creating checkout:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo procesar el pago. Inténtalo de nuevo.",
-        variant: "destructive"
-      });
-    }
+    // Open Stripe payment page directly
+    window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
+    
+    toast({
+      title: "Redirigiendo a Stripe",
+      description: "Te hemos redirigido a la página de pago segura"
+    });
+    
+    onClose();
   };
 
   return (

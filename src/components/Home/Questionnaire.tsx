@@ -117,7 +117,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
         { name: 'city', label: 'Ciudad', type: 'text', required: true },
         { name: 'start_date', label: 'Fecha de inicio', type: 'date', required: true },
         { name: 'contracted_program', label: 'Programa contratado', type: 'select', required: true, options: ['Básico (75€)', 'Premium (120€)', 'Pro trimestral (300€)'] },
-        { name: 'payment_method', label: 'Forma de pago', type: 'select', required: true, options: ['Tarjeta', 'Bizum', 'Transferencia', 'Web'] },
+        { name: 'payment_method', label: 'Forma de pago', type: 'select', required: true, options: ['Tarjeta (Stripe)', 'Transferencia', 'Web'] },
         { name: 'next_renewal', label: 'Próxima renovación', type: 'date', required: false },
         { name: 'acquisition_source', label: 'Fuente de captación', type: 'select', required: true, options: ['Instagram', 'Recomendación', 'WhatsApp', 'Página web', 'Otro'] },
         

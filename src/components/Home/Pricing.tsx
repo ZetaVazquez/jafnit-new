@@ -16,37 +16,20 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
   const { user } = useAuth();
   const { toast } = useToast();
   
-  const handleSelectPlan = async (planType: string) => {
+  const handleSelectPlan = (planType: string) => {
     if (!user) {
       // If not authenticated, redirect to questionnaire first
       onStartQuestionnaire();
       return;
     }
 
-    try {
-      toast({
-        title: "Procesando...",
-        description: "Redirigiendo a Stripe Checkout"
-      });
-
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType }
-      });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        // Open Stripe checkout in a new tab
-        window.open(data.url, '_blank');
-      }
-    } catch (error) {
-      console.error('Error creating checkout:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo procesar el pago. Inténtalo de nuevo.",
-        variant: "destructive"
-      });
-    }
+    // Open Stripe payment page directly
+    window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
+    
+    toast({
+      title: "Redirigiendo a Stripe",
+      description: "Te hemos redirigido a la página de pago segura de Stripe"
+    });
   };
 
   const plans: PricingPlan[] = [

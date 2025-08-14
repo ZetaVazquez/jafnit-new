@@ -190,7 +190,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
                     </div>
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold text-nutrition-black">Pagos Pendientes</h3>
-                      <p className="text-nutrition-gray">Gestionar pagos por Bizum</p>
+                      <p className="text-nutrition-gray">Gestionar pagos de suscripciones</p>
                     </div>
                   </div>
                 </CardContent>

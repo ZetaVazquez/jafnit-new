@@ -90,13 +90,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
   };
 
   const handlePayment = () => {
-    // Redirigir a Bizum (simulado)
+    // Redirigir a Stripe
     toast({
-      title: "Redirigiendo a Bizum",
-      description: "Te redirigimos a la plataforma de pago..."
+      title: "Redirigiendo a Stripe",
+      description: "Te redirigimos a la plataforma de pago segura..."
     });
-    // En una implementación real, aquí se abriría Bizum
-    window.open('https://bizum.es', '_blank');
+    window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
   };
 
   return (
@@ -213,7 +212,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
                 onClick={handlePayment}
                 className="bg-nutrition-green hover:bg-nutrition-green-dark text-white"
               >
-                Pagar con Bizum
+                Pagar con Stripe
               </Button>
             </CardContent>
           </Card>

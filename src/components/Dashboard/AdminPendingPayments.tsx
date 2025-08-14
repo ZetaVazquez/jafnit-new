@@ -87,7 +87,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
           status: 'active',
           start_date: startDate.toISOString(),
           end_date: endDate.toISOString(),
-          payment_method: 'bizum',
+          payment_method: 'stripe',
           amount: payment.amount
         });
 
@@ -191,7 +191,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
           <CardHeader>
             <CardTitle className="flex items-center">
               <DollarSign className="w-5 h-5 mr-2" />
-              Pagos por Bizum Pendientes de Aprobación
+              Pagos Pendientes de Aprobación
             </CardTitle>
           </CardHeader>
           <CardContent>

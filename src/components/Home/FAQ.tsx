@@ -40,7 +40,7 @@ const FAQ: React.FC = () => {
       id: '5',
       category: 'Precio',
       question: '¿Qué formas de pago aceptas y hay descuentos?',
-      answer: 'Acepto transferencia bancaria, tarjeta de crédito/débito y Bizum para mayor comodidad. El Plan Básico es pago único de €75. Los planes Premium y PRO son mensuales pero ofrezco descuentos por pagos trimestrales y semestrales. El Plan PRO requiere mínimo 6 meses porque las transformaciones reales necesitan tiempo y constancia. No hago ofertas flash ni descuentos engañosos: el precio refleja el valor real del servicio personalizado que recibes. La inversión en tu salud y bienestar no tiene precio.'
+      answer: 'Acepto pagos seguros con tarjeta de crédito/débito a través de Stripe. El Plan Básico es pago único de €75. Los planes Premium y PRO son mensuales pero ofrezco descuentos por pagos trimestrales y semestrales. El Plan PRO requiere mínimo 6 meses porque las transformaciones reales necesitan tiempo y constancia. No hago ofertas flash ni descuentos engañosos: el precio refleja el valor real del servicio personalizado que recibes. La inversión en tu salud y bienestar no tiene precio.'
     },
     {
       id: '6',
