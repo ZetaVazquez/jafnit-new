@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -158,6 +158,144 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      client_forms: {
+        Row: {
+          acquisition_source: string | null
+          address: string | null
+          age: number | null
+          birth_date: string | null
+          bmi: number | null
+          body_fat_percentage: number | null
+          city: string | null
+          commitment_time: string | null
+          contracted_program: string | null
+          created_at: string
+          current_diet_type: string | null
+          current_supplements: string | null
+          current_training: string | null
+          daily_activity_level: string | null
+          daily_water_intake: string | null
+          dni_nie: string | null
+          email: string | null
+          food_restrictions: string | null
+          full_name: string | null
+          gender: string | null
+          height_cm: number | null
+          hip_perimeter: number | null
+          id: string
+          initial_weight: number | null
+          intolerances_allergies: string | null
+          main_objective: string | null
+          meals_per_day: number | null
+          measurements_date: string | null
+          next_renewal: string | null
+          ninety_day_goal: string | null
+          pathologies: string | null
+          payment_method: string | null
+          personal_motivation: string | null
+          phone: string | null
+          physical_limitations: string | null
+          professional_notes: string | null
+          resting_heart_rate: number | null
+          secondary_objectives: string | null
+          start_date: string | null
+          training_availability: string | null
+          updated_at: string
+          user_id: string
+          waist_perimeter: number | null
+        }
+        Insert: {
+          acquisition_source?: string | null
+          address?: string | null
+          age?: number | null
+          birth_date?: string | null
+          bmi?: number | null
+          body_fat_percentage?: number | null
+          city?: string | null
+          commitment_time?: string | null
+          contracted_program?: string | null
+          created_at?: string
+          current_diet_type?: string | null
+          current_supplements?: string | null
+          current_training?: string | null
+          daily_activity_level?: string | null
+          daily_water_intake?: string | null
+          dni_nie?: string | null
+          email?: string | null
+          food_restrictions?: string | null
+          full_name?: string | null
+          gender?: string | null
+          height_cm?: number | null
+          hip_perimeter?: number | null
+          id?: string
+          initial_weight?: number | null
+          intolerances_allergies?: string | null
+          main_objective?: string | null
+          meals_per_day?: number | null
+          measurements_date?: string | null
+          next_renewal?: string | null
+          ninety_day_goal?: string | null
+          pathologies?: string | null
+          payment_method?: string | null
+          personal_motivation?: string | null
+          phone?: string | null
+          physical_limitations?: string | null
+          professional_notes?: string | null
+          resting_heart_rate?: number | null
+          secondary_objectives?: string | null
+          start_date?: string | null
+          training_availability?: string | null
+          updated_at?: string
+          user_id: string
+          waist_perimeter?: number | null
+        }
+        Update: {
+          acquisition_source?: string | null
+          address?: string | null
+          age?: number | null
+          birth_date?: string | null
+          bmi?: number | null
+          body_fat_percentage?: number | null
+          city?: string | null
+          commitment_time?: string | null
+          contracted_program?: string | null
+          created_at?: string
+          current_diet_type?: string | null
+          current_supplements?: string | null
+          current_training?: string | null
+          daily_activity_level?: string | null
+          daily_water_intake?: string | null
+          dni_nie?: string | null
+          email?: string | null
+          food_restrictions?: string | null
+          full_name?: string | null
+          gender?: string | null
+          height_cm?: number | null
+          hip_perimeter?: number | null
+          id?: string
+          initial_weight?: number | null
+          intolerances_allergies?: string | null
+          main_objective?: string | null
+          meals_per_day?: number | null
+          measurements_date?: string | null
+          next_renewal?: string | null
+          ninety_day_goal?: string | null
+          pathologies?: string | null
+          payment_method?: string | null
+          personal_motivation?: string | null
+          phone?: string | null
+          physical_limitations?: string | null
+          professional_notes?: string | null
+          resting_heart_rate?: number | null
+          secondary_objectives?: string | null
+          start_date?: string | null
+          training_availability?: string | null
+          updated_at?: string
+          user_id?: string
+          waist_perimeter?: number | null
+        }
+        Relationships: []
       }
       daily_goals: {
         Row: {
@@ -501,6 +639,51 @@ export type Database = {
         }
         Relationships: []
       }
+      stripe_subscription_events: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan_type: string
+          status: string
+          stripe_customer_id: string
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_type: string
+          status?: string
+          stripe_customer_id: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_type?: string
+          status?: string
+          stripe_customer_id?: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       stripe_subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -766,8 +949,8 @@ export type Database = {
       }
       has_role: {
         Args: {
-          _user_id: string
           _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
         }
         Returns: boolean
       }
