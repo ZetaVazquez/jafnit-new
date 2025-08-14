@@ -72,7 +72,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
         isOpen={true}
         onClose={() => {}}
         onDecideLater={() => {}}
-        recommendedPlan="monthly"
+        recommendedPlan="premium"
       />
     );
   }

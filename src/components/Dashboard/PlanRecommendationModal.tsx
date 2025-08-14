@@ -12,7 +12,7 @@ interface PlanRecommendationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDecideLater: () => void;
-  recommendedPlan: 'monthly' | 'quarterly';
+  recommendedPlan: 'basic' | 'premium' | 'pro';
 }
 
 const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
@@ -26,33 +26,49 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   const { toast } = useToast();
 
   const plans = {
-    monthly: {
+    basic: {
       name: 'Plan Básico',
       price: '€75',
       duration: 'Pago único',
       features: [
-        'Evaluación inicial completa',
-        'Plan de alimentación personalizado',
-        'Rutina de ejercicios básica',
-        'Seguimiento semanal',
-        'Soporte por WhatsApp',
-        'Acceso a recursos básicos'
+        'Dirigido a principiantes que quieren orden',
+        'Nutrición personalizada con menú adaptado',
+        'Entrenamiento no incluido',
+        'Hábitos con guías básicas',
+        'Seguimiento: 1 revisión por mensaje',
+        'Sin análisis',
+        'Sin soporte',
+        'Extras: Guía de compras y batch cooking'
       ]
     },
-    quarterly: {
+    premium: {
       name: 'Plan Premium',
       price: '€120',
       duration: 'Por mes',
       features: [
-        'Todo lo del plan mensual',
-        'Evaluación médica avanzada',
-        'Plan de suplementación',
-        'Rutina de ejercicios avanzada',
-        'Seguimiento bisemanal',
-        'Recetas personalizadas',
-        'Acceso a la app móvil premium',
-        '2 sesiones de entrenamiento personal',
-        'Seguimiento mensual personalizado'
+        'Dirigido a personas que buscan mejorar composición corporal',
+        'Nutrición incluida + organización de comidas',
+        'Entrenamiento: Plan para casa o gimnasio',
+        'Hábitos: Plan estructurado + herramientas',
+        'Seguimiento: 1 consulta online o presencial mensual',
+        'Sin análisis',
+        'Soporte: Acceso básico a herramientas',
+        'Extras: Plantillas de control y rutinas'
+      ]
+    },
+    pro: {
+      name: 'Plan PRO',
+      price: '€300',
+      duration: 'Duración mínima 6 meses',
+      features: [
+        'Dirigido a personas comprometidas con un cambio completo',
+        'Nutrición incluida + revisión y ajustes avanzados',
+        'Entrenamiento completo, progresivo y evaluado',
+        'Hábitos: Fases inicio - media - consolidación',
+        'Seguimiento: Revisión quincenal por vídeo o mensaje',
+        'Análisis: Informe mensual con métricas y feedback',
+        'Soporte directo por WhatsApp (24h hábiles)',
+        'Extras: Retos, comunidad privada y evolución total'
       ]
     }
   };
@@ -69,8 +85,9 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
 
     // URLs específicas para cada plan
     const planUrls = {
-      'monthly': 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
-      'quarterly': 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01'
+      'basic': 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
+      'premium': 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01',
+      'pro': 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02'
     };
 
     const url = planUrls[selectedPlan];
@@ -112,7 +129,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-3 gap-4">
                 {Object.entries(plans).map(([key, plan]) => (
                   <Card
                     key={key}
@@ -123,7 +140,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                     } ${
                       recommendedPlan === key ? 'ring-2 ring-nutrition-accent' : ''
                     }`}
-                    onClick={() => setSelectedPlan(key as 'monthly' | 'quarterly')}
+                    onClick={() => setSelectedPlan(key as 'basic' | 'premium' | 'pro')}
                   >
                     <CardHeader className="text-center">
                       {recommendedPlan === key && (

@@ -9,6 +9,7 @@ import { ArrowLeft, Camera, Trash2, CreditCard } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import PlanRecommendationModal from './PlanRecommendationModal';
 
 interface UserProfileProps {
   onGoBack: () => void;
@@ -24,6 +25,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
     profile_image_url: profile?.profile_image_url || ''
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showPlansModal, setShowPlansModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
@@ -90,12 +92,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
   };
 
   const handlePayment = () => {
-    // Redirigir a Stripe
-    toast({
-      title: "Redirigiendo a Stripe",
-      description: "Te redirigimos a la plataforma de pago segura..."
-    });
-    window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
+    setShowPlansModal(true);
   };
 
   return (
@@ -212,7 +209,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
                 onClick={handlePayment}
                 className="bg-nutrition-green hover:bg-nutrition-green-dark text-white"
               >
-                Pagar con Stripe
+                Gestionar Suscripción
               </Button>
             </CardContent>
           </Card>
@@ -264,6 +261,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
           </Card>
         </div>
       </main>
+
+      {/* Plan Recommendation Modal */}
+      <PlanRecommendationModal
+        isOpen={showPlansModal}
+        onClose={() => setShowPlansModal(false)}
+        onDecideLater={() => setShowPlansModal(false)}
+        recommendedPlan="premium"
+      />
     </div>
   );
 };
