@@ -23,13 +23,21 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
       return;
     }
 
-    // Open Stripe payment page directly
-    window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
-    
-    toast({
-      title: "Redirigiendo a Stripe",
-      description: "Te hemos redirigido a la página de pago segura de Stripe"
-    });
+    // URLs específicas para cada plan
+    const planUrls = {
+      'basic': 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
+      'premium': 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01',
+      'pro': 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02'
+    };
+
+    const url = planUrls[planType as keyof typeof planUrls];
+    if (url) {
+      window.open(url, '_blank');
+      toast({
+        title: "Redirigiendo a Stripe",
+        description: "Te hemos redirigido a la página de pago segura de Stripe"
+      });
+    }
   };
 
   const plans: PricingPlan[] = [

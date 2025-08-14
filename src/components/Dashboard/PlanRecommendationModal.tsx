@@ -67,13 +67,20 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       return;
     }
 
-    // Open Stripe payment page directly
-    window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
-    
-    toast({
-      title: "Redirigiendo a Stripe",
-      description: "Te hemos redirigido a la página de pago segura"
-    });
+    // URLs específicas para cada plan
+    const planUrls = {
+      'monthly': 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
+      'quarterly': 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01'
+    };
+
+    const url = planUrls[selectedPlan];
+    if (url) {
+      window.open(url, '_blank');
+      toast({
+        title: "Redirigiendo a Stripe",
+        description: "Te hemos redirigido a la página de pago segura"
+      });
+    }
     
     onClose();
   };
