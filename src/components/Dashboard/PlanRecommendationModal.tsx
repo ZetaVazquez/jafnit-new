@@ -105,7 +105,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={() => { onClose(); window.location.href = '/'; }}>
-        <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-nutrition-green-lighter to-white relative p-6">
+        <DialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-7xl w-[95vw] max-h-[95vh] overflow-y-auto bg-gradient-to-br from-nutrition-green-lighter to-white relative p-6 z-50">
           {/* Decorative background elements reducidos para el modal */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
             <div className="geometric-shape circle-shape w-16 h-16 top-5 left-5 animate-pulse-slow"></div>

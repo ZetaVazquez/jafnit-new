@@ -19,6 +19,7 @@ import AuthModal from '@/components/Auth/AuthModal';
 import { ClientFormModal } from '@/components/Auth/ClientFormModal';
 import { useAuth } from '@/hooks/useAuth';
 import DynamicBackground from '@/components/Layout/DynamicBackground';
+import PlanRecommendationModal from '@/components/Dashboard/PlanRecommendationModal';
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -26,6 +27,7 @@ const Index = () => {
   const [showRegistrationAfterQuestionnaire, setShowRegistrationAfterQuestionnaire] = useState(false);
   const [showClientForm, setShowClientForm] = useState(false);
   const [dashboardView, setDashboardView] = useState<string>('dashboard');
+  const [showPlanModal, setShowPlanModal] = useState(false);
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
@@ -92,8 +94,7 @@ const Index = () => {
   };
 
   const handleNavigateToChangePlan = () => {
-    // Logic for changing plan
-    console.log('Navigate to change plan');
+    setShowPlanModal(true);
   };
 
   const handleLogin = () => {
@@ -218,6 +219,12 @@ const Index = () => {
           <Contact />
         </main>
         <Footer />
+        <PlanRecommendationModal
+          isOpen={showPlanModal}
+          onClose={() => setShowPlanModal(false)}
+          onDecideLater={() => setShowPlanModal(false)}
+          recommendedPlan="premium"
+        />
       </DynamicBackground>
     </div>
   );
