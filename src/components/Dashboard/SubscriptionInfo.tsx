@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CreditCard, Calendar, RefreshCw, ExternalLink } from 'lucide-react';
 import { useSubscription } from '@/hooks/useSubscription';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import PlanRecommendationModal from './PlanRecommendationModal';
 
 const SubscriptionInfo: React.FC = () => {
   const { 
@@ -18,29 +18,10 @@ const SubscriptionInfo: React.FC = () => {
     refreshSubscription 
   } = useSubscription();
   const { toast } = useToast();
+  const [showPlansModal, setShowPlansModal] = useState(false);
 
-  const handleManageSubscription = async () => {
-    try {
-      toast({
-        title: "Redirigiendo...",
-        description: "Abriendo portal de gestión de suscripción"
-      });
-
-      const { data, error } = await supabase.functions.invoke('customer-portal');
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (error) {
-      console.error('Error accessing customer portal:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo acceder al portal de gestión",
-        variant: "destructive"
-      });
-    }
+  const handleManageSubscription = () => {
+    setShowPlansModal(true);
   };
 
   const handleRefreshStatus = () => {
@@ -180,6 +161,14 @@ const SubscriptionInfo: React.FC = () => {
           </div>
         )}
       </CardContent>
+
+      {/* Plan Recommendation Modal */}
+      <PlanRecommendationModal
+        isOpen={showPlansModal}
+        onClose={() => setShowPlansModal(false)}
+        onDecideLater={() => setShowPlansModal(false)}
+        recommendedPlan="premium"
+      />
     </Card>
   );
 };
