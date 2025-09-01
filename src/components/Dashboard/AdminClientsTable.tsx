@@ -65,36 +65,48 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
       // Primero actualizar suscripciones expiradas
       await supabase.rpc('update_expired_subscriptions');
 
-      const { data, error } = await supabase
+      // Obtener perfiles
+      const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select(`
           id,
           name,
           email,
-          created_at,
-          subscriptions (
-            id,
-            status,
-            plan_type,
-            end_date
-          ),
-          stripe_subscriptions (
-            id,
-            status,
-            plan_type,
-            current_period_end
-          )
+          created_at
         `)
         .neq('email', 'josefiguenu@gmail.com')
         .neq('email', 'consultajafn@gmail.com')
         .neq('email', 'zaiidav347@gmail.com');
 
-      if (error) throw error;
+      if (profilesError) throw profilesError;
 
-      const clientsData = data?.map((profile: any) => {
-        // Priorizar suscripciones de Stripe si existen y están activas
-        const stripeSubscription = profile.stripe_subscriptions?.[0];
-        const traditionalSubscription = profile.subscriptions?.[0];
+      // Obtener suscripciones tradicionales
+      const { data: subscriptionsData, error: subscriptionsError } = await supabase
+        .from('subscriptions')
+        .select('*');
+
+      if (subscriptionsError) throw subscriptionsError;
+
+      // Obtener suscripciones de Stripe
+      const { data: stripeSubscriptionsData, error: stripeError } = await supabase
+        .from('stripe_subscriptions')
+        .select('*');
+
+      if (stripeError) throw stripeError;
+
+      const clientsData = profilesData?.map((profile: any) => {
+        // Buscar suscripciones para este usuario
+        const userSubscriptions = subscriptionsData?.filter(sub => sub.user_id === profile.id) || [];
+        const userStripeSubscriptions = stripeSubscriptionsData?.filter(sub => sub.user_id === profile.id) || [];
+        
+        // Obtener la suscripción más reciente de cada tipo
+        const traditionalSubscription = userSubscriptions.sort((a, b) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )[0];
+        
+        const stripeSubscription = userStripeSubscriptions.sort((a, b) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )[0];
         
         let finalSubscription: any = traditionalSubscription;
         
