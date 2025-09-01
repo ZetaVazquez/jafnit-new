@@ -49,6 +49,17 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 bottom-[5%] right-3/4 animate-bounce-gentle"></div>
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-[10%] left-1/3 animate-float"></div>
         
+        {/* Extra circles for right side balance */}
+        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-[17%] right-1/12 animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 top-[27%] right-1/8 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-7 h-7 md:w-14 md:h-14 top-[37%] right-1/10 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-13 h-13 md:w-26 md:h-26 top-[47%] right-1/7 animate-float"></div>
+        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-[57%] right-2/5 animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-[67%] right-3/5 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-[77%] right-1/5 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-[87%] right-1/3 animate-float"></div>
+        <div className="geometric-shape circle-shape w-5 h-5 md:w-10 md:h-10 bottom-[3%] right-1/6 animate-rotate-slow"></div>
+        
         {/* Triangles - Dispersed throughout */}
         <div className="geometric-shape triangle-shape triangle-up top-[12%] left-1/4 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down top-[22%] right-1/4 animate-float"></div>
@@ -69,11 +80,24 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         <div className="geometric-shape triangle-shape triangle-up top-[72%] left-1/8 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-down top-[82%] right-1/2 animate-rotate-slow"></div>
         
+        {/* Additional triangles for right side balance */}
+        <div className="geometric-shape triangle-shape triangle-up top-[14%] right-1/12 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[24%] right-1/10 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[34%] right-2/5 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[44%] right-1/7 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[54%] right-3/5 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[64%] right-1/9 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[74%] right-2/6 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[84%] right-1/11 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[94%] right-1/8 animate-pulse-slow"></div>
+        
         {/* Final triangles in bottom areas */}
         <div className="geometric-shape triangle-shape triangle-up bottom-[15%] right-2/3 animate-pulse-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-[8%] left-5/6 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up bottom-[12%] right-4/5 animate-bounce-gentle"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-[20%] left-2/3 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-[6%] right-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up bottom-[18%] right-1/6 animate-float"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
