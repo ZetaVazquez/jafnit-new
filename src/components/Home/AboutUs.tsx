@@ -64,136 +64,227 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </ScrollReveal>
         </div>
 
-        {/* Journey Path with straight vertical line */}
+        {/* Journey Path with responsive design */}
         <div className="relative max-w-6xl mx-auto">
-          {/* Straight vertical line */}
-          <div className="absolute left-1/2 top-0 bottom-0 transform -translate-x-1/2 w-1 bg-gradient-to-b from-nutrition-green via-nutrition-accent to-nutrition-green opacity-80 z-0"></div>
+          {/* Vertical line - hidden on mobile */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 transform -translate-x-1/2 w-1 bg-gradient-to-b from-nutrition-green via-nutrition-accent to-nutrition-green opacity-80 z-0"></div>
 
-          {/* Journey Steps with alternating layout */}
-          <div className="space-y-16">
-            {/* Step 1 - Title left, content right */}
+          {/* Journey Steps */}
+          <div className="space-y-8 md:space-y-16">
+            {/* Step 1 */}
             <ScrollReveal direction="up" delay={100}>
-              <div className="flex items-center justify-between relative">
-                {/* Title left */}
-                <div className="w-5/12 text-right pr-8">
-                  <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
-                    ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES
-                  </h3>
+              <div className="relative">
+                {/* Mobile Layout */}
+                <div className="block md:hidden">
+                  <div className="text-center mb-4">
+                    <div className="inline-flex w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg items-center justify-center shadow-lg mb-4">
+                      01
+                    </div>
+                    <h3 className="text-lg font-bold text-nutrition-black title-playful px-4">
+                      ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES
+                    </h3>
+                  </div>
+                  <div className="mx-4">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border-2 border-nutrition-green-light">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.<br /><br />
+                        👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.<br /><br />
+                        Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.<br /><br />
+                        🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.<br /><br />
+                        Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                
-                {/* Number on line */}
-                <div className="flex-shrink-0 w-16 h-16 bg-nutrition-green text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
-                  01
-                </div>
-                
-                {/* Content right */}
-                <div className="w-5/12 pl-8">
-                  <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.<br />
-                      👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.<br />
-                      Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.<br />
-                      🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.<br />
-                      Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.
-                    </p>
+
+                {/* Desktop Layout */}
+                <div className="hidden md:flex items-center justify-between">
+                  <div className="w-5/12 text-right pr-8">
+                    <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
+                      ES MÁS FÁCIL CONSEGUIRLO CUANDO TE GUSTA LO QUE COMES
+                    </h3>
+                  </div>
+                  <div className="flex-shrink-0 w-16 h-16 bg-nutrition-green text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
+                    01
+                  </div>
+                  <div className="w-5/12 pl-8">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        Con tu PLAN DE ALIMENTACIÓN PERSONALIZADO olvídate de contar calorías, de comer arroz con pollo sin sabor o de forzarte a comer lo que no te apetece.<br />
+                        👉 Conmigo vas a disfrutar del proceso sin renunciar al placer de comer Te diseño un menú realista y variado, adaptado a tu día a día, tus horarios, tus gustos y tus objetivos.<br />
+                        Nada de dietas rígidas ni menús que parecen castigos. Vas a comer bien y vas a lograr resultados.<br />
+                        🔥 ¿Lo mejor? Varias opciones por comida con cantidades claras.<br />
+                        Comer bien no es aburrido, si sabes cómo hacerlo. Y yo te voy a enseñar.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* Step 2 - Content left, title right */}
+            {/* Step 2 */}
             <ScrollReveal direction="up" delay={250}>
-              <div className="flex items-center justify-between relative">
-                {/* Content left */}
-                <div className="w-5/12 pr-8">
-                  <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    <p className="text-sm text-nutrition-gray leading-relaxed">
-                      O si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.<br />
-                      Tu cuerpo puede mucho más de lo que crees.<br />
-                      💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.<br />
-                      👉 Entrenarás con estrategia, con técnica y con confianza.<br />
-                      🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.<br />
-                      Nada de rutinas copiadas, nada de ejercicios que no entiendes. Aquí todo tiene sentido y propósito.
-                    </p>
+              <div className="relative">
+                {/* Mobile Layout */}
+                <div className="block md:hidden">
+                  <div className="text-center mb-4">
+                    <div className="inline-flex w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg items-center justify-center shadow-lg mb-4">
+                      02
+                    </div>
+                    <h3 className="text-lg font-bold text-nutrition-black title-playful px-4">
+                      NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO
+                    </h3>
+                  </div>
+                  <div className="mx-4">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border-2 border-nutrition-accent-light">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        O si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.<br /><br />
+                        Tu cuerpo puede mucho más de lo que crees.<br /><br />
+                        💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.<br /><br />
+                        👉 Entrenarás con estrategia, con técnica y con confianza.<br /><br />
+                        🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.<br /><br />
+                        Nada de rutinas copiadas, nada de ejercicios que no entiendes. Aquí todo tiene sentido y propósito.
+                      </p>
+                    </div>
                   </div>
                 </div>
-                
-                {/* Number on line */}
-                <div className="flex-shrink-0 w-16 h-16 bg-nutrition-accent text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
-                  02
-                </div>
-                
-                {/* Title right */}
-                <div className="w-5/12 text-left pl-8">
-                  <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
-                    NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO
-                  </h3>
+
+                {/* Desktop Layout */}
+                <div className="hidden md:flex items-center justify-between">
+                  <div className="w-5/12 pr-8">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        O si no sabes por dónde empezar... Aquí vas a aprender desde cero, sin miedo y con apoyo total.<br />
+                        Tu cuerpo puede mucho más de lo que crees.<br />
+                        💡 Yo me encargo de guiarte paso a paso, explicarte cada ejercicio y diseñarte una rutina realista, sin entrenar horas ni machacarte sin sentido.<br />
+                        👉 Entrenarás con estrategia, con técnica y con confianza.<br />
+                        🔥 ¿Lo mejor? Te sentirás seguro desde el día 1.<br />
+                        Nada de rutinas copiadas, nada de ejercicios que no entiendes. Aquí todo tiene sentido y propósito.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 w-16 h-16 bg-nutrition-accent text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
+                    02
+                  </div>
+                  <div className="w-5/12 text-left pl-8">
+                    <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
+                      NO IMPORTA SI NUNCA HAS PISADO UN GIMNASIO
+                    </h3>
+                  </div>
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* Step 3 - Title left, content right */}
+            {/* Step 3 */}
             <ScrollReveal direction="up" delay={400}>
-              <div className="flex items-center justify-between relative">
-                {/* Title left */}
-                <div className="w-5/12 text-right pr-8">
-                  <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
-                    SIN COMUNICACIÓN, NO HAY RESULTADOS
-                  </h3>
+              <div className="relative">
+                {/* Mobile Layout */}
+                <div className="block md:hidden">
+                  <div className="text-center mb-4">
+                    <div className="inline-flex w-12 h-12 bg-nutrition-green text-white rounded-full font-bold text-lg items-center justify-center shadow-lg mb-4">
+                      03
+                    </div>
+                    <h3 className="text-lg font-bold text-nutrition-black title-playful px-4">
+                      SIN COMUNICACIÓN, NO HAY RESULTADOS
+                    </h3>
+                  </div>
+                  <div className="mx-4">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border-2 border-nutrition-green-light">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        No es solo un plan. Es un proceso en equipo con un SEGUIMIENTO INDIVIDUALIZADO.<br /><br />
+                        Para que logres tus objetivos, necesito saber cómo estás, qué necesitas y cómo te estás sintiendo.<br /><br />
+                        👉 Sin tus mensajes, no puedo ayudarte ni ajustar tu plan.<br /><br />
+                        Este no es un servicio enlatado: es un acompañamiento real y constante.<br /><br />
+                        💡 Siempre hay otra opción que sí se adapta a ti.<br /><br />
+                        No importa si algo no te gusta o se te complica.<br /><br />
+                        🔁 Siempre hay una solución. Siempre hay una alternativa.<br /><br />
+                        Lo importante es que te guste, te funcione y lo mantengas.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                
-                {/* Number on line */}
-                <div className="flex-shrink-0 w-16 h-16 bg-nutrition-green text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
-                  03
-                </div>
-                
-                {/* Content right */}
-                <div className="w-5/12 pl-8">
-                  <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    <p className="text-sm text-nutrition-gray leading-relaxed">
-                      No es solo un plan. Es un proceso en equipo con un SEGUIMIENTO INDIVIDUALIZADO.<br />
-                      Para que logres tus objetivos, necesito saber cómo estás, qué necesitas y cómo te estás sintiendo.<br />
-                      👉 Sin tus mensajes, no puedo ayudarte ni ajustar tu plan.<br />
-                      Este no es un servicio enlatado: es un acompañamiento real y constante.<br />
-                      💡 Siempre hay otra opción que sí se adapta a ti.<br />
-                      No importa si algo no te gusta o se te complica.<br />
-                      🔁 Siempre hay una solución. Siempre hay una alternativa.<br />
-                      Lo importante es que te guste, te funcione y lo mantengas.
-                    </p>
+
+                {/* Desktop Layout */}
+                <div className="hidden md:flex items-center justify-between">
+                  <div className="w-5/12 text-right pr-8">
+                    <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
+                      SIN COMUNICACIÓN, NO HAY RESULTADOS
+                    </h3>
+                  </div>
+                  <div className="flex-shrink-0 w-16 h-16 bg-nutrition-green text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
+                    03
+                  </div>
+                  <div className="w-5/12 pl-8">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-green-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        No es solo un plan. Es un proceso en equipo con un SEGUIMIENTO INDIVIDUALIZADO.<br />
+                        Para que logres tus objetivos, necesito saber cómo estás, qué necesitas y cómo te estás sintiendo.<br />
+                        👉 Sin tus mensajes, no puedo ayudarte ni ajustar tu plan.<br />
+                        Este no es un servicio enlatado: es un acompañamiento real y constante.<br />
+                        💡 Siempre hay otra opción que sí se adapta a ti.<br />
+                        No importa si algo no te gusta o se te complica.<br />
+                        🔁 Siempre hay una solución. Siempre hay una alternativa.<br />
+                        Lo importante es que te guste, te funcione y lo mantengas.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* Step 4 - Content left, title right */}
+            {/* Step 4 */}
             <ScrollReveal direction="up" delay={550}>
-              <div className="flex items-center justify-between relative">
-                {/* Content left */}
-                <div className="w-5/12 pr-8">
-                  <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    <p className="text-sm text-nutrition-gray leading-relaxed">
-                      Esto no es una carrera de 30 días ni de una semana.<br />
-                      Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.<br />
-                      📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más. Así ajustamos el plan y seguimos avanzando.<br />
-                      🧭 ¿Te vas de vacaciones o has tenido una mala semana? No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.<br />
-                      🔁 Esto va más allá del físico<br />
-                      Mi objetivo es que cambies tu forma de ver el fitness.<br />
-                      Que construyas un cuerpo que te guste sin obsesiones, sin extremos.<br />
-                      Y sobre todo: que te dure para siempre.
-                    </p>
+              <div className="relative">
+                {/* Mobile Layout */}
+                <div className="block md:hidden">
+                  <div className="text-center mb-4">
+                    <div className="inline-flex w-12 h-12 bg-nutrition-accent text-white rounded-full font-bold text-lg items-center justify-center shadow-lg mb-4">
+                      04
+                    </div>
+                    <h3 className="text-lg font-bold text-nutrition-black title-playful px-4">
+                      EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE
+                    </h3>
+                  </div>
+                  <div className="mx-4">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border-2 border-nutrition-accent-light">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        Esto no es una carrera de 30 días ni de una semana.<br /><br />
+                        Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.<br /><br />
+                        📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más. Así ajustamos el plan y seguimos avanzando.<br /><br />
+                        🧭 ¿Te vas de vacaciones o has tenido una mala semana? No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.<br /><br />
+                        🔁 Esto va más allá del físico<br /><br />
+                        Mi objetivo es que cambies tu forma de ver el fitness.<br /><br />
+                        Que construyas un cuerpo que te guste sin obsesiones, sin extremos.<br /><br />
+                        Y sobre todo: que te dure para siempre.
+                      </p>
+                    </div>
                   </div>
                 </div>
-                
-                {/* Number on line */}
-                <div className="flex-shrink-0 w-16 h-16 bg-nutrition-accent text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
-                  04
-                </div>
-                
-                {/* Title right */}
-                <div className="w-5/12 text-left pl-8">
-                  <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
-                    EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE
-                  </h3>
+
+                {/* Desktop Layout */}
+                <div className="hidden md:flex items-center justify-between">
+                  <div className="w-5/12 pr-8">
+                    <div className="bg-gray-50/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-nutrition-accent-light hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                      <p className="text-sm text-nutrition-gray leading-relaxed">
+                        Esto no es una carrera de 30 días ni de una semana.<br />
+                        Es un proceso en el que aprendes a mantener resultados reales sin rebotes ni frustraciones.<br />
+                        📲 Cada 2/4 semanas revisamos tus avances: medidas, descanso, pasos, entreno, hidratación, alimentación y más. Así ajustamos el plan y seguimos avanzando.<br />
+                        🧭 ¿Te vas de vacaciones o has tenido una mala semana? No pasa nada. Me avisas y adaptamos el plan para que disfrutes sin perder el rumbo.¿Quieres dejar un mal hábito? Te acompaño y lo trabajamos juntos.<br />
+                        🔁 Esto va más allá del físico<br />
+                        Mi objetivo es que cambies tu forma de ver el fitness.<br />
+                        Que construyas un cuerpo que te guste sin obsesiones, sin extremos.<br />
+                        Y sobre todo: que te dure para siempre.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 w-16 h-16 bg-nutrition-accent text-white rounded-full font-bold text-xl flex items-center justify-center z-10 relative shadow-lg">
+                    04
+                  </div>
+                  <div className="w-5/12 text-left pl-8">
+                    <h3 className="text-xl lg:text-2xl font-bold text-nutrition-black title-playful">
+                      EL CAMBIO NO ES TEMPORAL, ES SOSTENIBLE
+                    </h3>
+                  </div>
                 </div>
               </div>
             </ScrollReveal>
