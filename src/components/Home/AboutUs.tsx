@@ -24,7 +24,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Circles */}
+        {/* Circles - First Row */}
         <div className="geometric-shape circle-shape w-16 h-16 md:w-32 md:h-32 top-10 left-10 animate-pulse-slow"></div>
         <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-1/2 right-20 animate-bounce-gentle"></div>
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
@@ -33,13 +33,47 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-1/3 left-3/4 animate-bounce-gentle"></div>
         <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-32 right-12 animate-pulse-slow"></div>
         
-        {/* Triangles */}
+        {/* Circles - Additional Row */}
+        <div className="geometric-shape circle-shape w-18 h-18 md:w-36 md:h-36 top-5 right-5 animate-float"></div>
+        <div className="geometric-shape circle-shape w-7 h-7 md:w-14 md:h-14 top-1/5 left-1/2 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 bottom-10 right-1/3 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 top-2/3 left-1/12 animate-float"></div>
+        <div className="geometric-shape circle-shape w-13 h-13 md:w-26 md:h-26 bottom-1/4 left-2/3 animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-5 h-5 md:w-10 md:h-10 top-3/5 right-1/6 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-15 h-15 md:w-30 md:h-30 top-1/6 right-2/3 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-4 h-4 md:w-8 md:h-8 bottom-1/5 left-1/5 animate-float"></div>
+        
+        {/* Circles - More distributed */}
+        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-4/5 right-1/4 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-1/8 left-4/5 animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 bottom-1/6 right-3/4 animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-7/8 left-1/3 animate-float"></div>
+        
+        {/* Triangles - Original */}
         <div className="geometric-shape triangle-shape triangle-up top-40 left-1/4 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
         <div className="geometric-shape triangle-shape triangle-down top-2/3 right-1/3 animate-rotate-slow"></div>
         <div className="geometric-shape triangle-shape triangle-up bottom-1/3 left-3/4 animate-float"></div>
         <div className="geometric-shape triangle-shape triangle-down top-1/6 left-2/3 animate-pulse-slow"></div>
+        
+        {/* Triangles - Additional */}
+        <div className="geometric-shape triangle-shape triangle-up top-1/8 right-1/8 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/8 left-1/8 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-3/8 left-1/6 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-5/8 right-1/5 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-up bottom-1/6 right-1/6 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-1/12 left-1/3 animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-7/8 right-3/4 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-2/3 left-4/5 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/2 left-1/8 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-4/5 right-1/2 animate-rotate-slow"></div>
+        
+        {/* More triangles for extra dynamics */}
+        <div className="geometric-shape triangle-shape triangle-up bottom-3/4 right-2/3 animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-3/4 left-5/6 animate-float"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-1/3 right-4/5 animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down bottom-1/2 left-2/3 animate-rotate-slow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
