@@ -31,10 +31,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch total clients
+        // Fetch total clients (excluding admin emails)
         const { count: clientsCount } = await supabase
           .from('profiles')
-          .select('*', { count: 'exact' });
+          .select('*', { count: 'exact', head: true })
+          .neq('email', 'josefiguenu@gmail.com')
+          .neq('email', 'consultajafn@gmail.com')
+          .neq('email', 'zaiidav347@gmail.com');
         setTotalClients(clientsCount || 0);
 
         // Fetch total diet plans
