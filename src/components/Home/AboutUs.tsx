@@ -22,82 +22,46 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
         pointerEvents: 'none'
       }}></div>
 
-      {/* Decorative background elements */}
+      {/* Decorative background elements - Better distributed throughout the section */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Circles - Dispersed throughout the section */}
-        <div className="geometric-shape circle-shape w-16 h-16 md:w-32 md:h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-[15%] right-20 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-[25%] left-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-[35%] right-1/3 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-14 h-14 md:w-28 md:h-28 top-[45%] left-16 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-[55%] left-3/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-[65%] right-12 animate-pulse-slow"></div>
+        {/* Top area figures (5-15%) */}
+        <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-[5%] left-[8%] animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[8%] right-[15%] animate-float"></div>
+        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-[12%] right-[5%] animate-bounce-gentle"></div>
         
-        {/* More circles throughout the height */}
-        <div className="geometric-shape circle-shape w-18 h-18 md:w-36 md:h-36 top-[20%] right-5 animate-float"></div>
-        <div className="geometric-shape circle-shape w-7 h-7 md:w-14 md:h-14 top-[30%] left-1/2 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-[40%] right-1/3 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 top-[50%] left-1/12 animate-float"></div>
-        <div className="geometric-shape circle-shape w-13 h-13 md:w-26 md:h-26 top-[60%] left-2/3 animate-rotate-slow"></div>
-        <div className="geometric-shape circle-shape w-5 h-5 md:w-10 md:h-10 top-[70%] right-1/6 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-15 h-15 md:w-30 md:h-30 top-[80%] right-2/3 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-4 h-4 md:w-8 md:h-8 top-[85%] left-1/5 animate-float"></div>
+        {/* Upper middle area (20-35%) */}
+        <div className="geometric-shape triangle-shape triangle-down top-[20%] left-[5%] animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-[25%] right-[25%] animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[30%] left-[75%] animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-[35%] right-[8%] animate-float"></div>
         
-        {/* Additional circles in lower areas */}
-        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-[90%] right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-[95%] left-4/5 animate-rotate-slow"></div>
-        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 bottom-[5%] right-3/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 bottom-[10%] left-1/3 animate-float"></div>
+        {/* Middle area (40-55%) */}
+        <div className="geometric-shape circle-shape w-14 h-14 md:w-28 md:h-28 top-[40%] left-[10%] animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[45%] right-[35%] animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-[50%] left-[80%] animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[55%] right-[12%] animate-float"></div>
         
-        {/* Extra circles for right side balance */}
-        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-[17%] right-1/12 animate-rotate-slow"></div>
-        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 top-[27%] right-1/8 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-7 h-7 md:w-14 md:h-14 top-[37%] right-1/10 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-13 h-13 md:w-26 md:h-26 top-[47%] right-1/7 animate-float"></div>
-        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-[57%] right-2/5 animate-rotate-slow"></div>
-        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-[67%] right-3/5 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-[77%] right-1/5 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-12 h-12 md:w-24 md:h-24 top-[87%] right-1/3 animate-float"></div>
-        <div className="geometric-shape circle-shape w-5 h-5 md:w-10 md:h-10 bottom-[3%] right-1/6 animate-rotate-slow"></div>
+        {/* Lower middle area (60-75%) */}
+        <div className="geometric-shape triangle-shape triangle-down top-[60%] left-[15%] animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-11 h-11 md:w-22 md:h-22 top-[65%] right-[45%] animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[70%] left-[65%] animate-bounce-gentle"></div>
+        <div className="geometric-shape circle-shape w-7 h-7 md:w-14 md:h-14 top-[75%] right-[20%] animate-float"></div>
         
-        {/* Triangles - Dispersed throughout */}
-        <div className="geometric-shape triangle-shape triangle-up top-[12%] left-1/4 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[22%] right-1/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[32%] left-1/6 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[42%] right-1/3 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[52%] left-3/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[62%] left-2/3 animate-pulse-slow"></div>
+        {/* Bottom area (80-95%) */}
+        <div className="geometric-shape circle-shape w-13 h-13 md:w-26 md:h-26 top-[80%] left-[25%] animate-rotate-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[85%] right-[60%] animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-5 h-5 md:w-10 md:h-10 top-[90%] left-[70%] animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[95%] right-[30%] animate-float"></div>
         
-        {/* More triangles in middle and lower areas */}
-        <div className="geometric-shape triangle-shape triangle-up top-[18%] right-1/8 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[28%] left-1/8 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[38%] left-1/6 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[48%] right-1/5 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[58%] right-1/6 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[68%] left-1/3 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[78%] right-3/4 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[88%] left-4/5 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[72%] left-1/8 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[82%] right-1/2 animate-rotate-slow"></div>
-        
-        {/* Additional triangles for right side balance */}
-        <div className="geometric-shape triangle-shape triangle-up top-[14%] right-1/12 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[24%] right-1/10 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[34%] right-2/5 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[44%] right-1/7 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[54%] right-3/5 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[64%] right-1/9 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[74%] right-2/6 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down top-[84%] right-1/11 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-[94%] right-1/8 animate-pulse-slow"></div>
-        
-        {/* Final triangles in bottom areas */}
-        <div className="geometric-shape triangle-shape triangle-up bottom-[15%] right-2/3 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-[8%] left-5/6 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up bottom-[12%] right-4/5 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-[20%] left-2/3 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-[6%] right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up bottom-[18%] right-1/6 animate-float"></div>
+        {/* Additional scattered elements for visual balance */}
+        <div className="geometric-shape circle-shape w-8 h-8 md:w-16 md:h-16 top-[18%] left-[40%] animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[28%] right-[50%] animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-6 h-6 md:w-12 md:h-12 top-[38%] left-[55%] animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[48%] left-[45%] animate-float"></div>
+        <div className="geometric-shape circle-shape w-10 h-10 md:w-20 md:h-20 top-[58%] right-[65%] animate-pulse-slow"></div>
+        <div className="geometric-shape triangle-shape triangle-up top-[68%] left-[35%] animate-rotate-slow"></div>
+        <div className="geometric-shape circle-shape w-9 h-9 md:w-18 md:h-18 top-[78%] right-[55%] animate-bounce-gentle"></div>
+        <div className="geometric-shape triangle-shape triangle-down top-[88%] left-[50%] animate-float"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
