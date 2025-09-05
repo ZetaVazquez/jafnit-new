@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import NewsModal from './NewsModal';
+import consejosImage from '@/assets/consejos-cocinar-sano.png';
+import mitoAguaImage from '@/assets/mito-agua-limon.png';
+import mitoHidratosImage from '@/assets/mito-hidratos.png';
 
 const News: React.FC = () => {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
@@ -17,7 +20,7 @@ const News: React.FC = () => {
       content: '🥘 ¿Sientes que no tienes tiempo para cocinar sano todos los días? Te enseñamos estrategias prácticas para alimentarte bien sin complicarte la vida.',
       date: '2024-01-15',
       type: 'instagram',
-      image: '/lovable-uploads/02b37b86-627d-4c1c-a55a-1fdab3eaf6cf.png'
+      image: consejosImage
     },
     {
       id: '2',
@@ -25,7 +28,7 @@ const News: React.FC = () => {
       content: '🍋 Desmontamos este popular mito nutricional. ¿Realmente el agua con limón en ayunas tiene efectos mágicos para quemar grasa?',
       date: '2024-01-12',
       type: 'instagram',
-      image: '/lovable-uploads/649a395f-0ba7-4144-82a9-f45d469b77b7.png'
+      image: mitoAguaImage
     },
     {
       id: '3',
@@ -33,7 +36,7 @@ const News: React.FC = () => {
       content: '🍞 Muchas personas tienen miedo a consumir carbohidratos. Te explicamos por qué no deberías temerles y cómo incluirlos inteligentemente.',
       date: '2024-01-10',
       type: 'instagram',
-      image: '/lovable-uploads/9a9ed6cd-bf68-4a70-9964-f04533b6397d.png'
+      image: mitoHidratosImage
     },
     // Noticias expandidas (las 3 siguientes)
     {
@@ -182,21 +185,21 @@ Elige UN pequeño cambio y comprométete solo con eso. Cuando sea natural (2-3 s
         <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <ScrollReveal direction="down">
-            <h2 className="text-4xl font-bold text-white mb-4 title-main">
-              Noticias y Actualizaciones
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={200}>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
-            </p>
-          </ScrollReveal>
-        </div>
+        <div className="container mx-auto px-4 relative z-20">
+          <div className="text-center mb-16">
+            <ScrollReveal direction="down">
+              <h2 className="text-4xl font-bold text-white mb-4 title-main">
+                Noticias y Actualizaciones
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal direction="up" delay={200}>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto">
+                Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
+              </p>
+            </ScrollReveal>
+          </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-20">
           {newsItems.map((item, index) => (
             <ScrollReveal key={item.id} direction="up" delay={index * 200}>
               <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">

@@ -27,15 +27,15 @@ const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
   if (!isOpen || !newsItem) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+    <div className="fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative z-[10000]">
         {/* Header sticky con la cruz */}
-        <div className="sticky top-0 bg-white rounded-t-lg z-10 flex justify-end p-4 border-b border-gray-100">
+        <div className="sticky top-0 bg-white rounded-t-lg z-[10001] flex justify-end p-4 border-b border-gray-100">
           <Button
             onClick={onClose}
             variant="ghost"
             size="icon"
-            className="bg-white/80 hover:bg-white shadow-sm"
+            className="bg-white hover:bg-gray-100 shadow-sm border"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -45,7 +45,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
           <img
             src={newsItem.image}
             alt={newsItem.title}
-            className="w-full h-auto max-h-96 object-contain bg-gray-50"
+            className="w-full h-auto object-contain bg-gray-50 max-h-80"
           />
         </div>
         
