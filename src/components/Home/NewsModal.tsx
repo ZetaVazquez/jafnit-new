@@ -28,7 +28,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
           <img
             src={newsItem.image}
             alt={newsItem.title}
-            className="w-full h-64 object-cover rounded-t-lg"
+            className="w-full h-auto max-h-96 object-contain rounded-t-lg bg-gray-50"
           />
         </div>
         

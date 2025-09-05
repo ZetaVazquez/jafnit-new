@@ -38,77 +38,101 @@ const News: React.FC = () => {
     // Noticias expandidas (las 3 siguientes)
     {
       id: '4',
-      title: 'La importancia del descanso en tu proceso de cambio',
-      content: `💤 El descanso no es un lujo, es una necesidad fundamental para tu transformación física y mental.
+      title: 'Tu alimentación no es algo temporal',
+      content: `📌 Deja de ver la alimentación saludable como algo temporal. No se trata de seguir una dieta estricta por 3 semanas, sino de aprender a alimentarte de forma inteligente para toda la vida.
 
-Durante el sueño, tu cuerpo se regenera, consolida la memoria y regula las hormonas del hambre y la saciedad. Una mala calidad de sueño puede sabotear todos tus esfuerzos en nutrición y entrenamiento.
+🧠 La mentalidad del "todo o nada" es tu peor enemigo:
+• "Empiezo el lunes" y abandono el miércoles
+• Restricciones extremas que no puedes mantener
+• Culpa constante por "fallar" en la dieta
+• Búsqueda desesperada de la fórmula mágica
 
-✨ Consejos para mejorar tu descanso:
-• Mantén horarios regulares de sueño
-• Evita pantallas 1 hora antes de dormir
-• Crea un ambiente fresco y oscuro
-• Practica técnicas de relajación
-• Evita comidas pesadas antes de acostarte
+🍽️ Cambio de perspectiva hacia hábitos sostenibles:
+• Pequeños ajustes que puedas mantener para siempre
+• Flexibilidad para disfrutar ocasiones especiales
+• Aprender a tomar mejores decisiones sin obsesionarte
+• Construir una relación saludable con la comida
 
-Recuerda: dormir bien no es perder tiempo, es invertir en tu bienestar y resultados.`,
+✨ El objetivo no es ser perfecto, sino ser constante:
+• 80% de decisiones saludables vs. 20% de flexibilidad
+• Progresar, no buscar la perfección
+• Cada comida es una nueva oportunidad
+• Tu alimentación debe encajar en tu vida, no al revés
+
+Recuerda: los cambios que puedes mantener para siempre son los únicos que realmente transforman tu vida.`,
       date: '2024-01-08',
       type: 'news',
       image: '/lovable-uploads/1f14584b-e3d2-4429-8769-363699ed5b31.png'
     },
     {
       id: '5',
-      title: 'Hidratación: Más allá de los 8 vasos de agua',
-      content: `💧 La hidratación adecuada va mucho más allá de beber 8 vasos de agua al día.
+      title: 'Tu objetivo tiene que ver con tocar un instrumento',
+      content: `🎹 ¿Y si tu alimentación fuera como aprender a tocar el piano? No puedes esperar resultados si cada dos semanas cambias de instrumento...
 
-Tu necesidad de líquidos depende de múltiples factores: tu peso, nivel de actividad, clima, alimentación y estado de salud. Los alimentos también contribuyen significativamente a tu hidratación diaria.
+🎵 Imaginate que quieres aprender piano:
+• Semana 1-2: "Voy a tocar 3 horas diarias"
+• Semana 3: "Esto es muy difícil, mejor pruebo guitarra"
+• Semana 5: "La guitarra no me gusta, voy a violín"
+• Mes 3: "No sé tocar ningún instrumento, no sirvo para esto"
 
-🥤 Señales de buena hidratación:
-• Orina de color amarillo claro
-• Energía estable durante el día
-• Piel elástica y saludable
-• Concentración mental óptima
+🍽️ Esto es exactamente lo que haces con las dietas:
+• Dieta cetogénica → No funciona
+• Ayuno intermitente → No funciona  
+• Dieta de la piña → No funciona
+• "Soy un desastre, no hay nada que funcione"
 
-🍉 Alimentos que te hidratan:
-• Frutas: sandía, melón, naranjas
-• Verduras: pepino, lechuga, tomate
-• Sopas y caldos caseros
-• Infusiones y tés naturales
+🎯 La clave está en la CONSISTENCIA, no en la perfección:
+• Elige UN enfoque nutricional sostenible
+• Manténlo al menos 3-6 meses
+• Ajusta detalles, pero no cambies el sistema completo
+• Los resultados llegan con la repetición constante
 
-La clave está en escuchar a tu cuerpo y mantener un equilibrio constante.`,
+🏆 Maestría = Tiempo + Consistencia + Paciencia:
+• El pianista no se hace en 2 semanas
+• Tu transformación tampoco
+• Cada día de práctica suma
+• La magia está en no rendirse
+
+¿Estás dispuesto/a a "tocar tu instrumento nutricional" todos los días?`,
       date: '2024-01-05',
       type: 'news',
       image: '/lovable-uploads/7ac6cf0a-58e2-4ccc-b742-8c3813ecd697.png'
     },
     {
       id: '6',
-      title: 'Planificación de comidas: Tu aliado para el éxito',
-      content: `📝 La planificación de comidas es el superpoder de quienes logran mantener hábitos saludables a largo plazo.
+      title: 'Pequeños cambios = Grandes resultados',
+      content: `📌 Pequeños cambios = grandes resultados. No necesitas hacerlo perfecto, solo mantenerte constante. 
 
-Cuando planificas con anticipación, reduces la tentación de opciones poco saludables, ahorras tiempo y dinero, y garantizas que tu cuerpo reciba los nutrientes que necesita.
+🎯 Si cada semana sumas una mejora realista, el cambio llega sin sentir que te estás forzando.
 
-🎯 Pasos para una planificación exitosa:
+⚡ El poder de los micro-hábitos:
+• Semana 1: Añade una fruta a tu desayuno
+• Semana 2: Bebe un vaso de agua al levantarte
+• Semana 3: Camina 10 minutos después de comer
+• Semana 4: Cena 2 horas antes de dormir
 
-1. EVALÚA TU SEMANA
-   • Revisa tu agenda y compromisos
-   • Identifica días más ocupados
-   • Planifica comidas según tu rutina
+🔥 Por qué funcionan mejor que los cambios drásticos:
+• Son sostenibles a largo plazo
+• No generan resistencia mental
+• Se integran naturalmente en tu rutina
+• Crean impulso positivo que se acumula
 
-2. DISEÑA TU MENÚ
-   • Incluye todos los grupos alimenticios
-   • Considera tus preferencias y objetivos
-   • Prepara opciones de respaldo rápidas
+🧠 Tu cerebro prefiere los cambios graduales:
+• Los cambios extremos activan mecanismos de "supervivencia"
+• Tu mente lucha contra lo que percibe como "amenaza"
+• Los pequeños ajustes pasan desapercibidos
+• Se convierten en automáticos sin esfuerzo consciente
 
-3. ORGANIZA TUS COMPRAS
-   • Haz una lista organizada por secciones
-   • Compra ingredientes versátiles
-   • Prioriza productos frescos y de temporada
+📈 El efecto acumulativo es PODEROSO:
+• 1% de mejora diaria = 37 veces mejor en un año
+• La suma de pequeñas victorias crea grandes transformaciones
+• Cada micro-hábito refuerza tu identidad saludable
+• Los resultados permanentes nacen de acciones permanentes
 
-4. PREPARA CON INTELIGENCIA
-   • Dedica 1-2 horas a meal prep
-   • Cocina porciones adicionales
-   • Congela opciones para emergencias
+💪 Estrategia para esta semana:
+Elige UN pequeño cambio y comprométete solo con eso. Cuando sea natural (2-3 semanas), añade el siguiente.
 
-Recuerda: no necesitas perfección, solo consistencia. Empieza planificando 3-4 días y ve aumentando gradualmente.`,
+¿Cuál será tu primer micro-cambio?`,
       date: '2024-01-03',
       type: 'news',
       image: '/lovable-uploads/0822324f-ee5f-4ac8-b452-680991c41159.png'
