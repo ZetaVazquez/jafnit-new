@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
@@ -10,25 +10,42 @@ interface NewsModalProps {
 }
 
 const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
+  // Prevenir scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup al desmontar o cambiar estado
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   if (!isOpen || !newsItem) return null;
 
   return (
     <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-        <Button
-          onClick={onClose}
-          variant="ghost"
-          size="icon"
-          className="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white"
-        >
-          <X className="w-4 h-4" />
-        </Button>
+        {/* Header sticky con la cruz */}
+        <div className="sticky top-0 bg-white rounded-t-lg z-10 flex justify-end p-4 border-b border-gray-100">
+          <Button
+            onClick={onClose}
+            variant="ghost"
+            size="icon"
+            className="bg-white/80 hover:bg-white shadow-sm"
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
         
-        <div className="relative">
+        <div className="relative -mt-4">
           <img
             src={newsItem.image}
             alt={newsItem.title}
-            className="w-full h-auto max-h-96 object-contain rounded-t-lg bg-gray-50"
+            className="w-full h-auto max-h-96 object-contain bg-gray-50"
           />
         </div>
         
