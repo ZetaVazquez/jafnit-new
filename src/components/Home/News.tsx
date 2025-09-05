@@ -1,54 +1,138 @@
-import React from 'react';
-import { Calendar, Instagram } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Instagram, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import NewsModal from './NewsModal';
 
 const News: React.FC = () => {
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const newsItems: NewsItem[] = [
+    // Instagram posts (las 3 primeras)
     {
       id: '1',
-      title: 'Tu alimentación no es algo temporal',
-      content: '📌 Deja de ver la alimentación saludable como algo temporal. No se trata de seguir una dieta estricta por 3 semanas, sino de aprender a alimentarte de forma inteligente para toda la vida. 🧠🍽️',
+      title: 'Consejos: No tengo tiempo para cocinar sano',
+      content: '🥘 ¿Sientes que no tienes tiempo para cocinar sano todos los días? Te enseñamos estrategias prácticas para alimentarte bien sin complicarte la vida.',
       date: '2024-01-15',
       type: 'instagram',
-      image: '/lovable-uploads/1f14584b-e3d2-4429-8769-363699ed5b31.png'
+      image: '/lovable-uploads/02b37b86-627d-4c1c-a55a-1fdab3eaf6cf.png'
     },
     {
       id: '2',
-      title: 'Que tiene ver tu objetivo con tocar un instrumento',
-      content: '¿Y si tu alimentación fuera como aprender a tocar el piano? 🎹 No puedes esperar resultados si cada dos semanas cambias de instrumento…',
+      title: 'Mitos: Beber agua con limón en ayunas quema grasa',
+      content: '🍋 Desmontamos este popular mito nutricional. ¿Realmente el agua con limón en ayunas tiene efectos mágicos para quemar grasa?',
       date: '2024-01-12',
       type: 'instagram',
-      image: '/lovable-uploads/7ac6cf0a-58e2-4ccc-b742-8c3813ecd697.png'
+      image: '/lovable-uploads/649a395f-0ba7-4144-82a9-f45d469b77b7.png'
     },
     {
       id: '3',
-      title: 'Pequeños cambios grandes resultados',
-      content: '📌 Pequeños cambios = grandes resultados. No necesitas hacerlo perfecto, solo mantenerte constante. 🎯 Si cada semana sumas una mejora realista, el cambio llega sin sentir que te estás forzando',
+      title: 'Mitos: Miedo a los hidratos de carbono',
+      content: '🍞 Muchas personas tienen miedo a consumir carbohidratos. Te explicamos por qué no deberías temerles y cómo incluirlos inteligentemente.',
       date: '2024-01-10',
       type: 'instagram',
-      image: '/lovable-uploads/0822324f-ee5f-4ac8-b452-680991c41159.png'
+      image: '/lovable-uploads/9a9ed6cd-bf68-4a70-9964-f04533b6397d.png'
     },
+    // Noticias expandidas (las 3 siguientes)
     {
       id: '4',
-      title: 'Encuentra tu propósito y alinea tus hábitos con él',
-      content: '📌 Para sostener hábitos saludables, necesitas un propósito real.',
+      title: 'La importancia del descanso en tu proceso de cambio',
+      content: `💤 El descanso no es un lujo, es una necesidad fundamental para tu transformación física y mental.
+
+Durante el sueño, tu cuerpo se regenera, consolida la memoria y regula las hormonas del hambre y la saciedad. Una mala calidad de sueño puede sabotear todos tus esfuerzos en nutrición y entrenamiento.
+
+✨ Consejos para mejorar tu descanso:
+• Mantén horarios regulares de sueño
+• Evita pantallas 1 hora antes de dormir
+• Crea un ambiente fresco y oscuro
+• Practica técnicas de relajación
+• Evita comidas pesadas antes de acostarte
+
+Recuerda: dormir bien no es perder tiempo, es invertir en tu bienestar y resultados.`,
       date: '2024-01-08',
-      type: 'instagram',
-      image: '/lovable-uploads/3f8cd7c7-6d1c-4d5f-a944-d083a71f3f95.png'
+      type: 'news',
+      image: '/lovable-uploads/1f14584b-e3d2-4429-8769-363699ed5b31.png'
+    },
+    {
+      id: '5',
+      title: 'Hidratación: Más allá de los 8 vasos de agua',
+      content: `💧 La hidratación adecuada va mucho más allá de beber 8 vasos de agua al día.
+
+Tu necesidad de líquidos depende de múltiples factores: tu peso, nivel de actividad, clima, alimentación y estado de salud. Los alimentos también contribuyen significativamente a tu hidratación diaria.
+
+🥤 Señales de buena hidratación:
+• Orina de color amarillo claro
+• Energía estable durante el día
+• Piel elástica y saludable
+• Concentración mental óptima
+
+🍉 Alimentos que te hidratan:
+• Frutas: sandía, melón, naranjas
+• Verduras: pepino, lechuga, tomate
+• Sopas y caldos caseros
+• Infusiones y tés naturales
+
+La clave está en escuchar a tu cuerpo y mantener un equilibrio constante.`,
+      date: '2024-01-05',
+      type: 'news',
+      image: '/lovable-uploads/7ac6cf0a-58e2-4ccc-b742-8c3813ecd697.png'
+    },
+    {
+      id: '6',
+      title: 'Planificación de comidas: Tu aliado para el éxito',
+      content: `📝 La planificación de comidas es el superpoder de quienes logran mantener hábitos saludables a largo plazo.
+
+Cuando planificas con anticipación, reduces la tentación de opciones poco saludables, ahorras tiempo y dinero, y garantizas que tu cuerpo reciba los nutrientes que necesita.
+
+🎯 Pasos para una planificación exitosa:
+
+1. EVALÚA TU SEMANA
+   • Revisa tu agenda y compromisos
+   • Identifica días más ocupados
+   • Planifica comidas según tu rutina
+
+2. DISEÑA TU MENÚ
+   • Incluye todos los grupos alimenticios
+   • Considera tus preferencias y objetivos
+   • Prepara opciones de respaldo rápidas
+
+3. ORGANIZA TUS COMPRAS
+   • Haz una lista organizada por secciones
+   • Compra ingredientes versátiles
+   • Prioriza productos frescos y de temporada
+
+4. PREPARA CON INTELIGENCIA
+   • Dedica 1-2 horas a meal prep
+   • Cocina porciones adicionales
+   • Congela opciones para emergencias
+
+Recuerda: no necesitas perfección, solo consistencia. Empieza planificando 3-4 días y ve aumentando gradualmente.`,
+      date: '2024-01-03',
+      type: 'news',
+      image: '/lovable-uploads/0822324f-ee5f-4ac8-b452-680991c41159.png'
     }
   ];
 
   const instagramLinks = [
-    'https://www.instagram.com/p/DJ7FdduNykY/?img_index=1',
-    'https://www.instagram.com/p/DJpD5uwNIiO/?img_index=1',
-    'https://www.instagram.com/p/DJXCVW5NfUC/?img_index=1',
-    'https://www.instagram.com/p/DIy_OEWtLUg/?img_index=1'
+    'https://www.instagram.com/p/DKzXHCoK1V4/?img_index=1',
+    'https://www.instagram.com/p/DL2-O4RAogE/?img_index=1',
+    'https://www.instagram.com/p/DL2-O4RAogE/?img_index=1'
   ];
 
   const handleInstagramClick = (index: number) => {
     window.open(instagramLinks[index], '_blank');
+  };
+
+  const handleNewsClick = (newsItem: NewsItem) => {
+    setSelectedNews(newsItem);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedNews(null);
   };
 
   return (
@@ -88,7 +172,7 @@ const News: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsItems.map((item, index) => (
             <ScrollReveal key={item.id} direction="up" delay={index * 200}>
               <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
@@ -99,7 +183,11 @@ const News: React.FC = () => {
                     className="w-full h-48 object-cover"
                   />
                   <div className="absolute top-4 right-4">
-                    <Instagram className="w-6 h-6 text-pink-500 bg-white p-1 rounded-full" />
+                    {item.type === 'instagram' ? (
+                      <Instagram className="w-6 h-6 text-pink-500 bg-white p-1 rounded-full" />
+                    ) : (
+                      <Eye className="w-6 h-6 text-nutrition-green bg-white p-1 rounded-full" />
+                    )}
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
@@ -111,20 +199,45 @@ const News: React.FC = () => {
                     {item.title}
                   </h3>
                   <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
-                    {item.content}
+                    {item.type === 'news' 
+                      ? item.content.split('\n')[0] + '...'
+                      : item.content
+                    }
                   </p>
                   <Button
-                    onClick={() => handleInstagramClick(index)}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto"
+                    onClick={() => item.type === 'instagram' 
+                      ? handleInstagramClick(index) 
+                      : handleNewsClick(item)
+                    }
+                    className={`w-full font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto ${
+                      item.type === 'instagram' 
+                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white'
+                        : 'bg-gradient-to-r from-nutrition-green to-nutrition-green-dark hover:from-nutrition-green-dark hover:to-nutrition-green text-white'
+                    }`}
                   >
-                    <Instagram className="w-4 h-4" />
-                    Ver en Instagram
+                    {item.type === 'instagram' ? (
+                      <>
+                        <Instagram className="w-4 h-4" />
+                        Ver en Instagram
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="w-4 h-4" />
+                        Leer más
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
             </ScrollReveal>
           ))}
         </div>
+
+        <NewsModal 
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          newsItem={selectedNews}
+        />
       </div>
     </section>
   );
