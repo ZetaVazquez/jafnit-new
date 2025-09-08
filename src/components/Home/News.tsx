@@ -3,7 +3,6 @@ import { Calendar, Instagram, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import NewsModal from './NewsModal';
 import consejosImage from '@/assets/consejos-cocinar-sano.png';
 import mitoAguaImage from '@/assets/mito-agua-limon.png';
@@ -205,16 +204,11 @@ Elige UN pequeño cambio y comprométete solo con eso. Cuando sea natural (2-3 s
             <ScrollReveal key={item.id} direction="up" delay={index * 200}>
               <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
                 <div className="relative">
-                  <div className="bg-gray-50">
-                    <AspectRatio ratio={16 / 9}>
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        loading="lazy"
-                        className="w-full h-full object-contain"
-                      />
-                    </AspectRatio>
-                  </div>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-48 object-cover"
+                  />
                   <div className="absolute top-4 right-4">
                     {item.type === 'instagram' ? (
                       <Instagram className="w-6 h-6 text-pink-500 bg-white p-1 rounded-full" />
