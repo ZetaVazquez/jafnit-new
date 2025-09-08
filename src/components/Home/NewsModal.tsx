@@ -45,7 +45,8 @@ const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
           <img
             src={newsItem.image}
             alt={newsItem.title}
-            className="w-full h-auto object-contain bg-gray-50 max-h-80"
+            className="w-full max-h-[70vh] object-contain bg-gray-50"
+            loading="eager"
           />
         </div>
         
