@@ -97,12 +97,26 @@ const AdminDietPlanManager: React.FC<AdminDietPlanManagerProps> = ({ onGoBack })
     e.preventDefault();
     
     try {
+      // Validar JSON antes de procesar
+      let mealPlanJson;
+      try {
+        mealPlanJson = JSON.parse(formData.meal_plan || '{}');
+      } catch (jsonError) {
+        const error = jsonError as Error;
+        toast({
+          title: "Error en el JSON",
+          description: `El plan de comidas contiene un error de formato JSON: ${error.message}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
       const planData = {
         user_id: formData.user_id,
         title: formData.title,
         description: formData.description,
         calories_target: parseInt(formData.calories_target),
-        meal_plan: JSON.parse(formData.meal_plan || '{}')
+        meal_plan: mealPlanJson
       };
 
       if (editingPlan) {
