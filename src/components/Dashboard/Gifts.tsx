@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Gift, Download, ExternalLink } from 'lucide-react';
@@ -9,40 +10,71 @@ interface GiftsProps {
 }
 
 const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
-  const handleDownloadGift = () => {
+  const { toast } = useToast();
+  const handleDownloadGift = async () => {
+    const pdfPath = '/gifts/welcome-gift.pdf';
     try {
-      // Crear un enlace temporal para descargar el archivo
+      const res = await fetch(pdfPath, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('pdf')) {
+        throw new Error('Contenido inesperado (no es PDF)');
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
       const link = document.createElement('a');
-      link.href = '/gifts/welcome-gift.pdf';
+      link.href = url;
       link.download = 'JAFN-Gift-Welcome.pdf';
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      
-      // Añadir al DOM temporalmente para hacer click
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      console.log('Descarga iniciada para el PDF de regalo');
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      toast({
+        title: 'Descarga iniciada',
+        description: 'Se está descargando tu regalo en PDF.',
+      });
     } catch (error) {
-      console.error('Error al descargar el archivo:', error);
-      // Fallback: abrir en nueva pestaña
-      window.open('/gifts/welcome-gift.pdf', '_blank');
+      console.error('Error al descargar el PDF:', error);
+      toast({
+        variant: 'destructive',
+        title: 'No se pudo descargar el PDF',
+        description: 'Revisaremos el enlace. Intenta de nuevo más tarde.',
+      });
+      // Fallback: abrir la ruta directa
+      window.open(pdfPath, '_blank', 'noopener,noreferrer');
     }
   };
 
-  const handleViewGift = () => {
-    // Crear enlace directo para evitar bloqueos de popup
-    const link = document.createElement('a');
-    link.href = '/gifts/welcome-gift.pdf';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    
-    // Añadir al DOM y hacer click para abrir
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+  const handleViewGift = async () => {
+    const pdfPath = '/gifts/welcome-gift.pdf';
+    try {
+      const res = await fetch(pdfPath, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('pdf')) {
+        throw new Error('Contenido inesperado (no es PDF)');
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank', 'noopener,noreferrer');
+      // Revocar después de un tiempo
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (error) {
+      console.error('Error al abrir el PDF:', error);
+      toast({
+        variant: 'destructive',
+        title: 'No se pudo abrir el PDF',
+        description: 'Parece que el archivo no está disponible. Intentando abrir el enlace directo…',
+      });
+      // Fallback: abrir ruta directa
+      window.open(pdfPath, '_blank', 'noopener,noreferrer');
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
