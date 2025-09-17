@@ -3,7 +3,7 @@ import React from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Gift, Download, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Gift, Download } from 'lucide-react';
 
 interface GiftsProps {
   onGoBack: () => void;
@@ -49,31 +49,6 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
   };
 
 
-  const handleViewGift = async () => {
-    const pdfPath = '/gifts/welcome-gift.pdf';
-    try {
-      const res = await fetch(pdfPath, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('pdf')) {
-        throw new Error('Contenido inesperado (no es PDF)');
-      }
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank', 'noopener,noreferrer');
-      // Revocar después de un tiempo
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
-    } catch (error) {
-      console.error('Error al abrir el PDF:', error);
-      toast({
-        variant: 'destructive',
-        title: 'No se pudo abrir el PDF',
-        description: 'Parece que el archivo no está disponible. Intentando abrir el enlace directo…',
-      });
-      // Fallback: abrir ruta directa
-      window.open(pdfPath, '_blank', 'noopener,noreferrer');
-    }
-  };
 
 
   return (
@@ -128,16 +103,7 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button
-                  onClick={handleViewGift}
-                  variant="outline"
-                  className="border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white font-bold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                >
-                  <ExternalLink className="w-5 h-5 mr-2" />
-                  Ver Online
-                </Button>
-
+              <div className="flex justify-center">
                 <Button
                   onClick={handleDownloadGift}
                   className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
