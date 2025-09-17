@@ -69,32 +69,35 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
 
   const formatWorkoutPlan = (exercises: any): string => {
     if (!exercises) return 'No hay ejercicios especificados';
-    
-    if (typeof exercises === 'string') {
-      return exercises;
+
+    if (typeof exercises === 'string') return exercises;
+
+    if (Array.isArray(exercises)) {
+      return exercises
+        .map((exercise: any, index: number) => {
+          if (typeof exercise === 'string') return `• ${exercise}`;
+          const lines: string[] = [];
+          lines.push(`${index + 1}. ${exercise.name || 'Ejercicio sin nombre'}`);
+          if (exercise.description) lines.push(`   Descripción: ${exercise.description}`);
+          if (exercise.sets) lines.push(`   Series: ${exercise.sets}`);
+          if (exercise.reps) lines.push(`   Repeticiones: ${exercise.reps}`);
+          if (exercise.duration) lines.push(`   Duración: ${exercise.duration}`);
+          if (exercise.weight) lines.push(`   Peso: ${exercise.weight}`);
+          if (exercise.rest) lines.push(`   Descanso: ${exercise.rest}`);
+          return lines.join('\n');
+        })
+        .join('\n');
     }
-    
+
     if (typeof exercises === 'object') {
-      if (exercises.description) {
-        return exercises.description;
-      }
-      
-      if (Array.isArray(exercises)) {
-        return exercises.map((exercise, index) => {
-          let exerciseStr = `${index + 1}. ${exercise.name || 'Ejercicio sin nombre'}\n`;
-          if (exercise.description) exerciseStr += `   Descripción: ${exercise.description}\n`;
-          if (exercise.sets) exerciseStr += `   Series: ${exercise.sets}\n`;
-          if (exercise.reps) exerciseStr += `   Repeticiones: ${exercise.reps}\n`;
-          if (exercise.duration) exerciseStr += `   Duración: ${exercise.duration}\n`;
-          if (exercise.weight) exerciseStr += `   Peso: ${exercise.weight}\n`;
-          if (exercise.rest) exerciseStr += `   Descanso: ${exercise.rest}\n`;
-          return exerciseStr;
-        }).join('\n');
-      }
-      
-      return JSON.stringify(exercises, null, 2);
+      // Formateo genérico tipo "Mis dietas": sin llaves/corchetes/quotes, con indentación legible
+      return JSON.stringify(exercises, null, 2)
+        .replace(/[{}\[\]",]/g, '')
+        .replace(/:/g, ': ')
+        .replace(/^\s*$/gm, '')
+        .trim();
     }
-    
+
     return String(exercises);
   };
 
