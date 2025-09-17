@@ -44,6 +44,13 @@ export type Database = {
             foreignKeyName: "activity_logs_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -150,6 +157,13 @@ export type Database = {
           weight?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "body_measurements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "body_measurements_user_id_fkey"
             columns: ["user_id"]
@@ -336,6 +350,13 @@ export type Database = {
             foreignKeyName: "daily_goals_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_goals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -387,6 +408,13 @@ export type Database = {
             foreignKeyName: "daily_progress_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -430,6 +458,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "diet_plans_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "diet_plans_user_id_fkey"
             columns: ["user_id"]
@@ -555,6 +590,13 @@ export type Database = {
           weight?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "questionnaire_responses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "questionnaire_responses_user_id_fkey"
             columns: ["user_id"]
@@ -774,6 +816,13 @@ export type Database = {
             foreignKeyName: "subscriptions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -929,6 +978,13 @@ export type Database = {
             foreignKeyName: "workout_plans_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "active_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_plans_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -936,7 +992,39 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      active_profiles: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          email: string | null
+          id: string | null
+          name: string | null
+          password: string | null
+          profile_image_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string | null
+          name?: string | null
+          password?: string | null
+          profile_image_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          id?: string | null
+          name?: string | null
+          password?: string | null
+          profile_image_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_user_stripe_subscription_status: {
@@ -957,6 +1045,10 @@ export type Database = {
       update_expired_subscriptions: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      user_exists: {
+        Args: { user_uuid: string }
+        Returns: boolean
       }
     }
     Enums: {
