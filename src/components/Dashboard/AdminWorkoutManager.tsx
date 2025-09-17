@@ -62,10 +62,10 @@ const AdminWorkoutManager: React.FC<AdminWorkoutManagerProps> = ({ onGoBack }) =
   const fetchClients = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, name, email')
+        .rpc('get_active_profiles')
         .neq('email', 'josefiguenu@gmail.com')
-        .neq('email', 'consultajafn@gmail.com');
+        .neq('email', 'consultajafn@gmail.com')
+        .neq('email', 'zaiidav347@gmail.com');
 
       if (error) throw error;
       setClients(data || []);
