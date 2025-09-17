@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, ChefHat, Calendar, Target } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ArrowLeft, ChefHat, Calendar, Target, Download, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { DietPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
@@ -17,6 +18,48 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
   const { user } = useAuth();
   const [dietPlans, setDietPlans] = useState<DietPlan[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Función para formatear el plan de comidas
+  const formatMealPlan = (mealPlan: any) => {
+    if (!mealPlan) return 'No hay plan de comidas disponible';
+    
+    if (typeof mealPlan === 'string') return mealPlan;
+    
+    if (typeof mealPlan === 'object') {
+      return JSON.stringify(mealPlan, null, 2)
+        .replace(/[{}[\]",]/g, '')
+        .replace(/:/g, ': ')
+        .trim();
+    }
+    
+    return String(mealPlan);
+  };
+
+  // Función para descargar el plan como archivo de texto
+  const downloadDietPlan = (diet: DietPlan) => {
+    const content = `
+PLAN DE DIETA: ${diet.title}
+
+Descripción: ${diet.description || 'No disponible'}
+
+Objetivo de calorías: ${diet.calories_target ? `${diet.calories_target} cal/día` : 'No especificado'}
+
+Fecha de creación: ${new Date(diet.created_at).toLocaleDateString('es-ES')}
+
+PLAN DE COMIDAS:
+${formatMealPlan(diet.meal_plan)}
+    `.trim();
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${diet.title.replace(/[^a-z0-9]/gi, '_')}_plan_dieta.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     const fetchDietPlans = async () => {
@@ -118,11 +161,58 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                          Ver Plan Completo
-                        </Button>
-                        <Button variant="outline" className="w-full border-nutrition-green text-nutrition-green">
-                          Descargar PDF
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
+                              <Eye className="w-4 h-4 mr-2" />
+                              Ver Plan Completo
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle className="text-nutrition-green text-xl">
+                                {diet.title}
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              {diet.description && (
+                                <div>
+                                  <h4 className="font-semibold text-nutrition-black mb-2">Descripción:</h4>
+                                  <p className="text-nutrition-gray">{diet.description}</p>
+                                </div>
+                              )}
+                              
+                              <div className="grid grid-cols-2 gap-4">
+                                {diet.calories_target && (
+                                  <div>
+                                    <h4 className="font-semibold text-nutrition-black mb-1">Objetivo de calorías:</h4>
+                                    <p className="text-nutrition-gray">{diet.calories_target} cal/día</p>
+                                  </div>
+                                )}
+                                <div>
+                                  <h4 className="font-semibold text-nutrition-black mb-1">Fecha de creación:</h4>
+                                  <p className="text-nutrition-gray">{new Date(diet.created_at).toLocaleDateString('es-ES')}</p>
+                                </div>
+                              </div>
+
+                              <div>
+                                <h4 className="font-semibold text-nutrition-black mb-2">Plan de Comidas:</h4>
+                                <div className="bg-gray-50 p-4 rounded-lg border">
+                                  <pre className="whitespace-pre-wrap text-sm text-nutrition-gray font-mono">
+                                    {formatMealPlan(diet.meal_plan)}
+                                  </pre>
+                                </div>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <Button 
+                          variant="outline" 
+                          className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                          onClick={() => downloadDietPlan(diet)}
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Descargar Plan
                         </Button>
                       </div>
                     </div>
