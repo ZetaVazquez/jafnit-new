@@ -4,9 +4,6 @@ import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import NewsModal from './NewsModal';
-import consejosImage from '@/assets/consejos-cocinar-sano.png';
-import mitoAguaImage from '@/assets/mito-agua-limon.png';
-import mitoHidratosImage from '@/assets/mito-hidratos.png';
 
 const News: React.FC = () => {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
@@ -20,7 +17,7 @@ const News: React.FC = () => {
       content: '🥘 ¿Sientes que no tienes tiempo para cocinar sano todos los días? Te enseñamos estrategias prácticas para alimentarte bien sin complicarte la vida.',
       date: '2024-01-15',
       type: 'instagram',
-      image: consejosImage
+      image: '/lovable-uploads/02b37b86-627d-4c1c-a55a-1fdab3eaf6cf.png'
     },
     {
       id: '2',
@@ -28,7 +25,7 @@ const News: React.FC = () => {
       content: '🍋 Desmontamos este popular mito nutricional. ¿Realmente el agua con limón en ayunas tiene efectos mágicos para quemar grasa?',
       date: '2024-01-12',
       type: 'instagram',
-      image: mitoAguaImage
+      image: '/lovable-uploads/649a395f-0ba7-4144-82a9-f45d469b77b7.png'
     },
     {
       id: '3',
@@ -36,7 +33,7 @@ const News: React.FC = () => {
       content: '🍞 Muchas personas tienen miedo a consumir carbohidratos. Te explicamos por qué no deberías temerles y cómo incluirlos inteligentemente.',
       date: '2024-01-10',
       type: 'instagram',
-      image: mitoHidratosImage
+      image: '/lovable-uploads/9a9ed6cd-bf68-4a70-9964-f04533b6397d.png'
     },
     // Noticias expandidas (las 3 siguientes)
     {
