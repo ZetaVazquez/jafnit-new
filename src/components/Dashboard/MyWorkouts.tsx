@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Dumbbell, Clock, Target, PlayCircle } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ArrowLeft, Dumbbell, Clock, Target, Download, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { WorkoutPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
@@ -18,7 +19,8 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
   const { user } = useAuth();
   const [workoutPlans, setWorkoutPlans] = useState<WorkoutPlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState<WorkoutPlan | null>(null);
+  const [selectedWorkout, setSelectedWorkout] = useState<WorkoutPlan | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchWorkoutPlans = async () => {
@@ -65,6 +67,67 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
     }
   };
 
+  const formatWorkoutPlan = (exercises: any): string => {
+    if (!exercises) return 'No hay ejercicios especificados';
+    
+    if (typeof exercises === 'string') {
+      return exercises;
+    }
+    
+    if (typeof exercises === 'object') {
+      if (exercises.description) {
+        return exercises.description;
+      }
+      
+      if (Array.isArray(exercises)) {
+        return exercises.map((exercise, index) => {
+          let exerciseStr = `${index + 1}. ${exercise.name || 'Ejercicio sin nombre'}\n`;
+          if (exercise.description) exerciseStr += `   Descripción: ${exercise.description}\n`;
+          if (exercise.sets) exerciseStr += `   Series: ${exercise.sets}\n`;
+          if (exercise.reps) exerciseStr += `   Repeticiones: ${exercise.reps}\n`;
+          if (exercise.duration) exerciseStr += `   Duración: ${exercise.duration}\n`;
+          if (exercise.weight) exerciseStr += `   Peso: ${exercise.weight}\n`;
+          if (exercise.rest) exerciseStr += `   Descanso: ${exercise.rest}\n`;
+          return exerciseStr;
+        }).join('\n');
+      }
+      
+      return JSON.stringify(exercises, null, 2);
+    }
+    
+    return String(exercises);
+  };
+
+  const downloadWorkoutPlan = (workout: WorkoutPlan) => {
+    const content = `PLAN DE ENTRENAMIENTO: ${workout.title}
+
+DESCRIPCIÓN:
+${workout.description || 'Sin descripción'}
+
+NIVEL DE DIFICULTAD: ${getDifficultyText(workout.difficulty_level)}
+
+EJERCICIOS:
+${formatWorkoutPlan(workout.exercises)}
+
+Fecha de creación: ${new Date(workout.created_at).toLocaleDateString('es-ES')}
+`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `plan_entrenamiento_${workout.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleViewPlan = (workout: WorkoutPlan) => {
+    setSelectedWorkout(workout);
+    setIsDialogOpen(true);
+  };
+
   const WorkoutsContent = () => {
     if (loading) {
       return (
@@ -73,88 +136,6 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-nutrition-green mx-auto"></div>
             <p className="mt-4 text-nutrition-gray">Cargando tus entrenamientos...</p>
           </div>
-        </DynamicBackground>
-      );
-    }
-
-    if (selectedPlan) {
-      return (
-        <DynamicBackground className="min-h-screen">
-          {/* Header */}
-          <header className="bg-white/80 backdrop-blur-sm shadow-md">
-            <div className="container mx-auto px-4 py-4">
-              <Button
-                onClick={() => setSelectedPlan(null)}
-                variant="ghost"
-                className="mb-4 text-nutrition-green hover:text-nutrition-green-dark"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Volver a Entrenamientos
-              </Button>
-              <h1 className="text-3xl font-bold text-nutrition-black">{selectedPlan.title}</h1>
-              <p className="text-nutrition-gray mt-2">{selectedPlan.description}</p>
-            </div>
-          </header>
-
-          {/* Content */}
-          <main className="container mx-auto px-4 py-8">
-            <div className="max-w-4xl mx-auto">
-              {/* Plan Info */}
-              <Card className="mb-6 bg-white/90 backdrop-blur-sm">
-                <CardContent className="py-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <Badge className={getDifficultyColor(selectedPlan.difficulty_level)}>
-                      {getDifficultyText(selectedPlan.difficulty_level)}
-                    </Badge>
-                    <Button className="bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                      <PlayCircle className="w-4 h-4 mr-2" />
-                      Comenzar Entrenamiento
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Exercises */}
-              {selectedPlan.exercises && (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-nutrition-black mb-4">Ejercicios</h2>
-                  {Array.isArray(selectedPlan.exercises) ? (
-                    selectedPlan.exercises.map((exercise: any, index: number) => (
-                      <Card key={index} className="bg-white/90 backdrop-blur-sm">
-                        <CardContent className="py-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="font-bold text-nutrition-black">{exercise.name || `Ejercicio ${index + 1}`}</h3>
-                              <p className="text-nutrition-gray">{exercise.description || 'Sin descripción'}</p>
-                              {exercise.sets && (
-                                <p className="text-sm text-nutrition-gray mt-1">
-                                  {exercise.sets} series × {exercise.reps || 'X'} repeticiones
-                                </p>
-                              )}
-                            </div>
-                            <div className="text-right">
-                              {exercise.duration && (
-                                <div className="flex items-center text-nutrition-gray">
-                                  <Clock className="w-4 h-4 mr-1" />
-                                  <span>{exercise.duration}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  ) : (
-                    <Card className="bg-white/90 backdrop-blur-sm">
-                      <CardContent className="py-6 text-center">
-                        <p className="text-nutrition-gray">No hay ejercicios específicos definidos para este plan.</p>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              )}
-            </div>
-          </main>
         </DynamicBackground>
       );
     }
@@ -196,8 +177,7 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
               {workoutPlans.map((plan) => (
                 <Card
                   key={plan.id}
-                  className="cursor-pointer hover:shadow-lg transition-shadow bg-white/90 backdrop-blur-sm"
-                  onClick={() => setSelectedPlan(plan)}
+                  className="bg-white/90 backdrop-blur-sm hover:shadow-lg transition-shadow"
                 >
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -209,21 +189,33 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-nutrition-gray mb-4">{plan.description}</p>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center text-nutrition-gray">
                         <Target className="w-4 h-4 mr-1" />
+                        <span className="text-sm">Plan personalizado</span>
+                      </div>
+                      <div className="flex items-center text-nutrition-gray">
+                        <Clock className="w-4 h-4 mr-1" />
                         <span className="text-sm">
-                          {plan.exercises && Array.isArray(plan.exercises) 
-                            ? `${plan.exercises.length} ejercicios` 
-                            : 'Plan personalizado'
-                          }
+                          {new Date(plan.created_at).toLocaleDateString('es-ES')}
                         </span>
                       </div>
+                    </div>
+                    <div className="flex gap-2">
                       <Button 
                         size="sm" 
-                        className="bg-nutrition-green hover:bg-nutrition-green-dark text-white"
+                        className="bg-nutrition-green hover:bg-nutrition-green-dark text-white flex-1"
+                        onClick={() => handleViewPlan(plan)}
                       >
-                        Ver Plan
+                        <Eye className="w-4 h-4 mr-2" />
+                        Ver Plan Completo
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => downloadWorkoutPlan(plan)}
+                      >
+                        <Download className="w-4 h-4" />
                       </Button>
                     </div>
                   </CardContent>
@@ -232,6 +224,55 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
             </div>
           )}
         </main>
+
+        {/* Modal para ver plan completo */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Plan de Entrenamiento Completo</DialogTitle>
+            </DialogHeader>
+            {selectedWorkout && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-nutrition-black mb-2">{selectedWorkout.title}</h2>
+                  {selectedWorkout.description && (
+                    <p className="text-nutrition-gray mb-4">{selectedWorkout.description}</p>
+                  )}
+                  <div className="flex items-center gap-4 mb-4">
+                    <Badge className={getDifficultyColor(selectedWorkout.difficulty_level)}>
+                      {getDifficultyText(selectedWorkout.difficulty_level)}
+                    </Badge>
+                    <span className="text-sm text-nutrition-gray">
+                      Creado el {new Date(selectedWorkout.created_at).toLocaleDateString('es-ES')}
+                    </span>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold text-nutrition-black mb-3">Plan de Ejercicios:</h3>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <pre className="whitespace-pre-wrap text-sm text-gray-800">
+                      {formatWorkoutPlan(selectedWorkout.exercises)}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-4 border-t">
+                  <Button
+                    variant="outline"
+                    onClick={() => downloadWorkoutPlan(selectedWorkout)}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar Plan
+                  </Button>
+                  <Button onClick={() => setIsDialogOpen(false)}>
+                    Cerrar
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </DynamicBackground>
     );
   };
