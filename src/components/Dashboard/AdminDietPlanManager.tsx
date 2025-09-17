@@ -122,8 +122,7 @@ const AdminDietPlanManager: React.FC<AdminDietPlanManagerProps> = ({ onGoBack })
       if (editingPlan) {
         const { error } = await supabase
           .from('diet_plans')
-          .update(planData)
-          .eq('id', editingPlan.id);
+          .upsert({ id: editingPlan.id, ...planData }, { onConflict: 'id' });
 
         if (error) throw error;
 
