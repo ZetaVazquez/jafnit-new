@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ArrowLeft, Search, Trash2, Eye, Edit } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import ClientDetailsModal from './ClientDetailsModal';
 
 interface Client {
   id: string;
@@ -47,6 +48,8 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
   const [loading, setLoading] = useState(true);
   const [editingPlan, setEditingPlan] = useState<string | null>(null);
   const [editingDate, setEditingDate] = useState<string | null>(null);
+  const [selectedClient, setSelectedClient] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -358,6 +361,20 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
     return new Date(endDate) < new Date();
   };
 
+  const handleViewDetails = (client: Client) => {
+    setSelectedClient({
+      id: client.id,
+      name: client.name,
+      email: client.email
+    });
+    setShowDetailsModal(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setShowDetailsModal(false);
+    setSelectedClient(null);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-nutrition-green-lighter to-white">
@@ -512,7 +529,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => alert(`Ver detalles de ${client.name}`)}
+                          onClick={() => handleViewDetails(client)}
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
@@ -540,6 +557,17 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
             )}
           </CardContent>
         </Card>
+
+        {/* Modal de Detalles del Cliente */}
+        {selectedClient && (
+          <ClientDetailsModal
+            isOpen={showDetailsModal}
+            onClose={handleCloseDetailsModal}
+            clientId={selectedClient.id}
+            clientName={selectedClient.name}
+            clientEmail={selectedClient.email}
+          />
+        )}
       </div>
     </div>
   );
