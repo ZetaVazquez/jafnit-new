@@ -155,12 +155,22 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
       if (planType === 'none') {
         // Eliminar suscripción existente
         if (client.subscription_id) {
-          const { error } = await supabase
-            .from('subscriptions')
-            .delete()
-            .eq('id', client.subscription_id);
+          if (client.source === 'stripe') {
+            // Para Stripe, solo marcar como inactiva (no podemos eliminar desde aquí)
+            toast({
+              title: "Información",
+              description: "Las suscripciones de Stripe deben cancelarse desde el panel de Stripe.",
+              variant: "destructive",
+            });
+            return;
+          } else {
+            const { error } = await supabase
+              .from('subscriptions')
+              .delete()
+              .eq('id', client.subscription_id);
 
-          if (error) throw error;
+            if (error) throw error;
+          }
         }
       } else {
         // Calcular fechas
@@ -175,22 +185,44 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         }
 
         if (client.subscription_id) {
-          // Actualizar suscripción existente
-          const { error } = await supabase
-            .from('subscriptions')
-            .update({
-              plan_type: planType,
-              status: 'active',
-              start_date: startDate.toISOString(),
-              end_date: endDate.toISOString(),
-              amount: amount,
-              updated_at: new Date().toISOString()
-            })
-            .eq('id', client.subscription_id);
+          // Actualizar suscripción existente usando RPCs
+          if (client.source === 'stripe') {
+            // Actualizar suscripción de Stripe
+            const { error } = await supabase.rpc('admin_update_stripe_subscription_end_date', {
+              p_subscription_id: client.subscription_id,
+              p_new_end: endDate.toISOString(),
+            });
+            if (error) throw error;
 
-          if (error) throw error;
+            // También actualizar el plan_type si es necesario (esto requeriría otro RPC)
+            toast({
+              title: "Información",
+              description: "Para cambiar el tipo de plan en Stripe, debe hacerse desde el panel de Stripe. Solo se actualizó la fecha.",
+            });
+          } else {
+            // Actualizar suscripción tradicional
+            const { error } = await supabase.rpc('admin_update_subscription_end_date', {
+              p_subscription_id: client.subscription_id,
+              p_new_end: endDate.toISOString(),
+            });
+            if (error) throw error;
+
+            // Actualizar también el tipo de plan
+            const { error: updateError } = await supabase
+              .from('subscriptions')
+              .update({
+                plan_type: planType,
+                status: 'active',
+                start_date: startDate.toISOString(),
+                amount: amount,
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', client.subscription_id);
+
+            if (updateError) throw updateError;
+          }
         } else {
-          // Crear nueva suscripción
+          // Crear nueva suscripción tradicional
           const { error } = await supabase
             .from('subscriptions')
             .insert({
