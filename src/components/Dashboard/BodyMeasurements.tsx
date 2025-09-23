@@ -77,12 +77,11 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
 
       let error;
       if (editingId) {
-        // For updates, don't include user_id
+        // For updates, only use ID - RLS policy handles user security
         ({ error } = await supabase
           .from('body_measurements')
           .update(baseMeasurementData)
-          .eq('id', editingId)
-          .eq('user_id', user.id)); // Extra security check
+          .eq('id', editingId));
       } else {
         // For inserts, include user_id
         ({ error } = await supabase
