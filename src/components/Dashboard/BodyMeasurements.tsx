@@ -63,8 +63,8 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
     if (!user) return;
 
     try {
-      const measurementData = {
-        user_id: user.id,
+      // Base measurement data without user_id for updates
+      const baseMeasurementData = {
         weight: formData.weight ? parseFloat(formData.weight) : null,
         body_fat_percentage: formData.body_fat_percentage ? parseFloat(formData.body_fat_percentage) : null,
         muscle_mass: formData.muscle_mass ? parseFloat(formData.muscle_mass) : null,
@@ -77,29 +77,35 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
 
       let error;
       if (editingId) {
+        // For updates, don't include user_id
         ({ error } = await supabase
           .from('body_measurements')
-          .update(measurementData)
-          .eq('id', editingId));
+          .update(baseMeasurementData)
+          .eq('id', editingId)
+          .eq('user_id', user.id)); // Extra security check
       } else {
+        // For inserts, include user_id
         ({ error } = await supabase
           .from('body_measurements')
-          .insert(measurementData));
+          .insert({
+            ...baseMeasurementData,
+            user_id: user.id
+          }));
       }
 
       if (error) {
         console.error('Error saving measurement:', error);
         toast({
           title: "Error",
-          description: "No se pudo guardar la medición",
+          description: `No se pudo ${editingId ? 'actualizar' : 'guardar'} la medición: ${error.message}`,
           variant: "destructive"
         });
         return;
       }
 
       toast({
-        title: "Guardado",
-        description: "Medición guardada correctamente"
+        title: editingId ? "Actualizado" : "Guardado",
+        description: `Medición ${editingId ? 'actualizada' : 'guardada'} correctamente`
       });
 
       setShowAddForm(false);
@@ -108,6 +114,11 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
       fetchMeasurements();
     } catch (error) {
       console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: "Error de conexión. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
     }
   };
 
