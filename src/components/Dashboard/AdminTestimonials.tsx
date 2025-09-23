@@ -60,15 +60,23 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
 
   const updateTestimonialStatus = async (id: string, status: 'approved' | 'rejected') => {
     try {
-      const { error } = await supabase
+      console.log('Updating testimonial:', { id, status });
+      
+      const { data, error } = await supabase
         .from('user_testimonials')
         .update({ 
           status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', id);
+        .eq('id', id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Update successful:', data);
 
       setTestimonials(prev =>
         prev.map(testimonial =>
@@ -80,11 +88,11 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
         title: "Actualizado",
         description: `Comentario ${status === 'approved' ? 'aprobado' : 'rechazado'} exitosamente`
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating testimonial:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar el comentario",
+        description: `No se pudo actualizar el comentario: ${error?.message || 'Error desconocido'}`,
         variant: "destructive"
       });
     }
