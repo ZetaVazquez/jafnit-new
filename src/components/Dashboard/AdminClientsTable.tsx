@@ -69,7 +69,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
       // Primero actualizar suscripciones expiradas
       await supabase.rpc('update_expired_subscriptions');
 
-      // Obtener perfiles
+      // Obtener perfiles solo de usuarios que han tenido al menos una suscripción o pago
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select(`
@@ -91,6 +91,13 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
       if (subscriptionsError) throw subscriptionsError;
 
+      // Obtener pagos pendientes
+      const { data: pendingPaymentsData, error: pendingPaymentsError } = await supabase
+        .from('pending_payments')
+        .select('user_id');
+
+      if (pendingPaymentsError) throw pendingPaymentsError;
+
       // Obtener suscripciones de Stripe
       const { data: stripeSubscriptionsData, error: stripeError } = await supabase
         .from('stripe_subscriptions')
@@ -98,7 +105,24 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
       if (stripeError) throw stripeError;
 
-      const clientsData = profilesData?.map((profile: any) => {
+      // Filtrar solo usuarios que han pagado al menos una vez
+      const usersWithPayments = new Set();
+      
+      // Agregar usuarios con suscripciones tradicionales
+      subscriptionsData?.forEach(sub => usersWithPayments.add(sub.user_id));
+      
+      // Agregar usuarios con suscripciones de Stripe
+      stripeSubscriptionsData?.forEach(sub => usersWithPayments.add(sub.user_id));
+      
+      // Agregar usuarios con pagos pendientes
+      pendingPaymentsData?.forEach(payment => usersWithPayments.add(payment.user_id));
+
+      // Filtrar perfiles solo de usuarios que han pagado
+      const filteredProfiles = profilesData?.filter(profile => 
+        usersWithPayments.has(profile.id)
+      ) || [];
+
+      const clientsData = filteredProfiles.map((profile: any) => {
         // Buscar suscripciones para este usuario
         const userSubscriptions = subscriptionsData?.filter(sub => sub.user_id === profile.id) || [];
         const userStripeSubscriptions = stripeSubscriptionsData?.filter(sub => sub.user_id === profile.id) || [];
@@ -135,7 +159,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
           subscription_id: finalSubscription?.id || null,
           source: stripeSubscription && (stripeSubscription.status === 'active' || stripeSubscription.status === 'trialing') ? 'stripe' : 'traditional'
         };
-      }) || [];
+      });
 
       setClients(clientsData);
     } catch (error) {
