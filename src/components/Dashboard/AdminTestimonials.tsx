@@ -62,21 +62,20 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
     try {
       console.log('Updating testimonial:', { id, status });
       
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('user_testimonials')
-        .update({ 
+        .update({
           status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', id)
-        .select();
+        .eq('id', id);
 
       if (error) {
         console.error('Supabase error:', error);
         throw error;
       }
 
-      console.log('Update successful:', data);
+      console.log('Update successful');
 
       setTestimonials(prev =>
         prev.map(testimonial =>
