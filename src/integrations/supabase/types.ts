@@ -939,6 +939,39 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_update_stripe_subscription_end_date: {
+        Args: { p_new_end: string; p_subscription_id: string }
+        Returns: {
+          cancel_at_period_end: boolean | null
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan_type: string
+          status: string
+          stripe_customer_id: string
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+      }
+      admin_update_subscription_end_date: {
+        Args: { p_new_end: string; p_subscription_id: string }
+        Returns: {
+          amount: number
+          created_at: string
+          end_date: string | null
+          id: string
+          payment_method: string | null
+          plan_type: string
+          start_date: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+      }
       get_active_profiles: {
         Args: Record<PropertyKey, never>
         Returns: {

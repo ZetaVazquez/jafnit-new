@@ -236,29 +236,22 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         return;
       }
 
-      // Solo actualizar suscripciones tradicionales por ahora
-      // Las suscripciones de Stripe se gestionan desde Stripe
+      const isoDate = new Date(newDate).toISOString();
+
       if (client.source === 'stripe') {
-        toast({
-          title: "Error",
-          description: "Las suscripciones de Stripe deben gestionarse desde Stripe.",
-          variant: "destructive",
+        // Actualizar suscripción de Stripe vía RPC (seguridad con SECURITY DEFINER)
+        const { error } = await supabase.rpc('admin_update_stripe_subscription_end_date', {
+          p_subscription_id: client.subscription_id,
+          p_new_end: isoDate,
         });
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('subscriptions')
-        .update({
-          end_date: new Date(newDate).toISOString(),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', client.subscription_id)
-        .select();
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+        if (error) throw error as any;
+      } else {
+        // Actualizar suscripción tradicional vía RPC
+        const { error } = await supabase.rpc('admin_update_subscription_end_date', {
+          p_subscription_id: client.subscription_id,
+          p_new_end: isoDate,
+        });
+        if (error) throw error as any;
       }
 
       toast({
@@ -268,11 +261,11 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
       fetchClients(); // Refrescar la lista
       setEditingDate(null);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating expiration date:', error);
       toast({
         title: "Error",
-        description: `No se pudo actualizar la fecha de vencimiento: ${error.message || 'Error desconocido'}`,
+        description: `No se pudo actualizar la fecha de vencimiento: ${error?.message || 'Error desconocido'}`,
         variant: "destructive",
       });
     }
