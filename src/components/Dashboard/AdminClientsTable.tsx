@@ -236,19 +236,30 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         return;
       }
 
-      // Determinar qué tabla actualizar basado en la fuente de la suscripción
-      const tableName = client.source === 'stripe' ? 'stripe_subscriptions' : 'subscriptions';
-      const dateField = client.source === 'stripe' ? 'current_period_end' : 'end_date';
+      // Solo actualizar suscripciones tradicionales por ahora
+      // Las suscripciones de Stripe se gestionan desde Stripe
+      if (client.source === 'stripe') {
+        toast({
+          title: "Error",
+          description: "Las suscripciones de Stripe deben gestionarse desde Stripe.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      const { error } = await supabase
-        .from(tableName)
+      const { data, error } = await supabase
+        .from('subscriptions')
         .update({
-          [dateField]: new Date(newDate).toISOString(),
+          end_date: new Date(newDate).toISOString(),
           updated_at: new Date().toISOString()
         })
-        .eq('id', client.subscription_id);
+        .eq('id', client.subscription_id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       toast({
         title: "Fecha actualizada",
@@ -261,7 +272,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
       console.error('Error updating expiration date:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar la fecha de vencimiento.",
+        description: `No se pudo actualizar la fecha de vencimiento: ${error.message || 'Error desconocido'}`,
         variant: "destructive",
       });
     }
