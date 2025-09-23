@@ -27,36 +27,25 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
       if (!user) return;
 
       try {
-        // Fetch last 30 days of progress
+        // Fetch last 30 days of habit completions from activity_logs
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-        const { data: progressData, error: progressError } = await supabase
-          .from('daily_progress')
-          .select(`
-            *,
-            daily_goals (*)
-          `)
-          .eq('user_id', user.id)
-          .gte('date', thirtyDaysAgo.toISOString().split('T')[0])
-          .order('date', { ascending: true });
-
-        if (progressError) {
-          console.error('Error fetching progress:', progressError);
-          return;
-        }
-
-        // Fetch goals
-        const { data: goalsData, error: goalsError } = await supabase
-          .from('daily_goals')
+        const { data: activityData, error: activityError } = await supabase
+          .from('activity_logs')
           .select('*')
           .eq('user_id', user.id)
-          .eq('is_active', true);
+          .eq('activity_type', 'habit_completed')
+          .gte('created_at', thirtyDaysAgo.toISOString())
+          .order('created_at', { ascending: true });
 
-        if (goalsError) {
-          console.error('Error fetching goals:', goalsError);
+        if (activityError) {
+          console.error('Error fetching activity data:', activityError);
           return;
         }
+
+        // Total number of predefined habits (from MyGoals)
+        const totalHabits = 12; // 4 categories × 3 habits each
 
         // Fetch body measurements
         const { data: measurementsData, error: measurementsError } = await supabase
@@ -70,11 +59,11 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
           return;
         }
 
-        // Process progress data for charts
-        const chartData = processProgressData(progressData || [], (goalsData || []) as DailyGoal[]);
+        // Process activity data for charts
+        const chartData = processActivityData(activityData || [], totalHabits);
         
         setProgressData(chartData);
-        setGoals((goalsData || []) as DailyGoal[]);
+        setGoals([]);
         setBodyMeasurements(measurementsData || []);
       } catch (error) {
         console.error('Error:', error);
@@ -86,7 +75,7 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
     fetchProgressData();
   }, [user]);
 
-  const processProgressData = (progress: any[], goals: DailyGoal[]) => {
+  const processActivityData = (activityLogs: any[], totalHabits: number) => {
     const last30Days = [];
     const today = new Date();
     
@@ -95,21 +84,39 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
       
-      const dayProgress = progress.filter(p => p.date === dateStr);
-      const completedGoals = dayProgress.filter(p => p.completed).length;
-      const totalGoals = goals.length;
-      const completionRate = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+      // Filter activities for this specific day
+      const dayActivities = activityLogs.filter(activity => {
+        const activityDate = new Date(activity.created_at).toISOString().split('T')[0];
+        return activityDate === dateStr;
+      });
+      
+      // Count unique habit completions for the day
+      const uniqueHabits = new Set();
+      dayActivities.forEach(activity => {
+        if (activity.metadata && activity.metadata.habit_id) {
+          uniqueHabits.add(activity.metadata.habit_id);
+        }
+      });
+      
+      const completedGoals = uniqueHabits.size;
+      const completionRate = totalHabits > 0 ? Math.round((completedGoals / totalHabits) * 100) : 0;
+      
+      // Count by category based on habit_id prefixes
+      const alimentacion = Array.from(uniqueHabits).filter(id => String(id).startsWith('alimentacion_')).length;
+      const movimiento = Array.from(uniqueHabits).filter(id => String(id).startsWith('movimiento_')).length;
+      const hidratacion = Array.from(uniqueHabits).filter(id => String(id).startsWith('hidratacion_')).length;
+      const descanso = Array.from(uniqueHabits).filter(id => String(id).startsWith('descanso_')).length;
       
       last30Days.push({
         date: dateStr,
         displayDate: date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }),
         completedGoals,
-        totalGoals,
+        totalGoals: totalHabits,
         completionRate,
-        diet: dayProgress.find(p => p.daily_goals?.goal_type === 'diet')?.completed ? 1 : 0,
-        workout: dayProgress.find(p => p.daily_goals?.goal_type === 'workout')?.completed ? 1 : 0,
-        water: dayProgress.find(p => p.daily_goals?.goal_type === 'water')?.completed ? 1 : 0,
-        sleep: dayProgress.find(p => p.daily_goals?.goal_type === 'sleep')?.completed ? 1 : 0,
+        diet: alimentacion,
+        workout: movimiento,
+        water: hidratacion,
+        sleep: descanso,
       });
     }
     
