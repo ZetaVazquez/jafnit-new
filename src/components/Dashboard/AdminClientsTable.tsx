@@ -46,6 +46,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [editingPlan, setEditingPlan] = useState<string | null>(null);
+  const [editingDate, setEditingDate] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -223,6 +224,49 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
     }
   };
 
+  const updateClientExpirationDate = async (clientId: string, newDate: string) => {
+    try {
+      const client = clients.find(c => c.id === clientId);
+      if (!client || !client.subscription_id) {
+        toast({
+          title: "Error",
+          description: "No se encontró una suscripción para actualizar.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Determinar qué tabla actualizar basado en la fuente de la suscripción
+      const tableName = client.source === 'stripe' ? 'stripe_subscriptions' : 'subscriptions';
+      const dateField = client.source === 'stripe' ? 'current_period_end' : 'end_date';
+
+      const { error } = await supabase
+        .from(tableName)
+        .update({
+          [dateField]: new Date(newDate).toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', client.subscription_id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Fecha actualizada",
+        description: "La fecha de vencimiento ha sido actualizada correctamente.",
+      });
+
+      fetchClients(); // Refrescar la lista
+      setEditingDate(null);
+    } catch (error) {
+      console.error('Error updating expiration date:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la fecha de vencimiento.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const deleteClient = async (clientId: string, clientName: string) => {
     if (!confirm(`¿Estás seguro de que quieres eliminar a ${clientName}? Esta acción no se puede deshacer.`)) {
       return;
@@ -375,12 +419,53 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {client.end_date ? (
-                        <span className={isExpired(client.end_date) ? 'text-red-600 font-medium' : 'text-gray-600'}>
-                          {new Date(client.end_date).toLocaleDateString()}
-                        </span>
+                      {editingDate === client.id ? (
+                        <div className="flex items-center space-x-2">
+                          <Input
+                            type="date"
+                            defaultValue={client.end_date ? new Date(client.end_date).toISOString().split('T')[0] : ''}
+                            onBlur={(e) => {
+                              if (e.target.value) {
+                                updateClientExpirationDate(client.id, e.target.value);
+                              } else {
+                                setEditingDate(null);
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                if (e.currentTarget.value) {
+                                  updateClientExpirationDate(client.id, e.currentTarget.value);
+                                } else {
+                                  setEditingDate(null);
+                                }
+                              } else if (e.key === 'Escape') {
+                                setEditingDate(null);
+                              }
+                            }}
+                            className="w-36"
+                            autoFocus
+                          />
+                        </div>
                       ) : (
-                        <span className="text-gray-400">-</span>
+                        <div className="flex items-center space-x-2">
+                          {client.end_date ? (
+                            <span className={isExpired(client.end_date) ? 'text-red-600 font-medium' : 'text-gray-600'}>
+                              {new Date(client.end_date).toLocaleDateString()}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                          {client.subscription_id && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setEditingDate(client.id)}
+                              className="opacity-50 hover:opacity-100"
+                            >
+                              <Edit className="w-3 h-3" />
+                            </Button>
+                          )}
+                        </div>
                       )}
                     </TableCell>
                     <TableCell>
