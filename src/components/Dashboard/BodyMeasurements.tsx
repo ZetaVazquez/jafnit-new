@@ -77,11 +77,14 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
 
       let error;
       if (editingId) {
-        // For updates, only use ID - RLS policy handles user security
+        // Usar upsert (POST) para evitar posibles bloqueos al usar PATCH
         ({ error } = await supabase
           .from('body_measurements')
-          .update(baseMeasurementData)
-          .eq('id', editingId)
+          .upsert({
+            id: editingId,
+            user_id: user.id,
+            ...baseMeasurementData,
+          }, { onConflict: 'id' })
           .select()
           .single());
       } else {
