@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Plus, Edit2, Save, X, Trash2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { BodyMeasurement } from '@/types/database';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -81,7 +81,9 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
         ({ error } = await supabase
           .from('body_measurements')
           .update(baseMeasurementData)
-          .eq('id', editingId));
+          .eq('id', editingId)
+          .select()
+          .single());
       } else {
         // For inserts, include user_id
         ({ error } = await supabase
@@ -89,7 +91,9 @@ const BodyMeasurements: React.FC<BodyMeasurementsProps> = ({ onClose }) => {
           .insert({
             ...baseMeasurementData,
             user_id: user.id
-          }));
+          })
+          .select()
+          .single());
       }
 
       if (error) {
