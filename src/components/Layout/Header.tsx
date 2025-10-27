@@ -46,6 +46,7 @@ const Header: React.FC<HeaderProps> = ({
     { label: 'Inicio', href: '#inicio' },
     { label: 'Sobre Mi', href: '#sobre-mi' },
     { label: 'Servicios', href: '#servicios' },
+    { label: 'Guías', href: '#guias' },
     { label: 'Opiniones', href: '#testimonios' },
     { label: 'FAQ', href: '#faq' },
     { label: 'Precios', href: '#precios' },

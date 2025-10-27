@@ -439,6 +439,86 @@ export type Database = {
           },
         ]
       }
+      guide_purchases: {
+        Row: {
+          amount_paid: number
+          created_at: string
+          guide_id: string
+          id: string
+          purchased_at: string
+          stripe_payment_intent_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_paid: number
+          created_at?: string
+          guide_id: string
+          id?: string
+          purchased_at?: string
+          stripe_payment_intent_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_paid?: number
+          created_at?: string
+          guide_id?: string
+          id?: string
+          purchased_at?: string
+          stripe_payment_intent_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_purchases_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guides: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          discounted_price: number
+          id: string
+          image_url: string | null
+          is_active: boolean
+          pdf_url: string
+          regular_price: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          discounted_price: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          pdf_url: string
+          regular_price: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          discounted_price?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          pdf_url?: string
+          regular_price?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pending_payments: {
         Row: {
           amount: number
