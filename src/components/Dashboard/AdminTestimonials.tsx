@@ -64,21 +64,28 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
   const updateTestimonialStatus = async (id: string, status: 'approved' | 'rejected') => {
     try {
       console.log('Updating testimonial:', { id, status });
+      console.log('Current user:', await supabase.auth.getUser());
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('user_testimonials')
         .update({
           status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', id);
+        .eq('id', id)
+        .select();
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         throw error;
       }
 
-      console.log('Update successful');
+      console.log('Update successful, data returned:', data);
 
       setTestimonials(prev =>
         prev.map(testimonial =>
@@ -91,7 +98,11 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
         description: `Comentario ${status === 'approved' ? 'aprobado' : 'rechazado'} exitosamente`
       });
     } catch (error: any) {
-      console.error('Error updating testimonial:', error);
+      console.error('Error updating testimonial:', {
+        message: error?.message,
+        stack: error?.stack,
+        details: error?.details || 'No details available'
+      });
       toast({
         title: "Error",
         description: `No se pudo actualizar el comentario: ${error?.message || 'Error desconocido'}`,
