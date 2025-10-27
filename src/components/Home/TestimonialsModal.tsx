@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Star, X } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -122,19 +122,9 @@ const TestimonialsModal: React.FC<TestimonialsModalProps> = ({ isOpen, onClose, 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white to-nutrition-green-lighter">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl md:text-3xl font-bold text-nutrition-green">
-              Opiniones de Nuestros Clientes
-            </DialogTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="text-nutrition-gray hover:text-nutrition-green"
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
+          <DialogTitle className="text-2xl md:text-3xl font-bold text-nutrition-green">
+            Opiniones de Nuestros Clientes
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-8">
