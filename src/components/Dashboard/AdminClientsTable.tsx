@@ -105,24 +105,8 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
       if (stripeError) throw stripeError;
 
-      // Filtrar solo usuarios que han pagado al menos una vez
-      const usersWithPayments = new Set();
-      
-      // Agregar usuarios con suscripciones tradicionales
-      subscriptionsData?.forEach(sub => usersWithPayments.add(sub.user_id));
-      
-      // Agregar usuarios con suscripciones de Stripe
-      stripeSubscriptionsData?.forEach(sub => usersWithPayments.add(sub.user_id));
-      
-      // Agregar usuarios con pagos pendientes
-      pendingPaymentsData?.forEach(payment => usersWithPayments.add(payment.user_id));
-
-      // Filtrar perfiles solo de usuarios que han pagado
-      const filteredProfiles = profilesData?.filter(profile => 
-        usersWithPayments.has(profile.id)
-      ) || [];
-
-      const clientsData = filteredProfiles.map((profile: any) => {
+      // Mapear todos los perfiles (no filtrar por pagos)
+      const clientsData = (profilesData || []).map((profile: any) => {
         // Buscar suscripciones para este usuario
         const userSubscriptions = subscriptionsData?.filter(sub => sub.user_id === profile.id) || [];
         const userStripeSubscriptions = stripeSubscriptionsData?.filter(sub => sub.user_id === profile.id) || [];
