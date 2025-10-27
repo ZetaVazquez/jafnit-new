@@ -63,29 +63,39 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
 
   const updateTestimonialStatus = async (id: string, status: 'approved' | 'rejected') => {
     try {
-      console.log('Updating testimonial:', { id, status });
-      console.log('Current user:', await supabase.auth.getUser());
+      console.log('Starting update for testimonial:', { id, status });
       
-      const { data, error } = await supabase
-        .from('user_testimonials')
-        .update({
-          status,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .select();
+      // Obtener el token de autenticación actual
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      // Llamar a la función edge para actualizar el testimonial
+      const { data, error } = await supabase.functions.invoke('update-testimonial', {
+        body: {
+          testimonialId: id,
+          status: status
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('Function result:', { data, error });
 
       if (error) {
-        console.error('Supabase error details:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        });
+        console.error('Function error:', error);
         throw error;
       }
 
-      console.log('Update successful, data returned:', data);
+      if (!data.success) {
+        throw new Error(data.error || 'Unknown error from function');
+      }
+
+      console.log('Update successful, updating local state');
 
       setTestimonials(prev =>
         prev.map(testimonial =>
@@ -98,11 +108,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
         description: `Comentario ${status === 'approved' ? 'aprobado' : 'rechazado'} exitosamente`
       });
     } catch (error: any) {
-      console.error('Error updating testimonial:', {
-        message: error?.message,
-        stack: error?.stack,
-        details: error?.details || 'No details available'
-      });
+      console.error('Full error object:', error);
       toast({
         title: "Error",
         description: `No se pudo actualizar el comentario: ${error?.message || 'Error desconocido'}`,
