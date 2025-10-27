@@ -956,6 +956,12 @@ export type Database = {
           updated_at: string
           user_id: string
         }
+        SetofOptions: {
+          from: "*"
+          to: "stripe_subscriptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       admin_update_subscription_end_date: {
         Args: { p_new_end: string; p_subscription_id: string }
@@ -971,9 +977,15 @@ export type Database = {
           updated_at: string
           user_id: string
         }
+        SetofOptions: {
+          from: "*"
+          to: "subscriptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       get_active_profiles: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           created_at: string
           description: string
@@ -1000,14 +1012,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      update_expired_subscriptions: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      user_exists: {
-        Args: { user_uuid: string }
-        Returns: boolean
-      }
+      update_expired_subscriptions: { Args: never; Returns: undefined }
+      user_exists: { Args: { user_uuid: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
