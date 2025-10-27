@@ -26,6 +26,8 @@ const Index = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const [showRegistrationAfterQuestionnaire, setShowRegistrationAfterQuestionnaire] = useState(false);
   const [showClientForm, setShowClientForm] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
   const [dashboardView, setDashboardView] = useState<string>('dashboard');
   const [showPlanModal, setShowPlanModal] = useState(false);
   const { user, isAdmin } = useAuth();
@@ -98,11 +100,21 @@ const Index = () => {
   };
 
   const handleLogin = () => {
-    // Login logic handled by auth system
+    setAuthModalTab('login');
+    setShowAuthModal(true);
   };
 
   const handleRegister = () => {
     handleStartQuestionnaire();
+  };
+
+  const handleAuthModalClose = () => {
+    setShowAuthModal(false);
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    setShowClientForm(true);
   };
 
   if (showDashboard && user) {
@@ -225,6 +237,12 @@ const Index = () => {
           onDecideLater={() => setShowPlanModal(false)}
           recommendedPlan="premium"
           fromQuestionnaire={false}
+        />
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={handleAuthModalClose}
+          onSuccess={handleAuthSuccess}
+          initialTab={authModalTab}
         />
       </DynamicBackground>
     </div>
