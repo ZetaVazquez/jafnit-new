@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, Check, X, Trash2, ArrowLeft } from 'lucide-react';
+import { Star, Check, X, Trash2, ArrowLeft, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
 interface UserTestimonial {
   id: string;
@@ -32,6 +33,8 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
   const [testimonials, setTestimonials] = useState<UserTestimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const [selected, setSelected] = useState<UserTestimonial | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchTestimonials();
@@ -227,6 +230,13 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => { setSelected(testimonial); setIsDialogOpen(true); }}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
                         {testimonial.status === 'pending' && (
                           <>
                             <Button
@@ -263,6 +273,45 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
             </Table>
           </div>
         )}
+        
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Comentario de {selected?.name}</DialogTitle>
+              <DialogDescription>
+                {selected ? formatDate(selected.created_at) : ''}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3">
+              <div className="text-sm text-gray-700 whitespace-pre-wrap">
+                {selected?.comment}
+              </div>
+              <div className="flex items-center gap-2">
+                {[...Array(selected?.rating || 0)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current text-yellow-500" />
+                ))}
+                {selected && getStatusBadge(selected.status)}
+              </div>
+            </div>
+            {selected && (
+              <DialogFooter className="gap-2">
+                {selected.status === 'pending' && (
+                  <>
+                    <Button size="sm" onClick={() => { updateTestimonialStatus(selected.id, 'approved'); setIsDialogOpen(false); }}>
+                      Aprobar
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => { updateTestimonialStatus(selected.id, 'rejected'); setIsDialogOpen(false); }}>
+                      Rechazar
+                    </Button>
+                  </>
+                )}
+                <Button size="sm" variant="destructive" onClick={() => { deleteTestimonial(selected.id); setIsDialogOpen(false); }}>
+                  Eliminar
+                </Button>
+              </DialogFooter>
+            )}
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
