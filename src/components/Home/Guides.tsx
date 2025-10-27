@@ -135,15 +135,13 @@ const Guides: React.FC = () => {
     }
 
     try {
-      // Get the signed URL for the PDF
-      const { data, error } = await supabase.storage
-        .from('guides')
-        .createSignedUrl(guide.pdf_url, 3600); // Valid for 1 hour
-
-      if (error) throw error;
-
-      // Open download in new tab
-      window.open(data.signedUrl, '_blank');
+      // Download from public folder
+      const link = document.createElement('a');
+      link.href = `/guides/${guide.pdf_url}`;
+      link.download = guide.pdf_url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       toast({
         title: 'Descarga iniciada',
