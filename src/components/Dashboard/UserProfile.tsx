@@ -1,15 +1,17 @@
 
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ArrowLeft, Camera, Trash2, CreditCard } from 'lucide-react';
+import { ArrowLeft, Camera, Trash2, CreditCard, Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import PlanRecommendationModal from './PlanRecommendationModal';
+import { ChangeEmailModal, ChangePasswordModal } from './ChangeCredentialsModal';
 
 interface UserProfileProps {
   onGoBack: () => void;
@@ -26,6 +28,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPlansModal, setShowPlansModal] = useState(false);
+  const [showChangeEmail, setShowChangeEmail] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
@@ -193,6 +197,39 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
             </CardContent>
           </Card>
 
+          {/* Security Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center text-nutrition-green">
+                <Lock className="w-5 h-5 mr-2" />
+                Seguridad de la Cuenta
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-nutrition-gray text-sm">
+                Actualiza tu email o contraseña para mantener tu cuenta segura.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowChangeEmail(true)}
+                  className="flex items-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  Cambiar Email
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowChangePassword(true)}
+                  className="flex items-center gap-2"
+                >
+                  <Lock className="w-4 h-4" />
+                  Cambiar Contraseña
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Payment Card */}
           <Card>
             <CardHeader>
@@ -270,8 +307,22 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
         recommendedPlan="premium"
         fromQuestionnaire={false}
       />
+
+      {/* Change Email Modal */}
+      <ChangeEmailModal
+        isOpen={showChangeEmail}
+        onClose={() => setShowChangeEmail(false)}
+        currentEmail={user?.email || ''}
+      />
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+      />
     </div>
   );
 };
 
 export default UserProfile;
+
