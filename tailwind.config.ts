@@ -26,15 +26,15 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#16a34a', // Green-600
+					DEFAULT: 'hsl(var(--accent-green))',
 					foreground: '#ffffff'
 				},
 				secondary: {
-					DEFAULT: '#f8fafc', // Slate-50
+					DEFAULT: '#f8fafc',
 					foreground: '#0f172a'
 				},
 				accent: {
-					DEFAULT: '#059669', // Emerald-600
+					DEFAULT: 'hsl(var(--accent-green-light))',
 					foreground: '#ffffff'
 				},
 				destructive: {
@@ -53,24 +53,31 @@ export default {
 					DEFAULT: '#ffffff',
 					foreground: '#0f172a'
 				},
-				// Nueva paleta de colores más armoniosa para nutrición - Verde más claro
+				// Dark theme
+				dark: {
+					bg: 'hsl(var(--dark-bg))',
+					surface: 'hsl(var(--dark-surface))',
+					card: 'hsl(var(--dark-card))',
+					border: 'hsl(var(--dark-border))',
+				},
+				// Nutrition brand colors (kept for dashboard compatibility)
 				nutrition: {
-					green: '#22c55e',        // Green-500 - Principal (más claro)
-					'green-light': '#4ade80', // Green-400 - Suave
-					'green-lighter': '#bbf7d0', // Green-200 - Muy suave
-					'green-dark': '#16a34a',   // Green-600 - Oscuro (ahora el verde anterior)
-					'green-darker': '#15803d', // Green-700 - Muy oscuro
-					'green-emerald': '#10b981', // Emerald-500 - Para acentos (más claro)
-					'green-sage': '#84cc16',   // Lime-500 - Verde sabio
-					'green-forest': '#14532d', // Green-900 - Verde bosque
-					accent: '#10b981',         // Emerald-500 - Acento principal (más claro)
-					'accent-light': '#34d399', // Emerald-400
-					'accent-dark': '#059669',  // Emerald-600
-					black: '#0f172a',         // Slate-900
+					green: '#22c55e',
+					'green-light': '#4ade80',
+					'green-lighter': '#bbf7d0',
+					'green-dark': '#16a34a',
+					'green-darker': '#15803d',
+					'green-emerald': '#10b981',
+					'green-sage': '#84cc16',
+					'green-forest': '#14532d',
+					accent: '#10b981',
+					'accent-light': '#34d399',
+					'accent-dark': '#059669',
+					black: '#0f172a',
 					white: '#ffffff',
-					gray: '#64748b',          // Slate-500
-					'gray-light': '#94a3b8',  // Slate-400
-					'gray-lighter': '#f1f5f9', // Slate-100
+					gray: '#64748b',
+					'gray-light': '#94a3b8',
+					'gray-lighter': '#f1f5f9',
 				}
 			},
 			borderRadius: {
@@ -80,41 +87,32 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
 				'fade-in': {
-					'0%': {
-						opacity: '0',
-						transform: 'translateY(10px)'
-					},
-					'100%': {
-						opacity: '1',
-						transform: 'translateY(0)'
-					}
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
 				},
 				'slide-in-right': {
 					'0%': { transform: 'translateX(100%)' },
 					'100%': { transform: 'translateX(0)' }
+				},
+				'fade-in-up': {
+					'0%': { opacity: '0', transform: 'translateY(30px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
-				'slide-in-right': 'slide-in-right 0.3s ease-out'
+				'slide-in-right': 'slide-in-right 0.3s ease-out',
+				'fade-in-up': 'fade-in-up 0.6s ease-out forwards'
 			}
 		}
 	},

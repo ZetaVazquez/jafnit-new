@@ -1,8 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, Home, Eye, Camera, FileText, CreditCard, MessageCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home } from 'lucide-react';
 import LoginModal from '@/components/Auth/LoginModal';
 
 interface HeaderProps {
@@ -19,7 +18,7 @@ interface HeaderProps {
   onNavigateToDiets?: () => void;
   onNavigateToWorkouts?: () => void;
   onNavigateToSchedule?: () => void;
-  showDashboard?: boolean; // Nueva prop para saber si estamos en el dashboard
+  showDashboard?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -41,19 +40,28 @@ const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navigationItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Sobre Mi', href: '#sobre-mi' },
-    { label: 'Servicios', href: '#servicios' },
-    { label: 'Guías', href: '#guias' },
-    { label: 'Opiniones', href: '#testimonios' },
-    { label: 'FAQ', href: '#faq' },
-    { label: 'Precios', href: '#precios' },
-    { label: 'Contacto', href: '#contacto' },
+    { label: 'Programas', href: '#programas' },
+    { label: 'Método', href: '#metodo' },
+    { label: 'Sobre Mí', href: '#sobre-mi' },
+    { label: 'Evaluación', href: '#evaluacion' },
   ];
 
   const handleNavClick = (href: string) => {
+    if (href === '#evaluacion' && onStartQuestionnaire) {
+      onStartQuestionnaire();
+      setIsMenuOpen(false);
+      return;
+    }
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
     if (element) {
@@ -64,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const sidebarItems = [
     { label: 'Mi Perfil', icon: User, action: onNavigateToProfile },
-    { label: 'Configuraciones', icon: Settings, action: onNavigateToProfile }, // Por ahora va al perfil
+    { label: 'Configuraciones', icon: Settings, action: onNavigateToProfile },
     { label: 'Mis Dietas', icon: BookOpen, action: onNavigateToDiets },
     { label: 'Mis Entrenamientos', icon: Dumbbell, action: onNavigateToWorkouts },
     { label: 'Calendario', icon: Calendar, action: onNavigateToSchedule },
@@ -99,35 +107,29 @@ const Header: React.FC<HeaderProps> = ({
     window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank');
   };
 
-  // Check if we're on the dashboard (not the public page)
-  const isOnDashboard = window.location.hash === '#settings' || showDashboard;
-
   return (
     <>
-      <header className="bg-white shadow-md sticky top-0 z-50">
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-[hsl(220,20%,10%)]/95 backdrop-blur-md shadow-lg shadow-black/20' 
+          : 'bg-transparent'
+      }`}>
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo and Brand */}
-            <div className="flex items-center space-x-6">
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-nutrition-green/20">
-                <img 
-                  src="/lovable-uploads/7a65475a-1feb-4fb7-b32f-5fae0d6019fd.png" 
-                  alt="JAFNFIT Logo" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent">
-                JAFNFIT
-              </h1>
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <span className="text-white text-xl lg:text-2xl font-bold tracking-tight">
+                MÉTODO <span className="text-accent heading-accent">JAFN</span>
+              </span>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
+            <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item.href)}
-                  className="text-sm xl:text-base text-nutrition-black hover:text-nutrition-green-emerald transition-colors duration-200 font-medium"
+                  className="text-sm text-white/80 hover:text-white transition-colors duration-200 font-medium tracking-wide"
                 >
                   {item.label}
                 </button>
@@ -138,64 +140,53 @@ const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center space-x-3">
               {isLoggedIn ? (
                 <>
-                  {/* Chat with Trainer Button */}
                   <Button
                     onClick={handleChatWithTrainer}
                     variant="ghost"
                     size="sm"
-                    className="hidden lg:flex items-center space-x-2 text-nutrition-green-emerald hover:bg-nutrition-green-lighter"
+                    className="hidden lg:flex text-white/80 hover:text-white hover:bg-white/10"
                   >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Chat</span>
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Chat
                   </Button>
                   
-                  {/* Back to Public Page - Only show when IN the dashboard */}
                   {showDashboard && onNavigateToHome && (
                     <Button
                       onClick={onNavigateToHome}
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
-                      className="hidden lg:flex items-center space-x-2 border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                      className="hidden lg:flex text-white/80 hover:text-white hover:bg-white/10"
                     >
-                      <Home className="w-4 h-4" />
-                      <span>Página Principal</span>
+                      <Home className="w-4 h-4 mr-2" />
+                      Inicio
                     </Button>
                   )}
                   
-                  {/* My Account Button with updated colors */}
                   {onNavigateToDashboard && (
                     <Button
                       onClick={onNavigateToDashboard}
-                      className="hidden lg:flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
+                      className="hidden lg:flex btn-cta text-sm px-5 py-2"
                     >
-                      <User className="w-4 h-4" />
-                      <span>Mi Cuenta</span>
+                      Acceso Clientes
                     </Button>
                   )}
                   
                   <Button
                     onClick={() => setIsSidebarOpen(true)}
-                    variant="outline"
-                    className="hidden lg:flex items-center space-x-2 border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                    variant="ghost"
+                    size="sm"
+                    className="hidden lg:flex text-white/80 hover:text-white hover:bg-white/10"
                   >
                     <Settings className="w-4 h-4" />
-                    <span>Menú</span>
                   </Button>
                 </>
               ) : (
-                <div className="hidden lg:flex items-center space-x-2">
-                  {/* Login button with updated colors */}
+                <div className="hidden lg:flex items-center space-x-3">
                   <Button
                     onClick={handleLoginClick}
-                    className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
+                    className="btn-cta text-sm px-6 py-2 rounded-md"
                   >
-                    Iniciar Sesión
-                  </Button>
-                  <Button
-                    onClick={handleRegisterClick}
-                    className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
-                  >
-                    Registrarse
+                    Acceso Clientes
                   </Button>
                 </div>
               )}
@@ -205,7 +196,7 @@ const Header: React.FC<HeaderProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden"
+                className="lg:hidden text-white hover:bg-white/10"
               >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </Button>
@@ -214,13 +205,13 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="lg:hidden border-t bg-white">
-              <nav className="py-4 space-y-2">
+            <div className="lg:hidden border-t border-white/10 bg-[hsl(220,20%,10%)]/98 backdrop-blur-md">
+              <nav className="py-4 space-y-1">
                 {navigationItems.map((item) => (
                   <button
                     key={item.label}
                     onClick={() => handleNavClick(item.href)}
-                    className="block w-full text-left px-4 py-2 text-nutrition-black hover:text-nutrition-green-emerald hover:bg-gray-50 transition-colors duration-200"
+                    className="block w-full text-left px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 transition-colors duration-200 font-medium"
                   >
                     {item.label}
                   </button>
@@ -229,67 +220,43 @@ const Header: React.FC<HeaderProps> = ({
                 {isLoggedIn ? (
                   <div className="px-4 mt-4 space-y-2">
                     <Button
-                      onClick={() => {
-                        handleChatWithTrainer();
-                        setIsMenuOpen(false);
-                      }}
+                      onClick={() => { handleChatWithTrainer(); setIsMenuOpen(false); }}
                       variant="outline"
-                      className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
+                      className="w-full border-white/20 text-white hover:bg-white/10"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Chat con Entrenador
                     </Button>
-                    {showDashboard && onNavigateToHome && (
-                      <Button
-                        onClick={() => {
-                          onNavigateToHome();
-                          setIsMenuOpen(false);
-                        }}
-                        variant="outline"
-                        className="w-full border-nutrition-green text-nutrition-green hover:bg-nutrition-green hover:text-white"
-                      >
-                        <Home className="w-4 h-4 mr-2" />
-                        Página Principal
-                      </Button>
-                    )}
-                    {/* Mobile My Account button with updated colors */}
                     {onNavigateToDashboard && (
                       <Button
-                        onClick={() => {
-                          onNavigateToDashboard();
-                          setIsMenuOpen(false);
-                        }}
-                        className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
+                        onClick={() => { onNavigateToDashboard(); setIsMenuOpen(false); }}
+                        className="w-full btn-cta"
                       >
-                        <User className="w-4 h-4 mr-2" />
-                        Mi Cuenta
+                        Acceso Clientes
                       </Button>
                     )}
                     <Button
-                      onClick={() => {
-                        setIsSidebarOpen(true);
-                        setIsMenuOpen(false);
-                      }}
+                      onClick={() => { setIsSidebarOpen(true); setIsMenuOpen(false); }}
                       variant="outline"
-                      className="w-full border-nutrition-green-emerald text-nutrition-green-emerald hover:bg-nutrition-green-emerald hover:text-white"
+                      className="w-full border-white/20 text-white hover:bg-white/10"
                     >
                       Menú
                     </Button>
                   </div>
                 ) : (
                   <div className="px-4 mt-4 space-y-2">
-                    {/* Mobile Login button with updated colors */}
                     <Button
                       onClick={handleLoginClick}
-                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold"
+                      className="w-full btn-cta"
                     >
-                      Iniciar Sesión
+                      Acceso Clientes
                     </Button>
                     <Button
                       onClick={handleRegisterClick}
-                      className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green-forest text-white"
+                      variant="outline"
+                      className="w-full border-white/20 text-white hover:bg-white/10"
                     >
-                      Registrarse
+                      Realizar Evaluación
                     </Button>
                   </div>
                 )}
@@ -311,28 +278,22 @@ const Header: React.FC<HeaderProps> = ({
       {/* Sidebar for logged-in users */}
       {isSidebarOpen && (
         <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsSidebarOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl animate-slide-in-right">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsSidebarOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-80 bg-[hsl(220,20%,12%)] shadow-xl animate-slide-in-right border-l border-white/10">
             <div className="p-6">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xl font-bold text-nutrition-green-emerald">Menú</h2>
-                <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
+                <h2 className="text-xl font-bold text-white">Menú</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)} className="text-white/60 hover:text-white hover:bg-white/10">
                   <X className="w-5 h-5" />
                 </Button>
               </div>
 
-              <nav className="space-y-2">
+              <nav className="space-y-1">
                 {sidebarItems.map((item) => (
                   <button
                     key={item.label}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-nutrition-green-lighter text-nutrition-black hover:text-nutrition-green-forest transition-colors duration-200 w-full text-left"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (item.action) {
-                        item.action();
-                      }
-                      setIsSidebarOpen(false);
-                    }}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors duration-200 w-full text-left"
+                    onClick={() => { item.action?.(); setIsSidebarOpen(false); }}
                   >
                     <item.icon className="w-5 h-5" />
                     <span>{item.label}</span>
@@ -340,14 +301,11 @@ const Header: React.FC<HeaderProps> = ({
                 ))}
               </nav>
 
-              <div className="mt-8 pt-8 border-t">
+              <div className="mt-8 pt-8 border-t border-white/10">
                 <Button
-                  onClick={() => {
-                    onLogout();
-                    setIsSidebarOpen(false);
-                  }}
+                  onClick={() => { onLogout(); setIsSidebarOpen(false); }}
                   variant="outline"
-                  className="w-full flex items-center space-x-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                  className="w-full flex items-center space-x-2 border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Cerrar Sesión</span>
