@@ -1,9 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, X } from 'lucide-react';
-import { PricingPlan } from '@/types';
-import { supabase } from '@/integrations/supabase/client';
+import { Check, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
@@ -12,202 +10,208 @@ interface PricingProps {
   onStartQuestionnaire: () => void;
 }
 
+const plans = [
+  {
+    id: 'explorador',
+    name: 'Explorador',
+    tagline: 'Persona que empieza y necesita orden',
+    price: '29',
+    duration: 'Pago único',
+    highlighted: false,
+    features: [
+      'Base estructural',
+      '7 días',
+      'Guía base de alimentación',
+      'Orientación general',
+      'Sin seguimiento',
+    ],
+    stripeUrl: 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
+  },
+  {
+    id: 'constructor',
+    name: 'Constructor',
+    tagline: 'Persona decidida que quiere aplicar método',
+    price: '99',
+    duration: '/mes',
+    highlighted: true,
+    features: [
+      'Planificación estructurada',
+      'Nivel medio',
+      'Plan nutricional adaptado',
+      'Rutina progresiva',
+      'Evaluación y ajuste 1 a 1',
+    ],
+    stripeUrl: 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01',
+  },
+  {
+    id: 'estratega',
+    name: 'Estratega',
+    tagline: 'Comprometida que busca transformación real',
+    price: '297',
+    duration: '/mes',
+    highlighted: false,
+    features: [
+      'Acompañamiento completo y continuo',
+      '12 semanas (90 días)',
+      'Plan completo y personalizable',
+      'Plan completo, personalizado y progresión',
+      'Evaluaciones periódicas y ajustes estratégicos',
+    ],
+    stripeUrl: 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02',
+  },
+];
+
+const differentiators = {
+  left: [
+    { text: 'La diferencia no está en el marketing.', bold: true },
+    { text: 'El nivel de personalización', bold: false },
+    { text: 'El grado de seguimiento', bold: false },
+  ],
+  right: [
+    { text: 'La profundidad del diagnóstico', bold: false },
+    { text: 'El nivel de personalización', bold: false },
+    { text: 'El grado de seguimiento', bold: false },
+    { text: 'La frecuencia de ajustes estratégicos', bold: false },
+  ],
+};
+
 const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
-  const handleSelectPlan = (planType: string) => {
+
+  const handleSelectPlan = (plan: typeof plans[0]) => {
     if (!user) {
-      // If not authenticated, redirect to questionnaire first
       onStartQuestionnaire();
       return;
     }
-
-    // URLs específicas para cada plan
-    const planUrls = {
-      'basic': 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
-      'premium': 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01',
-      'pro': 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02'
-    };
-
-    const url = planUrls[planType as keyof typeof planUrls];
-    if (url) {
-      window.open(url, '_blank');
+    if (plan.stripeUrl) {
+      window.open(plan.stripeUrl, '_blank');
       toast({
-        title: "Redirigiendo a Stripe",
-        description: "Te hemos redirigido a la página de pago segura de Stripe"
+        title: 'Redirigiendo a Stripe',
+        description: 'Te hemos redirigido a la página de pago segura.',
       });
     }
   };
 
-  const plans: PricingPlan[] = [
-    {
-      id: '1',
-      name: 'Plan Básico',
-      duration: 'Pago único',
-      price: '€75',
-      features: [
-        'Dirigido a principiantes que quieren orden',
-        'Nutrición personalizada con menú adaptado',
-        'Entrenamiento no incluido',
-        'Hábitos con guías básicas',
-        'Seguimiento: 1 revisión por mensaje',
-        'Sin análisis',
-        'Sin soporte',
-        'Extras: Guía de compras y batch cooking'
-      ]
-    },
-    {
-      id: '2',
-      name: 'Plan Premium',
-      duration: 'Por mes',
-      price: '€120',
-      features: [
-        'Dirigido a personas que buscan mejorar composición corporal',
-        'Nutrición incluida + organización de comidas',
-        'Entrenamiento: Plan para casa o gimnasio',
-        'Hábitos: Plan estructurado + herramientas',
-        'Seguimiento: 1 consulta online o presencial mensual',
-        'Sin análisis',
-        'Soporte: Acceso básico a herramientas',
-        'Extras: Plantillas de control y rutinas'
-      ],
-      highlighted: true
-    },
-    {
-      id: '3',
-      name: 'Plan PRO',
-      duration: 'Duración mínima 6 meses',
-      price: '€300',
-      features: [
-        'Dirigido a personas comprometidas con un cambio completo',
-        'Nutrición incluida + revisión y ajustes avanzados',
-        'Entrenamiento completo, progresivo y evaluado',
-        'Hábitos: Fases inicio - media - consolidación',
-        'Seguimiento: Revisión quincenal por vídeo o mensaje',
-        'Análisis: Informe mensual con métricas y feedback',
-        'Soporte directo por WhatsApp (24h hábiles)',
-        'Extras: Retos, comunidad privada y evolución total'
-      ]
-    }
-  ];
-
   return (
-    <section id="pricing" className="py-12 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark relative overflow-hidden">
-      {/* Formas geométricas animadas de fondo */}
+    <section id="pricing" className="py-20 dark-section relative overflow-hidden">
+      {/* Subtle bg shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Círculos grandes */}
         <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
-        
-        {/* Círculos medianos */}
-        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
-        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-14 h-14 bottom-1/2 left-3/4 animate-float"></div>
-        
-        {/* Triángulos */}
-        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+        <div className="geometric-shape circle-shape w-24 h-24 bottom-20 right-20 animate-bounce-gentle"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Decorative background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-          <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
-          <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
-          <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
-          
-          <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
-          <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
-          <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-          <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
-        </div>
-
+        {/* Header */}
         <div className="text-center mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Planes y Precios
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              Elige el{' '}
+              <em className="heading-accent not-italic font-bold italic">nivel adecuado</em>{' '}
+              según tu momento
             </h2>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={200}>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              Elige el plan que mejor se adapte a tus objetivos y presupuesto
+            <p className="text-lg text-white/60 max-w-3xl mx-auto">
+              No todos necesitan el mismo grado de <strong className="text-white/80">acompañamiento</strong>, por eso este sistema está organizado en{' '}
+              <strong className="text-white/80">tres niveles progresivos</strong>, según tu punto actual y tu nivel de compromiso.
             </p>
           </ScrollReveal>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {/* Plan Cards */}
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
           {plans.map((plan, index) => (
-            <ScrollReveal key={plan.id} direction="up" delay={index * 200}>
+            <ScrollReveal key={plan.id} direction="up" delay={index * 150}>
               <div
-                className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 border-2 ${
-                  plan.highlighted 
-                    ? 'border-nutrition-green ring-4 ring-nutrition-green/20' 
-                    : 'border-nutrition-green-light hover:border-nutrition-green'
+                className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
+                  plan.highlighted
+                    ? 'glass-card ring-2 ring-accent/50 shadow-lg shadow-accent/10'
+                    : 'glass-card-light'
                 }`}
               >
-                <div className="p-6">
-                  <div className="text-center">
-                    <h3 className="text-xl font-bold mb-2 text-nutrition-black title-playful">
-                      {plan.name}
-                    </h3>
-                    <p className="text-sm mb-4 text-nutrition-gray">
-                      {plan.duration}
-                    </p>
-                    <div className="text-3xl font-bold mb-4 text-nutrition-green title-main">
-                      {plan.price}
-                      {plan.id === '2' && <span className="text-sm text-nutrition-gray">/mes</span>}
-                      {plan.id === '3' && <span className="text-sm text-nutrition-gray">/mes</span>}
-                    </div>
-                    {plan.highlighted && (
-                      <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-4">
-                        Más Popular
-                      </div>
-                    )}
+                {/* Badge */}
+                <div className={`text-center py-2 text-xs font-bold uppercase tracking-widest ${
+                  plan.highlighted
+                    ? 'bg-accent/20 text-accent'
+                    : 'bg-white/5 text-white/50'
+                }`}>
+                  {plan.highlighted ? '⭐ Popular' : plan.name.toUpperCase()}
+                </div>
+
+                <div className="p-6 lg:p-8">
+                  <h3 className="text-2xl font-bold text-white mb-1">{plan.name}</h3>
+                  <p className="text-sm text-white/50 mb-6">{plan.tagline}</p>
+
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-white">{plan.price}€</span>
+                    <span className="text-white/40 text-sm">{plan.duration}</span>
                   </div>
 
-                  <ul className="space-y-2 mb-6">
-                    {plan.features.map((feature, index) => {
-                      const isNegative = feature.includes('no incluido') || feature.includes('Sin');
-                      return (
-                        <li key={index} className="flex items-start">
-                          {isNegative ? (
-                            <X className="w-4 h-4 mr-2 mt-0.5 text-red-500 flex-shrink-0" />
-                          ) : (
-                            <Check className="w-4 h-4 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
-                          )}
-                          <span className={`text-xs ${isNegative ? 'text-red-600' : 'text-nutrition-gray'}`}>
-                            {feature}
-                          </span>
-                        </li>
-                      );
-                    })}
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <Check className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-white/70">{feature}</span>
+                      </li>
+                    ))}
                   </ul>
 
                   <Button
-                    onClick={() => {
-                      const planType = plan.id === '1' ? 'basic' : plan.id === '2' ? 'premium' : 'pro';
-                      user ? handleSelectPlan(planType) : onStartQuestionnaire();
-                    }}
-                    className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 ${
+                    onClick={() => handleSelectPlan(plan)}
+                    className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
                       plan.highlighted
-                        ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
-                        : 'bg-nutrition-green-light hover:bg-nutrition-green text-nutrition-green-dark hover:text-white'
+                        ? 'btn-cta'
+                        : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
                     }`}
                   >
-                    {user ? 'Contratar Plan' : 'Elegir Plan'}
+                    Saber más sobre {plan.name} <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
               </div>
             </ScrollReveal>
           ))}
         </div>
+
+        {/* Differentiators */}
+        <ScrollReveal direction="up" delay={300}>
+          <div className="glass-card-light rounded-2xl p-8 lg:p-12 max-w-5xl mx-auto">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-8">
+              Qué cambia <em className="heading-accent not-italic font-bold italic">realmente</em> entre niveles
+            </h3>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <ul className="space-y-3">
+                {differentiators.left.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-2 h-2 rounded-full bg-white/40 mt-2 flex-shrink-0" />
+                    <span className={`text-sm ${item.bold ? 'text-white font-semibold' : 'text-white/60'}`}>
+                      {item.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <ul className="space-y-3">
+                {differentiators.right.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-white/70">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+              <p className="text-sm text-white/50">
+                No elijas por precio. Elige por nivel de estructura. Si no sabes cuál es el adecuado, empieza por la{' '}
+                <strong className="text-white/80">Evaluación Inicial</strong>.
+              </p>
+              <Button onClick={onStartQuestionnaire} className="btn-cta px-6 py-3 rounded-lg whitespace-nowrap">
+                Solicitar Evaluación Inicial
+              </Button>
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

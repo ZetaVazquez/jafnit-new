@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, CheckCircle, BarChart3, Target } from 'lucide-react';
 
@@ -7,7 +7,25 @@ interface HeroCarouselProps {
   onStartQuestionnaire: () => void;
 }
 
+const heroImages = [
+  '/images/hero-bg-1.jpeg',
+  '/images/hero-bg-2.jpeg',
+  '/images/hero-bg-3.jpeg',
+  '/images/hero-bg-4.jpeg',
+  '/lovable-uploads/36f5f0c3-e789-4843-b583-f8d9790e501d.png',
+];
+
 const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [nextSlide]);
 
   const handleScrollToPrograms = () => {
     const el = document.getElementById('programas');
@@ -16,15 +34,19 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
   return (
     <section id="inicio" className="relative min-h-screen overflow-hidden dark-section">
-      {/* Background image with dark overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(/lovable-uploads/36f5f0c3-e789-4843-b583-f8d9790e501d.png)`,
-        }}
-      >
-        <div className="absolute inset-0 gradient-overlay-dark"></div>
-      </div>
+      {/* Background carousel images */}
+      {heroImages.map((src, i) => (
+        <div
+          key={src}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out"
+          style={{
+            backgroundImage: `url(${src})`,
+            opacity: i === currentIndex ? 1 : 0,
+          }}
+        />
+      ))}
+      {/* Dark overlay */}
+      <div className="absolute inset-0 gradient-overlay-dark"></div>
 
       {/* Subtle geometric accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -35,15 +57,16 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 pt-32 lg:pt-40 pb-16 min-h-screen flex flex-col justify-between">
         {/* Main content area */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center flex-1">
-          {/* Left: Text content */}
-          <div className="space-y-6 lg:space-y-8">
+        <div className="flex-1 flex items-center">
+          <div className="space-y-6 lg:space-y-8 max-w-3xl">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05]">
-                Mejora{' '}
-                <em className="heading-accent not-italic font-bold italic">tu estructura</em>
+                Mejora tu{' '}
+                <em className="heading-accent not-italic font-bold italic">ESTRUCTURA</em>
                 <br />
-                y alcanza resultados reales
+                y alcanza resultados
+                <br />
+                <span className="heading-accent">REALES</span>
               </h1>
               <p className="text-lg lg:text-xl text-white/70 max-w-lg leading-relaxed">
                 Evalúa en qué punto te encuentras para conocer el plan adecuado para ti.
@@ -71,19 +94,23 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
               </p>
             </div>
           </div>
+        </div>
 
-          {/* Right: Trainer image */}
-          <div className="hidden lg:flex justify-end items-end relative">
-            <img 
-              src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
-              alt="José Antonio Fernández - Coach Nutricional" 
-              className="h-[70vh] object-contain object-bottom drop-shadow-2xl"
+        {/* Carousel indicators */}
+        <div className="flex justify-center gap-2 mb-6">
+          {heroImages.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentIndex(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                i === currentIndex ? 'bg-accent w-8' : 'bg-white/30 hover:bg-white/50'
+              }`}
             />
-          </div>
+          ))}
         </div>
 
         {/* Bottom: Feature cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mt-8 lg:mt-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
           {[
             {
               icon: CheckCircle,
