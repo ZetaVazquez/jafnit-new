@@ -121,7 +121,7 @@ const Header: React.FC<HeaderProps> = ({
               <img 
                 src="/images/logo-metodo-jafn.png" 
                 alt="Método JAFN - Dietética y Entrenamiento" 
-                className="h-14 lg:h-20 w-auto"
+                className="h-16 lg:h-24 w-auto"
               />
             </div>
 
