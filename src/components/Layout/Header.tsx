@@ -118,9 +118,11 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <span className="text-white text-xl lg:text-2xl font-bold tracking-tight">
-                MÉTODO <span className="text-accent heading-accent">JAFN</span>
-              </span>
+              <img 
+                src="/images/logo-metodo-jafn.png" 
+                alt="Método JAFN - Dietética y Entrenamiento" 
+                className="h-10 lg:h-12 w-auto"
+              />
             </div>
 
             {/* Desktop Navigation */}

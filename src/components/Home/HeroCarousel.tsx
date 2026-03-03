@@ -40,10 +40,10 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05]">
-                Descubre{' '}
-                <em className="heading-accent not-italic font-bold italic">tu nivel</em>
+                Mejora{' '}
+                <em className="heading-accent not-italic font-bold italic">tu estructura</em>
                 <br />
-                y empieza el cambio
+                y alcanza resultados reales
               </h1>
               <p className="text-lg lg:text-xl text-white/70 max-w-lg leading-relaxed">
                 Evalúa en qué punto te encuentras para conocer el plan adecuado para ti.
