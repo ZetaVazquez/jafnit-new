@@ -48,17 +48,12 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
       {/* Dark overlay */}
       <div className="absolute inset-0 gradient-overlay-dark"></div>
 
-      {/* Subtle geometric accents */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="geometric-shape circle-shape w-64 h-64 -top-32 -left-32 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-48 h-48 bottom-20 right-10 animate-bounce-gentle"></div>
-      </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 pt-32 lg:pt-40 pb-16 min-h-screen flex flex-col justify-between">
         {/* Main content area */}
-        <div className="flex-1 flex items-center">
-          <div className="space-y-6 lg:space-y-8 max-w-3xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center flex-1">
+          <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05]">
                 Mejora tu{' '}
@@ -93,6 +88,15 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 José Antonio Fernández · <span className="text-white/40">Coach Nutricional & Fitness</span>
               </p>
             </div>
+          </div>
+
+          {/* Right: Trainer image */}
+          <div className="hidden lg:flex justify-end items-end relative">
+            <img 
+              src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
+              alt="José Antonio Fernández - Coach Nutricional" 
+              className="h-[70vh] object-contain object-bottom drop-shadow-2xl"
+            />
           </div>
         </div>
 

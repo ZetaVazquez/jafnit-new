@@ -95,11 +95,6 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
 
   return (
     <section id="pricing" className="py-20 dark-section relative overflow-hidden">
-      {/* Subtle bg shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-24 h-24 bottom-20 right-20 animate-bounce-gentle"></div>
-      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
