@@ -52,8 +52,9 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 pt-32 lg:pt-40 pb-16 min-h-screen flex flex-col justify-between">
         {/* Main content area */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center flex-1">
-          <div className="space-y-6 lg:space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-end flex-1 relative">
+          {/* Left: Text content */}
+          <div className="space-y-6 lg:space-y-8 pb-8 lg:pb-24">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05]">
                 Mejora tu{' '}
@@ -90,12 +91,12 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             </div>
           </div>
 
-          {/* Right: Trainer image */}
-          <div className="hidden lg:flex justify-end items-end relative">
+          {/* Right: Trainer image - positioned to overflow over feature cards */}
+          <div className="hidden lg:flex justify-end items-end absolute right-0 bottom-0 z-20 pointer-events-none">
             <img 
               src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
               alt="José Antonio Fernández - Coach Nutricional" 
-              className="h-[70vh] object-contain object-bottom drop-shadow-2xl"
+              className="h-[75vh] object-contain object-bottom drop-shadow-2xl translate-y-24"
             />
           </div>
         </div>
