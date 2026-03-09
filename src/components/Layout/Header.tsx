@@ -154,6 +154,29 @@ const Header: React.FC<HeaderProps> = ({
                   {item.label}
                 </button>
               ))}
+              {/* More dropdown */}
+              <div ref={moreRef} className="relative">
+                <button
+                  onClick={() => setIsMoreOpen(!isMoreOpen)}
+                  className="text-sm text-white/80 hover:text-white transition-colors duration-200 font-medium tracking-wide flex items-center gap-1"
+                >
+                  Más <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isMoreOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-56 bg-[hsl(220,20%,12%)] border border-white/10 rounded-lg shadow-xl backdrop-blur-md py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                    {moreItems.map((item) => (
+                      <button
+                        key={item.label}
+                        onClick={() => { handleNavClick(item.href); setIsMoreOpen(false); }}
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                      >
+                        <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
 
             {/* User Actions */}
