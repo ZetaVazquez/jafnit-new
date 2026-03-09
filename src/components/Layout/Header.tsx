@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail, Star } from 'lucide-react';
 import LoginModal from '@/components/Auth/LoginModal';
 
 interface HeaderProps {
@@ -69,6 +69,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const moreItems = [
     { label: 'Calculadora de IMC', href: '#portfolio', icon: Calculator },
+    { label: 'Opiniones', href: '#testimonios', icon: Star },
     { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
     { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
     { label: 'Contáctame', href: '#contacto', icon: Mail },
