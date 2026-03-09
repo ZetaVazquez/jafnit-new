@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, CheckCircle, BarChart3, Target } from 'lucide-react';
+import { ChevronRight, CheckCircle, BarChart3, Target, Play, Pause } from 'lucide-react';
 
 interface HeroCarouselProps {
   onStartQuestionnaire: () => void;
@@ -17,6 +17,18 @@ const heroImages = [
 
 const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleVideo = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % heroImages.length);
@@ -93,8 +105,9 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
           {/* Right: Video */}
           <div className="hidden lg:flex justify-center items-center pb-8 lg:pb-24">
-            <div className="rounded-2xl overflow-hidden border-2 border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-full max-w-md">
+            <div className="relative group rounded-2xl overflow-hidden border-2 border-[hsl(var(--accent-green))] shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_30px_hsla(142,71%,45%,0.15)] w-full max-w-md">
               <video
+                ref={videoRef}
                 src="/videos/hero-video.mp4"
                 autoPlay
                 loop
@@ -102,6 +115,13 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
                 playsInline
                 className="w-full h-auto object-cover"
               />
+              {/* Play/Pause overlay button */}
+              <button
+                onClick={toggleVideo}
+                className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm border border-[hsl(var(--accent-green))]/50 flex items-center justify-center text-white hover:bg-[hsl(var(--accent-green))]/80 transition-all duration-300 opacity-0 group-hover:opacity-100"
+              >
+                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+              </button>
             </div>
           </div>
         </div>

@@ -1,229 +1,189 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Apple, Dumbbell, Users, Calendar, MessageCircle, BarChart3 } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
-const Services: React.FC = () => {
-  const services = [
-    {
-      icon: Apple,
-      title: 'Planes Nutricionales Personalizados',
-      description: 'Diseñamos planes de alimentación adaptados a tus objetivos, preferencias y estilo de vida.',
-      features: ['Análisis nutricional completo', 'Menús semanales', 'Lista de compras', 'Recetas saludables']
-    },
-    {
-      icon: Dumbbell,
-      title: 'Entrenamiento Personalizado',
-      description: 'Rutinas de ejercicio complementarias a tu plan nutricional para maximizar resultados.',
-      features: ['Rutinas adaptadas', 'Videos explicativos', 'Progress tracking', 'Ajustes semanales']
-    },
-    {
-      icon: Users,
-      title: 'Seguimiento Individualizado',
-      description: 'Acompañamiento personalizado con revisiones regulares y ajustes según tu progreso.',
-      features: ['Consultas regulares', 'Análisis de progreso', 'Ajustes del plan', 'Soporte continuo']
-    },
-    {
-      icon: Calendar,
-      title: 'Planificación de Comidas',
-      description: 'Organización completa de tus comidas con horarios y preparación anticipada.',
-      features: ['Calendario de comidas', 'Meal prep', 'Horarios optimizados', 'Preparación por lotes']
-    },
-    {
-      icon: MessageCircle,
-      title: 'Soporte 24/7',
-      description: 'Comunicación directa con tu nutricionista para resolver dudas y mantenerte motivado.',
-      features: ['Chat directo', 'Respuesta rápida', 'Motivación constante', 'Resolución de dudas']
-    },
-    {
-      icon: BarChart3,
-      title: 'Análisis de Progreso',
-      description: 'Seguimiento detallado de tu evolución con métricas y gráficos personalizados.',
-      features: ['Métricas corporales', 'Gráficos de progreso', 'Reportes mensuales', 'Análisis de tendencias']
-    }
-  ];
+const services = [
+  {
+    icon: Apple,
+    title: 'Planes Nutricionales Personalizados',
+    description: 'Diseñamos planes de alimentación adaptados a tus objetivos, preferencias y estilo de vida.',
+    features: ['Análisis nutricional completo', 'Menús semanales', 'Lista de compras', 'Recetas saludables']
+  },
+  {
+    icon: Dumbbell,
+    title: 'Entrenamiento Personalizado',
+    description: 'Rutinas de ejercicio complementarias a tu plan nutricional para maximizar resultados.',
+    features: ['Rutinas adaptadas', 'Videos explicativos', 'Progress tracking', 'Ajustes semanales']
+  },
+  {
+    icon: Users,
+    title: 'Seguimiento Individualizado',
+    description: 'Acompañamiento personalizado con revisiones regulares y ajustes según tu progreso.',
+    features: ['Consultas regulares', 'Análisis de progreso', 'Ajustes del plan', 'Soporte continuo']
+  },
+  {
+    icon: Calendar,
+    title: 'Planificación de Comidas',
+    description: 'Organización completa de tus comidas con horarios y preparación anticipada.',
+    features: ['Calendario de comidas', 'Meal prep', 'Horarios optimizados', 'Preparación por lotes']
+  },
+  {
+    icon: MessageCircle,
+    title: 'Soporte 24/7',
+    description: 'Comunicación directa con tu nutricionista para resolver dudas y mantenerte motivado.',
+    features: ['Chat directo', 'Respuesta rápida', 'Motivación constante', 'Resolución de dudas']
+  },
+  {
+    icon: BarChart3,
+    title: 'Análisis de Progreso',
+    description: 'Seguimiento detallado de tu evolución con métricas y gráficos personalizados.',
+    features: ['Métricas corporales', 'Gráficos de progreso', 'Reportes mensuales', 'Análisis de tendencias']
+  }
+];
 
+const ServiceCard: React.FC<{ service: typeof services[0]; index: number }> = ({ service, index }) => (
+  <ScrollReveal direction="up" delay={index * 150}>
+    <div className="glass-card-light p-6 lg:p-8 hover-lift h-full">
+      <div className="flex items-start gap-4 mb-5">
+        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[hsl(var(--accent-green))]/20 flex items-center justify-center">
+          <service.icon className="w-6 h-6 text-[hsl(var(--accent-green-light))]" />
+        </div>
+        <h3 className="text-lg font-bold text-white leading-tight pt-1">{service.title}</h3>
+      </div>
+      <p className="text-white/60 text-sm leading-relaxed mb-5">
+        {service.description}
+      </p>
+      <ul className="space-y-2">
+        {service.features.map((feature, i) => (
+          <li key={i} className="flex items-center text-sm text-white/50">
+            <div className="w-1.5 h-1.5 bg-[hsl(var(--accent-green))] rounded-full mr-3 flex-shrink-0"></div>
+            {feature}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </ScrollReveal>
+);
+
+const Services: React.FC = () => {
   return (
-    <section id="servicios" className="py-16 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark relative overflow-hidden">
-      {/* Unified background overlay for consistency */}
-      <div className="absolute inset-0" style={{
+    <section id="servicios" className="relative py-24 dark-section overflow-hidden">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: `
-          radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(5, 150, 105, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 40% 70%, rgba(132, 204, 22, 0.12) 0%, transparent 50%),
-          radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
-          radial-gradient(circle at 10% 90%, rgba(187, 247, 208, 0.2) 0%, transparent 50%)
-        `,
-        pointerEvents: 'none'
+          radial-gradient(circle at 20% 30%, hsla(var(--accent-green) / 0.06) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, hsla(var(--accent-green) / 0.04) 0%, transparent 50%)
+        `
       }}></div>
 
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
-        
-        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
-      </div>
-
       <div className="container mx-auto px-4 relative z-10">
+        {/* Header */}
         <div className="text-center mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-4xl font-bold text-white mb-4 title-main">
-              Nuestros Servicios
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Nuestros <em className="heading-accent not-italic italic">Servicios</em>
             </h2>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={300}>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              Ofrecemos un enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
+              Enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
             </p>
           </ScrollReveal>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Service cards grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
-            <ScrollReveal key={index} direction="up" delay={index * 150}>
-              <Card className="h-full bg-white backdrop-blur-sm hover:shadow-xl transition-all duration-300 border-2 border-nutrition-green-light shadow-lg">
-                <CardHeader className="text-center pb-4">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-nutrition-green to-nutrition-green-emerald text-white rounded-full mb-4 mx-auto">
-                    <service.icon className="w-8 h-8" />
-                  </div>
-                  <CardTitle className="text-xl text-gray-800 title-playful">
-                    {service.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-gray-700 mb-6">
-                    {service.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {service.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center text-sm text-gray-600">
-                        <div className="w-2 h-2 bg-nutrition-green rounded-full mr-3 flex-shrink-0"></div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </ScrollReveal>
+            <ServiceCard key={index} service={service} index={index} />
           ))}
         </div>
 
-        <div className="mt-16 bg-white backdrop-blur-sm p-8 rounded-2xl text-center shadow-lg border border-nutrition-green-light">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4 title-playful">
-            ¿Necesitas algo más específico?
-          </h3>
-          <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-            Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva, 
-            trastornos alimentarios, alergias e intolerancias, y mucho más.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
-              Nutrición Deportiva
-            </span>
-            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
-              Pérdida de Peso
-            </span>
-            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
-              Ganancia Muscular
-            </span>
-            <span className="bg-nutrition-green/20 text-nutrition-green-dark px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-nutrition-green/30">
-              Alergias e Intolerancias
-            </span>
+        {/* CTA banner */}
+        <ScrollReveal direction="up" delay={400}>
+          <div className="mt-16 glass-card-light p-8 lg:p-10 text-center">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              ¿Necesitas algo más <em className="heading-accent not-italic italic">específico</em>?
+            </h3>
+            <p className="text-white/60 mb-8 max-w-2xl mx-auto">
+              Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva,
+              trastornos alimentarios, alergias e intolerancias, y mucho más.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {['Nutrición Deportiva', 'Pérdida de Peso', 'Ganancia Muscular', 'Alergias e Intolerancias'].map((tag) => (
+                <span key={tag} className="px-4 py-2 rounded-full text-sm font-medium bg-[hsl(var(--accent-green))]/15 text-[hsl(var(--accent-green-light))] border border-[hsl(var(--accent-green))]/25">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Communication Section */}
-        <div className="mt-16 bg-white backdrop-blur-sm rounded-2xl shadow-lg border border-nutrition-green-light overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
-            {/* Text Content */}
-            <div className="order-2 lg:order-1">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 title-playful">
-                💬 EL DIÁLOGO CONSTANTE ES FUNDAMENTAL PARA ALCANZAR TUS METAS Y ENTENDER TUS REQUERIMIENTOS
-              </h3>
-              <div className="space-y-4 text-gray-700">
-                <p className="text-lg leading-relaxed">
-                  Mi objetivo es comprender tu situación de manera completa para ofrecerte la mejor orientación y apoyo.
-                </p>
-                <p className="text-lg leading-relaxed font-semibold">
-                  La comunicación es esencial para personalizar y optimizar tu plan de forma efectiva.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  Mantén el contacto conmigo para que pueda brindarte el máximo valor en mi asesoramiento.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  Cualquier ajuste que necesites, <span className="font-bold">SIEMPRE</span> existe una alternativa y <span className="font-bold">SIEMPRE</span> encontramos la mejor solución para ti.
-                </p>
-                <p className="text-lg leading-relaxed">
-                  Mi enfoque se centra en que te sientas cómodo y puedas mantener el plan a largo plazo.
-                </p>
-                <p className="text-lg leading-relaxed font-semibold">
-                  Para maximizar los beneficios de nuestro trabajo conjunto, mantente en contacto cuando lo requieras!
-                </p>
-              </div>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-gray-800 font-medium">Contáctame cuando lo necesites</span>
+        <ScrollReveal direction="up" delay={300}>
+          <div className="mt-16 glass-card-light overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
+              {/* Text Content */}
+              <div className="order-2 lg:order-1">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
+                  💬 El diálogo constante es <em className="heading-accent not-italic italic">fundamental</em>
+                </h3>
+                <div className="space-y-4 text-white/60">
+                  <p className="text-base leading-relaxed">
+                    Mi objetivo es comprender tu situación de manera completa para ofrecerte la mejor orientación y apoyo.
+                  </p>
+                  <p className="text-base leading-relaxed text-white/80 font-medium">
+                    La comunicación es esencial para personalizar y optimizar tu plan de forma efectiva.
+                  </p>
+                  <p className="text-base leading-relaxed">
+                    Cualquier ajuste que necesites, <span className="text-[hsl(var(--accent-green-light))] font-bold">SIEMPRE</span> existe una alternativa y <span className="text-[hsl(var(--accent-green-light))] font-bold">SIEMPRE</span> encontramos la mejor solución para ti.
+                  </p>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-gray-800 font-medium">Soporte y motivación diarios</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-nutrition-green rounded-full"></div>
-                  <span className="text-gray-800 font-medium">Material educativo y recursos</span>
-                </div>
-              </div>
-            </div>
 
-            {/* WhatsApp Phone Mockup */}
-            <div className="order-1 lg:order-2 flex justify-center">
-              <div className="relative transform rotate-6">
-                {/* Phone Frame */}
-                <div className="relative w-64 h-[520px] bg-black rounded-[2.5rem] p-2 shadow-2xl">
-                  {/* Screen */}
-                  <div className="w-full h-full bg-white rounded-[2rem] overflow-hidden relative">
-                    {/* Status Bar */}
-                    <div className="flex justify-between items-center px-6 pt-3 pb-1 bg-gray-50">
-                      <span className="text-sm font-medium">13:17</span>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-4 h-2 bg-gray-800 rounded-sm"></div>
-                        <div className="w-1 h-3 bg-gray-800 rounded-full"></div>
-                      </div>
+                <div className="mt-8 space-y-3">
+                  {['Contáctame cuando lo necesites', 'Soporte y motivación diarios', 'Material educativo y recursos'].map((item) => (
+                    <div key={item} className="flex items-center gap-3">
+                      <div className="w-2 h-2 bg-[hsl(var(--accent-green))] rounded-full"></div>
+                      <span className="text-white/80 text-sm font-medium">{item}</span>
                     </div>
-                    
-                    {/* WhatsApp Header */}
-                    <div className="bg-nutrition-green p-4 flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-                      <div>
-                        <h4 className="text-white font-semibold text-sm">JAFNFIT - José Antonio</h4>
-                        <p className="text-green-100 text-xs">en línea</p>
+                  ))}
+                </div>
+              </div>
+
+              {/* WhatsApp Phone Mockup */}
+              <div className="order-1 lg:order-2 flex justify-center">
+                <div className="relative transform rotate-3">
+                  <div className="relative w-64 h-[500px] bg-[hsl(var(--dark-surface))] rounded-[2.5rem] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.5)] border border-[hsl(var(--dark-border))]">
+                    <div className="w-full h-full bg-[hsl(var(--dark-bg))] rounded-[2rem] overflow-hidden relative">
+                      {/* Status Bar */}
+                      <div className="flex justify-between items-center px-6 pt-3 pb-1 bg-[hsl(var(--dark-surface))]">
+                        <span className="text-xs font-medium text-white/70">13:17</span>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-4 h-2 bg-white/50 rounded-sm"></div>
+                        </div>
                       </div>
-                    </div>
-                    
-                    {/* Chat Content */}
-                    <div className="flex-1 p-4 space-y-3 bg-gray-50 h-full">
-                      <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
-                        <p className="text-xs text-gray-700">Hola, tenía que decírtelo... ¡Estoy flipando! 😍 me está encantando el menú, por fin como bien sin sentir que estoy a dieta.</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">8:27</p>
+
+                      {/* WhatsApp Header */}
+                      <div className="bg-[hsl(var(--accent-green))] p-3 flex items-center space-x-3">
+                        <div className="w-9 h-9 bg-white/20 rounded-full"></div>
+                        <div>
+                          <h4 className="text-white font-semibold text-xs">JAFNFIT - José Antonio</h4>
+                          <p className="text-white/70 text-[10px]">en línea</p>
+                        </div>
                       </div>
-                      
-                      <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
-                        <p className="text-xs text-gray-700">Me preparé las tostadas que me indicaste, probé las combinaciones y el boniato... ¡riquísimo y no paso hambre!</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">8:28</p>
-                      </div>
-                      
-                      <div className="bg-white p-3 rounded-lg shadow-sm max-w-[85%] rounded-bl-none">
-                        <p className="text-xs text-gray-700">¡Desde la última vez bajé ya 2 kg sin darme cuenta! Gracias 🙏 💚</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">8:29</p>
+
+                      {/* Chat Content */}
+                      <div className="flex-1 p-3 space-y-2.5 bg-[hsl(var(--dark-bg))] h-full">
+                        {[
+                          { text: 'Hola, tenía que decírtelo... ¡Estoy flipando! 😍 me está encantando el menú.', time: '8:27' },
+                          { text: 'Me preparé las tostadas que me indicaste, probé las combinaciones... ¡riquísimo!', time: '8:28' },
+                          { text: '¡Bajé ya 2 kg sin darme cuenta! Gracias 🙏 💚', time: '8:29' },
+                        ].map((msg, i) => (
+                          <div key={i} className="bg-[hsl(var(--dark-surface))] p-2.5 rounded-lg max-w-[85%] border border-[hsl(var(--dark-border))]">
+                            <p className="text-[10px] text-white/80 leading-relaxed">{msg.text}</p>
+                            <p className="text-[9px] text-white/30 mt-1 text-right">{msg.time}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -231,7 +191,7 @@ const Services: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
