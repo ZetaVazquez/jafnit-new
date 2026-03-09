@@ -91,13 +91,18 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             </div>
           </div>
 
-          {/* Right: Trainer image - positioned to overflow over feature cards */}
-          <div className="hidden lg:flex justify-end items-end absolute right-0 bottom-0 z-20 pointer-events-none">
-            <img 
-              src="/lovable-uploads/eddd69ef-b238-4ea9-bd8a-2fc3dc1aff1b.png"
-              alt="José Antonio Fernández - Coach Nutricional" 
-              className="h-[75vh] object-contain object-bottom drop-shadow-2xl translate-y-24"
-            />
+          {/* Right: Video */}
+          <div className="hidden lg:flex justify-center items-center pb-8 lg:pb-24">
+            <div className="rounded-2xl overflow-hidden border-2 border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-full max-w-md">
+              <video
+                src="/videos/hero-video.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-cover"
+              />
+            </div>
           </div>
         </div>
 
