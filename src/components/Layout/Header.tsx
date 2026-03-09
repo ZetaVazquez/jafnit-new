@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail } from 'lucide-react';
 import LoginModal from '@/components/Auth/LoginModal';
 
 interface HeaderProps {
@@ -41,6 +41,8 @@ const Header: React.FC<HeaderProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -48,12 +50,28 @@ const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const navigationItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Programas', href: '#programas' },
-    { label: 'Método', href: '#metodo' },
+    { label: 'Programas', href: '#pricing' },
     { label: 'Sobre Mí', href: '#sobre-mi' },
     { label: 'Evaluación', href: '#evaluacion' },
+  ];
+
+  const moreItems = [
+    { label: 'Calculadora de IMC', href: '#portfolio', icon: Calculator },
+    { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
+    { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
+    { label: 'Contáctame', href: '#contacto', icon: Mail },
   ];
 
   const handleNavClick = (href: string) => {
@@ -136,6 +154,29 @@ const Header: React.FC<HeaderProps> = ({
                   {item.label}
                 </button>
               ))}
+              {/* More dropdown */}
+              <div ref={moreRef} className="relative">
+                <button
+                  onClick={() => setIsMoreOpen(!isMoreOpen)}
+                  className="text-sm text-white/80 hover:text-white transition-colors duration-200 font-medium tracking-wide flex items-center gap-1"
+                >
+                  Más <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isMoreOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-56 bg-[hsl(220,20%,12%)] border border-white/10 rounded-lg shadow-xl backdrop-blur-md py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                    {moreItems.map((item) => (
+                      <button
+                        key={item.label}
+                        onClick={() => { handleNavClick(item.href); setIsMoreOpen(false); }}
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                      >
+                        <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
 
             {/* User Actions */}
@@ -218,6 +259,21 @@ const Header: React.FC<HeaderProps> = ({
                     {item.label}
                   </button>
                 ))}
+
+                {/* More items in mobile */}
+                <div className="border-t border-white/10 mt-2 pt-2">
+                  <p className="px-4 py-2 text-xs text-white/40 font-medium uppercase tracking-wider">Más</p>
+                  {moreItems.map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => handleNavClick(item.href)}
+                      className="flex items-center gap-3 w-full text-left px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 transition-colors duration-200 font-medium"
+                    >
+                      <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
                 
                 {isLoggedIn ? (
                   <div className="px-4 mt-4 space-y-2">
