@@ -258,7 +258,7 @@ const Header: React.FC<HeaderProps> = ({
                   >
                     {item.label}
                   </button>
-                ))
+                )}}
 
                 {/* More items in mobile */}
                 <div className="border-t border-white/10 mt-2 pt-2">
