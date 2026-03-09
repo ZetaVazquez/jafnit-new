@@ -41,6 +41,8 @@ const Header: React.FC<HeaderProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -48,12 +50,28 @@ const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const navigationItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Programas', href: '#programas' },
-    { label: 'Método', href: '#metodo' },
+    { label: 'Programas', href: '#pricing' },
     { label: 'Sobre Mí', href: '#sobre-mi' },
     { label: 'Evaluación', href: '#evaluacion' },
+  ];
+
+  const moreItems = [
+    { label: 'Calculadora de IMC', href: '#portfolio', icon: Calculator },
+    { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
+    { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
+    { label: 'Contáctame', href: '#contacto', icon: Mail },
   ];
 
   const handleNavClick = (href: string) => {
