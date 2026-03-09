@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, CheckCircle, BarChart3, Target } from 'lucide-react';
+import { ChevronRight, CheckCircle, BarChart3, Target, Play, Pause } from 'lucide-react';
 
 interface HeroCarouselProps {
   onStartQuestionnaire: () => void;
