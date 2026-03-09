@@ -258,7 +258,22 @@ const Header: React.FC<HeaderProps> = ({
                   >
                     {item.label}
                   </button>
-                ))}
+                ))
+
+                {/* More items in mobile */}
+                <div className="border-t border-white/10 mt-2 pt-2">
+                  <p className="px-4 py-2 text-xs text-white/40 font-medium uppercase tracking-wider">Más</p>
+                  {moreItems.map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => handleNavClick(item.href)}
+                      className="flex items-center gap-3 w-full text-left px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 transition-colors duration-200 font-medium"
+                    >
+                      <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
                 
                 {isLoggedIn ? (
                   <div className="px-4 mt-4 space-y-2">
