@@ -8,10 +8,10 @@ interface HeroCarouselProps {
 }
 
 const heroImages = [
-  '/images/loveable-uploads/bba1525e-dc69-41bb-acb5-238e1469290f.png',
-  '/images/loveable-uploads/bba1525e-dc69-41bb-acb5-238e1469290f.png',
-  '/images/loveable-uploads/bba1525e-dc69-41bb-acb5-238e1469290f.png',
-  '/images/loveable-uploads/bba1525e-dc69-41bb-acb5-238e1469290f.png',
+  '/images/hero-bg-1.jpeg',
+  '/images/hero-bg-2.jpeg',
+  '/images/hero-bg-3.jpeg',
+  '/images/hero-bg-4.jpeg',
   '/lovable-uploads/36f5f0c3-e789-4843-b583-f8d9790e501d.png',
 ];
 
