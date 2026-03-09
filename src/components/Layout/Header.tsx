@@ -69,6 +69,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const moreItems = [
     { label: 'Calculadora de IMC', href: '#portfolio', icon: Calculator },
+    { label: 'Opiniones', href: '#testimonios', icon: Star },
     { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
     { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
     { label: 'Contáctame', href: '#contacto', icon: Mail },
