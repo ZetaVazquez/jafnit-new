@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail } from 'lucide-react';
 import LoginModal from '@/components/Auth/LoginModal';
 
 interface HeaderProps {
