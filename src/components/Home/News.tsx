@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Calendar, Instagram, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,6 @@ const News: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const newsItems: NewsItem[] = [
-    // Instagram posts (las 3 primeras)
     {
       id: '1',
       title: 'Consejos: No tengo tiempo para cocinar sano',
@@ -35,7 +35,6 @@ const News: React.FC = () => {
       type: 'instagram',
       image: '/lovable-uploads/9a9ed6cd-bf68-4a70-9964-f04533b6397d.png'
     },
-    // Noticias expandidas (las 3 siguientes)
     {
       id: '4',
       title: 'Tu alimentación no es algo temporal',
@@ -160,93 +159,83 @@ Elige UN pequeño cambio y comprométete solo con eso. Cuando sea natural (2-3 s
   };
 
   return (
-    <section id="noticias" className="py-16 bg-gradient-to-br from-nutrition-green via-nutrition-green-emerald to-nutrition-green-dark relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Círculos grandes */}
-        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
-        
-        {/* Círculos medianos */}
-        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
-        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-18 h-18 top-2/3 left-1/6 animate-bounce-gentle"></div>
-        
-        {/* Triángulos */}
-        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-3/4 right-1/6 animate-rotate-slow"></div>
+    <section id="noticias" className="py-20 dark-section relative overflow-hidden">
+      {/* Subtle radial glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[hsla(var(--accent-green)/0.06)] blur-[120px]" />
       </div>
 
-        <div className="container mx-auto px-4 relative z-20">
-          <div className="text-center mb-16">
-            <ScrollReveal direction="down">
-              <h2 className="text-4xl font-bold text-white mb-4 title-main">
-                Noticias y Actualizaciones
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={200}>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
-              </p>
-            </ScrollReveal>
-          </div>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16">
+          <ScrollReveal direction="down">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
+              Noticias y{' '}
+              <em className="heading-accent not-italic font-bold italic">Actualizaciones</em>
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            <p className="text-lg text-[hsl(var(--text-secondary))] max-w-2xl mx-auto">
+              Mantente al día con las últimas noticias sobre nutrición, entrenamiento y bienestar
+            </p>
+          </ScrollReveal>
+        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsItems.map((item, index) => (
-            <ScrollReveal key={item.id} direction="up" delay={index * 200}>
-              <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
+            <ScrollReveal key={item.id} direction="up" delay={index * 150}>
+              <div className="glass-card-light overflow-hidden hover:scale-[1.02] transition-all duration-300 flex flex-col h-full">
                 <div className="relative">
                   <img
                     src={item.image}
                     alt={item.title}
                     className="w-full h-48 object-cover"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--dark-bg))] to-transparent opacity-60" />
                   <div className="absolute top-4 right-4">
                     {item.type === 'instagram' ? (
-                      <Instagram className="w-6 h-6 text-pink-500 bg-white p-1 rounded-full" />
+                      <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/30 text-pink-400 text-xs font-semibold">
+                        <Instagram className="w-3 h-3" /> Instagram
+                      </span>
                     ) : (
-                      <Eye className="w-6 h-6 text-nutrition-green bg-white p-1 rounded-full" />
+                      <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsla(var(--accent-green)/0.2)] border border-[hsla(var(--accent-green)/0.3)] text-[hsl(var(--accent-green-light))] text-xs font-semibold">
+                        <Eye className="w-3 h-3" /> Artículo
+                      </span>
                     )}
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex items-center text-sm text-gray-500 mb-2">
-                    <Calendar className="w-4 h-4 mr-2" />
+                  <div className="flex items-center text-sm text-[hsl(var(--text-secondary))] mb-3">
+                    <Calendar className="w-4 h-4 mr-2 text-[hsl(var(--accent-green-light))]" />
                     {new Date(item.date).toLocaleDateString('es-ES')}
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                  <h3 className="text-lg font-bold text-[hsl(var(--text-primary))] mb-3">
                     {item.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed flex-grow">
-                    {item.type === 'news' 
+                  <p className="text-sm text-[hsl(var(--text-secondary))] mb-6 leading-relaxed flex-grow">
+                    {item.type === 'news'
                       ? item.content.split('\n')[0] + '...'
                       : item.content
                     }
                   </p>
                   <Button
-                    onClick={() => item.type === 'instagram' 
-                      ? handleInstagramClick(index) 
+                    onClick={() => item.type === 'instagram'
+                      ? handleInstagramClick(index)
                       : handleNewsClick(item)
                     }
-                    className={`w-full font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto ${
-                      item.type === 'instagram' 
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white'
-                        : 'bg-gradient-to-r from-nutrition-green to-nutrition-green-dark hover:from-nutrition-green-dark hover:to-nutrition-green text-white'
+                    className={`w-full font-semibold transition-all duration-300 mt-auto ${
+                      item.type === 'instagram'
+                        ? 'bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 border border-pink-500/30'
+                        : 'btn-cta'
                     }`}
                   >
                     {item.type === 'instagram' ? (
                       <>
-                        <Instagram className="w-4 h-4" />
+                        <Instagram className="w-4 h-4 mr-2" />
                         Ver en Instagram
                       </>
                     ) : (
                       <>
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-4 h-4 mr-2" />
                         Leer más
                       </>
                     )}
@@ -257,7 +246,7 @@ Elige UN pequeño cambio y comprométete solo con eso. Cuando sea natural (2-3 s
           ))}
         </div>
 
-        <NewsModal 
+        <NewsModal
           isOpen={isModalOpen}
           onClose={closeModal}
           newsItem={selectedNews}
