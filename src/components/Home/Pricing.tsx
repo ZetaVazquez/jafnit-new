@@ -126,13 +126,15 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
                 }`}
               >
                 {/* Badge */}
-                <div className={`text-center py-2 text-xs font-bold uppercase tracking-widest ${
-                  plan.highlighted
-                    ? 'bg-accent/20 text-accent'
-                    : 'bg-white/5 text-white/50'
-                }`}>
-                  {plan.highlighted ? '⭐ Popular' : plan.name.toUpperCase()}
-                </div>
+                {plan.highlighted ? (
+                  <div className="text-center py-3 bg-[hsl(45,100%,51%)] text-[hsl(220,20%,10%)]">
+                    <span className="text-lg font-black uppercase tracking-wider">⭐ POPULAR</span>
+                  </div>
+                ) : (
+                  <div className="text-center py-2 bg-[hsla(0,0%,100%,0.05)] text-[hsla(0,0%,100%,0.5)] text-xs font-bold uppercase tracking-widest">
+                    {plan.name.toUpperCase()}
+                  </div>
+                )}
 
                 <div className="p-6 lg:p-8">
                   <h3 className="text-2xl font-bold text-white mb-1">{plan.name}</h3>
