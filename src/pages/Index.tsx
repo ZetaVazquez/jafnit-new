@@ -5,7 +5,7 @@ import Footer from '@/components/Layout/Footer';
 import HeroCarousel from '@/components/Home/HeroCarousel';
 import AboutUs from '@/components/Home/AboutUs';
 import Services from '@/components/Home/Services';
-import Guides from '@/components/Home/Guides';
+import GuidesModal from '@/components/Home/GuidesModal';
 import Testimonials from '@/components/Home/Testimonials';
 import Pricing from '@/components/Home/Pricing';
 import Contact from '@/components/Home/Contact';
