@@ -220,6 +220,8 @@ const Index = () => {
           onNavigateToWorkouts={handleNavigateToWorkouts}
           onNavigateToSchedule={handleNavigateToSchedule}
           onNavigateToChangePlan={handleNavigateToChangePlan}
+          onOpenBMI={() => setShowBMIModal(true)}
+          onOpenGuides={() => setShowGuidesModal(true)}
           showDashboard={showDashboard}
         />
         <main>
@@ -245,6 +247,14 @@ const Index = () => {
           onClose={handleAuthModalClose}
           onSuccess={handleAuthSuccess}
           initialTab={authModalTab}
+        />
+        <BMICalculatorModal
+          isOpen={showBMIModal}
+          onClose={() => setShowBMIModal(false)}
+        />
+        <GuidesModal
+          isOpen={showGuidesModal}
+          onClose={() => setShowGuidesModal(false)}
         />
       </DynamicBackground>
     </div>
