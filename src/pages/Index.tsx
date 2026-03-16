@@ -31,6 +31,8 @@ const Index = () => {
   const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
   const [dashboardView, setDashboardView] = useState<string>('dashboard');
   const [showPlanModal, setShowPlanModal] = useState(false);
+  const [showBMIModal, setShowBMIModal] = useState(false);
+  const [showGuidesModal, setShowGuidesModal] = useState(false);
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
