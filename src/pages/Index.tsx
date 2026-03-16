@@ -5,13 +5,13 @@ import Footer from '@/components/Layout/Footer';
 import HeroCarousel from '@/components/Home/HeroCarousel';
 import AboutUs from '@/components/Home/AboutUs';
 import Services from '@/components/Home/Services';
-import Guides from '@/components/Home/Guides';
+import GuidesModal from '@/components/Home/GuidesModal';
 import Testimonials from '@/components/Home/Testimonials';
 import Pricing from '@/components/Home/Pricing';
 import Contact from '@/components/Home/Contact';
 import FAQ from '@/components/Home/FAQ';
 import News from '@/components/Home/News';
-import BMICalculator from '@/components/Home/BMICalculator';
+import BMICalculatorModal from '@/components/Home/BMICalculatorModal';
 import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
@@ -31,6 +31,8 @@ const Index = () => {
   const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
   const [dashboardView, setDashboardView] = useState<string>('dashboard');
   const [showPlanModal, setShowPlanModal] = useState(false);
+  const [showBMIModal, setShowBMIModal] = useState(false);
+  const [showGuidesModal, setShowGuidesModal] = useState(false);
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
@@ -218,16 +220,16 @@ const Index = () => {
           onNavigateToWorkouts={handleNavigateToWorkouts}
           onNavigateToSchedule={handleNavigateToSchedule}
           onNavigateToChangePlan={handleNavigateToChangePlan}
+          onOpenBMI={() => setShowBMIModal(true)}
+          onOpenGuides={() => setShowGuidesModal(true)}
           showDashboard={showDashboard}
         />
         <main>
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
           <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} />
           <Services />
-          <Guides />
           <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
           <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
-          <BMICalculator />
           <News />
           <FAQ />
           <Contact />
@@ -245,6 +247,14 @@ const Index = () => {
           onClose={handleAuthModalClose}
           onSuccess={handleAuthSuccess}
           initialTab={authModalTab}
+        />
+        <BMICalculatorModal
+          isOpen={showBMIModal}
+          onClose={() => setShowBMIModal(false)}
+        />
+        <GuidesModal
+          isOpen={showGuidesModal}
+          onClose={() => setShowGuidesModal(false)}
         />
       </DynamicBackground>
     </div>

@@ -18,6 +18,8 @@ interface HeaderProps {
   onNavigateToDiets?: () => void;
   onNavigateToWorkouts?: () => void;
   onNavigateToSchedule?: () => void;
+  onOpenBMI?: () => void;
+  onOpenGuides?: () => void;
   showDashboard?: boolean;
 }
 
@@ -35,6 +37,8 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToDiets,
   onNavigateToWorkouts,
   onNavigateToSchedule,
+  onOpenBMI,
+  onOpenGuides,
   showDashboard = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -68,7 +72,8 @@ const Header: React.FC<HeaderProps> = ({
   ];
 
   const moreItems = [
-    { label: 'Calculadora de IMC', href: '#portfolio', icon: Calculator },
+    { label: 'Calculadora de IMC', href: '#bmi', icon: Calculator, action: onOpenBMI },
+    { label: 'Guías y Recursos', href: '#guias', icon: BookOpen, action: onOpenGuides },
     { label: 'Opiniones', href: '#testimonios', icon: Star },
     { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
     { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
@@ -168,7 +173,7 @@ const Header: React.FC<HeaderProps> = ({
                     {moreItems.map((item) => (
                       <button
                         key={item.label}
-                        onClick={() => { handleNavClick(item.href); setIsMoreOpen(false); }}
+                        onClick={() => { if (item.action) { item.action(); } else { handleNavClick(item.href); } setIsMoreOpen(false); }}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                       >
                         <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
@@ -267,7 +272,7 @@ const Header: React.FC<HeaderProps> = ({
                   {moreItems.map((item) => (
                     <button
                       key={item.label}
-                      onClick={() => handleNavClick(item.href)}
+                      onClick={() => { if (item.action) { item.action(); } else { handleNavClick(item.href); } setIsMenuOpen(false); }}
                       className="flex items-center gap-3 w-full text-left px-4 py-3 text-white/80 hover:text-white hover:bg-white/5 transition-colors duration-200 font-medium"
                     >
                       <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
