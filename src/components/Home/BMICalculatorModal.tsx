@@ -131,7 +131,7 @@ const BMICalculatorModal: React.FC<BMICalculatorModalProps> = ({ isOpen, onClose
             <Button
               onClick={reset}
               variant="outline"
-              className="px-6 border-white/20 text-white/70 hover:bg-white/10 hover:text-white rounded-xl"
+              className="px-6 border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 bg-white/5 rounded-xl"
             >
               Reset
             </Button>
