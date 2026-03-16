@@ -37,6 +37,8 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToDiets,
   onNavigateToWorkouts,
   onNavigateToSchedule,
+  onOpenBMI,
+  onOpenGuides,
   showDashboard = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
