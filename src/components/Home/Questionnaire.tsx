@@ -1,8 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, ClipboardList } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -105,7 +104,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
       type: 'form',
       required: true,
       fields: [
-        // Datos Generales
         { name: 'full_name', label: 'Nombre completo', type: 'text', required: true },
         { name: 'birth_date', label: 'Fecha de nacimiento', type: 'date', required: true },
         { name: 'age', label: 'Edad', type: 'number', required: true },
@@ -120,15 +118,11 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
         { name: 'payment_method', label: 'Forma de pago', type: 'select', required: true, options: ['Tarjeta (Stripe)', 'Transferencia', 'Web'] },
         { name: 'next_renewal', label: 'Próxima renovación', type: 'date', required: false },
         { name: 'acquisition_source', label: 'Fuente de captación', type: 'select', required: true, options: ['Instagram', 'Recomendación', 'WhatsApp', 'Página web', 'Otro'] },
-        
-        // Objetivos y Motivación
         { name: 'main_objective', label: 'Objetivo principal', type: 'select', required: true, options: ['Pérdida de grasa', 'Rendimiento (oposiciones)', 'Ganancia muscular', 'Recomposición corporal'] },
         { name: 'secondary_objectives', label: 'Objetivos secundarios', type: 'textarea', required: false },
         { name: 'personal_motivation', label: 'Motivación / Razón personal', type: 'textarea', required: true },
         { name: 'commitment_time', label: 'Tiempo estimado de compromiso', type: 'text', required: true },
         { name: 'ninety_day_goal', label: 'Objetivo a 90 días', type: 'textarea', required: true },
-        
-        // Datos físicos
         { name: 'initial_weight', label: 'Peso (kg)', type: 'number', required: true },
         { name: 'height_cm', label: 'Altura (cm)', type: 'number', required: true },
         { name: 'bmi', label: 'IMC', type: 'number', required: false },
@@ -137,14 +131,10 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
         { name: 'body_fat_percentage', label: 'Grasa corporal estimada (%)', type: 'number', required: false },
         { name: 'resting_heart_rate', label: 'Frecuencia cardíaca en reposo', type: 'number', required: false },
         { name: 'measurements_date', label: 'Fecha de mediciones', type: 'date', required: true },
-        
-        // Información de actividad
         { name: 'daily_activity_level', label: 'Nivel de actividad diaria (NEAT)', type: 'select', required: true, options: ['Sedentario', 'Moderado', 'Activo'] },
         { name: 'current_training', label: 'Entrenamiento actual', type: 'textarea', required: false },
         { name: 'physical_limitations', label: 'Limitaciones físicas o lesiones', type: 'textarea', required: false },
         { name: 'training_availability', label: 'Disponibilidad para entrenar', type: 'textarea', required: false },
-        
-        // Hábitos alimentarios
         { name: 'meals_per_day', label: 'Número de comidas al día', type: 'number', required: false },
         { name: 'current_diet_type', label: 'Tipo de alimentación actual', type: 'textarea', required: false },
         { name: 'food_restrictions', label: 'Alimentos que no consume o restringe', type: 'textarea', required: false },
@@ -152,8 +142,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
         { name: 'intolerances_allergies', label: 'Intolerancias / Alergias', type: 'textarea', required: false },
         { name: 'pathologies', label: 'Patologías', type: 'textarea', required: false },
         { name: 'daily_water_intake', label: 'Hidratación diaria (agua)', type: 'text', required: false },
-        
-        // Notas adicionales
         { name: 'professional_notes', label: 'Notas adicionales del profesional', type: 'textarea', required: false }
       ]
     }
@@ -187,7 +175,6 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      // Guardar respuestas y completar cuestionario
       try {
         const responses = {
           health_goals: answers['1'] || '',
@@ -241,28 +228,76 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const isLastQuestion = currentQuestion === questions.length - 1;
 
+  // Shared dark input classes
+  const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:ring-2 focus:ring-[hsl(var(--accent-green))]/50 focus:border-[hsl(var(--accent-green))]/50 outline-none";
+  const labelClass = "text-sm font-medium text-white/60";
+
+  const renderFormField = (field: { name: string; label: string; type: string; required: boolean; options?: string[] }, formData: Record<string, string>) => {
+    const isWide = ['address', 'secondary_objectives', 'personal_motivation', 'ninety_day_goal'].includes(field.name) || field.type === 'textarea';
+
+    return (
+      <div key={field.name} className={`space-y-2 ${isWide ? 'md:col-span-2' : ''}`}>
+        <Label htmlFor={field.name} className={labelClass}>
+          {field.label}
+          {field.required && <span className="text-red-400 ml-1">*</span>}
+        </Label>
+        {field.type === 'select' ? (
+          <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
+            <SelectTrigger className={`${inputClass} h-10`}>
+              <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
+            </SelectTrigger>
+            <SelectContent className="bg-[hsl(220,20%,14%)] border-white/10 text-white">
+              {field.options?.map((option, i) => (
+                <SelectItem key={i} value={option} className="hover:bg-white/10 focus:bg-white/10 focus:text-white">{option}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : field.type === 'textarea' ? (
+          <Textarea
+            id={field.name}
+            value={formData[field.name] || ''}
+            onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+            placeholder={`Describe tu ${field.label.toLowerCase()}`}
+            className={`${inputClass} min-h-[80px]`}
+            rows={3}
+          />
+        ) : (
+          <Input
+            id={field.name}
+            type={field.type}
+            value={formData[field.name] || ''}
+            onChange={(e) => handleFormAnswer(field.name, e.target.value)}
+            placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
+            className={inputClass}
+            required={field.required}
+          />
+        )}
+      </div>
+    );
+  };
+
   const renderQuestionContent = () => {
     if (currentQuestionData.type === 'multiple-choice') {
       return (
-        <div className="space-y-4">
-          <p className="text-sm text-gray-600 mb-6">🔻 Selecciona una opción:</p>
+        <div className="space-y-3">
+          <p className="text-sm text-white/40 mb-4">🔻 Selecciona una opción:</p>
           {currentQuestionData.options?.map((option, index) => (
             <button
               key={index}
               onClick={() => handleAnswer(option)}
-              className={`w-full p-5 text-left rounded-xl border-2 transition-all duration-300 font-medium ${
+              className={`w-full p-4 text-left rounded-xl border transition-all duration-300 font-medium ${
                 answers[currentQuestionData.id] === option
-                  ? 'border-nutrition-green-emerald bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light text-nutrition-green-forest shadow-lg scale-105'
-                  : 'border-gray-200 hover:border-nutrition-green-emerald hover:bg-nutrition-green-lighter hover:bg-opacity-50 hover:scale-102 hover:shadow-md'
+                  ? 'border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-green))]/15 text-white shadow-lg shadow-[hsl(var(--accent-green))]/10 scale-[1.02]'
+                  : 'border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:bg-white/10 hover:text-white'
               }`}
             >
               <div className="flex items-center">
-                <div className={`w-4 h-4 rounded-full border-2 mr-4 ${
+                <div className={`w-4 h-4 rounded-full border-2 mr-4 flex-shrink-0 ${
                   answers[currentQuestionData.id] === option
-                    ? 'bg-nutrition-green border-nutrition-green'
-                    : 'border-gray-300'
+                    ? 'bg-[hsl(var(--accent-green))] border-[hsl(var(--accent-green))]'
+                    : 'border-white/30'
                 }`}></div>
-                {option}
+                <span className="text-sm">{option}</span>
               </div>
             </button>
           ))}
@@ -272,16 +307,16 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
 
     if (currentQuestionData.type === 'text') {
       return (
-        <div className="space-y-4">
-          <p className="text-sm text-gray-600 mb-4">✏️ Campo de texto libre para responder (máx. 500 caracteres).</p>
+        <div className="space-y-3">
+          <p className="text-sm text-white/40 mb-3">✏️ Campo de texto libre para responder (máx. 500 caracteres).</p>
           <Textarea
             placeholder="Escribe tu respuesta aquí..."
             value={(answers[currentQuestionData.id] as string) || ''}
             onChange={(e) => handleTextAnswer(e.target.value)}
             maxLength={500}
-            className="min-h-[120px] resize-none bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
+            className={`${inputClass} min-h-[120px] resize-none`}
           />
-          <p className="text-xs text-gray-500 text-right">
+          <p className="text-xs text-white/30 text-right">
             {((answers[currentQuestionData.id] as string) || '').length}/500 caracteres
           </p>
         </div>
@@ -290,229 +325,30 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
 
     if (currentQuestionData.type === 'form') {
       const formData = (answers[currentQuestionData.id] as Record<string, string>) || {};
+      const fields = currentQuestionData.fields || [];
+      
+      const sections = [
+        { title: '📅 Datos Generales', fields: fields.slice(0, 14) },
+        { title: '🧠 Objetivos y Motivación', fields: fields.slice(14, 19) },
+        { title: '📏 Datos Físicos', fields: fields.slice(19, 27) },
+        { title: '🏋️‍♀️ Información de Actividad', fields: fields.slice(27, 31) },
+        { title: '🍽️ Hábitos Alimentarios', fields: fields.slice(31, 38) },
+        { title: '💬 Notas Adicionales', fields: fields.slice(38) },
+      ];
+
       return (
-        <div className="space-y-6 max-h-[60vh] overflow-y-auto">
-          <p className="text-sm text-gray-600 mb-6">📍 Complete todos los campos requeridos:</p>
-          
-          {/* Datos Generales */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">📅 Datos Generales</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentQuestionData.fields?.slice(0, 14).map((field, index) => (
-                <div key={index} className={`space-y-2 ${['address', 'secondary_objectives', 'personal_motivation', 'ninety_day_goal'].includes(field.name) ? 'md:col-span-2' : ''}`}>
-                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  {field.type === 'select' ? (
-                    <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
-                      <SelectTrigger className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green">
-                        <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.options?.map((option, optIndex) => (
-                          <SelectItem key={optIndex} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : field.type === 'textarea' ? (
-                    <Textarea
-                      id={field.name}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
-                      rows={3}
-                    />
-                  ) : (
-                    <Input
-                      id={field.name}
-                      type={field.type}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
-                      required={field.required}
-                    />
-                  )}
-                </div>
-              ))}
+        <div className="space-y-8 max-h-[55vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <p className="text-sm text-white/40 mb-2">📍 Complete todos los campos requeridos:</p>
+          {sections.map((section) => (
+            <div key={section.title}>
+              <h3 className="text-base font-semibold text-[hsl(var(--accent-green-light))] mb-4 pb-2 border-b border-white/10">
+                {section.title}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {section.fields.map((field) => renderFormField(field, formData))}
+              </div>
             </div>
-          </div>
-
-          {/* Objetivos y Motivación */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">🧠 Objetivos y Motivación</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentQuestionData.fields?.slice(14, 19).map((field, index) => (
-                <div key={index} className={`space-y-2 ${field.type === 'textarea' ? 'md:col-span-2' : ''}`}>
-                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  {field.type === 'select' ? (
-                    <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
-                      <SelectTrigger className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green">
-                        <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.options?.map((option, optIndex) => (
-                          <SelectItem key={optIndex} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : field.type === 'textarea' ? (
-                    <Textarea
-                      id={field.name}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
-                      rows={3}
-                    />
-                  ) : (
-                    <Input
-                      id={field.name}
-                      type={field.type}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
-                      required={field.required}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Datos Físicos */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">📏 Datos Físicos</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentQuestionData.fields?.slice(19, 27).map((field, index) => (
-                <div key={index} className="space-y-2">
-                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  <Input
-                    id={field.name}
-                    type={field.type}
-                    value={formData[field.name] || ''}
-                    onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                    placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                    className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
-                    required={field.required}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Información de Actividad */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">🏋️‍♀️ Información de Actividad</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {currentQuestionData.fields?.slice(27, 31).map((field, index) => (
-                <div key={index} className="space-y-2">
-                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  {field.type === 'select' ? (
-                    <Select value={formData[field.name] || ''} onValueChange={(value) => handleFormAnswer(field.name, value)}>
-                      <SelectTrigger className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green">
-                        <SelectValue placeholder={`Selecciona ${field.label.toLowerCase()}`} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.options?.map((option, optIndex) => (
-                          <SelectItem key={optIndex} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : field.type === 'textarea' ? (
-                    <Textarea
-                      id={field.name}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
-                      rows={3}
-                    />
-                  ) : (
-                    <Input
-                      id={field.name}
-                      type={field.type}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
-                      required={field.required}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Hábitos Alimentarios */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">🍽️ Hábitos Alimentarios</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {currentQuestionData.fields?.slice(31, 38).map((field, index) => (
-                <div key={index} className="space-y-2">
-                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  {field.type === 'textarea' ? (
-                    <Textarea
-                      id={field.name}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Describe tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[80px]"
-                      rows={3}
-                    />
-                  ) : (
-                    <Input
-                      id={field.name}
-                      type={field.type}
-                      value={formData[field.name] || ''}
-                      onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                      placeholder={`Ingresa tu ${field.label.toLowerCase()}`}
-                      className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green"
-                      required={field.required}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Notas Adicionales */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-nutrition-green-emerald mb-4">💬 Notas Adicionales</h3>
-            <div className="space-y-4">
-              {currentQuestionData.fields?.slice(38).map((field, index) => (
-                <div key={index} className="space-y-2">
-                  <Label htmlFor={field.name} className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  <Textarea
-                    id={field.name}
-                    value={formData[field.name] || ''}
-                    onChange={(e) => handleFormAnswer(field.name, e.target.value)}
-                    placeholder="Observaciones psicológicas, motivacionales, barreras detectadas, etc."
-                    className="w-full bg-nutrition-green-lighter border-nutrition-green-light focus:border-nutrition-green focus:ring-nutrition-green min-h-[100px]"
-                    rows={4}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       );
     }
@@ -521,98 +357,98 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
   };
 
   return (
-    <div className="fixed inset-0 dynamic-background flex items-center justify-center z-50 p-4 overflow-hidden">
-      {/* Decorative background elements con más círculos y triángulos */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="geometric-shape circle-shape w-32 h-32 top-10 left-10 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-24 h-24 top-1/2 right-20 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-20 h-20 bottom-20 left-1/4 animate-pulse-slow"></div>
-        <div className="geometric-shape circle-shape w-16 h-16 top-1/4 right-1/3 animate-bounce-gentle"></div>
-        <div className="geometric-shape circle-shape w-28 h-28 top-1/3 left-1/2 animate-float"></div>
-        <div className="geometric-shape circle-shape w-22 h-22 bottom-1/3 right-1/4 animate-pulse-slow"></div>
-        
-        <div className="geometric-shape triangle-shape triangle-up top-40 left-1/2 transform -translate-x-1/2 animate-rotate-slow"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-40 right-1/4 animate-float"></div>
-        <div className="geometric-shape triangle-shape triangle-up top-1/4 left-1/4 animate-bounce-gentle"></div>
-        <div className="geometric-shape triangle-shape triangle-down bottom-1/4 right-1/2 animate-pulse-slow"></div>
+    <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-50 p-4 overflow-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(var(--accent-green))]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[hsl(var(--accent-green))]/3 rounded-full blur-3xl" />
       </div>
 
-      <Card className="w-full max-w-4xl bg-white/90 backdrop-blur-sm border border-nutrition-green-light shadow-2xl relative z-10 max-h-[90vh] overflow-y-auto">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald bg-clip-text text-transparent title-main">
-              Cuestionario Personalizado
-            </CardTitle>
-            <Button variant="ghost" onClick={onClose} className="hover:bg-nutrition-green-lighter rounded-full">
-              ✕
-            </Button>
+      <div className="w-full max-w-4xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl relative z-10 max-h-[90vh] flex flex-col">
+        {/* Header */}
+        <div className="p-6 pb-4 border-b border-white/10 flex-shrink-0">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-[hsl(var(--accent-green))]/20 border border-[hsl(var(--accent-green))]/30">
+                <ClipboardList className="w-6 h-6 text-[hsl(var(--accent-green))]" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">
+                Cuestionario Personalizado
+              </h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          
+
           {/* Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-3 mt-6 overflow-hidden">
-            <div 
-              className="bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald h-3 rounded-full transition-all duration-500 shadow-lg"
+          <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-[hsl(var(--accent-green))] to-[hsl(var(--accent-green-light))] h-2 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-sm text-gray-600 mt-3 font-medium">
+          <p className="text-xs text-white/40 mt-2">
             Pregunta {currentQuestion + 1} de {questions.length}
           </p>
-        </CardHeader>
+        </div>
 
-        <CardContent>
-          <div className="mb-8">
-            <div className="mb-4">
-              <h3 className="text-lg font-bold text-nutrition-green-emerald mb-2 title-playful">
-                {currentQuestionData.step}
-              </h3>
-              <h4 className="text-xl font-bold mb-6 text-nutrition-black title-playful leading-tight">
-                {currentQuestionData.question}
-              </h4>
-            </div>
+        {/* Content */}
+        <div className="p-6 flex-1 overflow-y-auto">
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-[hsl(var(--accent-green-light))] mb-1">
+              {currentQuestionData.step}
+            </h3>
+            <h4 className="text-xl font-bold text-white leading-tight">
+              {currentQuestionData.question}
+            </h4>
+          </div>
 
-            {renderQuestionContent()}
+          {renderQuestionContent()}
 
-            {/* Mensaje especial en la última pregunta */}
-            {isLastQuestion && isAnswered() && (
-              <div className="mt-10 p-8 bg-gradient-to-r from-nutrition-green-lighter to-nutrition-green-light rounded-2xl border-l-4 border-nutrition-green-emerald shadow-lg">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-nutrition-green rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">🎉</span>
-                  </div>
-                  <h4 className="text-2xl font-bold text-nutrition-green-forest mb-3 title-playful">
-                    ¡Ya casi estamos!
-                  </h4>
-                  <p className="text-lg text-nutrition-green-dark font-medium">
-                    Ahora solo hace falta que seas parte de nuestra familia para poder tomar el cambio que tanto necesitas.
-                  </p>
+          {/* Final message */}
+          {isLastQuestion && isAnswered() && (
+            <div className="mt-8 p-6 rounded-2xl bg-[hsl(var(--accent-green))]/10 border border-[hsl(var(--accent-green))]/20">
+              <div className="text-center">
+                <div className="w-14 h-14 bg-[hsl(var(--accent-green))]/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-[hsl(var(--accent-green))]/30">
+                  <span className="text-2xl">🎉</span>
                 </div>
+                <h4 className="text-xl font-bold text-white mb-2">
+                  ¡Ya casi estamos!
+                </h4>
+                <p className="text-white/60">
+                  Ahora solo hace falta que seas parte de nuestra familia para poder tomar el cambio que tanto necesitas.
+                </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+        </div>
 
-          <div className="flex justify-between">
-            <Button
-              variant="outline"
-              onClick={prevQuestion}
-              disabled={currentQuestion === 0}
-              className="flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black border-none"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span>Anterior</span>
-            </Button>
+        {/* Footer Navigation */}
+        <div className="p-6 pt-4 border-t border-white/10 flex justify-between flex-shrink-0">
+          <Button
+            variant="outline"
+            onClick={prevQuestion}
+            disabled={currentQuestion === 0}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium border-white/20 text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-30 bg-transparent"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Anterior</span>
+          </Button>
 
-            <Button
-              onClick={nextQuestion}
-              disabled={!isAnswered() || loading}
-              className="flex items-center space-x-2 px-8 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span>{loading ? 'Guardando...' : (currentQuestion === questions.length - 1 ? 'Finalizar' : 'Siguiente')}</span>
-              <ChevronRight className="w-5 h-5" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          <Button
+            onClick={nextQuestion}
+            disabled={!isAnswered() || loading}
+            className="flex items-center gap-2 px-8 py-3 rounded-xl font-semibold bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green-dark))] text-black disabled:opacity-30"
+          >
+            <span>{loading ? 'Guardando...' : (isLastQuestion ? 'Finalizar' : 'Siguiente')}</span>
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
