@@ -72,7 +72,8 @@ const Header: React.FC<HeaderProps> = ({
   ];
 
   const moreItems = [
-    { label: 'Calculadora de IMC', href: '#portfolio', icon: Calculator },
+    { label: 'Calculadora de IMC', href: '#bmi', icon: Calculator, action: onOpenBMI },
+    { label: 'Guías y Recursos', href: '#guias', icon: BookOpen, action: onOpenGuides },
     { label: 'Opiniones', href: '#testimonios', icon: Star },
     { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
     { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
