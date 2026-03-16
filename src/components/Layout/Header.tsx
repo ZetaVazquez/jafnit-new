@@ -173,7 +173,7 @@ const Header: React.FC<HeaderProps> = ({
                     {moreItems.map((item) => (
                       <button
                         key={item.label}
-                        onClick={() => { handleNavClick(item.href); setIsMoreOpen(false); }}
+                        onClick={() => { if (item.action) { item.action(); } else { handleNavClick(item.href); } setIsMoreOpen(false); }}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                       >
                         <item.icon className="w-4 h-4 text-[hsl(var(--accent-green-light))]" />
