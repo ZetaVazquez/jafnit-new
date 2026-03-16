@@ -18,6 +18,8 @@ interface HeaderProps {
   onNavigateToDiets?: () => void;
   onNavigateToWorkouts?: () => void;
   onNavigateToSchedule?: () => void;
+  onOpenBMI?: () => void;
+  onOpenGuides?: () => void;
   showDashboard?: boolean;
 }
 
