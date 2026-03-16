@@ -1,4 +1,4 @@
-# Web janfit!
+# Web jafnfit!
 
 ## Project info
 
