@@ -11,7 +11,7 @@ import Pricing from '@/components/Home/Pricing';
 import Contact from '@/components/Home/Contact';
 import FAQ from '@/components/Home/FAQ';
 import News from '@/components/Home/News';
-import BMICalculator from '@/components/Home/BMICalculator';
+import BMICalculatorModal from '@/components/Home/BMICalculatorModal';
 import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
