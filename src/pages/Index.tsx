@@ -226,10 +226,8 @@ const Index = () => {
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
           <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} />
           <Services />
-          <Guides />
           <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
           <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
-          <BMICalculator />
           <News />
           <FAQ />
           <Contact />
