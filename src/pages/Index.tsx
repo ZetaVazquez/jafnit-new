@@ -21,6 +21,10 @@ import { ClientFormModal } from '@/components/Auth/ClientFormModal';
 import { useAuth } from '@/hooks/useAuth';
 import DynamicBackground from '@/components/Layout/DynamicBackground';
 import PlanRecommendationModal from '@/components/Dashboard/PlanRecommendationModal';
+import ProgramExploradorModal from '@/components/Home/ProgramExploradorModal';
+import ProgramConstructorModal from '@/components/Home/ProgramConstructorModal';
+import ProgramEstrategaModal from '@/components/Home/ProgramEstrategaModal';
+import AboutUsDetailModal from '@/components/Home/AboutUsDetailModal';
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -33,6 +37,10 @@ const Index = () => {
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [showBMIModal, setShowBMIModal] = useState(false);
   const [showGuidesModal, setShowGuidesModal] = useState(false);
+  const [showExploradorModal, setShowExploradorModal] = useState(false);
+  const [showConstructorModal, setShowConstructorModal] = useState(false);
+  const [showEstrategaModal, setShowEstrategaModal] = useState(false);
+  const [showAboutDetailModal, setShowAboutDetailModal] = useState(false);
   const { user, isAdmin } = useAuth();
 
   const handleStartQuestionnaire = () => {
@@ -64,15 +72,14 @@ const Index = () => {
 
   const handleBackToHome = () => {
     setShowDashboard(false);
-    setDashboardView('dashboard'); // Reset dashboard view
+    setDashboardView('dashboard');
   };
 
   const handleLogout = () => {
     setShowDashboard(false);
-    setDashboardView('dashboard'); // Reset dashboard view
+    setDashboardView('dashboard');
   };
 
-  // Navigation functions for sidebar
   const handleNavigateToProfile = () => {
     setDashboardView('profile');
     setShowDashboard(true);
@@ -118,6 +125,12 @@ const Index = () => {
   const handleAuthSuccess = () => {
     setShowAuthModal(false);
     setShowClientForm(true);
+  };
+
+  const handleOpenProgramModal = (programId: string) => {
+    if (programId === 'explorador') setShowExploradorModal(true);
+    else if (programId === 'constructor') setShowConstructorModal(true);
+    else if (programId === 'estratega') setShowEstrategaModal(true);
   };
 
   if (showDashboard && user) {
@@ -226,10 +239,10 @@ const Index = () => {
         />
         <main>
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
-          <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} />
+          <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} onOpenAboutDetail={() => setShowAboutDetailModal(true)} />
           <Services />
           <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
-          <Pricing onStartQuestionnaire={handleStartQuestionnaire} />
+          <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
           <News />
           <FAQ />
           <Contact />
@@ -255,6 +268,26 @@ const Index = () => {
         <GuidesModal
           isOpen={showGuidesModal}
           onClose={() => setShowGuidesModal(false)}
+        />
+        <ProgramExploradorModal
+          isOpen={showExploradorModal}
+          onClose={() => setShowExploradorModal(false)}
+          onStartQuestionnaire={handleStartQuestionnaire}
+        />
+        <ProgramConstructorModal
+          isOpen={showConstructorModal}
+          onClose={() => setShowConstructorModal(false)}
+          onStartQuestionnaire={handleStartQuestionnaire}
+        />
+        <ProgramEstrategaModal
+          isOpen={showEstrategaModal}
+          onClose={() => setShowEstrategaModal(false)}
+          onStartQuestionnaire={handleStartQuestionnaire}
+        />
+        <AboutUsDetailModal
+          isOpen={showAboutDetailModal}
+          onClose={() => setShowAboutDetailModal(false)}
+          onStartQuestionnaire={handleStartQuestionnaire}
         />
       </DynamicBackground>
     </div>
