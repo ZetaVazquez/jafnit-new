@@ -8,6 +8,7 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface PricingProps {
   onStartQuestionnaire: () => void;
+  onOpenProgramModal?: (programId: string) => void;
 }
 
 const plans = [
