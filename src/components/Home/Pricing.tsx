@@ -76,7 +76,7 @@ const differentiators = {
   ],
 };
 
-const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
+const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramModal }) => {
   const { user } = useAuth();
   const { toast } = useToast();
 
