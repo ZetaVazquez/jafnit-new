@@ -8,6 +8,7 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface PricingProps {
   onStartQuestionnaire: () => void;
+  onOpenProgramModal?: (programId: string) => void;
 }
 
 const plans = [
@@ -75,7 +76,7 @@ const differentiators = {
   ],
 };
 
-const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
+const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramModal }) => {
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -155,7 +156,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire }) => {
                   </ul>
 
                   <Button
-                    onClick={() => handleSelectPlan(plan)}
+                    onClick={() => onOpenProgramModal?.(plan.id)}
                     className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
                       plan.highlighted
                         ? 'btn-cta'
