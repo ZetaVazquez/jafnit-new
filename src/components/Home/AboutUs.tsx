@@ -1,14 +1,15 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Lock, Target, Brain, Trophy } from 'lucide-react';
+import { Check, Lock, Target, Brain, Trophy, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 interface AboutUsProps {
   onQuestionnaireOpen?: () => void;
+  onOpenAboutDetail?: () => void;
 }
 
-const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
+const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetail }) => {
   return (
     <section id="sobre-mi" className="py-20 dark-section relative overflow-hidden">
       {/* Subtle radial glows */}
@@ -30,7 +31,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
         <ScrollReveal direction="up" delay={100}>
           <p className="text-lg text-[hsl(var(--text-secondary))] max-w-3xl mb-16">
-            Soy <strong className="text-[hsl(var(--text-primary))]">José Antonio Fernández</strong>, el coach que te ayudará
+            Soy <strong className="text-[hsl(var(--text-primary))]">José Antonio Figueiras Núñez</strong>, el coach que te ayudará
             a encontrar la estrategia adecuada.
           </p>
         </ScrollReveal>
@@ -47,16 +48,16 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
 
               {/* Name card */}
               <div className="bg-[hsla(var(--accent-green)/0.1)] border border-[hsla(var(--accent-green)/0.3)] rounded-xl p-4 mb-6">
-                <p className="font-bold text-[hsl(var(--text-primary))] text-lg">José Antonio Fernández</p>
+                <p className="font-bold text-[hsl(var(--text-primary))] text-lg">José Antonio Figueiras Núñez</p>
                 <p className="text-sm text-[hsl(var(--accent-green-light))]">Coach Nutricional & Fitness</p>
               </div>
 
               {/* Credentials */}
               <ul className="space-y-3 mb-6">
                 {[
-                  '15 años de experiencia en el sector',
-                  'Más de 10.000 horas impartiendo formación',
-                  '1.500+ clientes y atletas asesorados',
+                  '+3 años de experiencia en el sector',
+                  'Más de 5.000 horas impartiendo formación',
+                  '100+ clientes y atletas asesorados',
                   'Creador del Método JAFN',
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -79,7 +80,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           <ScrollReveal direction="right" delay={300}>
             <div className="flex flex-col justify-center h-full">
               <div className="mb-6">
-                <p className="font-bold text-[hsl(var(--text-primary))] text-xl">José Antonio Fernández</p>
+                <p className="font-bold text-[hsl(var(--text-primary))] text-xl">José Antonio Figueiras Núñez</p>
                 <p className="text-sm text-[hsl(var(--accent-green-light))]">Coach Nutricional & Fitness</p>
               </div>
               <blockquote className="text-xl md:text-2xl italic text-[hsl(var(--text-secondary))] leading-relaxed border-l-4 border-[hsl(var(--accent-green))] pl-6">
@@ -126,10 +127,10 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
               <div className="hidden md:block absolute top-6 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-[hsl(var(--accent-green))] via-[hsla(var(--accent-green)/0.5)] to-[hsl(var(--accent-green))]" />
 
               {[
-                { year: '2009', title: 'Mis inicios', desc: 'Compitiendo en Men\'s Physique' },
-                { year: '2015', title: 'Filosofía Método JAFN', desc: 'Superación más allá de competición' },
-                { year: '2018', title: 'Máster y Formación', desc: 'Resultados de 180° de verdad' },
-                { year: '2024', title: 'Consolidación', desc: 'Método probado con cientos de clientes' },
+                { year: '2018', title: 'Mis inicios', desc: 'Primeros pasos en nutrición y entrenamiento' },
+                { year: '2020', title: 'Formación intensiva', desc: 'Máster y especialización profesional' },
+                { year: '2023', title: 'Método JAFN', desc: 'Creación del sistema estructurado' },
+                { year: '2026', title: 'Consolidación', desc: 'Método probado con cientos de clientes' },
               ].map((item, i) => (
                 <div key={i} className="text-center relative">
                   <div className="w-12 h-12 rounded-full bg-[hsl(var(--accent-green))] text-[hsl(var(--dark-bg))] font-bold text-xs flex items-center justify-center mx-auto mb-4 relative z-10 shadow-lg shadow-[hsla(var(--accent-green)/0.3)]">
@@ -143,28 +144,37 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen }) => {
           </div>
         </ScrollReveal>
 
-        {/* Final CTA */}
+        {/* Know more button + Final CTA */}
         <ScrollReveal direction="up" delay={300}>
           <div className="text-center max-w-3xl mx-auto">
             <blockquote className="text-lg md:text-xl italic text-[hsl(var(--text-secondary))] mb-8 leading-relaxed">
               "Voy a ayudarte a construir la disciplina y la estrategia que necesitas para lograr el resultado más ambicioso que puedas imaginar."
             </blockquote>
-            <Button
-              onClick={onQuestionnaireOpen}
-              className="btn-cta text-base px-10 py-4"
-            >
-              Realizar Evaluación
-            </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button
+                onClick={onQuestionnaireOpen}
+                className="btn-cta text-base px-10 py-4"
+              >
+                Realizar Evaluación
+              </Button>
+              <Button
+                onClick={onOpenAboutDetail}
+                variant="outline"
+                className="text-base px-8 py-4 border-[hsl(var(--accent-green))]/50 text-[hsl(var(--accent-green-light))] hover:bg-[hsla(var(--accent-green)/0.1)]"
+              >
+                Conocer más sobre mí <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
           </div>
         </ScrollReveal>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
           {[
-            { value: '30+', label: 'Clientes en Seguimiento' },
-            { value: '6', label: 'Meses de Experiencia' },
+            { value: '100+', label: 'Clientes Asesorados' },
+            { value: '+3', label: 'Años de Experiencia' },
             { value: '100%', label: 'Compromiso Personal' },
-            { value: '100+', label: 'Objetivos Alcanzados' },
+            { value: '5000+', label: 'Horas de Formación' },
           ].map((stat, i) => (
             <ScrollReveal key={i} direction="up" delay={i * 100}>
               <div className="glass-card-light p-5 text-center">

@@ -156,7 +156,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramMo
                   </ul>
 
                   <Button
-                    onClick={() => handleSelectPlan(plan)}
+                    onClick={() => onOpenProgramModal?.(plan.id)}
                     className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
                       plan.highlighted
                         ? 'btn-cta'
