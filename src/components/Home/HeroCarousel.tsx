@@ -104,8 +104,8 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           </div>
 
           {/* Right: Video */}
-          <div className="hidden lg:flex justify-center items-center pb-8 lg:pb-24">
-            <div className="relative group rounded-2xl overflow-hidden border-2 border-[hsl(var(--accent-green))] shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_30px_hsla(142,71%,45%,0.15)] w-full max-w-md">
+          <div className="hidden lg:flex justify-center items-center pb-8 lg:pb-16">
+            <div className="relative group rounded-2xl overflow-hidden border-2 border-[hsl(var(--accent-green))] shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_30px_hsla(142,71%,45%,0.15)] w-full max-w-lg">
               <video
                 ref={videoRef}
                 src="/videos/hero-video.mp4"
