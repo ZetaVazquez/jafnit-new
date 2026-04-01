@@ -98,7 +98,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
             <div className="pt-4">
               <p className="text-white/50 text-sm font-medium">
-                José Antonio Fernández · <span className="text-white/40">Coach Nutricional & Fitness</span>
+                José Antonio Figueiras Núñez · <span className="text-white/40">Coach Nutricional & Fitness</span>
               </p>
             </div>
           </div>
