@@ -17,7 +17,8 @@ import {
   Home,
   Newspaper,
   Gift,
-  Lock
+  Lock,
+  ChevronRight
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -48,24 +49,20 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { toast } = useToast();
 
-  // Actualizar la vista cuando cambie el initialView
   useEffect(() => {
     setCurrentView(initialView);
   }, [initialView]);
 
-  // Notificar cambios de vista al componente padre
   useEffect(() => {
     if (onViewChange) {
       onViewChange(currentView);
     }
   }, [currentView, onViewChange]);
 
-  // Verificar si debe mostrar el modal de bienvenida
   useEffect(() => {
     const checkWelcomeModalStatus = async () => {
       if (user && hasActiveSubscription) {
         try {
-          // Verificar en la base de datos si ya se mostró el modal
           const { data: modalInteraction } = await supabase
             .from('user_modal_interactions')
             .select('*')
@@ -78,7 +75,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
           }
         } catch (error) {
           console.error('Error checking welcome modal status:', error);
-          // Fallback a localStorage
           const hasSeenWelcomeGift = localStorage.getItem(`welcome_gift_seen_${user.id}`);
           if (!hasSeenWelcomeGift) {
             setShowWelcomeModal(true);
@@ -94,7 +90,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     setShowWelcomeModal(false);
     if (user) {
       try {
-        // Guardar en la base de datos que ya se mostró el modal
         await supabase
           .from('user_modal_interactions')
           .upsert({
@@ -105,7 +100,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
           });
       } catch (error) {
         console.error('Error saving welcome modal interaction:', error);
-        // Fallback a localStorage
         localStorage.setItem(`welcome_gift_seen_${user.id}`, 'true');
       }
     }
@@ -115,18 +109,11 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     try {
       console.log('Client dashboard logout initiated...');
       await signOut();
-      
-      // Clear any stored data
       localStorage.clear();
-      
-      // Call the onLogout callback if provided
       if (onLogout) {
         onLogout();
       }
-      
-      // Force reload to ensure clean state
       window.location.href = '/';
-      
       toast({
         title: "Sesión cerrada",
         description: "Has cerrado sesión exitosamente",
@@ -138,8 +125,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         description: "Hubo un problema al cerrar sesión",
         variant: "destructive",
       });
-      
-      // Force logout even if there's an error
       localStorage.clear();
       window.location.href = '/';
     }
@@ -157,7 +142,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     alert('Abriendo chat con tu entrenador personal...');
   };
 
-  // Función para verificar acceso a secciones premium
   const handlePremiumView = (view: string) => {
     if (!hasActiveSubscription) {
       toast({
@@ -170,65 +154,51 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     setCurrentView(view);
   };
 
-  if (currentView === 'goals') {
-    return <MyGoals onGoBack={() => setCurrentView('dashboard')} />;
-  }
+  if (currentView === 'goals') return <MyGoals onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'progress') return <MyProgress onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'diets') return <MyDiets onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'workouts') return <MyWorkouts onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'profile') return <UserProfile onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'schedule') return <MySchedule onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'news') return <News onGoBack={() => setCurrentView('dashboard')} />;
+  if (currentView === 'gifts') return <Gifts onGoBack={() => setCurrentView('dashboard')} />;
 
-  if (currentView === 'progress') {
-    return <MyProgress onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'diets') {
-    return <MyDiets onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'workouts') {
-    return <MyWorkouts onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'profile') {
-    return <UserProfile onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'schedule') {
-    return <MySchedule onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'news') {
-    return <News onGoBack={() => setCurrentView('dashboard')} />;
-  }
-
-  if (currentView === 'gifts') {
-    return <Gifts onGoBack={() => setCurrentView('dashboard')} />;
-  }
+  const dashboardCards = [
+    { id: 'profile', icon: User, title: 'Mi Perfil', desc: 'Gestiona tu información personal, configuraciones y preferencias.', premium: false },
+    { id: 'goals', icon: Target, title: 'Mis Objetivos', desc: 'Sigue y completa tus objetivos diarios de salud y bienestar.', premium: false },
+    { id: 'progress', icon: TrendingUp, title: 'Mi Progreso', desc: 'Visualiza tu evolución y logros a lo largo del tiempo.', premium: false },
+    { id: 'diets', icon: Apple, title: 'Mi Plan Nutricional', desc: 'Accede a tu plan de alimentación personalizado y recetas.', premium: true },
+    { id: 'workouts', icon: Dumbbell, title: 'Mis Entrenamientos', desc: 'Descubre y sigue tus rutinas de ejercicios personalizadas.', premium: true },
+    { id: 'schedule', icon: Calendar, title: 'Mi Agenda', desc: 'Registra tu progreso diario con un calendario editable.', premium: true },
+    { id: 'news', icon: Newspaper, title: 'Noticias', desc: 'Mantente al día con las últimas noticias y actualizaciones.', premium: false },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
-      {/* Welcome Gift Modal */}
+    <div className="min-h-screen bg-[hsl(220,20%,8%)]">
       <WelcomeGiftModal 
         isOpen={showWelcomeModal} 
         onClose={handleCloseWelcomeModal} 
       />
 
       {/* Header */}
-      <header className="bg-white shadow-md">
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Avatar 
-                className="w-12 h-12 cursor-pointer hover:ring-2 hover:ring-nutrition-green transition-all"
+                className="w-12 h-12 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--accent-green))] transition-all border-2 border-[hsl(var(--accent-green))]/30"
                 onClick={() => setCurrentView('profile')}
               >
                 <AvatarImage src={profile?.profile_image_url} />
-                <AvatarFallback className="bg-nutrition-green text-white">
+                <AvatarFallback className="bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))]">
                   {profile?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-2xl font-bold text-nutrition-black">
+                <h1 className="text-2xl font-bold text-white">
                   ¡Hola, {profile?.name || 'Usuario'}!
                 </h1>
-                <p className="text-nutrition-gray">Bienvenido a tu panel de control</p>
+                <p className="text-white/50">Bienvenido a tu panel de control</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -236,7 +206,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 variant="ghost" 
                 size="sm"
                 onClick={handleChatWithTrainer}
-                className="text-nutrition-green hover:bg-nutrition-green-lighter"
+                className="text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Chat
@@ -245,6 +215,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 variant="ghost" 
                 size="sm"
                 onClick={handleChatWithTrainer}
+                className="text-white/60 hover:text-white hover:bg-white/10"
               >
                 <Bell className="w-4 h-4" />
               </Button>
@@ -253,7 +224,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                   variant="outline"
                   size="sm"
                   onClick={onNavigateToHome}
-                  className="text-nutrition-green border-nutrition-green hover:bg-nutrition-green hover:text-white"
+                  className="border-[hsl(var(--accent-green))]/30 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10 bg-transparent"
                 >
                   <Home className="w-4 h-4 mr-2" />
                   Página Principal
@@ -263,7 +234,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 variant="ghost"
                 size="sm"
                 onClick={handleSignOut}
-                className="text-nutrition-gray hover:text-nutrition-green"
+                className="text-white/50 hover:text-red-400 hover:bg-red-500/10"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Cerrar Sesión
@@ -287,212 +258,68 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
           <SubscriptionInfo />
         </div>
 
-        {/* Main Dashboard Cards */}
+        {/* Dashboard Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Profile Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('profile')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <User className="w-5 h-5 mr-2" />
-                Mi Perfil
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Gestiona tu información personal, configuraciones y preferencias.
-              </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Perfil
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Goals Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('goals')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <Target className="w-5 h-5 mr-2" />
-                Mis Objetivos
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Sigue y completa tus objetivos diarios de salud y bienestar.
-              </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Objetivos
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Progress Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('progress')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <TrendingUp className="w-5 h-5 mr-2" />
-                Mi Progreso
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Visualiza tu evolución y logros a lo largo del tiempo.
-              </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Progreso
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Diets Card */}
-          <Card 
-            className={`cursor-pointer hover:shadow-lg transition-shadow ${
-              !hasActiveSubscription ? 'opacity-75' : ''
-            }`}
-            onClick={() => handlePremiumView('diets')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <Apple className="w-5 h-5 mr-2" />
-                Mi Plan Nutricional
-                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Accede a tu plan de alimentación personalizado y recetas.
-              </p>
-              <Button 
-                className={`w-full ${
-                  hasActiveSubscription 
-                    ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
-                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                }`}
-                disabled={!hasActiveSubscription}
+          {dashboardCards.map((card) => {
+            const locked = card.premium && !hasActiveSubscription;
+            return (
+              <Card 
+                key={card.id}
+                className={`cursor-pointer border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group ${locked ? 'opacity-60' : ''}`}
+                onClick={() => card.premium ? handlePremiumView(card.id) : setCurrentView(card.id)}
               >
-                {hasActiveSubscription ? 'Ver Plan' : 'Suscripción Requerida'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Workouts Card */}
-          <Card 
-            className={`cursor-pointer hover:shadow-lg transition-shadow ${
-              !hasActiveSubscription ? 'opacity-75' : ''
-            }`}
-            onClick={() => handlePremiumView('workouts')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <Dumbbell className="w-5 h-5 mr-2" />
-                Mis Entrenamientos
-                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Descubre y sigue tus rutinas de ejercicios personalizadas.
-              </p>
-              <Button 
-                className={`w-full ${
-                  hasActiveSubscription 
-                    ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
-                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                }`}
-                disabled={!hasActiveSubscription}
-              >
-                {hasActiveSubscription ? 'Ver Entrenamientos' : 'Suscripción Requerida'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Schedule Card */}
-          <Card 
-            className={`cursor-pointer hover:shadow-lg transition-shadow ${
-              !hasActiveSubscription ? 'opacity-75' : ''
-            }`}
-            onClick={() => handlePremiumView('schedule')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <Calendar className="w-5 h-5 mr-2" />
-                Mi Agenda
-                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Registra tu progreso diario con un calendario editable.
-              </p>
-              <Button 
-                className={`w-full ${
-                  hasActiveSubscription 
-                    ? 'bg-nutrition-green hover:bg-nutrition-green-dark text-white'
-                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                }`}
-                disabled={!hasActiveSubscription}
-              >
-                {hasActiveSubscription ? 'Ver Agenda' : 'Suscripción Requerida'}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* News Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setCurrentView('news')}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center text-nutrition-green">
-                <Newspaper className="w-5 h-5 mr-2" />
-                Noticias
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-nutrition-gray mb-4">
-                Mantente al día con las últimas noticias y actualizaciones.
-              </p>
-              <Button className="w-full bg-nutrition-green hover:bg-nutrition-green-dark text-white">
-                Ver Noticias
-              </Button>
-            </CardContent>
-          </Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-[hsl(var(--accent-green))]">
+                    <card.icon className="w-5 h-5 mr-2" />
+                    {card.title}
+                    {locked && <Lock className="w-4 h-4 ml-2 text-white/30" />}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-white/50 mb-4">{card.desc}</p>
+                  <Button 
+                    className={`w-full ${locked 
+                      ? 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10' 
+                      : 'bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/30 border border-[hsl(var(--accent-green))]/30'
+                    }`}
+                    disabled={locked}
+                  >
+                    {locked ? 'Suscripción Requerida' : (
+                      <span className="flex items-center gap-2">
+                        Ver {card.title.replace('Mi ', '').replace('Mis ', '')} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
 
           {/* Gifts Card */}
           <Card 
-            className={`cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 ${
-              !hasActiveSubscription ? 'opacity-75' : ''
-            }`}
+            className={`cursor-pointer border-yellow-500/30 bg-yellow-500/5 backdrop-blur-sm hover:bg-yellow-500/10 transition-all duration-300 ${!hasActiveSubscription ? 'opacity-60' : ''}`}
             onClick={() => hasActiveSubscription ? setCurrentView('gifts') : handlePremiumView('gifts')}
           >
             <CardHeader>
-              <CardTitle className="flex items-center text-orange-600">
+              <CardTitle className="flex items-center text-yellow-400">
                 <Gift className="w-5 h-5 mr-2" />
                 Gifts 🎁
-                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-gray-400" />}
+                {!hasActiveSubscription && <Lock className="w-4 h-4 ml-2 text-white/30" />}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-orange-700 mb-4">
+              <p className="text-white/50 mb-4">
                 Accede a tus regalos exclusivos y descargas especiales.
               </p>
               <Button 
                 className={`w-full font-bold ${
                   hasActiveSubscription 
-                    ? 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white'
-                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                    ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 hover:from-yellow-500/30 hover:to-orange-500/30 border border-yellow-500/30'
+                    : 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10'
                 }`}
                 disabled={!hasActiveSubscription}
               >
-                {hasActiveSubscription ? 'Ver Regalos' : 'Suscripción Requerida'}
+                {hasActiveSubscription ? '🎁 Ver Regalos' : 'Suscripción Requerida'}
               </Button>
             </CardContent>
           </Card>
