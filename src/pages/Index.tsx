@@ -243,6 +243,7 @@ const Index = () => {
           <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} onOpenAboutDetail={() => setShowAboutDetailModal(true)} />
           <Services />
           <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
+          <Results />
           <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
           <News />
           <FAQ />
