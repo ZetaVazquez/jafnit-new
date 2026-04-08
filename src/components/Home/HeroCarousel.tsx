@@ -81,12 +81,13 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
             </div>
 
             <div className="flex flex-col sm:flex-row items-start gap-4">
-              <Button
+              <button
                 onClick={onStartQuestionnaire}
-                className="btn-cta text-base px-8 py-4 rounded-lg"
+                className="px-8 py-4 rounded-lg font-bold text-base transition-all duration-300 hover:-translate-y-0.5"
+                style={{ backgroundColor: 'hsl(142, 71%, 45%)', color: '#ffffff' }}
               >
                 Realizar Evaluación
-              </Button>
+              </button>
               <button
                 onClick={handleScrollToPrograms}
                 className="text-white/70 hover:text-white font-medium flex items-center gap-1 transition-colors py-3"
