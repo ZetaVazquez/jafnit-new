@@ -315,13 +315,13 @@ const Header: React.FC<HeaderProps> = ({
                     >
                       Acceso Clientes
                     </Button>
-                    <Button
+                    <button
                       onClick={handleRegisterClick}
-                      variant="outline"
-                      className="w-full border-white/20 text-white hover:bg-white/10"
+                      className="w-full py-3 rounded-md font-bold text-sm transition-all duration-300 border border-white/20 text-white hover:bg-white/10"
+                      style={{ backgroundColor: 'hsl(142, 71%, 35%)', color: '#ffffff' }}
                     >
                       Realizar Evaluación
-                    </Button>
+                    </button>
                   </div>
                 )}
               </nav>
