@@ -317,7 +317,7 @@ const Header: React.FC<HeaderProps> = ({
                     </Button>
                     <button
                       onClick={handleRegisterClick}
-                      className="w-full py-3 rounded-md font-bold text-sm transition-all duration-300 border border-white/20 text-white hover:bg-white/10"
+                      className="w-full py-3 rounded-md font-bold text-sm transition-all duration-300 border border-white/20 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_hsla(142,71%,45%,0.4)]"
                       style={{ backgroundColor: 'hsl(142, 71%, 35%)', color: '#ffffff' }}
                     >
                       Realizar Evaluación
