@@ -83,8 +83,8 @@
   /* CTA button style */
   .btn-cta {
     @apply px-8 py-4 rounded-lg font-bold text-base transition-all duration-300;
-    background-color: hsl(var(--accent-green));
-    color: white;
+    background-color: hsl(var(--accent-green)) !important;
+    color: white !important;
   }
 
   .btn-cta:hover {
