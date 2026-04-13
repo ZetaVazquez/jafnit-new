@@ -10,155 +10,337 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
-interface Earning { id: string; amount: number; description: string; earning_date: string; created_at: string; }
-interface AdminEarningsProps { onGoBack: () => void; }
+interface Earning {
+  id: string;
+  amount: number;
+  description: string;
+  earning_date: string;
+  created_at: string;
+}
+
+interface AdminEarningsProps {
+  onGoBack: () => void;
+}
 
 const AdminEarnings: React.FC<AdminEarningsProps> = ({ onGoBack }) => {
   const [earnings, setEarnings] = useState<Earning[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [formData, setFormData] = useState({ amount: '', description: '', earning_date: new Date().toISOString().split('T')[0] });
+  const [formData, setFormData] = useState({
+    amount: '',
+    description: '',
+    earning_date: new Date().toISOString().split('T')[0]
+  });
   const { user } = useAuth();
   const { toast } = useToast();
 
-  useEffect(() => { if (user) fetchEarnings(); }, [user]);
+  useEffect(() => {
+    if (user) {
+      fetchEarnings();
+    }
+  }, [user]);
 
   const fetchEarnings = async () => {
     if (!user) return;
+
     try {
-      const { data, error } = await supabase.from('admin_earnings').select('*').eq('admin_id', user.id).order('earning_date', { ascending: false });
+      const { data, error } = await supabase
+        .from('admin_earnings')
+        .select('*')
+        .eq('admin_id', user.id)
+        .order('earning_date', { ascending: false });
+
       if (error) throw error;
       setEarnings(data || []);
-    } catch (error) { console.error('Error fetching earnings:', error); }
+    } catch (error) {
+      console.error('Error fetching earnings:', error);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.amount || !user) { toast({ title: "Error", description: "Completa la cantidad.", variant: "destructive" }); return; }
+    
+    if (!formData.amount || !user) {
+      toast({
+        title: "Error",
+        description: "Completa la cantidad.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const { error } = await supabase.from('admin_earnings').insert([{ admin_id: user.id, amount: parseFloat(formData.amount), description: formData.description, earning_date: formData.earning_date }]);
+      const { error } = await supabase
+        .from('admin_earnings')
+        .insert([{
+          admin_id: user.id,
+          amount: parseFloat(formData.amount),
+          description: formData.description,
+          earning_date: formData.earning_date
+        }]);
+
       if (error) throw error;
-      toast({ title: "Ganancia agregada" });
+
+      toast({
+        title: "Ganancia agregada",
+        description: "La ganancia ha sido registrada exitosamente.",
+      });
+
       setFormData({ amount: '', description: '', earning_date: new Date().toISOString().split('T')[0] });
-      setShowAddForm(false); fetchEarnings();
-    } catch (error) { toast({ title: "Error", description: "No se pudo registrar.", variant: "destructive" }); }
+      setShowAddForm(false);
+      fetchEarnings();
+    } catch (error) {
+      console.error('Error adding earning:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo registrar la ganancia.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const monthlyEarnings = earnings.filter(e => { const d = new Date(e.earning_date); return d.getMonth() === currentMonth && d.getFullYear() === currentYear; });
-  const yearlyEarnings = earnings.filter(e => new Date(e.earning_date).getFullYear() === currentYear);
-  const monthlyTotal = monthlyEarnings.reduce((s, e) => s + e.amount, 0);
-  const yearlyTotal = yearlyEarnings.reduce((s, e) => s + e.amount, 0);
+  const getMonthlyEarnings = () => {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    
+    return earnings.filter(earning => {
+      const earningDate = new Date(earning.earning_date);
+      return earningDate.getMonth() === currentMonth && earningDate.getFullYear() === currentYear;
+    });
+  };
+
+  const getYearlyEarnings = () => {
+    const currentYear = new Date().getFullYear();
+    
+    return earnings.filter(earning => {
+      const earningDate = new Date(earning.earning_date);
+      return earningDate.getFullYear() === currentYear;
+    });
+  };
+
+  const calculateTotal = (earningsList: Earning[]) => {
+    return earningsList.reduce((total, earning) => total + earning.amount, 0);
+  };
+
+  const monthlyEarnings = getMonthlyEarnings();
+  const yearlyEarnings = getYearlyEarnings();
+  const monthlyTotal = calculateTotal(monthlyEarnings);
+  const yearlyTotal = calculateTotal(yearlyEarnings);
 
   const getMonthlyBreakdown = () => {
-    const breakdown: Record<string, number> = {};
-    for (let m = 0; m < 12; m++) breakdown[new Date(currentYear, m).toLocaleString('es', { month: 'long' })] = 0;
-    yearlyEarnings.forEach(e => { const mn = new Date(e.earning_date).toLocaleString('es', { month: 'long' }); breakdown[mn] += e.amount; });
+    const breakdown: { [key: string]: number } = {};
+    const currentYear = new Date().getFullYear();
+    
+    for (let month = 0; month < 12; month++) {
+      const monthName = new Date(currentYear, month).toLocaleString('es', { month: 'long' });
+      breakdown[monthName] = 0;
+    }
+    
+    yearlyEarnings.forEach(earning => {
+      const earningDate = new Date(earning.earning_date);
+      const monthName = earningDate.toLocaleString('es', { month: 'long' });
+      breakdown[monthName] += earning.amount;
+    });
+    
     return breakdown;
   };
 
-  const renderEarningsList = (list: Earning[]) => (
-    list.length > 0 ? list.map(e => (
-      <div key={e.id} className="flex justify-between items-center p-4 border border-white/10 rounded-lg bg-white/5">
-        <div>
-          <p className="font-medium text-white">€{e.amount.toFixed(2)}</p>
-          {e.description && <p className="text-sm text-white/50">{e.description}</p>}
-          <p className="text-xs text-white/30">{new Date(e.earning_date).toLocaleDateString()}</p>
-        </div>
-        <DollarSign className="w-5 h-5 text-[hsl(var(--accent-green))]" />
-      </div>
-    )) : <div className="text-center py-8 text-white/40">No hay ganancias registradas.</div>
-  );
+  const monthlyBreakdown = getMonthlyBreakdown();
 
   return (
-    <div className="min-h-screen bg-[hsl(220,20%,8%)]">
+    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <Button variant="outline" onClick={onGoBack} className="mr-4 border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent">
-              <ArrowLeft className="w-4 h-4 mr-2" />Volver
+            <Button variant="outline" onClick={onGoBack} className="mr-4">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver
             </Button>
-            <h1 className="text-3xl font-bold text-[hsl(var(--accent-green))]">Ganancias</h1>
+            <h1 className="text-3xl font-bold text-nutrition-green">Ganancias</h1>
           </div>
-          <Button onClick={() => setShowAddForm(true)} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">
-            <Plus className="w-4 h-4 mr-2" />Agregar Ganancia
+          <Button 
+            onClick={() => setShowAddForm(true)}
+            className="bg-nutrition-green hover:bg-nutrition-green-dark text-white"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Agregar Ganancia
           </Button>
         </div>
 
+        {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card className="border-[hsl(var(--accent-green))]/20 bg-[hsl(var(--accent-green))]/10 backdrop-blur-sm">
+          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
             <CardContent className="py-6">
               <div className="flex items-center justify-between">
-                <div><p className="text-white/60 text-sm">Ganancias Este Mes</p><p className="text-3xl font-bold text-[hsl(var(--accent-green))]">€{monthlyTotal.toFixed(2)}</p></div>
-                <Calendar className="w-8 h-8 text-[hsl(var(--accent-green))]/60" />
+                <div>
+                  <p className="text-white/80 text-sm">Ganancias Este Mes</p>
+                  <p className="text-3xl font-bold">€{monthlyTotal.toFixed(2)}</p>
+                </div>
+                <Calendar className="w-8 h-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
-          <Card className="border-blue-500/20 bg-blue-500/10 backdrop-blur-sm">
+
+          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
             <CardContent className="py-6">
               <div className="flex items-center justify-between">
-                <div><p className="text-white/60 text-sm">Ganancias Este Año</p><p className="text-3xl font-bold text-blue-400">€{yearlyTotal.toFixed(2)}</p></div>
-                <TrendingUp className="w-8 h-8 text-blue-400/60" />
+                <div>
+                  <p className="text-white/80 text-sm">Ganancias Este Año</p>
+                  <p className="text-3xl font-bold">€{yearlyTotal.toFixed(2)}</p>
+                </div>
+                <TrendingUp className="w-8 h-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
         </div>
 
+        {/* Add Earning Form */}
         {showAddForm && (
-          <Card className="mb-6 border-white/10 bg-white/5 backdrop-blur-sm">
-            <CardHeader><CardTitle className="text-white">Agregar Nueva Ganancia</CardTitle></CardHeader>
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Agregar Nueva Ganancia</CardTitle>
+            </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">Cantidad (€)</label>
-                    <Input type="number" step="0.01" value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })} placeholder="0.00" required className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                    <label className="block text-sm font-medium mb-2">Cantidad (€)</label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={formData.amount}
+                      onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                      placeholder="0.00"
+                      required
+                    />
                   </div>
+                  
                   <div>
-                    <label className="block text-sm font-medium text-white/50 mb-2">Fecha</label>
-                    <Input type="date" value={formData.earning_date} onChange={(e) => setFormData({ ...formData, earning_date: e.target.value })} required className="bg-white/5 border-white/10 text-white" />
+                    <label className="block text-sm font-medium mb-2">Fecha</label>
+                    <Input
+                      type="date"
+                      value={formData.earning_date}
+                      onChange={(e) => setFormData({ ...formData, earning_date: e.target.value })}
+                      required
+                    />
                   </div>
                 </div>
+                
                 <div>
-                  <label className="block text-sm font-medium text-white/50 mb-2">Descripción</label>
-                  <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Descripción..." rows={3} className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                  <label className="block text-sm font-medium mb-2">Descripción</label>
+                  <Textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Descripción de la ganancia..."
+                    rows={3}
+                  />
                 </div>
+                
                 <div className="flex space-x-2">
-                  <Button type="submit" className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">Agregar</Button>
-                  <Button type="button" variant="outline" onClick={() => setShowAddForm(false)} className="border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent">Cancelar</Button>
+                  <Button 
+                    type="submit"
+                    className="bg-nutrition-green hover:bg-nutrition-green-dark text-white"
+                  >
+                    Agregar Ganancia
+                  </Button>
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowAddForm(false);
+                      setFormData({ amount: '', description: '', earning_date: new Date().toISOString().split('T')[0] });
+                    }}
+                  >
+                    Cancelar
+                  </Button>
                 </div>
               </form>
             </CardContent>
           </Card>
         )}
 
+        {/* Earnings Tabs */}
         <Tabs defaultValue="monthly" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white/5 border border-white/10">
-            <TabsTrigger value="monthly" className="data-[state=active]:bg-[hsl(var(--accent-green))]/20 data-[state=active]:text-[hsl(var(--accent-green))] text-white/50">Este Mes</TabsTrigger>
-            <TabsTrigger value="yearly" className="data-[state=active]:bg-[hsl(var(--accent-green))]/20 data-[state=active]:text-[hsl(var(--accent-green))] text-white/50">Este Año</TabsTrigger>
-            <TabsTrigger value="breakdown" className="data-[state=active]:bg-[hsl(var(--accent-green))]/20 data-[state=active]:text-[hsl(var(--accent-green))] text-white/50">Desglose</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="monthly">Este Mes</TabsTrigger>
+            <TabsTrigger value="yearly">Este Año</TabsTrigger>
+            <TabsTrigger value="breakdown">Desglose Mensual</TabsTrigger>
           </TabsList>
+          
           <TabsContent value="monthly">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white">Ganancias de {new Date().toLocaleString('es', { month: 'long', year: 'numeric' })}</CardTitle></CardHeader>
-              <CardContent><div className="space-y-4">{renderEarningsList(monthlyEarnings)}</div></CardContent>
+            <Card>
+              <CardHeader>
+                <CardTitle>Ganancias de {new Date().toLocaleString('es', { month: 'long', year: 'numeric' })}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {monthlyEarnings.length > 0 ? (
+                    monthlyEarnings.map((earning) => (
+                      <div key={earning.id} className="flex justify-between items-center p-4 border rounded-lg">
+                        <div>
+                          <p className="font-medium">€{earning.amount.toFixed(2)}</p>
+                          {earning.description && (
+                            <p className="text-sm text-gray-600">{earning.description}</p>
+                          )}
+                          <p className="text-xs text-gray-400">
+                            {new Date(earning.earning_date).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <DollarSign className="w-5 h-5 text-green-500" />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      No hay ganancias registradas este mes.
+                    </div>
+                  )}
+                </div>
+              </CardContent>
             </Card>
           </TabsContent>
+          
           <TabsContent value="yearly">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white">Ganancias de {currentYear}</CardTitle></CardHeader>
-              <CardContent><div className="space-y-4">{renderEarningsList(yearlyEarnings)}</div></CardContent>
+            <Card>
+              <CardHeader>
+                <CardTitle>Ganancias de {new Date().getFullYear()}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {yearlyEarnings.length > 0 ? (
+                    yearlyEarnings.map((earning) => (
+                      <div key={earning.id} className="flex justify-between items-center p-4 border rounded-lg">
+                        <div>
+                          <p className="font-medium">€{earning.amount.toFixed(2)}</p>
+                          {earning.description && (
+                            <p className="text-sm text-gray-600">{earning.description}</p>
+                          )}
+                          <p className="text-xs text-gray-400">
+                            {new Date(earning.earning_date).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <DollarSign className="w-5 h-5 text-green-500" />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      No hay ganancias registradas este año.
+                    </div>
+                  )}
+                </div>
+              </CardContent>
             </Card>
           </TabsContent>
+          
           <TabsContent value="breakdown">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white">Desglose Mensual {currentYear}</CardTitle></CardHeader>
+            <Card>
+              <CardHeader>
+                <CardTitle>Desglose Mensual {new Date().getFullYear()}</CardTitle>
+              </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {Object.entries(getMonthlyBreakdown()).map(([month, amount]) => (
-                    <div key={month} className="p-4 border border-white/10 rounded-lg text-center bg-white/5">
-                      <h3 className="font-medium capitalize text-white/70">{month}</h3>
-                      <p className="text-2xl font-bold text-[hsl(var(--accent-green))]">€{amount.toFixed(2)}</p>
+                  {Object.entries(monthlyBreakdown).map(([month, amount]) => (
+                    <div key={month} className="p-4 border rounded-lg text-center">
+                      <h3 className="font-medium capitalize">{month}</h3>
+                      <p className="text-2xl font-bold text-nutrition-green">€{amount.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>

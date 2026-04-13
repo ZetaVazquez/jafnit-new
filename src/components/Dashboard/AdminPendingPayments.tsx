@@ -9,7 +9,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { PendingPayment } from '@/types/database';
 
-interface AdminPendingPaymentsProps { onGoBack: () => void; }
+interface AdminPendingPaymentsProps {
+  onGoBack: () => void;
+}
 
 const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack }) => {
   const [pendingPayments, setPendingPayments] = useState<PendingPayment[]>([]);
@@ -18,138 +20,296 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => { fetchPendingPayments(); }, []);
+  useEffect(() => {
+    fetchPendingPayments();
+  }, []);
 
   const fetchPendingPayments = async () => {
     try {
-      const { data: paymentsData, error: paymentsError } = await supabase.from('pending_payments').select('*').order('created_at', { ascending: false });
+      // First get pending payments
+      const { data: paymentsData, error: paymentsError } = await supabase
+        .from('pending_payments')
+        .select('*')
+        .order('created_at', { ascending: false });
+
       if (paymentsError) throw paymentsError;
+
+      // Then get profiles for each payment
       const paymentsWithProfiles = await Promise.all(
         (paymentsData || []).map(async (payment) => {
-          const { data: profileData } = await supabase.from('profiles').select('id, name, email, created_at, updated_at').eq('id', payment.user_id).maybeSingle();
-          return { ...payment, profiles: profileData || null } as PendingPayment;
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, name, email, created_at, updated_at')
+            .eq('id', payment.user_id)
+            .maybeSingle();
+
+          if (profileError) {
+            console.error('Error fetching profile:', profileError);
+          }
+
+          return {
+            ...payment,
+            profiles: profileData || null
+          } as PendingPayment;
         })
       );
+
       setPendingPayments(paymentsWithProfiles);
-    } catch (error) { console.error('Error:', error); toast({ title: "Error", description: "No se pudieron cargar los pagos.", variant: "destructive" }); }
-    finally { setLoading(false); }
+    } catch (error) {
+      console.error('Error fetching pending payments:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar los pagos pendientes.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleApprovePayment = async (payment: PendingPayment) => {
     try {
-      const startDate = new Date(); const endDate = new Date();
-      if (payment.plan_type === 'monthly') endDate.setMonth(endDate.getMonth() + 1);
-      else endDate.setMonth(endDate.getMonth() + 3);
-      const { error: subErr } = await supabase.from('subscriptions').upsert({ user_id: payment.user_id, plan_type: payment.plan_type, status: 'active', start_date: startDate.toISOString(), end_date: endDate.toISOString(), payment_method: 'stripe', amount: payment.amount });
-      if (subErr) throw subErr;
-      const { error: earnErr } = await supabase.from('admin_earnings').insert({ admin_id: (await supabase.auth.getUser()).data.user?.id, amount: payment.amount, description: `Pago ${payment.plan_type} - ${payment.profiles?.name}`, earning_date: new Date().toISOString().split('T')[0] });
-      if (earnErr) throw earnErr;
-      const { error: upErr } = await supabase.from('pending_payments').update({ status: 'approved' }).eq('id', payment.id);
-      if (upErr) throw upErr;
-      toast({ title: "Pago aprobado", description: `Suscripción activada para ${payment.profiles?.name}` });
+      // Calcular fechas de suscripción
+      const startDate = new Date();
+      const endDate = new Date();
+      if (payment.plan_type === 'monthly') {
+        endDate.setMonth(endDate.getMonth() + 1);
+      } else {
+        endDate.setMonth(endDate.getMonth() + 3);
+      }
+
+      // Crear o actualizar suscripción
+      const { error: subscriptionError } = await supabase
+        .from('subscriptions')
+        .upsert({
+          user_id: payment.user_id,
+          plan_type: payment.plan_type,
+          status: 'active',
+          start_date: startDate.toISOString(),
+          end_date: endDate.toISOString(),
+          payment_method: 'stripe',
+          amount: payment.amount
+        });
+
+      if (subscriptionError) throw subscriptionError;
+
+      // Registrar ganancia para el admin
+      const { error: earningsError } = await supabase
+        .from('admin_earnings')
+        .insert({
+          admin_id: (await supabase.auth.getUser()).data.user?.id,
+          amount: payment.amount,
+          description: `Pago ${payment.plan_type} - ${payment.profiles?.name}`,
+          earning_date: new Date().toISOString().split('T')[0]
+        });
+
+      if (earningsError) throw earningsError;
+
+      // Actualizar estado del pago
+      const { error: updateError } = await supabase
+        .from('pending_payments')
+        .update({ status: 'approved' })
+        .eq('id', payment.id);
+
+      if (updateError) throw updateError;
+
+      toast({
+        title: "Pago aprobado",
+        description: `Suscripción activada para ${payment.profiles?.name}`,
+      });
+
       fetchPendingPayments();
-    } catch (error) { toast({ title: "Error", description: "No se pudo aprobar.", variant: "destructive" }); }
+    } catch (error) {
+      console.error('Error approving payment:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo aprobar el pago.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleRejectPayment = async (payment: PendingPayment) => {
     try {
-      const { error } = await supabase.from('pending_payments').update({ status: 'rejected' }).eq('id', payment.id);
+      const { error } = await supabase
+        .from('pending_payments')
+        .update({ status: 'rejected' })
+        .eq('id', payment.id);
+
       if (error) throw error;
-      toast({ title: "Pago rechazado" }); fetchPendingPayments();
-    } catch (error) { toast({ title: "Error", variant: "destructive" }); }
+
+      toast({
+        title: "Pago rechazado",
+        description: `Pago rechazado para ${payment.profiles?.name}`,
+      });
+
+      fetchPendingPayments();
+    } catch (error) {
+      console.error('Error rejecting payment:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo rechazar el pago.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const getStatusBadge = (status: string) => {
-    if (status === 'pending') return <Badge className="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Pendiente</Badge>;
-    if (status === 'approved') return <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Aprobado</Badge>;
-    return <Badge className="bg-red-500/20 text-red-400 border border-red-500/30">Rechazado</Badge>;
+  const viewReceipt = (payment: PendingPayment) => {
+    setSelectedPayment(payment);
+    setShowReceiptModal(true);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[hsl(220,20%,8%)]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-nutrition-green-lighter to-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[hsl(var(--accent-green))] mx-auto"></div>
-          <p className="mt-4 text-white/50">Cargando pagos pendientes...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-nutrition-green mx-auto"></div>
+          <p className="mt-4 text-nutrition-gray">Cargando pagos pendientes...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[hsl(220,20%,8%)]">
+    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center mb-6">
-          <Button variant="outline" onClick={onGoBack} className="mr-4 border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent">
-            <ArrowLeft className="w-4 h-4 mr-2" />Volver
-          </Button>
-          <h1 className="text-3xl font-bold text-[hsl(var(--accent-green))]">Pagos Pendientes</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <Button
+              variant="outline"
+              onClick={onGoBack}
+              className="mr-4"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver
+            </Button>
+            <h1 className="text-3xl font-bold text-nutrition-green">Pagos Pendientes</h1>
+          </div>
         </div>
 
-        <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center text-white"><DollarSign className="w-5 h-5 mr-2 text-[hsl(var(--accent-green))]" />Pagos Pendientes de Aprobación</CardTitle>
+            <CardTitle className="flex items-center">
+              <DollarSign className="w-5 h-5 mr-2" />
+              Pagos Pendientes de Aprobación
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-white/10 hover:bg-transparent">
-                    <TableHead className="text-white/50">Cliente</TableHead>
-                    <TableHead className="text-white/50">Plan</TableHead>
-                    <TableHead className="text-white/50">Cantidad</TableHead>
-                    <TableHead className="text-white/50">Referencia</TableHead>
-                    <TableHead className="text-white/50">Estado</TableHead>
-                    <TableHead className="text-white/50">Fecha</TableHead>
-                    <TableHead className="text-white/50">Acciones</TableHead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Plan</TableHead>
+                  <TableHead>Cantidad</TableHead>
+                  <TableHead>Referencia</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pendingPayments.map((payment) => (
+                  <TableRow key={payment.id}>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{payment.profiles?.name || 'Usuario desconocido'}</div>
+                        <div className="text-sm text-gray-500">{payment.profiles?.email || 'Email no disponible'}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="capitalize">{payment.plan_type}</TableCell>
+                    <TableCell className="font-medium">€{payment.amount}</TableCell>
+                    <TableCell>{payment.payment_reference || 'N/A'}</TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant={payment.status === 'pending' ? 'default' : 
+                                payment.status === 'approved' ? 'secondary' : 'destructive'}
+                      >
+                        {payment.status === 'pending' ? 'Pendiente' :
+                         payment.status === 'approved' ? 'Aprobado' : 'Rechazado'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(payment.created_at).toLocaleDateString('es-ES')}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => viewReceipt(payment)}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        {payment.status === 'pending' && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleApprovePayment(payment)}
+                              className="text-green-600 hover:text-green-700"
+                            >
+                              <Check className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleRejectPayment(payment)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pendingPayments.map((payment) => (
-                    <TableRow key={payment.id} className="border-white/10 hover:bg-white/5">
-                      <TableCell>
-                        <div className="font-medium text-white">{payment.profiles?.name || 'Desconocido'}</div>
-                        <div className="text-sm text-white/40">{payment.profiles?.email || ''}</div>
-                      </TableCell>
-                      <TableCell className="capitalize text-white/70">{payment.plan_type}</TableCell>
-                      <TableCell className="font-medium text-[hsl(var(--accent-green))]">€{payment.amount}</TableCell>
-                      <TableCell className="text-white/60">{payment.payment_reference || 'N/A'}</TableCell>
-                      <TableCell>{getStatusBadge(payment.status)}</TableCell>
-                      <TableCell className="text-white/50">{new Date(payment.created_at).toLocaleDateString('es-ES')}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Button variant="ghost" size="sm" onClick={() => { setSelectedPayment(payment); setShowReceiptModal(true); }} className="text-white/40 hover:text-white hover:bg-white/10"><Eye className="w-4 h-4" /></Button>
-                          {payment.status === 'pending' && (
-                            <>
-                              <Button variant="ghost" size="sm" onClick={() => handleApprovePayment(payment)} className="text-emerald-400 hover:bg-emerald-500/10"><Check className="w-4 h-4" /></Button>
-                              <Button variant="ghost" size="sm" onClick={() => handleRejectPayment(payment)} className="text-red-400 hover:bg-red-500/10"><X className="w-4 h-4" /></Button>
-                            </>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            {pendingPayments.length === 0 && <div className="text-center py-8 text-white/40">No hay pagos pendientes.</div>}
+                ))}
+              </TableBody>
+            </Table>
+
+            {pendingPayments.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No hay pagos pendientes.
+              </div>
+            )}
           </CardContent>
         </Card>
 
+        {/* Modal para ver comprobante */}
         <Dialog open={showReceiptModal} onOpenChange={setShowReceiptModal}>
-          <DialogContent className="max-w-md bg-[hsl(220,15%,13%)] border-white/10 text-white">
-            <DialogHeader><DialogTitle className="text-[hsl(var(--accent-green))]">Comprobante de Pago</DialogTitle></DialogHeader>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Comprobante de Pago</DialogTitle>
+            </DialogHeader>
             {selectedPayment && (
-              <div className="space-y-4 text-white/70">
-                <div><strong className="text-white">Cliente:</strong> {selectedPayment.profiles?.name || 'Desconocido'}</div>
-                <div><strong className="text-white">Plan:</strong> {selectedPayment.plan_type}</div>
-                <div><strong className="text-white">Cantidad:</strong> <span className="text-[hsl(var(--accent-green))]">€{selectedPayment.amount}</span></div>
-                {selectedPayment.payment_reference && <div><strong className="text-white">Referencia:</strong> {selectedPayment.payment_reference}</div>}
-                {selectedPayment.notes && <div><strong className="text-white">Notas:</strong> {selectedPayment.notes}</div>}
+              <div className="space-y-4">
+                <div>
+                  <strong>Cliente:</strong> {selectedPayment.profiles?.name || 'Usuario desconocido'}
+                </div>
+                <div>
+                  <strong>Plan:</strong> {selectedPayment.plan_type}
+                </div>
+                <div>
+                  <strong>Cantidad:</strong> €{selectedPayment.amount}
+                </div>
+                {selectedPayment.payment_reference && (
+                  <div>
+                    <strong>Referencia:</strong> {selectedPayment.payment_reference}
+                  </div>
+                )}
+                {selectedPayment.notes && (
+                  <div>
+                    <strong>Notas:</strong> {selectedPayment.notes}
+                  </div>
+                )}
                 {selectedPayment.receipt_url && (
                   <div>
-                    <strong className="text-white">Comprobante:</strong>
-                    <img src={`${supabase.storage.from('payment-receipts').getPublicUrl(selectedPayment.receipt_url).data.publicUrl}`} alt="Comprobante" className="mt-2 max-w-full h-auto rounded border border-white/10" />
+                    <strong>Comprobante:</strong>
+                    <img 
+                      src={`${supabase.storage.from('payment-receipts').getPublicUrl(selectedPayment.receipt_url).data.publicUrl}`}
+                      alt="Comprobante de pago"
+                      className="mt-2 max-w-full h-auto rounded border"
+                    />
                   </div>
                 )}
               </div>
