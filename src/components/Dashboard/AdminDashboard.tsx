@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Users, FileText, Dumbbell, DollarSign, TrendingUp, Calendar, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -32,7 +32,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch total clients (excluding admin emails)
         const { count: clientsCount } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true })
@@ -41,19 +40,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
           .neq('email', 'zaiidav347@gmail.com');
         setTotalClients(clientsCount || 0);
 
-        // Fetch total diet plans
         const { count: dietPlansCount } = await supabase
           .from('diet_plans')
           .select('*', { count: 'exact' });
         setTotalDietPlans(dietPlansCount || 0);
 
-        // Fetch total workout plans
         const { count: workoutPlansCount } = await supabase
           .from('workout_plans')
           .select('*', { count: 'exact' });
         setTotalWorkoutPlans(workoutPlansCount || 0);
 
-        // Fetch monthly earnings
         const { data: earningsData, error: earningsError } = await supabase
           .from('admin_earnings')
           .select('amount')
@@ -66,7 +62,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
           setMonthlyEarnings(totalEarnings);
         }
 
-        // Fetch total news
         const { count: newsCount } = await supabase
           .from('admin_news')
           .select('*', { count: 'exact' });
@@ -81,182 +76,74 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
 
   const handleAdminLogout = async () => {
     try {
-      console.log('Admin logout initiated...');
       await signOut();
-      
-      // Call the onLogout callback
       onLogout();
-      
-      toast({
-        title: "Sesión cerrada",
-        description: "Has cerrado sesión exitosamente",
-      });
+      toast({ title: "Sesión cerrada", description: "Has cerrado sesión exitosamente" });
     } catch (error) {
       console.error('Error during admin logout:', error);
-      toast({
-        title: "Error",
-        description: "Hubo un problema al cerrar sesión",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Hubo un problema al cerrar sesión", variant: "destructive" });
     }
   };
 
+  const adminCards = [
+    { key: 'clients' as const, icon: Users, label: 'Clientes', value: `${totalClients} usuarios`, iconColor: 'text-blue-400', iconBg: 'bg-blue-500/20' },
+    { key: 'diet' as const, icon: FileText, label: 'Planes de Dieta', value: `${totalDietPlans} planes`, iconColor: 'text-emerald-400', iconBg: 'bg-emerald-500/20' },
+    { key: 'workout' as const, icon: Dumbbell, label: 'Planes de Ejercicio', value: `${totalWorkoutPlans} planes`, iconColor: 'text-red-400', iconBg: 'bg-red-500/20' },
+    { key: 'pending-payments' as const, icon: Clock, label: 'Pagos Pendientes', value: 'Gestionar pagos', iconColor: 'text-orange-400', iconBg: 'bg-orange-500/20' },
+    { key: 'earnings' as const, icon: DollarSign, label: 'Ganancias Mensuales', value: `€${monthlyEarnings}`, iconColor: 'text-yellow-400', iconBg: 'bg-yellow-500/20' },
+    { key: 'news' as const, icon: PlusCircle, label: 'Creación de Noticias', value: `${totalNews} noticias`, iconColor: 'text-purple-400', iconBg: 'bg-purple-500/20' },
+    { key: 'testimonials' as const, icon: MessageSquare, label: 'Gestión de Comentarios', value: 'Revisar testimonios', iconColor: 'text-indigo-400', iconBg: 'bg-indigo-500/20' },
+    { key: 'questionnaire' as const, icon: ClipboardList, label: 'Respuestas Cuestionarios', value: 'Ver respuestas', iconColor: 'text-teal-400', iconBg: 'bg-teal-500/20' },
+  ];
+
   const renderContent = () => {
     switch (currentView) {
-      case 'clients':
-        return <AdminClientsTable onGoBack={() => setCurrentView('overview')} />;
-      case 'diet':
-        return <AdminDietPlanManager onGoBack={() => setCurrentView('overview')} />;
-      case 'workout':
-        return <AdminWorkoutManager onGoBack={() => setCurrentView('overview')} />;
-      case 'earnings':
-        return <AdminEarnings onGoBack={() => setCurrentView('overview')} />;
-      case 'pending-payments':
-        return <AdminPendingPayments onGoBack={() => setCurrentView('overview')} />;
-      case 'news':
-        return <AdminNewsManager onGoBack={() => setCurrentView('overview')} />;
-      case 'testimonials':
-        return <AdminTestimonials onBack={() => setCurrentView('overview')} />;
-      case 'questionnaire':
-        return <AdminQuestionnaireResponses onGoBack={() => setCurrentView('overview')} />;
+      case 'clients': return <AdminClientsTable onGoBack={() => setCurrentView('overview')} />;
+      case 'diet': return <AdminDietPlanManager onGoBack={() => setCurrentView('overview')} />;
+      case 'workout': return <AdminWorkoutManager onGoBack={() => setCurrentView('overview')} />;
+      case 'earnings': return <AdminEarnings onGoBack={() => setCurrentView('overview')} />;
+      case 'pending-payments': return <AdminPendingPayments onGoBack={() => setCurrentView('overview')} />;
+      case 'news': return <AdminNewsManager onGoBack={() => setCurrentView('overview')} />;
+      case 'testimonials': return <AdminTestimonials onBack={() => setCurrentView('overview')} />;
+      case 'questionnaire': return <AdminQuestionnaireResponses onGoBack={() => setCurrentView('overview')} />;
       default:
         return (
           <div className="container mx-auto px-4 py-8">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-3xl font-bold text-nutrition-green">Panel de Administración</h1>
-                <p className="text-nutrition-gray">Bienvenido, {user?.email}</p>
+                <h1 className="text-3xl font-bold text-[hsl(var(--accent-green))]">Panel de Administración</h1>
+                <p className="text-white/50 mt-1">Bienvenido, {user?.email}</p>
               </div>
-              <div className="flex items-center space-x-4">
-                <Button
-                  variant="outline"
-                  onClick={onNavigateToHome}
-                >
-                  <Home className="w-4 h-4 mr-2" />
-                  Inicio
+              <div className="flex items-center space-x-3">
+                <Button variant="outline" onClick={onNavigateToHome} className="border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent">
+                  <Home className="w-4 h-4 mr-2" />Inicio
                 </Button>
-                <Button
-                  variant="destructive"
-                  onClick={handleAdminLogout}
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Cerrar Sesión
+                <Button onClick={handleAdminLogout} className="bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30">
+                  <LogOut className="w-4 h-4 mr-2" />Cerrar Sesión
                 </Button>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('clients')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-blue-100 rounded-lg">
-                      <Users className="w-6 h-6 text-blue-600" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {adminCards.map(({ key, icon: Icon, label, value, iconColor, iconBg }) => (
+                <Card
+                  key={key}
+                  className="border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_8px_25px_hsla(142,71%,45%,0.15)]"
+                  onClick={() => setCurrentView(key)}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className={`p-3 rounded-xl ${iconBg}`}>
+                        <Icon className={`w-6 h-6 ${iconColor}`} />
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="text-lg font-semibold text-white">{label}</h3>
+                        <p className="text-white/50">{value}</p>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Clientes</h3>
-                      <p className="text-nutrition-gray">{totalClients} usuarios</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('diet')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-green-100 rounded-lg">
-                      <FileText className="w-6 h-6 text-green-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Planes de Dieta</h3>
-                      <p className="text-nutrition-gray">{totalDietPlans} planes</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('workout')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-red-100 rounded-lg">
-                      <Dumbbell className="w-6 h-6 text-red-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Planes de Ejercicio</h3>
-                      <p className="text-nutrition-gray">{totalWorkoutPlans} planes</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('pending-payments')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-orange-100 rounded-lg">
-                      <Clock className="w-6 h-6 text-orange-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Pagos Pendientes</h3>
-                      <p className="text-nutrition-gray">Gestionar pagos de suscripciones</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('earnings')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-yellow-100 rounded-lg">
-                      <DollarSign className="w-6 h-6 text-yellow-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Ganancias Mensuales</h3>
-                      <p className="text-nutrition-gray">€{monthlyEarnings}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('news')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-purple-100 rounded-lg">
-                      <PlusCircle className="w-6 h-6 text-purple-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Creación de Noticias</h3>
-                      <p className="text-nutrition-gray">{totalNews} noticias creadas</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('testimonials')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-indigo-100 rounded-lg">
-                      <MessageSquare className="w-6 h-6 text-indigo-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Gestión de Comentarios</h3>
-                      <p className="text-nutrition-gray">Revisar testimonios</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setCurrentView('questionnaire')}>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 bg-teal-100 rounded-lg">
-                      <ClipboardList className="w-6 h-6 text-teal-600" />
-                    </div>
-                    <div className="ml-4">
-                      <h3 className="text-lg font-semibold text-nutrition-black">Respuestas de Cuestionarios</h3>
-                      <p className="text-nutrition-gray">Ver respuestas de usuarios</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         );
@@ -264,7 +151,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+    <div className="min-h-screen bg-[hsl(220,20%,8%)]">
       {renderContent()}
     </div>
   );
