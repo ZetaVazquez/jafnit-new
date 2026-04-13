@@ -3,10 +3,16 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, TrendingUp, Target, Users, Calendar, Award, Flame, Dumbbell } from 'lucide-react';
 
 const results = [
-  { image: '/images/result-1.jpg', name: 'Carlos M.', duration: '6 meses', kg: '-12 kg', goal: 'Definición' },
-  { image: '/images/result-2.jpg', name: 'María L.', duration: '4 meses', kg: '-8 kg', goal: 'Pérdida de grasa' },
-  { image: '/images/result-3.jpg', name: 'Alejandro R.', duration: '8 meses', kg: '+6 kg músculo', goal: 'Volumen limpio' },
-  { image: '/images/result-4.jpg', name: 'David P.', duration: '5 meses', kg: '-15 kg', goal: 'Recomposición' },
+  { image: '/images/results/ana.jpg', name: 'Ana', duration: '5 meses', kg: '-7 kg', goal: 'Definición' },
+  { image: '/images/results/rocio.jpg', name: 'Rocío', duration: '6 meses', kg: '-18 kg', goal: 'Pérdida de grasa' },
+  { image: '/images/results/xoel.jpg', name: 'Xoel', duration: '4 meses', kg: '+5 kg músculo', goal: 'Recomposición' },
+  { image: '/images/results/almu.jpg', name: 'Almu', duration: '5 meses', kg: '-9 kg', goal: 'Pérdida de grasa' },
+  { image: '/images/results/sonia.jpg', name: 'Sonia', duration: '4 meses', kg: '-6 kg', goal: 'Definición' },
+  { image: '/images/results/javi.jpg', name: 'Javi', duration: '8 meses', kg: '+8 kg músculo', goal: 'Volumen limpio' },
+  { image: '/images/results/sonia2.jpg', name: 'Sonia M.', duration: '6 meses', kg: '-10 kg', goal: 'Recomposición' },
+  { image: '/images/results/edu.jpg', name: 'Edu', duration: '5 meses', kg: '+4 kg músculo', goal: 'Definición' },
+  { image: '/images/results/alicia.jpg', name: 'Alicia', duration: '7 meses', kg: '-12 kg', goal: 'Pérdida de grasa' },
+  { image: '/images/results/sonia3.jpg', name: 'Sonia R.', duration: '4 meses', kg: '-5 kg', goal: 'Recomposición' },
 ];
 
 const stats = [
