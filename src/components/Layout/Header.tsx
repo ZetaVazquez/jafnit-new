@@ -285,8 +285,7 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="px-4 mt-4 space-y-2">
                     <Button
                       onClick={() => { handleChatWithTrainer(); setIsMenuOpen(false); }}
-                      variant="outline"
-                      className="w-full border-white/20 text-white hover:bg-white/10"
+                      className="w-full btn-cta"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Chat con Entrenador
@@ -301,8 +300,7 @@ const Header: React.FC<HeaderProps> = ({
                     )}
                     <Button
                       onClick={() => { setIsSidebarOpen(true); setIsMenuOpen(false); }}
-                      variant="outline"
-                      className="w-full border-white/20 text-white hover:bg-white/10"
+                      className="w-full btn-cta"
                     >
                       Menú
                     </Button>
