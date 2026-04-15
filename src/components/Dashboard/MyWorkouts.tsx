@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Dumbbell, Clock, Target, Download, Eye } from 'lucide-react';
+import { ArrowLeft, Dumbbell, Clock, Target, Download, Eye, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { WorkoutPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
@@ -20,6 +19,7 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
   const [loading, setLoading] = useState(true);
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutPlan | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [expandedDays, setExpandedDays] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const fetchWorkoutPlans = async () => {
@@ -46,32 +46,54 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
     switch (level) { case 'beginner': return 'Principiante'; case 'intermediate': return 'Intermedio'; case 'advanced': return 'Avanzado'; default: return 'Sin especificar'; }
   };
 
-  const formatWorkoutPlan = (exercises: any): string => {
+  const hasStructuredDays = (exercises: any): boolean => {
+    return exercises?.duration && exercises?.days && Array.isArray(exercises.days);
+  };
+
+  const formatLegacyExercises = (exercises: any): string => {
     if (!exercises) return 'No hay ejercicios especificados';
     if (typeof exercises === 'string') return exercises;
-    if (Array.isArray(exercises)) {
-      return exercises.map((exercise: any, index: number) => {
-        if (typeof exercise === 'string') return `• ${exercise}`;
-        const lines: string[] = []; lines.push(`${index + 1}. ${exercise.name || 'Ejercicio sin nombre'}`);
-        if (exercise.description) lines.push(`   Descripción: ${exercise.description}`);
-        if (exercise.sets) lines.push(`   Series: ${exercise.sets}`);
-        if (exercise.reps) lines.push(`   Repeticiones: ${exercise.reps}`);
-        if (exercise.duration) lines.push(`   Duración: ${exercise.duration}`);
-        if (exercise.weight) lines.push(`   Peso: ${exercise.weight}`);
-        if (exercise.rest) lines.push(`   Descanso: ${exercise.rest}`);
-        return lines.join('\n');
-      }).join('\n');
-    }
-    if (typeof exercises === 'object') return JSON.stringify(exercises, null, 2).replace(/[{}\[\]",]/g, '').replace(/:/g, ': ').replace(/^\s*$/gm, '').trim();
+    if (exercises.description) return exercises.description;
+    if (typeof exercises === 'object') return JSON.stringify(exercises, null, 2).replace(/[{}\[\]",]/g, '').replace(/:/g, ': ').trim();
     return String(exercises);
   };
 
+  const toggleDay = (index: number) => {
+    setExpandedDays(prev => {
+      const next = new Set(prev);
+      next.has(index) ? next.delete(index) : next.add(index);
+      return next;
+    });
+  };
+
+  const openWorkout = (plan: WorkoutPlan) => {
+    setSelectedWorkout(plan);
+    setExpandedDays(new Set([0]));
+    setIsDialogOpen(true);
+  };
+
   const downloadWorkoutPlan = (workout: WorkoutPlan) => {
-    const content = `PLAN DE ENTRENAMIENTO: ${workout.title}\n\nDESCRIPCIÓN:\n${workout.description || 'Sin descripción'}\n\nNIVEL: ${getDifficultyText(workout.difficulty_level)}\n\nEJERCICIOS:\n${formatWorkoutPlan(workout.exercises)}\n\nFecha: ${new Date(workout.created_at).toLocaleDateString('es-ES')}`;
+    let content = `PLAN DE ENTRENAMIENTO: ${workout.title}\n\nDESCRIPCIÓN:\n${workout.description || 'Sin descripción'}\n\nNIVEL: ${getDifficultyText(workout.difficulty_level)}\n`;
+
+    if (hasStructuredDays(workout.exercises)) {
+      content += `\nDURACIÓN: ${workout.exercises.duration_label}\n`;
+      workout.exercises.days.forEach((day: any) => {
+        content += `\n${'='.repeat(40)}\n${day.day}\n${'='.repeat(40)}\n${day.exercises}\n`;
+      });
+    } else {
+      content += `\nEJERCICIOS:\n${formatLegacyExercises(workout.exercises)}\n`;
+    }
+
+    content += `\nFecha: ${new Date(workout.created_at).toLocaleDateString('es-ES')}`;
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url;
-    link.download = `plan_entrenamiento_${workout.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
-    document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `rutina_${workout.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const WorkoutsContent = () => {
@@ -104,7 +126,7 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
               <CardContent>
                 <Dumbbell className="w-24 h-24 text-[hsl(var(--accent-green))] mx-auto mb-6" />
                 <h2 className="text-2xl font-bold text-white mb-4">No tienes planes de entrenamiento</h2>
-                <p className="text-white/50 mb-6 max-w-md mx-auto">Aún no tienes ningún plan de entrenamiento asignado. Contacta con tu entrenador para obtener tu rutina personalizada.</p>
+                <p className="text-white/50 mb-6 max-w-md mx-auto">Aún no tienes ningún plan asignado. Contacta con tu entrenador para obtener tu rutina personalizada.</p>
               </CardContent>
             </Card>
           ) : (
@@ -118,16 +140,25 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-white/50 mb-4">{plan.description}</p>
+                    {plan.description && <p className="text-white/50 mb-4">{plan.description}</p>}
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center text-white/40"><Target className="w-4 h-4 mr-1" /><span className="text-sm">Plan personalizado</span></div>
+                      {hasStructuredDays(plan.exercises) ? (
+                        <div className="flex items-center text-white/40">
+                          <Calendar className="w-4 h-4 mr-1" />
+                          <span className="text-sm">{plan.exercises.duration_label} · {plan.exercises.days.length} días</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center text-white/40"><Target className="w-4 h-4 mr-1" /><span className="text-sm">Plan personalizado</span></div>
+                      )}
                       <div className="flex items-center text-white/40"><Clock className="w-4 h-4 mr-1" /><span className="text-sm">{new Date(plan.created_at).toLocaleDateString('es-ES')}</span></div>
                     </div>
                     <div className="flex gap-2">
-                      <Button size="sm" className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white flex-1" onClick={() => { setSelectedWorkout(plan); setIsDialogOpen(true); }}>
+                      <Button size="sm" className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white flex-1" onClick={() => openWorkout(plan)}>
                         <Eye className="w-4 h-4 mr-2" />Ver Plan
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => downloadWorkoutPlan(plan)} className="border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent"><Download className="w-4 h-4" /></Button>
+                      <Button size="sm" variant="outline" onClick={() => downloadWorkoutPlan(plan)} className="border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent">
+                        <Download className="w-4 h-4" />
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -136,25 +167,59 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
           )}
         </main>
 
+        {/* Workout Detail Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-[hsl(220,20%,12%)] border-white/10">
-            <DialogHeader><DialogTitle className="text-white">Plan de Entrenamiento Completo</DialogTitle></DialogHeader>
+          <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto bg-[hsl(220,20%,12%)] border-white/10">
+            <DialogHeader><DialogTitle className="text-white text-2xl">Plan de Entrenamiento</DialogTitle></DialogHeader>
             {selectedWorkout && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">{selectedWorkout.title}</h2>
+                  <h2 className="text-xl font-bold text-white mb-2">{selectedWorkout.title}</h2>
                   {selectedWorkout.description && <p className="text-white/60 mb-4">{selectedWorkout.description}</p>}
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-4">
                     <Badge className={`${getDifficultyColor(selectedWorkout.difficulty_level)} border`}>{getDifficultyText(selectedWorkout.difficulty_level)}</Badge>
-                    <span className="text-sm text-white/40">Creado el {new Date(selectedWorkout.created_at).toLocaleDateString('es-ES')}</span>
+                    {hasStructuredDays(selectedWorkout.exercises) && (
+                      <span className="text-sm text-white/40 flex items-center gap-1">
+                        <Calendar className="w-4 h-4" /> {selectedWorkout.exercises.duration_label}
+                      </span>
+                    )}
+                    <span className="text-sm text-white/40">{new Date(selectedWorkout.created_at).toLocaleDateString('es-ES')}</span>
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Plan de Ejercicios:</h3>
-                  <div className="bg-white/5 p-4 rounded-lg border border-white/10"><pre className="whitespace-pre-wrap text-sm text-white/70">{formatWorkoutPlan(selectedWorkout.exercises)}</pre></div>
-                </div>
+
+                {/* Structured days view */}
+                {hasStructuredDays(selectedWorkout.exercises) ? (
+                  <div className="space-y-2">
+                    {selectedWorkout.exercises.days.map((day: any, index: number) => (
+                      <div key={index} className="rounded-lg border border-white/10 overflow-hidden">
+                        <button
+                          onClick={() => toggleDay(index)}
+                          className="w-full flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 transition-colors"
+                        >
+                          <span className="font-semibold text-[hsl(var(--accent-green))]">{day.day}</span>
+                          {expandedDays.has(index) ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
+                        </button>
+                        {expandedDays.has(index) && (
+                          <div className="p-4 bg-white/[0.02]">
+                            <pre className="whitespace-pre-wrap text-sm text-white/70 leading-relaxed">{day.exercises}</pre>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-3">Ejercicios:</h3>
+                    <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+                      <pre className="whitespace-pre-wrap text-sm text-white/70">{formatLegacyExercises(selectedWorkout.exercises)}</pre>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
-                  <Button variant="outline" onClick={() => downloadWorkoutPlan(selectedWorkout)} className="border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent"><Download className="w-4 h-4 mr-2" />Descargar Plan</Button>
+                  <Button variant="outline" onClick={() => downloadWorkoutPlan(selectedWorkout)} className="border-white/20 text-white/60 hover:text-white hover:bg-white/10 bg-transparent">
+                    <Download className="w-4 h-4 mr-2" />Descargar
+                  </Button>
                   <Button onClick={() => setIsDialogOpen(false)} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">Cerrar</Button>
                 </div>
               </div>
