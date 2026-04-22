@@ -42,17 +42,6 @@ interface InitialEvaluationData {
   updated_at?: string;
 }
 
-const EVALUATION_BLOCK_TITLES: { key: keyof InitialEvaluationData; title: string }[] = [
-  { key: 'block_1_identification', title: '1. Identificación y contexto estratégico' },
-  { key: 'block_2_health_screening', title: '2. Cribado de salud y aptitud para el ejercicio' },
-  { key: 'block_3_dietary_history', title: '3. Historial dietético y conducta alimentaria' },
-  { key: 'block_4_training_profile', title: '4. Perfil de entrenamiento y capacidad física' },
-  { key: 'block_5_lifestyle_recovery', title: '5. Estilo de vida, estrés y recuperación' },
-  { key: 'block_6_medical_clinical', title: '6. Historial médico complementario y variables clínicas' },
-  { key: 'block_7_hormonal_health', title: '7. Salud hormonal y ciclo menstrual' },
-  { key: 'block_8_anthropometry', title: '8. Antropometría y mediciones' },
-];
-
 const formatFieldLabel = (key: string) =>
   key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
 
