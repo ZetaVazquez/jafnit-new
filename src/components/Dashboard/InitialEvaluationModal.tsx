@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, Lock } from 'lucide-react';
+import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, Lock, CircleDot } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -242,7 +242,45 @@ export const EVALUATION_BLOCKS: EvaluationBlock[] = [
   },
 ];
 
-const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen, onComplete }) => {
+/**
+ * Calcula el % de cumplimentación de un bloque concreto.
+ * Considera respondido cualquier campo con valor distinto de null/undefined/'' y
+ * para checkboxes los considera respondidos solo si están a true.
+ */
+export const getBlockCompletion = (
+  block: EvaluationBlock,
+  values: Record<string, any> | undefined | null
+): { answered: number; total: number; percent: number } => {
+  const total = block.fields.length;
+  if (!values) return { answered: 0, total, percent: 0 };
+  let answered = 0;
+  block.fields.forEach(f => {
+    const v = values[f.name];
+    if (f.type === 'checkbox') {
+      if (v === true) answered++;
+    } else if (v !== null && v !== undefined && v !== '') {
+      answered++;
+    }
+  });
+  return { answered, total, percent: total === 0 ? 0 : Math.round((answered / total) * 100) };
+};
+
+/**
+ * Calcula el progreso global a partir de un registro de initial_evaluations.
+ */
+export const getOverallEvaluationProgress = (
+  evaluation: Record<string, any> | null | undefined
+): number => {
+  if (!evaluation) return 0;
+  const totals = EVALUATION_BLOCKS.map(b =>
+    getBlockCompletion(b, evaluation[b.column] as Record<string, any>)
+  );
+  const totalFields = totals.reduce((acc, t) => acc + t.total, 0);
+  const answered = totals.reduce((acc, t) => acc + t.answered, 0);
+  return totalFields === 0 ? 0 : Math.round((answered / totalFields) * 100);
+};
+
+const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen, onComplete, allowClose = false, onClose }) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [currentBlock, setCurrentBlock] = useState(0);
@@ -251,6 +289,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
+  const [alreadyCompleted, setAlreadyCompleted] = useState(false);
 
   useEffect(() => {
     const loadEvaluation = async () => {
@@ -270,8 +309,9 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             loaded[b.key] = (data[b.column] as Record<string, any>) || {};
           });
           setBlockData(loaded);
-          // Si ya está completado, no mostrar el modal
-          if (data.completed) {
+          setAlreadyCompleted(!!data.completed);
+          // Si ya está completado y NO se permite reabrirlo, cerrar.
+          if (data.completed && !allowClose) {
             onComplete();
             return;
           }
@@ -279,6 +319,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
           const initial: Record<string, Record<string, any>> = {};
           EVALUATION_BLOCKS.forEach(b => { initial[b.key] = {}; });
           setBlockData(initial);
+          setAlreadyCompleted(false);
         }
       } catch (err) {
         console.error('Error loading evaluation:', err);
@@ -287,7 +328,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
       }
     };
     loadEvaluation();
-  }, [isOpen, user, onComplete]);
+  }, [isOpen, user, onComplete, allowClose]);
 
   if (!isOpen) return null;
 
