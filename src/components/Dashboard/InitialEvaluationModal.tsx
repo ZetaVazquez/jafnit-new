@@ -266,7 +266,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         if (data) {
           setEvaluationId(data.id);
           const loaded: Record<string, Record<string, any>> = {};
-          BLOCKS.forEach(b => {
+          EVALUATION_BLOCKS.forEach(b => {
             loaded[b.key] = (data[b.column] as Record<string, any>) || {};
           });
           setBlockData(loaded);
@@ -277,7 +277,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
           }
         } else {
           const initial: Record<string, Record<string, any>> = {};
-          BLOCKS.forEach(b => { initial[b.key] = {}; });
+          EVALUATION_BLOCKS.forEach(b => { initial[b.key] = {}; });
           setBlockData(initial);
         }
       } catch (err) {
@@ -291,7 +291,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
   if (!isOpen) return null;
 
-  const block = BLOCKS[currentBlock];
+  const block = EVALUATION_BLOCKS[currentBlock];
   const data = blockData[block?.key] || {};
 
   const updateField = (name: string, value: any) => {
@@ -306,7 +306,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     setLoading(true);
     try {
       const payload: Record<string, any> = { user_id: user.id };
-      BLOCKS.forEach(b => {
+      EVALUATION_BLOCKS.forEach(b => {
         payload[b.column] = blockData[b.key] || {};
       });
       if (markCompleted) {
@@ -350,7 +350,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     const ok = await saveBlock(false);
     if (!ok) return;
     toast({ title: 'Bloque guardado', description: 'Tu progreso se ha guardado.' });
-    if (currentBlock < BLOCKS.length - 1) {
+    if (currentBlock < EVALUATION_BLOCKS.length - 1) {
       setCurrentBlock(currentBlock + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -370,7 +370,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:ring-2 focus:ring-[hsl(var(--accent-green))]/50 focus:border-[hsl(var(--accent-green))]/50 outline-none";
   const labelClass = "text-sm font-medium text-white/70";
 
-  const renderField = (field: Field) => {
+  const renderField = (field: EvaluationField) => {
     const value = data[field.name] ?? '';
     const isFull = field.full || field.type === 'textarea';
 
@@ -476,8 +476,8 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     );
   }
 
-  const progress = ((currentBlock + 1) / BLOCKS.length) * 100;
-  const isLast = currentBlock === BLOCKS.length - 1;
+  const progress = ((currentBlock + 1) / EVALUATION_BLOCKS.length) * 100;
+  const isLast = currentBlock === EVALUATION_BLOCKS.length - 1;
 
   return (
     <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-4 overflow-hidden">
@@ -496,7 +496,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               </div>
               <div className="min-w-0">
                 <h2 className="text-xl md:text-2xl font-bold text-white truncate">Evaluación Inicial JAFN</h2>
-                <p className="text-xs text-white/40">Bloque {currentBlock + 1} de {BLOCKS.length}</p>
+                <p className="text-xs text-white/40">Bloque {currentBlock + 1} de {EVALUATION_BLOCKS.length}</p>
               </div>
             </div>
             <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
