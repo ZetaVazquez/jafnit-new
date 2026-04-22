@@ -32,6 +32,7 @@ import News from './News';
 import Gifts from './Gifts';
 import WelcomeGiftModal from './WelcomeGiftModal';
 import SubscriptionInfo from './SubscriptionInfo';
+import InitialEvaluationModal from './InitialEvaluationModal';
 import { TodayGoalsWidget, WorkoutStatsWidget, ActiveDaysWidget } from './DashboardWidgets';
 import { useToast } from '@/hooks/use-toast';
 
@@ -47,6 +48,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const { hasActiveSubscription, loading: subscriptionLoading } = useSubscription();
   const [currentView, setCurrentView] = useState<string>(initialView);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [showInitialEvaluation, setShowInitialEvaluation] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -84,6 +86,33 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     };
 
     checkWelcomeModalStatus();
+  }, [user, hasActiveSubscription]);
+
+  // Comprobar si la evaluación inicial está pendiente (tras el primer pago)
+  useEffect(() => {
+    const checkInitialEvaluation = async () => {
+      if (!user || !hasActiveSubscription) {
+        setShowInitialEvaluation(false);
+        return;
+      }
+      try {
+        const { data } = await (supabase as any)
+          .from('initial_evaluations')
+          .select('completed')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        // Si no existe registro o no está completada, mostramos el modal bloqueante
+        if (!data || !data.completed) {
+          setShowInitialEvaluation(true);
+        } else {
+          setShowInitialEvaluation(false);
+        }
+      } catch (error) {
+        console.error('Error checking initial evaluation:', error);
+      }
+    };
+    checkInitialEvaluation();
   }, [user, hasActiveSubscription]);
 
   const handleCloseWelcomeModal = async () => {
@@ -178,6 +207,11 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
       <WelcomeGiftModal 
         isOpen={showWelcomeModal} 
         onClose={handleCloseWelcomeModal} 
+      />
+
+      <InitialEvaluationModal
+        isOpen={showInitialEvaluation}
+        onComplete={() => setShowInitialEvaluation(false)}
       />
 
       {/* Header */}
