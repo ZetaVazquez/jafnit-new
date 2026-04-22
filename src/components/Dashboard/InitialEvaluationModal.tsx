@@ -519,6 +519,16 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
   const progress = ((currentBlock + 1) / EVALUATION_BLOCKS.length) * 100;
   const isLast = currentBlock === EVALUATION_BLOCKS.length - 1;
+  const overallProgress = getOverallEvaluationProgress(
+    EVALUATION_BLOCKS.reduce((acc, b) => {
+      acc[b.column] = blockData[b.key] || {};
+      return acc;
+    }, {} as Record<string, any>)
+  );
+
+  const handleCloseModal = () => {
+    if (allowClose && onClose) onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-4 overflow-hidden">
@@ -537,12 +547,33 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               </div>
               <div className="min-w-0">
                 <h2 className="text-xl md:text-2xl font-bold text-white truncate">Evaluación Inicial JAFN</h2>
-                <p className="text-xs text-white/40">Bloque {currentBlock + 1} de {EVALUATION_BLOCKS.length}</p>
+                <p className="text-xs text-white/40">
+                  Bloque {currentBlock + 1} de {EVALUATION_BLOCKS.length} · {overallProgress}% completado
+                </p>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-              <Lock className="w-3 h-3" />
-              Obligatorio
+            <div className="flex items-center gap-2">
+              {alreadyCompleted ? (
+                <div className="hidden md:flex items-center gap-2 text-xs text-[hsl(var(--accent-green))] px-3 py-1.5 rounded-full bg-[hsl(var(--accent-green))]/10 border border-[hsl(var(--accent-green))]/30">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Ya completada · Modo edición
+                </div>
+              ) : (
+                <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                  <Lock className="w-3 h-3" />
+                  Obligatorio
+                </div>
+              )}
+              {allowClose && (
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="p-2 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                  aria-label="Cerrar"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -556,14 +587,79 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-[hsl(var(--accent-green-light))] mb-1">{block.title}</h3>
-            {block.description && <p className="text-sm text-white/50">{block.description}</p>}
-          </div>
+        <div className="flex-1 flex overflow-hidden">
+          {/* Sidebar de bloques con progreso individual */}
+          <aside className="hidden lg:flex w-64 border-r border-white/10 overflow-y-auto flex-col p-3 gap-1.5 bg-white/[0.02]">
+            {EVALUATION_BLOCKS.map((b, idx) => {
+              const c = getBlockCompletion(b, blockData[b.key]);
+              const isActive = idx === currentBlock;
+              return (
+                <button
+                  key={b.key}
+                  type="button"
+                  onClick={() => setCurrentBlock(idx)}
+                  className={`text-left p-3 rounded-xl border transition-all ${
+                    isActive
+                      ? 'bg-[hsl(var(--accent-green))]/15 border-[hsl(var(--accent-green))]/40'
+                      : 'bg-white/[0.02] border-white/5 hover:bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className={`text-[11px] font-semibold uppercase tracking-wider ${isActive ? 'text-[hsl(var(--accent-green))]' : 'text-white/40'}`}>
+                      Bloque {idx + 1}
+                    </span>
+                    <span className={`text-[11px] font-medium ${
+                      c.percent === 100 ? 'text-[hsl(var(--accent-green))]' : c.percent > 0 ? 'text-yellow-400' : 'text-white/30'
+                    }`}>
+                      {c.percent}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-white/70 line-clamp-2 leading-snug">
+                    {b.title.replace(/^\d+\.\s*/, '')}
+                  </p>
+                  <div className="mt-2 w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full transition-all ${
+                        c.percent === 100
+                          ? 'bg-[hsl(var(--accent-green))]'
+                          : c.percent > 0
+                          ? 'bg-yellow-400/70'
+                          : 'bg-white/10'
+                      }`}
+                      style={{ width: `${c.percent}%` }}
+                    />
+                  </div>
+                </button>
+              );
+            })}
+          </aside>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {block.fields.map(renderField)}
+          <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <h3 className="text-lg font-semibold text-[hsl(var(--accent-green-light))] mb-1">{block.title}</h3>
+                {block.description && <p className="text-sm text-white/50">{block.description}</p>}
+              </div>
+              {(() => {
+                const c = getBlockCompletion(block, blockData[block.key]);
+                return (
+                  <div className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap ${
+                    c.percent === 100
+                      ? 'bg-[hsl(var(--accent-green))]/10 border-[hsl(var(--accent-green))]/30 text-[hsl(var(--accent-green))]'
+                      : c.percent > 0
+                      ? 'bg-yellow-400/10 border-yellow-400/30 text-yellow-400'
+                      : 'bg-white/5 border-white/10 text-white/50'
+                  }`}>
+                    {c.percent === 100 ? <CheckCircle2 className="w-3.5 h-3.5" /> : <CircleDot className="w-3.5 h-3.5" />}
+                    {c.answered}/{c.total} campos · {c.percent}%
+                  </div>
+                );
+              })()}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {block.fields.map(renderField)}
+            </div>
           </div>
         </div>
 
