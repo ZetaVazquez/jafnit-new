@@ -209,6 +209,11 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         onClose={handleCloseWelcomeModal} 
       />
 
+      <InitialEvaluationModal
+        isOpen={showInitialEvaluation}
+        onComplete={() => setShowInitialEvaluation(false)}
+      />
+
       {/* Header */}
       <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-4">
