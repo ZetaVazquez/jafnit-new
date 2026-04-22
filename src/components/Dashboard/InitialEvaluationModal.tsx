@@ -13,26 +13,32 @@ import { useToast } from '@/hooks/use-toast';
 interface InitialEvaluationModalProps {
   isOpen: boolean;
   onComplete: () => void;
+  /**
+   * Permite cerrar el modal aunque la evaluación no esté completada.
+   * Se usa cuando el cliente reabre la evaluación desde su perfil tras haberla completado.
+   */
+  allowClose?: boolean;
+  onClose?: () => void;
 }
 
 type FieldType = 'text' | 'number' | 'date' | 'textarea' | 'select' | 'checkbox' | 'tel' | 'email';
-interface Field {
+export interface EvaluationField {
   name: string;
   label: string;
   type: FieldType;
   options?: string[];
   full?: boolean;
 }
-interface Block {
+export interface EvaluationBlock {
   key: string;
   column: string;
   title: string;
   description?: string;
   conditional?: 'female_only';
-  fields: Field[];
+  fields: EvaluationField[];
 }
 
-const BLOCKS: Block[] = [
+export const EVALUATION_BLOCKS: EvaluationBlock[] = [
   {
     key: 'block_1_identification',
     column: 'block_1_identification',
