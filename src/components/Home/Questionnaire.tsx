@@ -293,14 +293,9 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onComplete, onClose }) =>
     if (currentQuestionData.type === 'form') {
       const formData = (answers[currentQuestionData.id] as Record<string, string>) || {};
       const fields = currentQuestionData.fields || [];
-      
+
       const sections = [
-        { title: '📅 Datos Generales', fields: fields.slice(0, 14) },
-        { title: '🧠 Objetivos y Motivación', fields: fields.slice(14, 19) },
-        { title: '📏 Datos Físicos', fields: fields.slice(19, 27) },
-        { title: '🏋️‍♀️ Información de Actividad', fields: fields.slice(27, 31) },
-        { title: '🍽️ Hábitos Alimentarios', fields: fields.slice(31, 38) },
-        { title: '💬 Notas Adicionales', fields: fields.slice(38) },
+        { title: '📋 Datos básicos', fields },
       ];
 
       return (
