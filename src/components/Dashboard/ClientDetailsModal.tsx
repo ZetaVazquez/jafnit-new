@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Mail, Calendar, Phone, Instagram, Activity, Target, Utensils, Dumbbell, Heart } from 'lucide-react';
+import { User, Mail, Calendar, Phone, Instagram, Activity, Target, Utensils, Dumbbell, Heart, ClipboardList, ChevronDown, CheckCircle2, Clock } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,6 +26,34 @@ interface QuestionnaireData {
   health_conditions?: string;
 }
 
+interface InitialEvaluationData {
+  block_1_identification?: Record<string, any>;
+  block_2_health_screening?: Record<string, any>;
+  block_3_dietary_history?: Record<string, any>;
+  block_4_training_profile?: Record<string, any>;
+  block_5_lifestyle_recovery?: Record<string, any>;
+  block_6_medical_clinical?: Record<string, any>;
+  block_7_hormonal_health?: Record<string, any>;
+  block_8_anthropometry?: Record<string, any>;
+  completed?: boolean;
+  completed_at?: string;
+  updated_at?: string;
+}
+
+const EVALUATION_BLOCK_TITLES: { key: keyof InitialEvaluationData; title: string }[] = [
+  { key: 'block_1_identification', title: '1. Identificación y contexto estratégico' },
+  { key: 'block_2_health_screening', title: '2. Cribado de salud y aptitud para el ejercicio' },
+  { key: 'block_3_dietary_history', title: '3. Historial dietético y conducta alimentaria' },
+  { key: 'block_4_training_profile', title: '4. Perfil de entrenamiento y capacidad física' },
+  { key: 'block_5_lifestyle_recovery', title: '5. Estilo de vida, estrés y recuperación' },
+  { key: 'block_6_medical_clinical', title: '6. Historial médico complementario y variables clínicas' },
+  { key: 'block_7_hormonal_health', title: '7. Salud hormonal y ciclo menstrual' },
+  { key: 'block_8_anthropometry', title: '8. Antropometría y mediciones' },
+];
+
+const formatFieldLabel = (key: string) =>
+  key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
+
 const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   isOpen,
   onClose,
@@ -33,6 +62,7 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   clientEmail
 }) => {
   const [questionnaireData, setQuestionnaireData] = useState<QuestionnaireData | null>(null);
+  const [evaluationData, setEvaluationData] = useState<InitialEvaluationData | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -60,6 +90,20 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
         setQuestionnaireData(null);
       } else {
         setQuestionnaireData(questionnaire);
+      }
+
+      // Obtener evaluación inicial profesional (segundo cuestionario)
+      const { data: evaluation, error: evalError } = await (supabase as any)
+        .from('initial_evaluations')
+        .select('*')
+        .eq('user_id', clientId)
+        .maybeSingle();
+
+      if (evalError) {
+        console.error('Error fetching evaluation:', evalError);
+        setEvaluationData(null);
+      } else {
+        setEvaluationData(evaluation);
       }
     } catch (error) {
       console.error('Error:', error);
