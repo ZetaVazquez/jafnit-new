@@ -251,7 +251,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
       if (!isOpen || !user) return;
       setInitialLoading(true);
       try {
-        const { data } = await supabase
+        const { data } = await (supabase as any)
           .from('initial_evaluations')
           .select('*')
           .eq('user_id', user.id)
@@ -261,7 +261,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
           setEvaluationId(data.id);
           const loaded: Record<string, Record<string, any>> = {};
           BLOCKS.forEach(b => {
-            loaded[b.key] = (data[b.column as keyof typeof data] as Record<string, any>) || {};
+            loaded[b.key] = (data[b.column] as Record<string, any>) || {};
           });
           setBlockData(loaded);
           // Si ya está completado, no mostrar el modal
@@ -310,14 +310,14 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
       let result;
       if (evaluationId) {
-        result = await supabase
+        result = await (supabase as any)
           .from('initial_evaluations')
           .update(payload)
           .eq('id', evaluationId)
           .select()
           .single();
       } else {
-        result = await supabase
+        result = await (supabase as any)
           .from('initial_evaluations')
           .insert(payload)
           .select()
