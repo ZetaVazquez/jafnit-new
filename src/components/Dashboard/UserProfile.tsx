@@ -6,12 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ArrowLeft, Camera, Trash2, CreditCard, Mail, Lock } from 'lucide-react';
+import { ArrowLeft, Camera, Trash2, CreditCard, Mail, Lock, ClipboardList } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import PlanRecommendationModal from './PlanRecommendationModal';
 import { ChangeEmailModal, ChangePasswordModal } from './ChangeCredentialsModal';
+import InitialEvaluationModal from './InitialEvaluationModal';
 
 interface UserProfileProps {
   onGoBack: () => void;
@@ -30,6 +31,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
   const [showPlansModal, setShowPlansModal] = useState(false);
   const [showChangeEmail, setShowChangeEmail] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showEvaluation, setShowEvaluation] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
@@ -134,6 +136,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
             </CardContent>
           </Card>
 
+          {/* Evaluación Inicial */}
+          <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center text-[hsl(var(--accent-green))]"><ClipboardList className="w-5 h-5 mr-2" />Evaluación Inicial Profesional</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-white/50 mb-4">Revisa o actualiza las respuestas de tu Evaluación Inicial del Método JAFN cuando lo necesites.</p>
+              <Button onClick={() => setShowEvaluation(true)} className="bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/30 border border-[hsl(var(--accent-green))]/30 gap-2">
+                <ClipboardList className="w-4 h-4" />Abrir Evaluación
+              </Button>
+            </CardContent>
+          </Card>
+
           {/* Danger Zone */}
           <Card className="border-red-500/30 bg-red-500/5 backdrop-blur-sm">
             <CardHeader>
@@ -160,6 +175,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
       <PlanRecommendationModal isOpen={showPlansModal} onClose={() => setShowPlansModal(false)} onDecideLater={() => setShowPlansModal(false)} recommendedPlan="premium" fromQuestionnaire={false} />
       <ChangeEmailModal isOpen={showChangeEmail} onClose={() => setShowChangeEmail(false)} currentEmail={user?.email || ''} />
       <ChangePasswordModal isOpen={showChangePassword} onClose={() => setShowChangePassword(false)} />
+      <InitialEvaluationModal
+        isOpen={showEvaluation}
+        onComplete={() => setShowEvaluation(false)}
+        allowClose
+        onClose={() => setShowEvaluation(false)}
+      />
     </div>
   );
 };

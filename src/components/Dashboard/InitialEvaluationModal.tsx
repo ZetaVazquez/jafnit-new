@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, Lock } from 'lucide-react';
+import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, Lock, CircleDot } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -13,26 +13,32 @@ import { useToast } from '@/hooks/use-toast';
 interface InitialEvaluationModalProps {
   isOpen: boolean;
   onComplete: () => void;
+  /**
+   * Permite cerrar el modal aunque la evaluación no esté completada.
+   * Se usa cuando el cliente reabre la evaluación desde su perfil tras haberla completado.
+   */
+  allowClose?: boolean;
+  onClose?: () => void;
 }
 
 type FieldType = 'text' | 'number' | 'date' | 'textarea' | 'select' | 'checkbox' | 'tel' | 'email';
-interface Field {
+export interface EvaluationField {
   name: string;
   label: string;
   type: FieldType;
   options?: string[];
   full?: boolean;
 }
-interface Block {
+export interface EvaluationBlock {
   key: string;
   column: string;
   title: string;
   description?: string;
   conditional?: 'female_only';
-  fields: Field[];
+  fields: EvaluationField[];
 }
 
-const BLOCKS: Block[] = [
+export const EVALUATION_BLOCKS: EvaluationBlock[] = [
   {
     key: 'block_1_identification',
     column: 'block_1_identification',
@@ -236,7 +242,45 @@ const BLOCKS: Block[] = [
   },
 ];
 
-const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen, onComplete }) => {
+/**
+ * Calcula el % de cumplimentación de un bloque concreto.
+ * Considera respondido cualquier campo con valor distinto de null/undefined/'' y
+ * para checkboxes los considera respondidos solo si están a true.
+ */
+export const getBlockCompletion = (
+  block: EvaluationBlock,
+  values: Record<string, any> | undefined | null
+): { answered: number; total: number; percent: number } => {
+  const total = block.fields.length;
+  if (!values) return { answered: 0, total, percent: 0 };
+  let answered = 0;
+  block.fields.forEach(f => {
+    const v = values[f.name];
+    if (f.type === 'checkbox') {
+      if (v === true) answered++;
+    } else if (v !== null && v !== undefined && v !== '') {
+      answered++;
+    }
+  });
+  return { answered, total, percent: total === 0 ? 0 : Math.round((answered / total) * 100) };
+};
+
+/**
+ * Calcula el progreso global a partir de un registro de initial_evaluations.
+ */
+export const getOverallEvaluationProgress = (
+  evaluation: Record<string, any> | null | undefined
+): number => {
+  if (!evaluation) return 0;
+  const totals = EVALUATION_BLOCKS.map(b =>
+    getBlockCompletion(b, evaluation[b.column] as Record<string, any>)
+  );
+  const totalFields = totals.reduce((acc, t) => acc + t.total, 0);
+  const answered = totals.reduce((acc, t) => acc + t.answered, 0);
+  return totalFields === 0 ? 0 : Math.round((answered / totalFields) * 100);
+};
+
+const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen, onComplete, allowClose = false, onClose }) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [currentBlock, setCurrentBlock] = useState(0);
@@ -245,6 +289,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
+  const [alreadyCompleted, setAlreadyCompleted] = useState(false);
 
   useEffect(() => {
     const loadEvaluation = async () => {
@@ -260,19 +305,21 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         if (data) {
           setEvaluationId(data.id);
           const loaded: Record<string, Record<string, any>> = {};
-          BLOCKS.forEach(b => {
+          EVALUATION_BLOCKS.forEach(b => {
             loaded[b.key] = (data[b.column] as Record<string, any>) || {};
           });
           setBlockData(loaded);
-          // Si ya está completado, no mostrar el modal
-          if (data.completed) {
+          setAlreadyCompleted(!!data.completed);
+          // Si ya está completado y NO se permite reabrirlo, cerrar.
+          if (data.completed && !allowClose) {
             onComplete();
             return;
           }
         } else {
           const initial: Record<string, Record<string, any>> = {};
-          BLOCKS.forEach(b => { initial[b.key] = {}; });
+          EVALUATION_BLOCKS.forEach(b => { initial[b.key] = {}; });
           setBlockData(initial);
+          setAlreadyCompleted(false);
         }
       } catch (err) {
         console.error('Error loading evaluation:', err);
@@ -281,11 +328,11 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
       }
     };
     loadEvaluation();
-  }, [isOpen, user, onComplete]);
+  }, [isOpen, user, onComplete, allowClose]);
 
   if (!isOpen) return null;
 
-  const block = BLOCKS[currentBlock];
+  const block = EVALUATION_BLOCKS[currentBlock];
   const data = blockData[block?.key] || {};
 
   const updateField = (name: string, value: any) => {
@@ -300,7 +347,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     setLoading(true);
     try {
       const payload: Record<string, any> = { user_id: user.id };
-      BLOCKS.forEach(b => {
+      EVALUATION_BLOCKS.forEach(b => {
         payload[b.column] = blockData[b.key] || {};
       });
       if (markCompleted) {
@@ -344,7 +391,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     const ok = await saveBlock(false);
     if (!ok) return;
     toast({ title: 'Bloque guardado', description: 'Tu progreso se ha guardado.' });
-    if (currentBlock < BLOCKS.length - 1) {
+    if (currentBlock < EVALUATION_BLOCKS.length - 1) {
       setCurrentBlock(currentBlock + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -364,7 +411,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:ring-2 focus:ring-[hsl(var(--accent-green))]/50 focus:border-[hsl(var(--accent-green))]/50 outline-none";
   const labelClass = "text-sm font-medium text-white/70";
 
-  const renderField = (field: Field) => {
+  const renderField = (field: EvaluationField) => {
     const value = data[field.name] ?? '';
     const isFull = field.full || field.type === 'textarea';
 
@@ -470,8 +517,18 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     );
   }
 
-  const progress = ((currentBlock + 1) / BLOCKS.length) * 100;
-  const isLast = currentBlock === BLOCKS.length - 1;
+  const progress = ((currentBlock + 1) / EVALUATION_BLOCKS.length) * 100;
+  const isLast = currentBlock === EVALUATION_BLOCKS.length - 1;
+  const overallProgress = getOverallEvaluationProgress(
+    EVALUATION_BLOCKS.reduce((acc, b) => {
+      acc[b.column] = blockData[b.key] || {};
+      return acc;
+    }, {} as Record<string, any>)
+  );
+
+  const handleCloseModal = () => {
+    if (allowClose && onClose) onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-4 overflow-hidden">
@@ -490,12 +547,33 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               </div>
               <div className="min-w-0">
                 <h2 className="text-xl md:text-2xl font-bold text-white truncate">Evaluación Inicial JAFN</h2>
-                <p className="text-xs text-white/40">Bloque {currentBlock + 1} de {BLOCKS.length}</p>
+                <p className="text-xs text-white/40">
+                  Bloque {currentBlock + 1} de {EVALUATION_BLOCKS.length} · {overallProgress}% completado
+                </p>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-              <Lock className="w-3 h-3" />
-              Obligatorio
+            <div className="flex items-center gap-2">
+              {alreadyCompleted ? (
+                <div className="hidden md:flex items-center gap-2 text-xs text-[hsl(var(--accent-green))] px-3 py-1.5 rounded-full bg-[hsl(var(--accent-green))]/10 border border-[hsl(var(--accent-green))]/30">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Ya completada · Modo edición
+                </div>
+              ) : (
+                <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                  <Lock className="w-3 h-3" />
+                  Obligatorio
+                </div>
+              )}
+              {allowClose && (
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="p-2 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                  aria-label="Cerrar"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -509,14 +587,79 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-[hsl(var(--accent-green-light))] mb-1">{block.title}</h3>
-            {block.description && <p className="text-sm text-white/50">{block.description}</p>}
-          </div>
+        <div className="flex-1 flex overflow-hidden">
+          {/* Sidebar de bloques con progreso individual */}
+          <aside className="hidden lg:flex w-64 border-r border-white/10 overflow-y-auto flex-col p-3 gap-1.5 bg-white/[0.02]">
+            {EVALUATION_BLOCKS.map((b, idx) => {
+              const c = getBlockCompletion(b, blockData[b.key]);
+              const isActive = idx === currentBlock;
+              return (
+                <button
+                  key={b.key}
+                  type="button"
+                  onClick={() => setCurrentBlock(idx)}
+                  className={`text-left p-3 rounded-xl border transition-all ${
+                    isActive
+                      ? 'bg-[hsl(var(--accent-green))]/15 border-[hsl(var(--accent-green))]/40'
+                      : 'bg-white/[0.02] border-white/5 hover:bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className={`text-[11px] font-semibold uppercase tracking-wider ${isActive ? 'text-[hsl(var(--accent-green))]' : 'text-white/40'}`}>
+                      Bloque {idx + 1}
+                    </span>
+                    <span className={`text-[11px] font-medium ${
+                      c.percent === 100 ? 'text-[hsl(var(--accent-green))]' : c.percent > 0 ? 'text-yellow-400' : 'text-white/30'
+                    }`}>
+                      {c.percent}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-white/70 line-clamp-2 leading-snug">
+                    {b.title.replace(/^\d+\.\s*/, '')}
+                  </p>
+                  <div className="mt-2 w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full transition-all ${
+                        c.percent === 100
+                          ? 'bg-[hsl(var(--accent-green))]'
+                          : c.percent > 0
+                          ? 'bg-yellow-400/70'
+                          : 'bg-white/10'
+                      }`}
+                      style={{ width: `${c.percent}%` }}
+                    />
+                  </div>
+                </button>
+              );
+            })}
+          </aside>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {block.fields.map(renderField)}
+          <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <h3 className="text-lg font-semibold text-[hsl(var(--accent-green-light))] mb-1">{block.title}</h3>
+                {block.description && <p className="text-sm text-white/50">{block.description}</p>}
+              </div>
+              {(() => {
+                const c = getBlockCompletion(block, blockData[block.key]);
+                return (
+                  <div className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap ${
+                    c.percent === 100
+                      ? 'bg-[hsl(var(--accent-green))]/10 border-[hsl(var(--accent-green))]/30 text-[hsl(var(--accent-green))]'
+                      : c.percent > 0
+                      ? 'bg-yellow-400/10 border-yellow-400/30 text-yellow-400'
+                      : 'bg-white/5 border-white/10 text-white/50'
+                  }`}>
+                    {c.percent === 100 ? <CheckCircle2 className="w-3.5 h-3.5" /> : <CircleDot className="w-3.5 h-3.5" />}
+                    {c.answered}/{c.total} campos · {c.percent}%
+                  </div>
+                );
+              })()}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {block.fields.map(renderField)}
+            </div>
           </div>
         </div>
 

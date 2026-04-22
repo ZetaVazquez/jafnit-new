@@ -6,6 +6,8 @@ import { User, Mail, Calendar, Phone, Instagram, Activity, Target, Utensils, Dum
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { EVALUATION_BLOCKS, getBlockCompletion, getOverallEvaluationProgress } from './InitialEvaluationModal';
+import { Progress } from '@/components/ui/progress';
 
 interface ClientDetailsModalProps {
   isOpen: boolean;
@@ -39,17 +41,6 @@ interface InitialEvaluationData {
   completed_at?: string;
   updated_at?: string;
 }
-
-const EVALUATION_BLOCK_TITLES: { key: keyof InitialEvaluationData; title: string }[] = [
-  { key: 'block_1_identification', title: '1. Identificación y contexto estratégico' },
-  { key: 'block_2_health_screening', title: '2. Cribado de salud y aptitud para el ejercicio' },
-  { key: 'block_3_dietary_history', title: '3. Historial dietético y conducta alimentaria' },
-  { key: 'block_4_training_profile', title: '4. Perfil de entrenamiento y capacidad física' },
-  { key: 'block_5_lifestyle_recovery', title: '5. Estilo de vida, estrés y recuperación' },
-  { key: 'block_6_medical_clinical', title: '6. Historial médico complementario y variables clínicas' },
-  { key: 'block_7_hormonal_health', title: '7. Salud hormonal y ciclo menstrual' },
-  { key: 'block_8_anthropometry', title: '8. Antropometría y mediciones' },
-];
 
 const formatFieldLabel = (key: string) =>
   key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
@@ -337,53 +328,81 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                     El cliente aún no ha iniciado la evaluación inicial profesional.
                   </p>
                 ) : (
-                  <Accordion type="multiple" className="w-full">
-                    {EVALUATION_BLOCK_TITLES.map(({ key, title }) => {
-                      const blockContent = (evaluationData[key] as Record<string, any>) || {};
-                      const entries = Object.entries(blockContent).filter(
-                        ([, v]) => v !== null && v !== undefined && v !== '' && v !== false
-                      );
-                      const hasData = entries.length > 0;
+                  <>
+                    {/* Progreso global */}
+                    {(() => {
+                      const overall = getOverallEvaluationProgress(evaluationData as Record<string, any>);
                       return (
-                        <AccordionItem key={key} value={key}>
-                          <AccordionTrigger className="text-sm font-semibold hover:no-underline">
-                            <span className="flex items-center gap-2">
-                              {title}
-                              {hasData ? (
-                                <Badge variant="secondary" className="text-xs">
-                                  {entries.length} respuesta{entries.length === 1 ? '' : 's'}
-                                </Badge>
-                              ) : (
-                                <Badge variant="outline" className="text-xs">Sin datos</Badge>
-                              )}
+                        <div className="mb-4 p-4 rounded-lg bg-gray-50 border border-gray-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-semibold text-gray-700">Progreso global de la evaluación</span>
+                            <span className={`text-sm font-bold ${overall === 100 ? 'text-green-600' : overall > 0 ? 'text-yellow-600' : 'text-gray-500'}`}>
+                              {overall}%
                             </span>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            {hasData ? (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                                {entries.map(([fieldKey, value]) => (
-                                  <div key={fieldKey} className="bg-gray-50 rounded-lg p-3">
-                                    <p className="text-xs font-medium text-gray-500 mb-1">
-                                      {formatFieldLabel(fieldKey)}
-                                    </p>
-                                    <p className="text-sm text-gray-800 break-words">
-                                      {typeof value === 'boolean'
-                                        ? value ? 'Sí' : 'No'
-                                        : String(value)}
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-gray-400 italic py-2">
-                                Este bloque aún no contiene respuestas.
-                              </p>
-                            )}
-                          </AccordionContent>
-                        </AccordionItem>
+                          </div>
+                          <Progress value={overall} className="h-2" />
+                        </div>
                       );
-                    })}
-                  </Accordion>
+                    })()}
+
+                    <Accordion type="multiple" className="w-full">
+                      {EVALUATION_BLOCKS.map((b) => {
+                        const key = b.column as keyof InitialEvaluationData;
+                        const title = b.title;
+                        const blockContent = (evaluationData[key] as Record<string, any>) || {};
+                        const completion = getBlockCompletion(b, blockContent);
+                        const entries = Object.entries(blockContent).filter(
+                          ([, v]) => v !== null && v !== undefined && v !== '' && v !== false
+                        );
+                        const hasData = entries.length > 0;
+                        const statusColor =
+                          completion.percent === 100
+                            ? 'bg-green-100 text-green-700 border-green-300'
+                            : completion.percent > 0
+                            ? 'bg-yellow-100 text-yellow-700 border-yellow-300'
+                            : 'bg-gray-100 text-gray-500 border-gray-300';
+                        return (
+                          <AccordionItem key={key as string} value={key as string}>
+                            <AccordionTrigger className="text-sm font-semibold hover:no-underline">
+                              <div className="flex items-center justify-between w-full pr-3 gap-3">
+                                <span className="text-left flex-1">{title}</span>
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                  <div className="hidden sm:block w-24">
+                                    <Progress value={completion.percent} className="h-1.5" />
+                                  </div>
+                                  <Badge variant="outline" className={`text-xs ${statusColor}`}>
+                                    {completion.answered}/{completion.total} · {completion.percent}%
+                                  </Badge>
+                                </div>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              {hasData ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                  {entries.map(([fieldKey, value]) => (
+                                    <div key={fieldKey} className="bg-gray-50 rounded-lg p-3">
+                                      <p className="text-xs font-medium text-gray-500 mb-1">
+                                        {formatFieldLabel(fieldKey)}
+                                      </p>
+                                      <p className="text-sm text-gray-800 break-words">
+                                        {typeof value === 'boolean'
+                                          ? value ? 'Sí' : 'No'
+                                          : String(value)}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-gray-400 italic py-2">
+                                  Este bloque aún no contiene respuestas.
+                                </p>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
+                  </>
                 )}
               </CardContent>
             </Card>
