@@ -307,6 +307,86 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
                 </CardContent>
               </Card>
             )}
+
+            {/* Evaluación Inicial Profesional (segundo cuestionario) */}
+            <Card className="border-2 border-nutrition-green/30">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <ClipboardList className="w-4 h-4" />
+                    <span>Evaluación Inicial Profesional (Método JAFN)</span>
+                  </div>
+                  {evaluationData?.completed ? (
+                    <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                      <CheckCircle2 className="w-3 h-3 mr-1" />
+                      Completada
+                    </Badge>
+                  ) : evaluationData ? (
+                    <Badge variant="secondary">
+                      <Clock className="w-3 h-3 mr-1" />
+                      En progreso
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">Pendiente</Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {!evaluationData ? (
+                  <p className="text-sm text-gray-500 text-center py-4">
+                    El cliente aún no ha iniciado la evaluación inicial profesional.
+                  </p>
+                ) : (
+                  <Accordion type="multiple" className="w-full">
+                    {EVALUATION_BLOCK_TITLES.map(({ key, title }) => {
+                      const blockContent = (evaluationData[key] as Record<string, any>) || {};
+                      const entries = Object.entries(blockContent).filter(
+                        ([, v]) => v !== null && v !== undefined && v !== '' && v !== false
+                      );
+                      const hasData = entries.length > 0;
+                      return (
+                        <AccordionItem key={key} value={key}>
+                          <AccordionTrigger className="text-sm font-semibold hover:no-underline">
+                            <span className="flex items-center gap-2">
+                              {title}
+                              {hasData ? (
+                                <Badge variant="secondary" className="text-xs">
+                                  {entries.length} respuesta{entries.length === 1 ? '' : 's'}
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="text-xs">Sin datos</Badge>
+                              )}
+                            </span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            {hasData ? (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                {entries.map(([fieldKey, value]) => (
+                                  <div key={fieldKey} className="bg-gray-50 rounded-lg p-3">
+                                    <p className="text-xs font-medium text-gray-500 mb-1">
+                                      {formatFieldLabel(fieldKey)}
+                                    </p>
+                                    <p className="text-sm text-gray-800 break-words">
+                                      {typeof value === 'boolean'
+                                        ? value ? 'Sí' : 'No'
+                                        : String(value)}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-gray-400 italic py-2">
+                                Este bloque aún no contiene respuestas.
+                              </p>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
+                )}
+              </CardContent>
+            </Card>
           </div>
         )}
       </DialogContent>
