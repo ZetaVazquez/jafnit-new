@@ -96,7 +96,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         return;
       }
       try {
-        const { data } = await supabase
+        const { data } = await (supabase as any)
           .from('initial_evaluations')
           .select('completed')
           .eq('user_id', user.id)
