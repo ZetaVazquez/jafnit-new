@@ -757,7 +757,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
           <div className="flex items-center gap-2 flex-wrap justify-end">
             {!isLast ? (
               <Button onClick={handleSaveAndContinue} disabled={loading} className="btn-cta">
-                <Save className="w-4 h-4 mr-2" />
+                {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                 {loading ? 'Guardando...' : 'Guardar y continuar'}
               </Button>
             ) : (
