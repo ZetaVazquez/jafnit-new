@@ -580,12 +580,12 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
                   Ya completada · Modo edición
                 </div>
               ) : (
-                <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                  <Lock className="w-3 h-3" />
-                  Obligatorio
+                <div className="hidden md:flex items-center gap-2 text-xs text-white/50 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                  <Save className="w-3 h-3" />
+                  Guardado automático
                 </div>
               )}
-              {allowClose && (
+              {onClose && (
                 <button
                   type="button"
                   onClick={handleCloseModal}
