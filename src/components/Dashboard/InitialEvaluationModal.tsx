@@ -366,7 +366,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
       } else {
         result = await (supabase as any)
           .from('initial_evaluations')
-          .insert(payload)
+          .upsert(payload, { onConflict: 'user_id' })
           .select()
           .single();
       }
@@ -471,6 +471,16 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         </div>
 
         <div className="w-full max-w-2xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl p-8 md:p-10 relative z-10">
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
           <div className="flex items-center gap-3 mb-6">
             <div className="p-3 rounded-xl bg-[hsl(var(--accent-green))]/20 border border-[hsl(var(--accent-green))]/30">
               <ClipboardList className="w-7 h-7 text-[hsl(var(--accent-green))]" />
@@ -491,19 +501,30 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
           </div>
 
           <div className="flex items-center gap-2 mb-6 px-4 py-3 rounded-xl bg-[hsl(var(--accent-green))]/10 border border-[hsl(var(--accent-green))]/20">
-            <Lock className="w-4 h-4 text-[hsl(var(--accent-green))] flex-shrink-0" />
+            <Save className="w-4 h-4 text-[hsl(var(--accent-green))] flex-shrink-0" />
             <p className="text-xs text-white/70">
-              Este cuestionario es <strong className="text-white">obligatorio</strong> para continuar. Puedes guardar tu progreso por bloques y completarlo más tarde.
+              Tu progreso se guarda automáticamente por bloques. Puedes <strong className="text-white">cerrar y continuar más tarde</strong> cuando quieras: al volver a entrar verás todo lo que ya hayas escrito.
             </p>
           </div>
 
-          <Button
-            onClick={() => setShowIntro(false)}
-            className="w-full btn-cta h-12 text-base"
-          >
-            Comenzar evaluación
-            <ChevronRight className="w-5 h-5 ml-2" />
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={() => setShowIntro(false)}
+              className="flex-1 btn-cta h-12 text-base"
+            >
+              Comenzar evaluación
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
+            {onClose && (
+              <Button
+                variant="outline"
+                onClick={onClose}
+                className="sm:w-auto h-12 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
+              >
+                Más tarde
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -527,7 +548,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   );
 
   const handleCloseModal = () => {
-    if (allowClose && onClose) onClose();
+    if (onClose) onClose();
   };
 
   return (
@@ -559,12 +580,12 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
                   Ya completada · Modo edición
                 </div>
               ) : (
-                <div className="hidden md:flex items-center gap-2 text-xs text-white/40 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                  <Lock className="w-3 h-3" />
-                  Obligatorio
+                <div className="hidden md:flex items-center gap-2 text-xs text-white/50 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                  <Save className="w-3 h-3" />
+                  Guardado automático
                 </div>
               )}
-              {allowClose && (
+              {onClose && (
                 <button
                   type="button"
                   onClick={handleCloseModal}
@@ -665,15 +686,33 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
         {/* Footer */}
         <div className="p-6 pt-4 border-t border-white/10 flex-shrink-0 flex items-center justify-between gap-3 flex-wrap">
-          <Button
-            variant="outline"
-            onClick={handlePrev}
-            disabled={currentBlock === 0 || loading}
-            className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
-          >
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Anterior
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={handlePrev}
+              disabled={currentBlock === 0 || loading}
+              className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Anterior
+            </Button>
+            {onClose && (
+              <Button
+                variant="ghost"
+                onClick={async () => {
+                  const ok = await saveBlock(false);
+                  if (ok) {
+                    toast({ title: 'Progreso guardado', description: 'Puedes continuar más tarde desde tu perfil.' });
+                    onClose();
+                  }
+                }}
+                disabled={loading}
+                className="text-white/60 hover:text-white hover:bg-white/10"
+              >
+                Guardar y cerrar
+              </Button>
+            )}
+          </div>
 
           <div className="flex items-center gap-2 flex-wrap justify-end">
             {!isLast ? (
