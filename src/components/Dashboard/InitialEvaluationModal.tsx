@@ -366,7 +366,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
       } else {
         result = await (supabase as any)
           .from('initial_evaluations')
-          .insert(payload)
+          .upsert(payload, { onConflict: 'user_id' })
           .select()
           .single();
       }
