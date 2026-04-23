@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, Lock, CircleDot, Loader2 } from 'lucide-react';
+import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, CircleDot, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -337,7 +337,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   const updateField = (name: string, value: any) => {
     setBlockData(prev => ({
       ...prev,
-      [block.key]: { ...(prev[block.key] || {}), [name]: value }
+      [block.key]: { ...prev[block.key], [name]: value }
     }));
   };
 
@@ -742,7 +742,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
                 onClick={async () => {
                   const ok = await saveBlock(false);
                   if (ok) {
-                    toast({ title: 'Progreso guardado', description: 'Puedes continuar más tarde desde tu perfil.' });
+                    toast.success('Progreso guardado', { description: 'Puedes continuar más tarde desde tu perfil.' });
                     onClose();
                   }
                 }}
@@ -764,15 +764,15 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               <>
                 <Button
                   variant="outline"
-                  onClick={() => saveBlock(false).then(ok => ok && toast({ title: 'Progreso guardado' }))}
+                  onClick={() => saveBlock(false).then(ok => ok && toast.success('Progreso guardado'))}
                   disabled={loading}
                   className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
                 >
-                  <Save className="w-4 h-4 mr-2" />
+                  {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                   Guardar progreso
                 </Button>
                 <Button onClick={handleFinish} disabled={loading} className="btn-cta">
-                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle2 className="w-4 h-4 mr-2" />}
                   {loading ? 'Finalizando...' : 'Finalizar evaluación'}
                 </Button>
               </>
