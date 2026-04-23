@@ -686,15 +686,33 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
         {/* Footer */}
         <div className="p-6 pt-4 border-t border-white/10 flex-shrink-0 flex items-center justify-between gap-3 flex-wrap">
-          <Button
-            variant="outline"
-            onClick={handlePrev}
-            disabled={currentBlock === 0 || loading}
-            className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
-          >
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Anterior
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={handlePrev}
+              disabled={currentBlock === 0 || loading}
+              className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Anterior
+            </Button>
+            {onClose && (
+              <Button
+                variant="ghost"
+                onClick={async () => {
+                  const ok = await saveBlock(false);
+                  if (ok) {
+                    toast({ title: 'Progreso guardado', description: 'Puedes continuar más tarde desde tu perfil.' });
+                    onClose();
+                  }
+                }}
+                disabled={loading}
+                className="text-white/60 hover:text-white hover:bg-white/10"
+              >
+                Guardar y cerrar
+              </Button>
+            )}
+          </div>
 
           <div className="flex items-center gap-2 flex-wrap justify-end">
             {!isLast ? (
