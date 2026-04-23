@@ -548,7 +548,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   );
 
   const handleCloseModal = () => {
-    if (allowClose && onClose) onClose();
+    if (onClose) onClose();
   };
 
   return (
