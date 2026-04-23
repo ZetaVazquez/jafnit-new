@@ -212,6 +212,8 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
       <InitialEvaluationModal
         isOpen={showInitialEvaluation}
         onComplete={() => setShowInitialEvaluation(false)}
+        allowClose
+        onClose={() => setShowInitialEvaluation(false)}
       />
 
       {/* Header */}
