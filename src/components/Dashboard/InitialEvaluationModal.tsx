@@ -5,10 +5,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, Lock, CircleDot } from 'lucide-react';
+import { ClipboardList, ChevronLeft, ChevronRight, Save, CheckCircle2, X, CircleDot, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface InitialEvaluationModalProps {
   isOpen: boolean;
@@ -282,7 +282,6 @@ export const getOverallEvaluationProgress = (
 
 const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen, onComplete, allowClose = false, onClose }) => {
   const { user } = useAuth();
-  const { toast } = useToast();
   const [currentBlock, setCurrentBlock] = useState(0);
   const [blockData, setBlockData] = useState<Record<string, Record<string, any>>>({});
   const [evaluationId, setEvaluationId] = useState<string | null>(null);
@@ -338,7 +337,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   const updateField = (name: string, value: any) => {
     setBlockData(prev => ({
       ...prev,
-      [block.key]: { ...(prev[block.key] || {}), [name]: value }
+      [block.key]: { ...prev[block.key], [name]: value }
     }));
   };
 
@@ -355,31 +354,53 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         payload.completed_at = new Date().toISOString();
       }
 
-      let result;
-      if (evaluationId) {
-        result = await (supabase as any)
+      let targetId = evaluationId;
+
+      if (!targetId) {
+        const existing = await (supabase as any)
           .from('initial_evaluations')
-          .update(payload)
-          .eq('id', evaluationId)
-          .select()
-          .single();
-      } else {
-        result = await (supabase as any)
-          .from('initial_evaluations')
-          .upsert(payload, { onConflict: 'user_id' })
-          .select()
-          .single();
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (existing.error) {
+          throw existing.error;
+        }
+
+        targetId = existing.data?.id ?? null;
       }
 
+      const result = targetId
+        ? await (supabase as any)
+            .from('initial_evaluations')
+            .update(payload)
+            .eq('id', targetId)
+            .select('*')
+            .single()
+        : await (supabase as any)
+            .from('initial_evaluations')
+            .insert(payload)
+            .select('*')
+            .single();
+
       if (result.error) throw result.error;
-      if (result.data) setEvaluationId(result.data.id);
+
+      if (result.data) {
+        setEvaluationId(result.data.id);
+        setBlockData(prev => {
+          const synced = { ...prev };
+          EVALUATION_BLOCKS.forEach(b => {
+            synced[b.key] = (result.data[b.column] as Record<string, any>) || prev[b.key] || {};
+          });
+          return synced;
+        });
+      }
+
       return true;
     } catch (err: any) {
       console.error('Error saving block:', err);
-      toast({
-        title: 'Error al guardar',
-        description: err.message || 'No se pudo guardar el progreso.',
-        variant: 'destructive',
+      toast.error('Error al guardar', {
+        description: err?.message || 'No se pudo guardar el progreso.',
       });
       return false;
     } finally {
@@ -388,10 +409,21 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   };
 
   const handleSaveAndContinue = async () => {
+    const currentBlockNumber = currentBlock + 1;
+    const loadingToastId = toast.loading(`Guardando bloque ${currentBlockNumber}...`);
     const ok = await saveBlock(false);
-    if (!ok) return;
-    toast({ title: 'Bloque guardado', description: 'Tu progreso se ha guardado.' });
+    if (!ok) {
+      toast.dismiss(loadingToastId);
+      return;
+    }
+
+    toast.success(`Bloque ${currentBlockNumber} guardado`, {
+      id: loadingToastId,
+      description: 'Tus respuestas se han guardado correctamente.',
+    });
+
     if (currentBlock < EVALUATION_BLOCKS.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 250));
       setCurrentBlock(currentBlock + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -402,9 +434,17 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   };
 
   const handleFinish = async () => {
+    const loadingToastId = toast.loading('Guardando evaluación final...');
     const ok = await saveBlock(true);
-    if (!ok) return;
-    toast({ title: '¡Evaluación completada!', description: 'Gracias por completar tu evaluación inicial.' });
+    if (!ok) {
+      toast.dismiss(loadingToastId);
+      return;
+    }
+
+    toast.success('¡Evaluación completada!', {
+      id: loadingToastId,
+      description: 'Gracias por completar tu evaluación inicial.',
+    });
     onComplete();
   };
 
@@ -702,7 +742,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
                 onClick={async () => {
                   const ok = await saveBlock(false);
                   if (ok) {
-                    toast({ title: 'Progreso guardado', description: 'Puedes continuar más tarde desde tu perfil.' });
+                    toast.success('Progreso guardado', { description: 'Puedes continuar más tarde desde tu perfil.' });
                     onClose();
                   }
                 }}
@@ -717,22 +757,22 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
           <div className="flex items-center gap-2 flex-wrap justify-end">
             {!isLast ? (
               <Button onClick={handleSaveAndContinue} disabled={loading} className="btn-cta">
-                <Save className="w-4 h-4 mr-2" />
+                {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                 {loading ? 'Guardando...' : 'Guardar y continuar'}
               </Button>
             ) : (
               <>
                 <Button
                   variant="outline"
-                  onClick={() => saveBlock(false).then(ok => ok && toast({ title: 'Progreso guardado' }))}
+                  onClick={() => saveBlock(false).then(ok => ok && toast.success('Progreso guardado'))}
                   disabled={loading}
                   className="bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
                 >
-                  <Save className="w-4 h-4 mr-2" />
+                  {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                   Guardar progreso
                 </Button>
                 <Button onClick={handleFinish} disabled={loading} className="btn-cta">
-                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle2 className="w-4 h-4 mr-2" />}
                   {loading ? 'Finalizando...' : 'Finalizar evaluación'}
                 </Button>
               </>
