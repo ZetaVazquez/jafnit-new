@@ -18,7 +18,8 @@ import {
   Newspaper,
   Gift,
   Lock,
-  ChevronRight
+  ChevronRight,
+  ClipboardList
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -49,6 +50,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [currentView, setCurrentView] = useState<string>(initialView);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showInitialEvaluation, setShowInitialEvaluation] = useState(false);
+  const [reopenEvaluation, setReopenEvaluation] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
