@@ -198,6 +198,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     { id: 'profile', icon: User, title: 'Mi Perfil', desc: 'Gestiona tu información personal, configuraciones y preferencias.', premium: false },
     { id: 'goals', icon: Target, title: 'Mis Objetivos', desc: 'Sigue y completa tus objetivos diarios de salud y bienestar.', premium: false },
     { id: 'progress', icon: TrendingUp, title: 'Mi Progreso', desc: 'Visualiza tu evolución y logros a lo largo del tiempo.', premium: false },
+    { id: 'questionnaire', icon: ClipboardList, title: 'Mi Cuestionario', desc: 'Revisa o actualiza tu Evaluación Inicial del Método JAFN.', premium: false },
     { id: 'diets', icon: Apple, title: 'Mi Plan Nutricional', desc: 'Accede a tu plan de alimentación personalizado y recetas.', premium: true },
     { id: 'workouts', icon: Dumbbell, title: 'Mis Entrenamientos', desc: 'Descubre y sigue tus rutinas de ejercicios personalizadas.', premium: true },
     { id: 'schedule', icon: Calendar, title: 'Mi Agenda', desc: 'Registra tu progreso diario con un calendario editable.', premium: true },
