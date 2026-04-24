@@ -309,11 +309,22 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardCards.map((card) => {
             const locked = card.premium && !hasActiveSubscription;
+            const handleClick = () => {
+              if (card.id === 'questionnaire') {
+                setReopenEvaluation(true);
+                return;
+              }
+              if (card.premium) {
+                handlePremiumView(card.id);
+              } else {
+                setCurrentView(card.id);
+              }
+            };
             return (
               <Card 
                 key={card.id}
                 className={`cursor-pointer border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group ${locked ? 'opacity-60' : ''}`}
-                onClick={() => card.premium ? handlePremiumView(card.id) : setCurrentView(card.id)}
+                onClick={handleClick}
               >
                 <CardHeader>
                   <CardTitle className="flex items-center text-[hsl(var(--accent-green))]">
