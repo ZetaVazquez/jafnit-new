@@ -18,7 +18,8 @@ import {
   Newspaper,
   Gift,
   Lock,
-  ChevronRight
+  ChevronRight,
+  ClipboardList
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -49,6 +50,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [currentView, setCurrentView] = useState<string>(initialView);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showInitialEvaluation, setShowInitialEvaluation] = useState(false);
+  const [reopenEvaluation, setReopenEvaluation] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -196,6 +198,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
     { id: 'profile', icon: User, title: 'Mi Perfil', desc: 'Gestiona tu información personal, configuraciones y preferencias.', premium: false },
     { id: 'goals', icon: Target, title: 'Mis Objetivos', desc: 'Sigue y completa tus objetivos diarios de salud y bienestar.', premium: false },
     { id: 'progress', icon: TrendingUp, title: 'Mi Progreso', desc: 'Visualiza tu evolución y logros a lo largo del tiempo.', premium: false },
+    { id: 'questionnaire', icon: ClipboardList, title: 'Mi Cuestionario', desc: 'Revisa o actualiza tu Evaluación Inicial del Método JAFN.', premium: false },
     { id: 'diets', icon: Apple, title: 'Mi Plan Nutricional', desc: 'Accede a tu plan de alimentación personalizado y recetas.', premium: true },
     { id: 'workouts', icon: Dumbbell, title: 'Mis Entrenamientos', desc: 'Descubre y sigue tus rutinas de ejercicios personalizadas.', premium: true },
     { id: 'schedule', icon: Calendar, title: 'Mi Agenda', desc: 'Registra tu progreso diario con un calendario editable.', premium: true },
@@ -214,6 +217,14 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         onComplete={() => setShowInitialEvaluation(false)}
         allowClose
         onClose={() => setShowInitialEvaluation(false)}
+      />
+
+      {/* Re-apertura manual del cuestionario desde la tarjeta "Mi Cuestionario" */}
+      <InitialEvaluationModal
+        isOpen={reopenEvaluation}
+        onComplete={() => setReopenEvaluation(false)}
+        allowClose
+        onClose={() => setReopenEvaluation(false)}
       />
 
       {/* Header */}
@@ -298,11 +309,22 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardCards.map((card) => {
             const locked = card.premium && !hasActiveSubscription;
+            const handleClick = () => {
+              if (card.id === 'questionnaire') {
+                setReopenEvaluation(true);
+                return;
+              }
+              if (card.premium) {
+                handlePremiumView(card.id);
+              } else {
+                setCurrentView(card.id);
+              }
+            };
             return (
               <Card 
                 key={card.id}
                 className={`cursor-pointer border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group ${locked ? 'opacity-60' : ''}`}
-                onClick={() => card.premium ? handlePremiumView(card.id) : setCurrentView(card.id)}
+                onClick={handleClick}
               >
                 <CardHeader>
                   <CardTitle className="flex items-center text-[hsl(var(--accent-green))]">
