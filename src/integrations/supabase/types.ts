@@ -14,16 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      initial_evaluations: {
+        Row: {
+          block_1_identification: Json
+          block_2_health_screening: Json
+          block_3_dietary_history: Json
+          block_4_training_profile: Json
+          block_5_lifestyle_recovery: Json
+          block_6_medical_clinical: Json
+          block_7_hormonal_health: Json
+          block_8_anthropometry: Json
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          block_1_identification?: Json
+          block_2_health_screening?: Json
+          block_3_dietary_history?: Json
+          block_4_training_profile?: Json
+          block_5_lifestyle_recovery?: Json
+          block_6_medical_clinical?: Json
+          block_7_hormonal_health?: Json
+          block_8_anthropometry?: Json
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          block_1_identification?: Json
+          block_2_health_screening?: Json
+          block_3_dietary_history?: Json
+          block_4_training_profile?: Json
+          block_5_lifestyle_recovery?: Json
+          block_6_medical_clinical?: Json
+          block_7_hormonal_health?: Json
+          block_8_anthropometry?: Json
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +227,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
