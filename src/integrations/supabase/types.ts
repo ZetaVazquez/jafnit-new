@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -39,19 +39,11 @@ export type Database = {
           metadata?: Json | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "activity_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       admin_earnings: {
         Row: {
-          admin_id: string
+          admin_id: string | null
           amount: number
           created_at: string
           description: string | null
@@ -59,15 +51,15 @@ export type Database = {
           id: string
         }
         Insert: {
-          admin_id: string
-          amount: number
+          admin_id?: string | null
+          amount?: number
           created_at?: string
           description?: string | null
           earning_date?: string
           id?: string
         }
         Update: {
-          admin_id?: string
+          admin_id?: string | null
           amount?: number
           created_at?: string
           description?: string | null
@@ -80,7 +72,7 @@ export type Database = {
         Row: {
           content: string
           created_at: string
-          created_by: string
+          created_by: string | null
           id: string
           image_url: string | null
           published: boolean
@@ -90,7 +82,7 @@ export type Database = {
         Insert: {
           content: string
           created_at?: string
-          created_by: string
+          created_by?: string | null
           id?: string
           image_url?: string | null
           published?: boolean
@@ -100,7 +92,7 @@ export type Database = {
         Update: {
           content?: string
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           id?: string
           image_url?: string | null
           published?: boolean
@@ -149,15 +141,7 @@ export type Database = {
           waist_circumference?: number | null
           weight?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "body_measurements_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       client_forms: {
         Row: {
@@ -201,7 +185,6 @@ export type Database = {
           secondary_objectives: string | null
           start_date: string | null
           training_availability: string | null
-          updated_at: string
           user_id: string
           waist_perimeter: number | null
         }
@@ -246,7 +229,6 @@ export type Database = {
           secondary_objectives?: string | null
           start_date?: string | null
           training_availability?: string | null
-          updated_at?: string
           user_id: string
           waist_perimeter?: number | null
         }
@@ -291,7 +273,6 @@ export type Database = {
           secondary_objectives?: string | null
           start_date?: string | null
           training_availability?: string | null
-          updated_at?: string
           user_id?: string
           waist_perimeter?: number | null
         }
@@ -331,15 +312,7 @@ export type Database = {
           title?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "daily_goals_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       daily_progress: {
         Row: {
@@ -347,7 +320,7 @@ export type Database = {
           completed_at: string | null
           created_at: string
           date: string
-          goal_id: string
+          goal_id: string | null
           id: string
           notes: string | null
           user_id: string
@@ -358,7 +331,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           date?: string
-          goal_id: string
+          goal_id?: string | null
           id?: string
           notes?: string | null
           user_id: string
@@ -369,28 +342,13 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           date?: string
-          goal_id?: string
+          goal_id?: string | null
           id?: string
           notes?: string | null
           user_id?: string
           value_achieved?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "daily_progress_goal_id_fkey"
-            columns: ["goal_id"]
-            isOneToOne: false
-            referencedRelation: "daily_goals"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "daily_progress_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       diet_plans: {
         Row: {
@@ -431,7 +389,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "diet_plans_user_id_fkey"
+            foreignKeyName: "diet_plans_assigned_to_profiles_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diet_plans_user_id_profiles_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -450,7 +415,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          amount_paid: number
+          amount_paid?: number
           created_at?: string
           guide_id: string
           id?: string
@@ -467,15 +432,7 @@ export type Database = {
           stripe_payment_intent_id?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "guide_purchases_guide_id_fkey"
-            columns: ["guide_id"]
-            isOneToOne: false
-            referencedRelation: "guides"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       guides: {
         Row: {
@@ -495,12 +452,12 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
-          discounted_price: number
+          discounted_price?: number
           id?: string
           image_url?: string | null
           is_active?: boolean
           pdf_url: string
-          regular_price: number
+          regular_price?: number
           title: string
           updated_at?: string
         }
@@ -519,6 +476,65 @@ export type Database = {
         }
         Relationships: []
       }
+      initial_evaluations: {
+        Row: {
+          block_1_identification: Json
+          block_2_health_screening: Json
+          block_3_dietary_history: Json
+          block_4_training_profile: Json
+          block_5_lifestyle_recovery: Json
+          block_6_medical_clinical: Json
+          block_7_hormonal_health: Json
+          block_8_anthropometry: Json
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          block_1_identification?: Json
+          block_2_health_screening?: Json
+          block_3_dietary_history?: Json
+          block_4_training_profile?: Json
+          block_5_lifestyle_recovery?: Json
+          block_6_medical_clinical?: Json
+          block_7_hormonal_health?: Json
+          block_8_anthropometry?: Json
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          block_1_identification?: Json
+          block_2_health_screening?: Json
+          block_3_dietary_history?: Json
+          block_4_training_profile?: Json
+          block_5_lifestyle_recovery?: Json
+          block_6_medical_clinical?: Json
+          block_7_hormonal_health?: Json
+          block_8_anthropometry?: Json
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "initial_evaluations_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pending_payments: {
         Row: {
           amount: number
@@ -534,7 +550,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          amount: number
+          amount?: number
           created_at?: string
           id?: string
           notes?: string | null
@@ -559,7 +575,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pending_payments_user_id_profiles_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -568,7 +592,6 @@ export type Database = {
           email: string
           id: string
           name: string
-          password: string | null
           profile_image_url: string | null
           updated_at: string
         }
@@ -577,8 +600,7 @@ export type Database = {
           description?: string | null
           email: string
           id: string
-          name: string
-          password?: string | null
+          name?: string
           profile_image_url?: string | null
           updated_at?: string
         }
@@ -588,7 +610,6 @@ export type Database = {
           email?: string
           id?: string
           name?: string
-          password?: string | null
           profile_image_url?: string | null
           updated_at?: string
         }
@@ -636,7 +657,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "questionnaire_responses_user_id_fkey"
+            foreignKeyName: "questionnaire_responses_user_id_profiles_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -691,14 +712,14 @@ export type Database = {
         }
         Insert: {
           active?: boolean | null
-          amount: number
+          amount?: number
           created_at?: string
           currency?: string
           description?: string | null
           id?: string
           interval_type?: string | null
           name: string
-          plan_type: string
+          plan_type?: string
           stripe_price_id: string
           stripe_product_id: string
           updated_at?: string
@@ -719,51 +740,6 @@ export type Database = {
         }
         Relationships: []
       }
-      stripe_subscription_events: {
-        Row: {
-          amount: number
-          created_at: string
-          currency: string | null
-          current_period_end: string | null
-          current_period_start: string | null
-          id: string
-          plan_type: string
-          status: string
-          stripe_customer_id: string
-          stripe_subscription_id: string | null
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          currency?: string | null
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan_type: string
-          status?: string
-          stripe_customer_id: string
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          currency?: string | null
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan_type?: string
-          status?: string
-          stripe_customer_id?: string
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       stripe_subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -774,7 +750,7 @@ export type Database = {
           id: string
           plan_type: string
           status: string
-          stripe_customer_id: string
+          stripe_customer_id: string | null
           stripe_price_id: string | null
           stripe_subscription_id: string | null
           updated_at: string
@@ -787,9 +763,9 @@ export type Database = {
           current_period_end?: string | null
           current_period_start?: string | null
           id?: string
-          plan_type: string
+          plan_type?: string
           status?: string
-          stripe_customer_id: string
+          stripe_customer_id?: string | null
           stripe_price_id?: string | null
           stripe_subscription_id?: string | null
           updated_at?: string
@@ -804,7 +780,7 @@ export type Database = {
           id?: string
           plan_type?: string
           status?: string
-          stripe_customer_id?: string
+          stripe_customer_id?: string | null
           stripe_price_id?: string | null
           stripe_subscription_id?: string | null
           updated_at?: string
@@ -826,12 +802,12 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          amount: number
+          amount?: number
           created_at?: string
           end_date?: string | null
           id?: string
           payment_method?: string | null
-          plan_type: string
+          plan_type?: string
           start_date?: string | null
           status?: string
           updated_at?: string
@@ -851,7 +827,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "subscriptions_user_id_fkey"
+            foreignKeyName: "subscriptions_user_id_profiles_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -1006,7 +982,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "workout_plans_user_id_fkey"
+            foreignKeyName: "workout_plans_assigned_to_profiles_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_plans_user_id_profiles_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -1030,7 +1013,7 @@ export type Database = {
           id: string
           plan_type: string
           status: string
-          stripe_customer_id: string
+          stripe_customer_id: string | null
           stripe_price_id: string | null
           stripe_subscription_id: string | null
           updated_at: string
@@ -1072,14 +1055,9 @@ export type Database = {
           email: string
           id: string
           name: string
-          password: string
           profile_image_url: string
           updated_at: string
         }[]
-      }
-      get_user_stripe_subscription_status: {
-        Args: { user_uuid: string }
-        Returns: string
       }
       get_user_subscription_status: {
         Args: { user_uuid: string }
@@ -1093,7 +1071,6 @@ export type Database = {
         Returns: boolean
       }
       update_expired_subscriptions: { Args: never; Returns: undefined }
-      user_exists: { Args: { user_uuid: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
