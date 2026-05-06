@@ -80,7 +80,7 @@ const AdminDietPlanManager: React.FC<AdminDietPlanManagerProps> = ({ onGoBack })
         .order('created_at', { ascending: false });
 
       if (plansError) throw plansError;
-      setDietPlans(plansData || []);
+      setDietPlans((plansData as any) || []);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
