@@ -201,7 +201,29 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
                         </button>
                         {expandedDays.has(index) && (
                           <div className="p-4 bg-white/[0.02]">
-                            <pre className="whitespace-pre-wrap text-sm text-white/70 leading-relaxed">{day.exercises}</pre>
+                            {Array.isArray(day.items) && day.items.length > 0 ? (
+                              <div className="space-y-3">
+                                {day.items.map((it: any, i: number) => (
+                                  <div key={i} className="rounded-lg border border-white/10 bg-white/5 p-3 flex gap-3">
+                                    {it.video_url ? (
+                                      <video src={it.video_url} controls className="w-32 h-32 object-cover rounded" poster={it.thumbnail_url || undefined} />
+                                    ) : it.thumbnail_url ? (
+                                      <img src={it.thumbnail_url} alt={it.name} className="w-32 h-32 object-cover rounded" />
+                                    ) : (
+                                      <div className="w-32 h-32 bg-white/5 rounded flex items-center justify-center text-white/30">Sin media</div>
+                                    )}
+                                    <div className="flex-1">
+                                      <div className="text-white font-semibold">{it.name}</div>
+                                      <div className="text-xs text-white/40 capitalize mb-2">{it.muscle_group}</div>
+                                      <div className="text-sm text-white/70">{it.sets} series × {it.reps} reps · {it.rest_seconds}s descanso</div>
+                                      {it.notes && <div className="text-xs text-white/50 mt-1 italic">{it.notes}</div>}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <pre className="whitespace-pre-wrap text-sm text-white/70 leading-relaxed">{day.exercises}</pre>
+                            )}
                           </div>
                         )}
                       </div>

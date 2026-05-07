@@ -108,7 +108,37 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                                 {diet.calories_target && <div><h4 className="font-semibold text-white mb-1">Objetivo de calorías:</h4><p className="text-white/60">{diet.calories_target} cal/día</p></div>}
                                 <div><h4 className="font-semibold text-white mb-1">Fecha de creación:</h4><p className="text-white/60">{new Date(diet.created_at).toLocaleDateString('es-ES')}</p></div>
                               </div>
-                              <div><h4 className="font-semibold text-white mb-2">Plan de Comidas:</h4><div className="bg-white/5 p-4 rounded-lg border border-white/10"><pre className="whitespace-pre-wrap text-sm text-white/60 font-mono">{formatMealPlan(diet.meal_plan)}</pre></div></div>
+                              <div>
+                                <h4 className="font-semibold text-white mb-2">Plan de Comidas:</h4>
+                                {Array.isArray(diet.meal_plan?.days) && diet.meal_plan.days.length > 0 ? (
+                                  <div className="space-y-4">
+                                    {diet.meal_plan.days.map((day: any, di: number) => (
+                                      <div key={di} className="rounded-lg border border-white/10 bg-white/5 p-3">
+                                        <h5 className="text-[hsl(var(--accent-green))] font-semibold mb-2">{day.day}</h5>
+                                        <div className="grid sm:grid-cols-2 gap-2">
+                                          {(day.meals || []).map((m: any, mi: number) => (
+                                            <div key={mi} className="rounded-lg border border-white/10 bg-white/[0.03] p-2 flex gap-2">
+                                              {m.image_url ? (
+                                                <img src={m.image_url} alt={m.name} className="w-20 h-20 object-cover rounded" />
+                                              ) : (
+                                                <div className="w-20 h-20 bg-white/5 rounded" />
+                                              )}
+                                              <div className="flex-1 min-w-0">
+                                                <div className="text-white text-sm font-medium">{m.name}</div>
+                                                <div className="text-xs text-white/40 capitalize">{m.meal_type}</div>
+                                                <div className="text-xs text-white/60 mt-1">{m.quantity}{m.calories != null ? ` · ${m.calories} kcal` : ''}</div>
+                                                {m.notes && <div className="text-xs text-white/40 italic">{m.notes}</div>}
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div className="bg-white/5 p-4 rounded-lg border border-white/10"><pre className="whitespace-pre-wrap text-sm text-white/60 font-mono">{formatMealPlan(diet.meal_plan)}</pre></div>
+                                )}
+                              </div>
                             </div>
                           </DialogContent>
                         </Dialog>
