@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Users, FileText, Dumbbell, DollarSign, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList } from 'lucide-react';
+import { Users, FileText, Dumbbell, DollarSign, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList, Library, UtensilsCrossed } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AdminClientsTable from './AdminClientsTable';
-import AdminDietPlanManager from './AdminDietPlanManager';
-import AdminWorkoutManager from './AdminWorkoutManager';
+import AdminDietBuilder from './AdminDietBuilder';
+import AdminWorkoutBuilder from './AdminWorkoutBuilder';
+import AdminExerciseLibrary from './AdminExerciseLibrary';
+import AdminMealLibrary from './AdminMealLibrary';
 import AdminEarnings from './AdminEarnings';
 import AdminPendingPayments from './AdminPendingPayments';
 import AdminNewsManager from './AdminNewsManager';
@@ -19,7 +21,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library'>('overview');
   const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
@@ -91,13 +93,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
     { view: 'news' as const, icon: PlusCircle, color: 'from-purple-500/20 to-purple-600/10 border-purple-500/30', iconColor: 'text-purple-400', title: 'Creación de Noticias', subtitle: `${totalNews} noticias` },
     { view: 'testimonials' as const, icon: MessageSquare, color: 'from-indigo-500/20 to-indigo-600/10 border-indigo-500/30', iconColor: 'text-indigo-400', title: 'Gestión de Comentarios', subtitle: 'Revisar testimonios' },
     { view: 'questionnaire' as const, icon: ClipboardList, color: 'from-teal-500/20 to-teal-600/10 border-teal-500/30', iconColor: 'text-teal-400', title: 'Respuestas de Cuestionarios', subtitle: 'Ver respuestas' },
+    { view: 'exercise-library' as const, icon: Library, color: 'from-pink-500/20 to-pink-600/10 border-pink-500/30', iconColor: 'text-pink-400', title: 'Biblioteca Ejercicios', subtitle: 'Videos y fichas' },
+    { view: 'meal-library' as const, icon: UtensilsCrossed, color: 'from-lime-500/20 to-lime-600/10 border-lime-500/30', iconColor: 'text-lime-400', title: 'Biblioteca Comidas', subtitle: 'Recetas con foto' },
   ];
 
   const renderContent = () => {
     switch (currentView) {
       case 'clients': return <AdminClientsTable onGoBack={() => setCurrentView('overview')} />;
-      case 'diet': return <AdminDietPlanManager onGoBack={() => setCurrentView('overview')} />;
-      case 'workout': return <AdminWorkoutManager onGoBack={() => setCurrentView('overview')} />;
+      case 'diet': return <AdminDietBuilder onGoBack={() => setCurrentView('overview')} />;
+      case 'workout': return <AdminWorkoutBuilder onGoBack={() => setCurrentView('overview')} />;
+      case 'exercise-library': return <AdminExerciseLibrary onGoBack={() => setCurrentView('overview')} />;
+      case 'meal-library': return <AdminMealLibrary onGoBack={() => setCurrentView('overview')} />;
       case 'earnings': return <AdminEarnings onGoBack={() => setCurrentView('overview')} />;
       case 'pending-payments': return <AdminPendingPayments onGoBack={() => setCurrentView('overview')} />;
       case 'news': return <AdminNewsManager onGoBack={() => setCurrentView('overview')} />;
