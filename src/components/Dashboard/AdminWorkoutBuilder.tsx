@@ -135,7 +135,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
     }
     setSaving(true);
     try {
-      const payload = {
+      const payload: any = {
         title, description, assigned_to: selectedClient, user_id: selectedClient,
         difficulty_level: difficulty, status,
         exercises: { duration, duration_label: DURATION_CONFIG[duration].label, days: days.filter(d => d.items.length > 0) }
