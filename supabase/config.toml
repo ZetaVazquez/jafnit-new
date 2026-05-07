@@ -2,3 +2,6 @@ project_id = "ecddfjnddtgxrqciwsgj"
 
 [functions.initial-evaluations-selftest]
 verify_jwt = false
+
+[functions.generate-plans-from-questionnaire]
+verify_jwt = true
