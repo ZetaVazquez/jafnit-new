@@ -357,8 +357,10 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string | null
+          generated_by_ai: boolean
           id: string
           meal_plan: Json | null
+          status: string
           title: string
           updated_at: string
           user_id: string
@@ -369,8 +371,10 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          generated_by_ai?: boolean
           id?: string
           meal_plan?: Json | null
+          status?: string
           title: string
           updated_at?: string
           user_id: string
@@ -381,8 +385,10 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          generated_by_ai?: boolean
           id?: string
           meal_plan?: Json | null
+          status?: string
           title?: string
           updated_at?: string
           user_id?: string
@@ -403,6 +409,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      exercises_library: {
+        Row: {
+          created_at: string
+          description: string | null
+          difficulty: string
+          equipment: string | null
+          id: string
+          instructions: string | null
+          muscle_group: string
+          name: string
+          thumbnail_url: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string
+          equipment?: string | null
+          id?: string
+          instructions?: string | null
+          muscle_group: string
+          name: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string
+          equipment?: string | null
+          id?: string
+          instructions?: string | null
+          muscle_group?: string
+          name?: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
       }
       guide_purchases: {
         Row: {
@@ -534,6 +582,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      meals_library: {
+        Row: {
+          calories: number | null
+          carbs_g: number | null
+          created_at: string
+          description: string | null
+          diet_tags: string[] | null
+          fats_g: number | null
+          id: string
+          image_url: string | null
+          ingredients: string | null
+          meal_type: string
+          name: string
+          protein_g: number | null
+          updated_at: string
+        }
+        Insert: {
+          calories?: number | null
+          carbs_g?: number | null
+          created_at?: string
+          description?: string | null
+          diet_tags?: string[] | null
+          fats_g?: number | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string | null
+          meal_type: string
+          name: string
+          protein_g?: number | null
+          updated_at?: string
+        }
+        Update: {
+          calories?: number | null
+          carbs_g?: number | null
+          created_at?: string
+          description?: string | null
+          diet_tags?: string[] | null
+          fats_g?: number | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string | null
+          meal_type?: string
+          name?: string
+          protein_g?: number | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       pending_payments: {
         Row: {
@@ -951,7 +1047,9 @@ export type Database = {
           description: string | null
           difficulty_level: string | null
           exercises: Json | null
+          generated_by_ai: boolean
           id: string
+          status: string
           title: string
           updated_at: string
           user_id: string
@@ -963,7 +1061,9 @@ export type Database = {
           description?: string | null
           difficulty_level?: string | null
           exercises?: Json | null
+          generated_by_ai?: boolean
           id?: string
+          status?: string
           title: string
           updated_at?: string
           user_id: string
@@ -975,7 +1075,9 @@ export type Database = {
           description?: string | null
           difficulty_level?: string | null
           exercises?: Json | null
+          generated_by_ai?: boolean
           id?: string
+          status?: string
           title?: string
           updated_at?: string
           user_id?: string
