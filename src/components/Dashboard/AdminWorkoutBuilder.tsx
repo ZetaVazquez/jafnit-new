@@ -135,16 +135,23 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
     }
     setSaving(true);
     try {
-      const payload: any = {
-        title, description, assigned_to: selectedClient, user_id: selectedClient,
-        difficulty_level: difficulty, status,
-        exercises: { duration, duration_label: DURATION_CONFIG[duration].label, days: days.filter(d => d.items.length > 0) }
-      };
+      const exercisesPayload = { duration, duration_label: DURATION_CONFIG[duration].label, days: days.filter(d => d.items.length > 0) };
       if (editing) {
-        const { error } = await supabase.from('workout_plans').update(payload).eq('id', editing.id);
+        const { error } = await supabase.rpc('admin_update_workout_plan', {
+          p_id: editing.id,
+          p_title: title,
+          p_description: description,
+          p_assigned_to: selectedClient,
+          p_difficulty_level: difficulty,
+          p_status: status,
+          p_exercises: exercisesPayload as unknown as any,
+        });
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('workout_plans').insert(payload);
+        const { error } = await supabase.from('workout_plans').insert({
+          title, description, assigned_to: selectedClient, user_id: selectedClient,
+          difficulty_level: difficulty, status, exercises: exercisesPayload as any,
+        });
         if (error) throw error;
       }
       toast({ title: status === 'approved' ? 'Plan aprobado y enviado' : 'Borrador guardado' });
@@ -155,7 +162,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
   };
 
   const approveDraft = async (id: string) => {
-    const { error } = await supabase.from('workout_plans').update({ status: 'approved' }).eq('id', id);
+    const { error } = await supabase.rpc('admin_approve_workout_plan', { p_id: id });
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Plan aprobado y enviado al cliente' });
     fetchPlans();
@@ -163,7 +170,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
 
   const deletePlan = async (id: string, name: string) => {
     if (!confirm(`¿Eliminar "${name}"?`)) return;
-    const { error } = await supabase.from('workout_plans').delete().eq('id', id);
+    const { error } = await supabase.rpc('admin_delete_workout_plan', { p_id: id });
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Eliminado' }); fetchPlans();
   };
