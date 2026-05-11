@@ -144,7 +144,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
           p_assigned_to: selectedClient,
           p_difficulty_level: difficulty,
           p_status: status,
-          p_exercises: exercisesPayload as any,
+          p_exercises: exercisesPayload as unknown as any,
         });
         if (error) throw error;
       } else {
