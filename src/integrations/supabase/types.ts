@@ -1104,6 +1104,85 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_approve_diet_plan: {
+        Args: { p_id: string }
+        Returns: {
+          assigned_to: string | null
+          calories_target: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          generated_by_ai: boolean
+          id: string
+          meal_plan: Json | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "diet_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_approve_workout_plan: {
+        Args: { p_id: string }
+        Returns: {
+          assigned_to: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty_level: string | null
+          exercises: Json | null
+          generated_by_ai: boolean
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "workout_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_delete_diet_plan: { Args: { p_id: string }; Returns: undefined }
+      admin_delete_workout_plan: { Args: { p_id: string }; Returns: undefined }
+      admin_update_diet_plan: {
+        Args: {
+          p_assigned_to: string
+          p_calories_target: number
+          p_description: string
+          p_id: string
+          p_meal_plan: Json
+          p_status: string
+          p_title: string
+        }
+        Returns: {
+          assigned_to: string | null
+          calories_target: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          generated_by_ai: boolean
+          id: string
+          meal_plan: Json | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "diet_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       admin_update_stripe_subscription_end_date: {
         Args: { p_new_end: string; p_subscription_id: string }
         Returns: {
@@ -1145,6 +1224,37 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "subscriptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_update_workout_plan: {
+        Args: {
+          p_assigned_to: string
+          p_description: string
+          p_difficulty_level: string
+          p_exercises: Json
+          p_id: string
+          p_status: string
+          p_title: string
+        }
+        Returns: {
+          assigned_to: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty_level: string | null
+          exercises: Json | null
+          generated_by_ai: boolean
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "workout_plans"
           isOneToOne: true
           isSetofReturn: false
         }
