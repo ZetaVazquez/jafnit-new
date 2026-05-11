@@ -150,7 +150,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
       } else {
         const { error } = await supabase.from('workout_plans').insert({
           title, description, assigned_to: selectedClient, user_id: selectedClient,
-          difficulty_level: difficulty, status, exercises: exercisesPayload,
+          difficulty_level: difficulty, status, exercises: exercisesPayload as any,
         });
         if (error) throw error;
       }
