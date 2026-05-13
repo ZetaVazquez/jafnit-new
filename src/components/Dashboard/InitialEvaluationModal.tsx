@@ -345,43 +345,15 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     if (!user) return false;
     setLoading(true);
     try {
-      const payload: Record<string, any> = { user_id: user.id };
-      EVALUATION_BLOCKS.forEach(b => {
-        payload[b.column] = blockData[b.key] || {};
+      const rpcPayload = EVALUATION_BLOCKS.reduce((acc, b) => {
+        acc[`p_${b.column}`] = blockData[b.key] || {};
+        return acc;
+      }, {} as Record<string, any>);
+
+      const result = await (supabase as any).rpc('save_initial_evaluation', {
+        ...rpcPayload,
+        p_mark_completed: markCompleted,
       });
-      if (markCompleted) {
-        payload.completed = true;
-        payload.completed_at = new Date().toISOString();
-      }
-
-      let targetId = evaluationId;
-
-      if (!targetId) {
-        const existing = await (supabase as any)
-          .from('initial_evaluations')
-          .select('id')
-          .eq('user_id', user.id)
-          .maybeSingle();
-
-        if (existing.error) {
-          throw existing.error;
-        }
-
-        targetId = existing.data?.id ?? null;
-      }
-
-      const result = targetId
-        ? await (supabase as any)
-            .from('initial_evaluations')
-            .update(payload)
-            .eq('id', targetId)
-            .select('*')
-            .single()
-        : await (supabase as any)
-            .from('initial_evaluations')
-            .insert(payload)
-            .select('*')
-            .single();
 
       if (result.error) throw result.error;
 
