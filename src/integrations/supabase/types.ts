@@ -1282,6 +1282,41 @@ export type Database = {
         }
         Returns: boolean
       }
+      save_initial_evaluation: {
+        Args: {
+          p_block_1_identification?: Json
+          p_block_2_health_screening?: Json
+          p_block_3_dietary_history?: Json
+          p_block_4_training_profile?: Json
+          p_block_5_lifestyle_recovery?: Json
+          p_block_6_medical_clinical?: Json
+          p_block_7_hormonal_health?: Json
+          p_block_8_anthropometry?: Json
+          p_mark_completed?: boolean
+        }
+        Returns: {
+          block_1_identification: Json
+          block_2_health_screening: Json
+          block_3_dietary_history: Json
+          block_4_training_profile: Json
+          block_5_lifestyle_recovery: Json
+          block_6_medical_clinical: Json
+          block_7_hormonal_health: Json
+          block_8_anthropometry: Json
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "initial_evaluations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       update_expired_subscriptions: { Args: never; Returns: undefined }
     }
     Enums: {
