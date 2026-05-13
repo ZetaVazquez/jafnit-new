@@ -465,7 +465,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             <SelectTrigger className={`${inputClass} h-10`}>
               <SelectValue placeholder="Selecciona una opción" />
             </SelectTrigger>
-            <SelectContent className="bg-[hsl(220,20%,14%)] border-white/10 text-white">
+            <SelectContent className="z-[200] bg-[hsl(220,20%,14%)] border-white/10 text-white">
               {field.options?.map(opt => (
                 <SelectItem key={opt} value={opt} className="hover:bg-white/10 focus:bg-white/10 focus:text-white">{opt}</SelectItem>
               ))}
