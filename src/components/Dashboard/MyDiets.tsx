@@ -135,21 +135,31 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                                             const labels: Record<string,string> = {breakfast:'Desayuno',desayuno:'Desayuno',lunch:'Comida',comida:'Comida',snack:'Merienda',merienda:'Merienda',dinner:'Cena',cena:'Cena',otro:'Otro'};
                                             return Object.keys(groups).sort((a,b)=>order.indexOf(a)-order.indexOf(b)).map((mt) => (
                                               <div key={mt}>
-                                                <h6 className="text-xs uppercase tracking-wide text-[hsl(var(--accent-green))]/80 mb-1">{labels[mt] || mt}</h6>
+                                                <div className="text-white text-sm font-medium mb-2 leading-snug">
+                                                  {groups[mt].map((m: any) => m.name).join(' o ')}{' '}
+                                                  <span className="text-[hsl(var(--accent-green))] uppercase text-xs tracking-wider">({(labels[mt] || mt).toUpperCase()})</span>
+                                                </div>
                                                 <div className="grid sm:grid-cols-2 gap-2">
                                                   {groups[mt].map((m: any, mi: number) => (
                                                     <div key={mi} className="rounded-lg border border-white/10 bg-white/[0.03] p-2 flex gap-2">
-                                              {m.image_url ? (
-                                                <img src={m.image_url} alt={m.name} className="w-20 h-20 object-cover rounded" />
-                                              ) : (
-                                                <div className="w-20 h-20 bg-white/5 rounded" />
-                                              )}
-                                              <div className="flex-1 min-w-0">
-                                                <div className="text-[10px] text-white/40 uppercase">Opción {mi + 1}</div>
-                                                <div className="text-white text-sm font-medium">{m.name}</div>
-                                                <div className="text-xs text-white/60 mt-1">{m.quantity}{m.calories != null ? ` · ${m.calories} kcal` : ''}</div>
-                                                {m.notes && <div className="text-xs text-white/40 italic">{m.notes}</div>}
-                                              </div>
+                                                      {m.image_url ? (
+                                                        <img src={m.image_url} alt={m.name} className="w-20 h-20 object-cover rounded" />
+                                                      ) : (
+                                                        <div className="w-20 h-20 bg-white/5 rounded" />
+                                                      )}
+                                                      <div className="flex-1 min-w-0">
+                                                        <div className="text-[10px] text-white/40 uppercase">Opción {mi + 1}</div>
+                                                        <div className="text-white text-sm font-medium">{m.name}</div>
+                                                        <div className="text-xs text-white/60 mt-1">
+                                                          <span className="font-semibold text-[hsl(var(--accent-green))]/90">Cantidad:</span> {m.quantity}
+                                                          {m.calories != null ? ` · ${m.calories} kcal` : ''}
+                                                        </div>
+                                                        {m.notes && (
+                                                          <div className="text-xs text-white/70 mt-1 leading-snug">
+                                                            <span className="font-semibold text-[hsl(var(--accent-green))]/90">Preparación:</span> {m.notes}
+                                                          </div>
+                                                        )}
+                                                      </div>
                                                     </div>
                                                   ))}
                                                 </div>
