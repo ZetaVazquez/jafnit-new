@@ -26,10 +26,27 @@ Deno.serve(async (req) => {
     const { data: roleData } = await admin.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
     if (!roleData) return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
-    const { user_id, type } = await req.json();
+    const { user_id, type, duration } = await req.json();
     if (!user_id || !["workout", "diet"].includes(type)) {
       return new Response(JSON.stringify({ error: "invalid params" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
+
+    // Duration mapping
+    const WORKOUT_DURATIONS: Record<string, { label: string; days: string[] }> = {
+      "1_day": { label: "1 Día", days: ["Día 1"] },
+      "1_week": { label: "1 Semana", days: ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"] },
+      "15_days": { label: "15 Días", days: Array.from({length:15},(_,i)=>`Día ${i+1}`) },
+      "1_month": { label: "1 Mes", days: Array.from({length:28},(_,i)=>`Día ${i+1}`) },
+    };
+    const DIET_DURATIONS: Record<string, { label: string; days: string[] }> = {
+      "1_day": { label: "1 Día", days: ["Día 1"] },
+      "3_days": { label: "3 Días", days: ["Día 1","Día 2","Día 3"] },
+      "1_week": { label: "1 Semana", days: ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"] },
+    };
+    const durationKey = duration || "1_week";
+    const durationConfig = type === "workout"
+      ? (WORKOUT_DURATIONS[durationKey] || WORKOUT_DURATIONS["1_week"])
+      : (DIET_DURATIONS[durationKey] || DIET_DURATIONS["1_week"]);
 
     // Load questionnaire + initial evaluation
     const { data: profile } = await admin.from("profiles").select("name, email").eq("id", user_id).single();
@@ -37,19 +54,27 @@ Deno.serve(async (req) => {
     const { data: initial } = await admin.from("initial_evaluations").select("*").eq("user_id", user_id).maybeSingle();
     const { data: clientForm } = await admin.from("client_forms").select("*").eq("user_id", user_id).order("created_at", { ascending: false }).limit(1).maybeSingle();
 
+    // Detect if we have enough data — otherwise generate a GENERIC plan
+    const hasInitial = !!initial && Object.values(initial).some((v:any) =>
+      v && typeof v === "object" && Object.keys(v).length > 0
+    );
+    const isGeneric = !questionnaire && !hasInitial && !clientForm;
+
     const profileSummary = {
       name: profile?.name,
       questionnaire,
       initial_evaluation: initial,
       client_form: clientForm,
+      _note: isGeneric ? "NO HAY DATOS DEL CLIENTE. Genera un plan GENÉRICO equilibrado para adulto promedio." : undefined,
     };
 
     if (type === "workout") {
       const { data: exercises } = await admin.from("exercises_library").select("id, name, muscle_group, difficulty, equipment");
       const exList = (exercises || []).map(e => `- [${e.id}] ${e.name} (${e.muscle_group}, ${e.difficulty})`).join("\n");
 
-      const systemPrompt = `Eres un entrenador personal experto del método JAFN. Genera un plan de entrenamiento de 1 semana adaptado a los datos del cliente. SOLO puedes elegir ejercicios de la biblioteca proporcionada usando su exact id. Devuelve JSON estricto.`;
-      const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${exList}`;
+      const systemPrompt = `Eres un entrenador personal experto del método JAFN. Genera un plan de entrenamiento adaptado a los datos del cliente. SOLO puedes elegir ejercicios de la biblioteca proporcionada usando su exact id. Devuelve JSON estricto.
+IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.${isGeneric ? "\nEl cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de dificultad intermedia." : ""}`;
+      const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${exList}\n\nDías a generar (${durationConfig.days.length}): ${durationConfig.days.join(", ")}`;
 
       const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -118,7 +143,7 @@ Deno.serve(async (req) => {
       const exMap = new Map((exercises || []).map(e => [e.id, e] as const));
       const { data: libFull } = await admin.from("exercises_library").select("*");
       const libMap = new Map((libFull || []).map(e => [e.id, e] as const));
-      const enrichedDays = (args.days || []).map((d: any) => ({
+      let enrichedDays = (args.days || []).map((d: any) => ({
         day: d.day,
         items: (d.items || []).filter((it: any) => libMap.has(it.exercise_id)).map((it: any) => {
           const lib = libMap.get(it.exercise_id)!;
@@ -129,13 +154,16 @@ Deno.serve(async (req) => {
           };
         })
       })).filter((d: any) => d.items.length > 0);
+      // Enforce duration: trim or pad
+      enrichedDays = enrichedDays.slice(0, durationConfig.days.length);
 
       const { error } = await admin.from("workout_plans").insert({
-        title: args.title, description: args.description,
+        title: (isGeneric ? "[Genérico] " : "") + args.title,
+        description: args.description,
         user_id, assigned_to: user_id,
         difficulty_level: args.difficulty_level,
         status: "draft", generated_by_ai: true,
-        exercises: { duration: "1_week", duration_label: "1 Semana", days: enrichedDays }
+        exercises: { duration: durationKey, duration_label: durationConfig.label, days: enrichedDays, is_generic: isGeneric }
       });
       if (error) throw error;
 
@@ -146,8 +174,11 @@ Deno.serve(async (req) => {
     const { data: meals } = await admin.from("meals_library").select("id, name, meal_type, calories, protein_g, carbs_g, fats_g, diet_tags");
     const mealsList = (meals || []).map(m => `- [${m.id}] ${m.name} (${m.meal_type}, ${m.calories ?? "?"} kcal)`).join("\n");
 
-    const systemPrompt = `Eres un nutricionista del método JAFN. Genera un plan de dieta de 1 semana. SOLO usa comidas de la biblioteca por su id. Devuelve JSON estricto.`;
-    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${mealsList}`;
+    const systemPrompt = `Eres un nutricionista del método JAFN. Genera un plan de dieta. SOLO usa comidas de la biblioteca por su id. Devuelve JSON estricto.
+IMPORTANTE:
+- El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.
+- Para CADA día debes incluir 2 OPCIONES por cada tipo de comida (desayuno, comida, merienda y cena). Es decir, 8 entradas por día (2 desayuno, 2 comida, 2 merienda, 2 cena), para que el cliente pueda elegir entre alternativas.${isGeneric ? "\n- El cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de ~2000 kcal." : ""}`;
+    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${mealsList}\n\nDías a generar (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 2 opciones por cada uno de los 4 tipos de comida (8 entradas/día).`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -212,7 +243,7 @@ Deno.serve(async (req) => {
 
     const { data: libFull } = await admin.from("meals_library").select("*");
     const libMap = new Map((libFull || []).map(m => [m.id, m] as const));
-    const enrichedDays = (args.days || []).map((d: any) => ({
+    let enrichedDays = (args.days || []).map((d: any) => ({
       day: d.day,
       meals: (d.meals || []).filter((m: any) => libMap.has(m.meal_id)).map((m: any) => {
         const lib = libMap.get(m.meal_id)!;
@@ -223,13 +254,15 @@ Deno.serve(async (req) => {
         };
       })
     })).filter((d: any) => d.meals.length > 0);
+    enrichedDays = enrichedDays.slice(0, durationConfig.days.length);
 
     const { error } = await admin.from("diet_plans").insert({
-      title: args.title, description: args.description,
+      title: (isGeneric ? "[Genérico] " : "") + args.title,
+      description: args.description,
       user_id, assigned_to: user_id,
       calories_target: args.calories_target,
       status: "draft", generated_by_ai: true,
-      meal_plan: { duration: "1_week", duration_label: "1 Semana", days: enrichedDays }
+      meal_plan: { duration: durationKey, duration_label: durationConfig.label, days: enrichedDays, is_generic: isGeneric }
     });
     if (error) throw error;
 
