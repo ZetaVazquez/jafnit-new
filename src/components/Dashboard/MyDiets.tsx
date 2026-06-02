@@ -178,6 +178,22 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
             </div>
           )}
         </main>
+
+        <Dialog open={showGenericModal} onOpenChange={setShowGenericModal}>
+          <DialogContent className="bg-[hsl(220,20%,12%)] border-yellow-500/30">
+            <DialogHeader>
+              <DialogTitle className="text-yellow-400 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5" /> Plan de dieta genérico
+              </DialogTitle>
+            </DialogHeader>
+            <p className="text-white/70 text-sm leading-relaxed">
+              Este plan de dietas es <strong>general</strong>. Para que sea totalmente personalizado a tus objetivos, preferencias e intolerancias, completa el <strong>cuestionario de evaluación inicial</strong> que se abre al iniciar sesión.
+            </p>
+            <div className="flex justify-end">
+              <Button onClick={() => setShowGenericModal(false)} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">Entendido</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   };
