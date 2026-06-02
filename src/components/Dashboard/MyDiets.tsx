@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowLeft, ChefHat, Calendar, Target, Download, Eye } from 'lucide-react';
+import { ArrowLeft, ChefHat, Calendar, Target, Download, Eye, AlertTriangle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { DietPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
@@ -17,6 +17,8 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
   const { user } = useAuth();
   const [dietPlans, setDietPlans] = useState<DietPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showGenericModal, setShowGenericModal] = useState(false);
+  const [genericNoticeShown, setGenericNoticeShown] = useState(false);
 
   const formatMealPlan = (mealPlan: any) => {
     if (!mealPlan) return 'No hay plan de comidas disponible';
@@ -39,7 +41,14 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
       try {
         const { data, error } = await supabase.from('diet_plans').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
         if (error) console.error('Error fetching diet plans:', error);
-        else setDietPlans(data || []);
+        else {
+          const plans = data || [];
+          setDietPlans(plans);
+          if (plans.some((p: any) => p.meal_plan?.is_generic) && !genericNoticeShown) {
+            setShowGenericModal(true);
+            setGenericNoticeShown(true);
+          }
+        }
       } catch (error) { console.error('Error:', error); } finally { setLoading(false); }
     };
     fetchDietPlans();
