@@ -179,7 +179,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
     setGenerating(clientId);
     try {
       const { data, error } = await supabase.functions.invoke('generate-plans-from-questionnaire', {
-        body: { user_id: clientId, type: 'workout' }
+        body: { user_id: clientId, type: 'workout', duration }
       });
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || 'Error generando');

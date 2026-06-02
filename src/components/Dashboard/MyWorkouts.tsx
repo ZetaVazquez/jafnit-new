@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Dumbbell, Clock, Target, Download, Eye, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Dumbbell, Clock, Target, Download, Eye, Calendar, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { WorkoutPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
@@ -20,6 +20,8 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutPlan | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [expandedDays, setExpandedDays] = useState<Set<number>>(new Set());
+  const [genericNoticeShown, setGenericNoticeShown] = useState(false);
+  const [showGenericModal, setShowGenericModal] = useState(false);
 
   useEffect(() => {
     const fetchWorkoutPlans = async () => {
@@ -27,7 +29,12 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
       try {
         const { data, error } = await supabase.from('workout_plans').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
         if (error) { console.error('Error fetching workout plans:', error); return; }
-        setWorkoutPlans((data || []) as WorkoutPlan[]);
+        const plans = (data || []) as WorkoutPlan[];
+        setWorkoutPlans(plans);
+        if (plans.some((p: any) => p.exercises?.is_generic) && !genericNoticeShown) {
+          setShowGenericModal(true);
+          setGenericNoticeShown(true);
+        }
       } catch (error) { console.error('Error:', error); } finally { setLoading(false); }
     };
     fetchWorkoutPlans();
@@ -166,6 +173,23 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
             </div>
           )}
         </main>
+
+        {/* Generic plan notice */}
+        <Dialog open={showGenericModal} onOpenChange={setShowGenericModal}>
+          <DialogContent className="bg-[hsl(220,20%,12%)] border-yellow-500/30">
+            <DialogHeader>
+              <DialogTitle className="text-yellow-400 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5" /> Plan de ejercicios genérico
+              </DialogTitle>
+            </DialogHeader>
+            <p className="text-white/70 text-sm leading-relaxed">
+              Este plan de ejercicios es <strong>general</strong>. Para que sea totalmente personalizado a tus objetivos, condición física y limitaciones, completa el <strong>cuestionario de evaluación inicial</strong> que se abre al iniciar sesión.
+            </p>
+            <div className="flex justify-end">
+              <Button onClick={() => setShowGenericModal(false)} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">Entendido</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Workout Detail Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
