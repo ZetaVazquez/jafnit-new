@@ -123,17 +123,21 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     if (!selectedClient || !title) { toast({ title: 'Faltan datos', variant: 'destructive' }); return; }
     setSaving(true);
     try {
-      const payload: any = {
-        title, description, user_id: selectedClient, assigned_to: selectedClient,
-        calories_target: calories ? Number(calories) : null,
-        status,
-        meal_plan: { duration, duration_label: DURATION_CONFIG[duration].label, days: days.filter(d => d.meals.length > 0) }
-      };
+      const meal_plan = { duration, duration_label: DURATION_CONFIG[duration].label, days: days.filter(d => d.meals.length > 0) };
+      const calories_target = calories ? Number(calories) : null;
       if (editing) {
-        const { error } = await supabase.from('diet_plans').update(payload).eq('id', editing.id);
+        const { error } = await supabase.rpc('admin_update_diet_plan', {
+          p_id: editing.id, p_title: title, p_description: description,
+          p_assigned_to: selectedClient, p_calories_target: calories_target,
+          p_status: status, p_meal_plan: meal_plan as any,
+        });
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('diet_plans').insert(payload);
+        const { error } = await supabase.rpc('admin_create_diet_plan', {
+          p_title: title, p_description: description,
+          p_assigned_to: selectedClient, p_calories_target: calories_target,
+          p_status: status, p_meal_plan: meal_plan as any,
+        });
         if (error) throw error;
       }
       toast({ title: status === 'approved' ? 'Plan aprobado y enviado' : 'Borrador guardado' });
@@ -143,13 +147,13 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   };
 
   const approveDraft = async (id: string) => {
-    const { error } = await supabase.from('diet_plans').update({ status: 'approved' }).eq('id', id);
+    const { error } = await supabase.rpc('admin_approve_diet_plan', { p_id: id });
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Plan aprobado y enviado al cliente' }); fetchPlans();
   };
   const deletePlan = async (id: string, name: string) => {
     if (!confirm(`¿Eliminar "${name}"?`)) return;
-    const { error } = await supabase.from('diet_plans').delete().eq('id', id);
+    const { error } = await supabase.rpc('admin_delete_diet_plan', { p_id: id });
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Eliminado' }); fetchPlans();
   };

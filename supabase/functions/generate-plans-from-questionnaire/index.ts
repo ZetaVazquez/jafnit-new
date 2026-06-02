@@ -177,8 +177,10 @@ IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s)
     const systemPrompt = `Eres un nutricionista del método JAFN. Genera un plan de dieta. SOLO usa comidas de la biblioteca por su id. Devuelve JSON estricto.
 IMPORTANTE:
 - El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.
-- Para CADA día debes incluir 2 OPCIONES por cada tipo de comida (desayuno, comida, merienda y cena). Es decir, 8 entradas por día (2 desayuno, 2 comida, 2 merienda, 2 cena), para que el cliente pueda elegir entre alternativas.${isGeneric ? "\n- El cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de ~2000 kcal." : ""}`;
-    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${mealsList}\n\nDías a generar (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 2 opciones por cada uno de los 4 tipos de comida (8 entradas/día).`;
+- Para CADA día debes incluir EXACTAMENTE 2 OPCIONES por cada tipo de comida (breakfast, lunch, snack, dinner). Es decir, 8 entradas por día (2 breakfast, 2 lunch, 2 snack, 2 dinner). NUNCA repitas la misma comida dentro del mismo tipo y día.
+- Para CADA entrada, rellena el campo "quantity" con la cantidad en gramos/unidades/ml ajustada al peso, altura, sexo y objetivo del cliente (ej: "150 g de pechuga + 80 g arroz integral cocido").
+- Para CADA entrada, rellena el campo "notes" con las instrucciones de PREPARACIÓN paso a paso de la receta (ej: "Cocer el arroz 12 min, plancha la pechuga 4 min/lado con AOVE, salpimentar"). Las notas deben respetar las intolerancias, alergias y restricciones del cliente del cuestionario, y deben ajustar técnicas y acompañamientos a su objetivo (déficit, mantenimiento o volumen).${isGeneric ? "\n- El cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de ~2000 kcal con cantidades estándar para adulto promedio." : ""}`;
+    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${mealsList}\n\nDías a generar (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 2 opciones POR CADA tipo de comida (8 entradas/día), con quantity en gramos/unidades reales y notes con la preparación detallada y personalizada.`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -212,7 +214,7 @@ IMPORTANTE:
                             quantity: { type: "string" },
                             notes: { type: "string" }
                           },
-                          required: ["meal_id", "quantity"]
+                          required: ["meal_id", "quantity", "notes"]
                         }
                       }
                     },
