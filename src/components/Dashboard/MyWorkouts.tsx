@@ -8,6 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { WorkoutPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface MyWorkoutsProps {
   onGoBack: () => void;
@@ -80,27 +82,178 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
   };
 
   const downloadWorkoutPlan = (workout: WorkoutPlan) => {
-    let content = `PLAN DE ENTRENAMIENTO: ${workout.title}\n\nDESCRIPCIÓN:\n${workout.description || 'Sin descripción'}\n\nNIVEL: ${getDifficultyText(workout.difficulty_level)}\n`;
+    const GREEN: [number, number, number] = [34, 197, 94]; // hsl(142,71%,45%)
+    const BLACK: [number, number, number] = [15, 15, 18];
+    const WHITE: [number, number, number] = [255, 255, 255];
+    const GREY: [number, number, number] = [240, 240, 240];
+    const TRAINER = 'JOSÉ ANTONIO FIGUEIRAS NÚÑEZ';
+    const userName = (user?.user_metadata?.name || user?.email || 'CLIENTE').toString().toUpperCase();
 
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+
+    const drawHeader = () => {
+      doc.setFillColor(...BLACK);
+      doc.rect(0, 0, pageW, 18, 'F');
+      doc.setFillColor(...GREEN);
+      doc.rect(0, 18, pageW, 1.5, 'F');
+      doc.setTextColor(...WHITE);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text(userName, 12, 11);
+      doc.setTextColor(...GREEN);
+      doc.setFontSize(9);
+      doc.text(TRAINER, pageW - 12, 8, { align: 'right' });
+      doc.setTextColor(...WHITE);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.text('ENTRENADOR PERSONAL', pageW - 12, 13, { align: 'right' });
+    };
+
+    const drawFooter = (pageNum: number) => {
+      doc.setFillColor(...GREEN);
+      doc.rect(0, pageH - 8, pageW, 8, 'F');
+      doc.setTextColor(...WHITE);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`JAFN FIT · ${TRAINER}`, 12, pageH - 3);
+      doc.text(String(pageNum), pageW - 12, pageH - 3, { align: 'right' });
+    };
+
+    // ===== COVER =====
+    doc.setFillColor(...BLACK);
+    doc.rect(0, 0, pageW, pageH, 'F');
+    doc.setFillColor(...GREEN);
+    doc.rect(0, pageH / 2 - 0.5, pageW, 1, 'F');
+    doc.setTextColor(...WHITE);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(28);
+    doc.text('PLAN DE ENTRENAMIENTO', pageW / 2, 70, { align: 'center' });
+    doc.setTextColor(...GREEN);
+    doc.setFontSize(22);
+    doc.text('PERSONALIZADO', pageW / 2, 84, { align: 'center' });
+    doc.setTextColor(...WHITE);
+    doc.setFontSize(18);
+    doc.text(userName, pageW / 2, 120, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.text(workout.title, pageW / 2, 130, { align: 'center' });
+    doc.setTextColor(...GREEN);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text(TRAINER, pageW / 2, pageH / 2 + 30, { align: 'center' });
+    doc.setTextColor(...WHITE);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('ENTRENADOR PERSONAL', pageW / 2, pageH / 2 + 38, { align: 'center' });
+    doc.setFontSize(9);
+    doc.text(`Nivel: ${getDifficultyText(workout.difficulty_level)}`, pageW / 2, pageH / 2 + 50, { align: 'center' });
     if (hasStructuredDays(workout.exercises)) {
-      content += `\nDURACIÓN: ${workout.exercises.duration_label}\n`;
-      workout.exercises.days.forEach((day: any) => {
-        content += `\n${'='.repeat(40)}\n${day.day}\n${'='.repeat(40)}\n${day.exercises}\n`;
+      doc.text(`Duración: ${workout.exercises.duration_label}`, pageW / 2, pageH / 2 + 56, { align: 'center' });
+    }
+    doc.text(`Fecha: ${new Date(workout.created_at).toLocaleDateString('es-ES')}`, pageW / 2, pageH / 2 + 62, { align: 'center' });
+
+    // ===== STRUCTURED CONTENT =====
+    if (hasStructuredDays(workout.exercises)) {
+      const days: any[] = workout.exercises.days || [];
+
+      // Overview table page
+      if (days.length > 1) {
+        doc.addPage();
+        drawHeader();
+        doc.setTextColor(...BLACK);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.text(`RESUMEN SEMANAL · ${workout.exercises.duration_label || ''}`, 12, 30);
+
+        const head = [['Día', 'Enfoque', 'Nº ejercicios']];
+        const body = days.map((d: any) => [
+          d.day || '-',
+          (d.focus || d.muscle_group || (Array.isArray(d.items) && d.items[0]?.muscle_group) || '—').toString(),
+          Array.isArray(d.items) ? String(d.items.length) : '—',
+        ]);
+        autoTable(doc, {
+          startY: 36,
+          head,
+          body,
+          theme: 'grid',
+          headStyles: { fillColor: GREEN, textColor: WHITE, fontStyle: 'bold' },
+          alternateRowStyles: { fillColor: GREY },
+          styles: { fontSize: 9, cellPadding: 3 },
+          margin: { left: 12, right: 12, bottom: 14 },
+          didDrawPage: () => { drawFooter(doc.getCurrentPageInfo().pageNumber); },
+        });
+      }
+
+      // Per-day pages
+      days.forEach((day: any, idx: number) => {
+        doc.addPage();
+        drawHeader();
+        doc.setTextColor(...BLACK);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text(day.day || `Día ${idx + 1}`, 12, 30);
+        if (day.focus) {
+          doc.setTextColor(...GREEN);
+          doc.setFontSize(11);
+          doc.setFont('helvetica', 'normal');
+          doc.text(day.focus, 12, 37);
+        }
+
+        if (Array.isArray(day.items) && day.items.length > 0) {
+          const head = [['Ejercicio', 'Grupo muscular', 'Series', 'Reps', 'Descanso', 'Notas']];
+          const body = day.items.map((it: any) => [
+            it.name || '-',
+            it.muscle_group || '-',
+            String(it.sets ?? '-'),
+            String(it.reps ?? '-'),
+            it.rest_seconds ? `${it.rest_seconds}s` : '-',
+            it.notes || '',
+          ]);
+          autoTable(doc, {
+            startY: 42,
+            head,
+            body,
+            theme: 'grid',
+            headStyles: { fillColor: BLACK, textColor: GREEN, fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: GREY },
+            styles: { fontSize: 9, cellPadding: 2.5, valign: 'middle' },
+            columnStyles: {
+              0: { fontStyle: 'bold', cellWidth: 45 },
+              1: { cellWidth: 30 },
+              2: { cellWidth: 16, halign: 'center' },
+              3: { cellWidth: 16, halign: 'center' },
+              4: { cellWidth: 20, halign: 'center' },
+              5: { cellWidth: 'auto' },
+            },
+            margin: { left: 12, right: 12, bottom: 14 },
+            didDrawPage: () => { drawFooter(doc.getCurrentPageInfo().pageNumber); },
+          });
+        } else if (day.exercises) {
+          doc.setTextColor(...BLACK);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          const lines = doc.splitTextToSize(String(day.exercises), pageW - 24);
+          doc.text(lines, 12, 48);
+          drawFooter(doc.getCurrentPageInfo().pageNumber);
+        }
       });
     } else {
-      content += `\nEJERCICIOS:\n${formatLegacyExercises(workout.exercises)}\n`;
+      doc.addPage();
+      drawHeader();
+      doc.setTextColor(...BLACK);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('EJERCICIOS', 12, 30);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      const lines = doc.splitTextToSize(formatLegacyExercises(workout.exercises), pageW - 24);
+      doc.text(lines, 12, 40);
+      drawFooter(doc.getCurrentPageInfo().pageNumber);
     }
 
-    content += `\nFecha: ${new Date(workout.created_at).toLocaleDateString('es-ES')}`;
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `rutina_${workout.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    doc.save(`rutina_${workout.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
   };
 
   const WorkoutsContent = () => {
