@@ -158,7 +158,7 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     setGenerating(clientId);
     try {
       const { data, error } = await supabase.functions.invoke('generate-plans-from-questionnaire', {
-        body: { user_id: clientId, type: 'diet' }
+        body: { user_id: clientId, type: 'diet', duration }
       });
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || 'Error generando');
