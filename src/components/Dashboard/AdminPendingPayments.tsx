@@ -161,43 +161,43 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-nutrition-green-lighter to-white">
+      <div className="min-h-screen flex items-center justify-center bg-[hsl(220,20%,8%)]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-nutrition-green mx-auto"></div>
-          <p className="mt-4 text-nutrition-gray">Cargando pagos pendientes...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[hsl(var(--accent-green-light))] mx-auto"></div>
+          <p className="mt-4 text-white/60">Cargando pagos pendientes...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+    <div className="min-h-screen bg-[hsl(220,20%,8%)] text-white">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Button
-              variant="outline"
+              variant="ghost"
               onClick={onGoBack}
-              className="mr-4"
+              className="mr-4 text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver
             </Button>
-            <h1 className="text-3xl font-bold text-nutrition-green">Pagos Pendientes</h1>
+            <h1 className="text-3xl font-bold text-white">Pagos <span className="text-[hsl(var(--accent-green-light))] italic">Pendientes</span></h1>
           </div>
         </div>
 
-        <Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex items-center text-white">
               <DollarSign className="w-5 h-5 mr-2" />
               Pagos Pendientes de Aprobación
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
+            <Table className="text-white/80">
               <TableHeader>
-                <TableRow>
+                <TableRow className="border-white/10 hover:bg-transparent">
                   <TableHead>Cliente</TableHead>
                   <TableHead>Plan</TableHead>
                   <TableHead>Cantidad</TableHead>
@@ -209,15 +209,15 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
               </TableHeader>
               <TableBody>
                 {pendingPayments.map((payment) => (
-                  <TableRow key={payment.id}>
+                  <TableRow key={payment.id} className="border-white/10 hover:bg-white/5">
                     <TableCell>
                       <div>
-                        <div className="font-medium">{payment.profiles?.name || 'Usuario desconocido'}</div>
-                        <div className="text-sm text-gray-500">{payment.profiles?.email || 'Email no disponible'}</div>
+                        <div className="font-medium text-white">{payment.profiles?.name || 'Usuario desconocido'}</div>
+                        <div className="text-sm text-white/50">{payment.profiles?.email || 'Email no disponible'}</div>
                       </div>
                     </TableCell>
                     <TableCell className="capitalize">{payment.plan_type}</TableCell>
-                    <TableCell className="font-medium">€{payment.amount}</TableCell>
+                    <TableCell className="font-medium text-[hsl(var(--accent-green-light))]">€{payment.amount}</TableCell>
                     <TableCell>{payment.payment_reference || 'N/A'}</TableCell>
                     <TableCell>
                       <Badge 
@@ -234,27 +234,28 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
                     <TableCell>
                       <div className="flex items-center space-x-2">
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
                           onClick={() => viewReceipt(payment)}
+                          className="text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
                         {payment.status === 'pending' && (
                           <>
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleApprovePayment(payment)}
-                              className="text-green-600 hover:text-green-700"
+                              className="text-[hsl(var(--accent-green-light))] hover:text-white hover:bg-[hsl(var(--accent-green-light))]/20 border border-[hsl(var(--accent-green-light))]/30"
                             >
                               <Check className="w-4 h-4" />
                             </Button>
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleRejectPayment(payment)}
-                              className="text-red-600 hover:text-red-700"
+                              className="text-red-400 hover:text-red-300 hover:bg-red-500/20 border border-red-500/30"
                             >
                               <X className="w-4 h-4" />
                             </Button>
@@ -268,7 +269,7 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
             </Table>
 
             {pendingPayments.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-white/50">
                 No hay pagos pendientes.
               </div>
             )}
