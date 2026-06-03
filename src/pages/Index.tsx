@@ -176,6 +176,7 @@ const Index = () => {
             onNavigateToSchedule={handleNavigateToSchedule}
             onNavigateToChangePlan={handleNavigateToChangePlan}
             showDashboard={showRegistrationAfterQuestionnaire}
+            isAdmin={isAdmin}
           />
           <AuthModal 
             isOpen={true}
@@ -206,6 +207,7 @@ const Index = () => {
             onNavigateToSchedule={handleNavigateToSchedule}
             onNavigateToChangePlan={handleNavigateToChangePlan}
             showDashboard={showClientForm}
+            isAdmin={isAdmin}
           />
           <ClientFormModal 
             isOpen={true}
@@ -237,6 +239,7 @@ const Index = () => {
           onOpenBMI={() => setShowBMIModal(true)}
           onOpenGuides={() => setShowGuidesModal(true)}
           showDashboard={showDashboard}
+          isAdmin={isAdmin}
         />
         <main>
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />

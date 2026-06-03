@@ -21,6 +21,7 @@ interface HeaderProps {
   onOpenBMI?: () => void;
   onOpenGuides?: () => void;
   showDashboard?: boolean;
+  isAdmin?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -39,7 +40,8 @@ const Header: React.FC<HeaderProps> = ({
   onNavigateToSchedule,
   onOpenBMI,
   onOpenGuides,
-  showDashboard = false
+  showDashboard = false,
+  isAdmin = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -216,7 +218,7 @@ const Header: React.FC<HeaderProps> = ({
                       onClick={onNavigateToDashboard}
                       className="hidden lg:flex btn-cta text-sm px-5 py-2"
                     >
-                      Acceso Clientes
+                      {isAdmin ? 'Panel Admin' : 'Acceso Clientes'}
                     </Button>
                   )}
                   
@@ -295,7 +297,7 @@ const Header: React.FC<HeaderProps> = ({
                         onClick={() => { onNavigateToDashboard(); setIsMenuOpen(false); }}
                         className="w-full btn-cta"
                       >
-                        Acceso Clientes
+                        {isAdmin ? 'Panel Admin' : 'Acceso Clientes'}
                       </Button>
                     )}
                     <Button

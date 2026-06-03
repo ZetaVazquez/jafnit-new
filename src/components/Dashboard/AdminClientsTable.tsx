@@ -385,47 +385,47 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-nutrition-green-lighter to-white">
+      <div className="min-h-screen flex items-center justify-center bg-[hsl(220,20%,8%)]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-nutrition-green mx-auto"></div>
-          <p className="mt-4 text-nutrition-gray">Cargando clientes...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[hsl(var(--accent-green-light))] mx-auto"></div>
+          <p className="mt-4 text-white/60">Cargando clientes...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-nutrition-green-lighter to-white">
+    <div className="min-h-screen bg-[hsl(220,20%,8%)] text-white">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center mb-6">
           <Button
-            variant="outline"
+            variant="ghost"
             onClick={onGoBack}
-            className="mr-4"
+            className="mr-4 text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver
           </Button>
-          <h1 className="text-3xl font-bold text-nutrition-green">Gestión de Clientes</h1>
+          <h1 className="text-3xl font-bold text-white">Gestión de <span className="text-[hsl(var(--accent-green-light))] italic">Clientes</span></h1>
         </div>
 
-        <Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm text-white">
           <CardHeader>
-            <CardTitle>Lista de Clientes</CardTitle>
+            <CardTitle className="text-white">Lista de Clientes</CardTitle>
             <div className="flex items-center space-x-2">
-              <Search className="w-4 h-4 text-gray-400" />
+              <Search className="w-4 h-4 text-white/40" />
               <Input
                 placeholder="Buscar por nombre o email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
+                className="max-w-sm bg-white/5 border-white/10 text-white placeholder:text-white/30"
               />
             </div>
           </CardHeader>
           <CardContent>
-            <Table>
+            <Table className="text-white/80">
               <TableHeader>
-                <TableRow>
+                <TableRow className="border-white/10 hover:bg-transparent">
                   <TableHead>Cliente</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Plan</TableHead>
@@ -437,8 +437,8 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
               </TableHeader>
               <TableBody>
                 {filteredClients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell className="font-medium">{client.name}</TableCell>
+                  <TableRow key={client.id} className="border-white/10 hover:bg-white/5">
+                    <TableCell className="font-medium text-white">{client.name}</TableCell>
                     <TableCell>{client.email}</TableCell>
                     <TableCell>
                       {editingPlan === client.id ? (
@@ -559,7 +559,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
             </Table>
             
             {filteredClients.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-white/50">
                 {searchTerm ? 'No se encontraron clientes con ese criterio de búsqueda.' : 'No hay clientes registrados.'}
               </div>
             )}
