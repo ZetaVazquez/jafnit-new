@@ -96,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({
     setIsMenuOpen(false);
   };
 
-  const sidebarItems = [
+  const fullSidebarItems = [
     { label: 'Mi Perfil', icon: User, action: onNavigateToProfile },
     { label: 'Configuraciones', icon: Settings, action: onNavigateToProfile },
     { label: 'Mis Dietas', icon: BookOpen, action: onNavigateToDiets },
@@ -104,6 +104,10 @@ const Header: React.FC<HeaderProps> = ({
     { label: 'Calendario', icon: Calendar, action: onNavigateToSchedule },
     { label: 'Cambiar mi Plan', icon: CreditCard, action: onNavigateToChangePlan },
   ];
+  // En vistas internas (dashboard/secciones) solo mostramos Mi Perfil y Calendario
+  const sidebarItems = showDashboard
+    ? fullSidebarItems.filter((i) => i.label === 'Mi Perfil' || i.label === 'Calendario')
+    : fullSidebarItems;
 
   const handleRegisterClick = () => {
     if (onStartQuestionnaire) {
