@@ -92,11 +92,25 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
         diet_tags: form.diet_tags ? form.diet_tags.split(',').map(t => t.trim()).filter(Boolean) : []
       };
       if (editing) {
-        const { error } = await supabase.from('meals_library').update(payload).eq('id', editing.id);
+        const { error } = await supabase.rpc('admin_upsert_meal', {
+          p_id: editing.id,
+          p_name: payload.name, p_meal_type: payload.meal_type,
+          p_description: payload.description, p_image_url: payload.image_url,
+          p_calories: payload.calories, p_protein_g: payload.protein_g,
+          p_carbs_g: payload.carbs_g, p_fats_g: payload.fats_g,
+          p_ingredients: payload.ingredients, p_diet_tags: payload.diet_tags,
+        });
         if (error) throw error;
         toast({ title: 'Comida actualizada' });
       } else {
-        const { error } = await supabase.from('meals_library').insert(payload);
+        const { error } = await supabase.rpc('admin_upsert_meal', {
+          p_id: null,
+          p_name: payload.name, p_meal_type: payload.meal_type,
+          p_description: payload.description, p_image_url: payload.image_url,
+          p_calories: payload.calories, p_protein_g: payload.protein_g,
+          p_carbs_g: payload.carbs_g, p_fats_g: payload.fats_g,
+          p_ingredients: payload.ingredients, p_diet_tags: payload.diet_tags,
+        });
         if (error) throw error;
         toast({ title: 'Comida creada' });
       }
@@ -120,7 +134,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
 
   const deleteMeal = async (id: string, name: string) => {
     if (!confirm(`¿Eliminar "${name}"?`)) return;
-    const { error } = await supabase.from('meals_library').delete().eq('id', id);
+    const { error } = await supabase.rpc('admin_delete_meal', { p_id: id });
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Eliminado' });
     fetchMeals();
