@@ -1211,6 +1211,8 @@ export type Database = {
         }
       }
       admin_delete_diet_plan: { Args: { p_id: string }; Returns: undefined }
+      admin_delete_exercise: { Args: { p_id: string }; Returns: undefined }
+      admin_delete_meal: { Args: { p_id: string }; Returns: undefined }
       admin_delete_workout_plan: { Args: { p_id: string }; Returns: undefined }
       admin_update_diet_plan: {
         Args: {
@@ -1315,6 +1317,74 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "workout_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_upsert_exercise: {
+        Args: {
+          p_description: string
+          p_difficulty: string
+          p_equipment: string
+          p_id: string
+          p_instructions: string
+          p_muscle_group: string
+          p_name: string
+          p_thumbnail_url: string
+          p_video_url: string
+        }
+        Returns: {
+          created_at: string
+          description: string | null
+          difficulty: string
+          equipment: string | null
+          id: string
+          instructions: string | null
+          muscle_group: string
+          name: string
+          thumbnail_url: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "exercises_library"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_upsert_meal: {
+        Args: {
+          p_calories: number
+          p_carbs_g: number
+          p_description: string
+          p_diet_tags: string[]
+          p_fats_g: number
+          p_id: string
+          p_image_url: string
+          p_ingredients: string
+          p_meal_type: string
+          p_name: string
+          p_protein_g: number
+        }
+        Returns: {
+          calories: number | null
+          carbs_g: number | null
+          created_at: string
+          description: string | null
+          diet_tags: string[] | null
+          fats_g: number | null
+          id: string
+          image_url: string | null
+          ingredients: string | null
+          meal_type: string
+          name: string
+          protein_g: number | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "meals_library"
           isOneToOne: true
           isSetofReturn: false
         }
