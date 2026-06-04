@@ -77,11 +77,23 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
     setSaving(true);
     try {
       if (editing) {
-        const { error } = await supabase.from('exercises_library').update(form).eq('id', editing.id);
+        const { error } = await supabase.rpc('admin_upsert_exercise', {
+          p_id: editing.id,
+          p_name: form.name, p_muscle_group: form.muscle_group,
+          p_description: form.description || null, p_instructions: form.instructions || null,
+          p_video_url: form.video_url || null, p_thumbnail_url: form.thumbnail_url || null,
+          p_difficulty: form.difficulty, p_equipment: form.equipment || null,
+        });
         if (error) throw error;
         toast({ title: 'Ejercicio actualizado' });
       } else {
-        const { error } = await supabase.from('exercises_library').insert(form);
+        const { error } = await supabase.rpc('admin_upsert_exercise', {
+          p_id: null,
+          p_name: form.name, p_muscle_group: form.muscle_group,
+          p_description: form.description || null, p_instructions: form.instructions || null,
+          p_video_url: form.video_url || null, p_thumbnail_url: form.thumbnail_url || null,
+          p_difficulty: form.difficulty, p_equipment: form.equipment || null,
+        });
         if (error) throw error;
         toast({ title: 'Ejercicio creado' });
       }
@@ -103,7 +115,7 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
 
   const deleteEx = async (id: string, name: string) => {
     if (!confirm(`¿Eliminar "${name}"?`)) return;
-    const { error } = await supabase.from('exercises_library').delete().eq('id', id);
+    const { error } = await supabase.rpc('admin_delete_exercise', { p_id: id });
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Eliminado' });
     fetchExercises();
