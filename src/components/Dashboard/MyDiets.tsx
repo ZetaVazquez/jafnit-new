@@ -8,6 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { DietPlan } from '@/types/database';
 import { useAuth } from '@/hooks/useAuth';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface MyDietsProps {
   onGoBack: () => void;
@@ -28,11 +30,192 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
   };
 
   const downloadDietPlan = (diet: DietPlan) => {
-    const content = `PLAN DE DIETA: ${diet.title}\n\nDescripción: ${diet.description || 'No disponible'}\n\nObjetivo de calorías: ${diet.calories_target ? `${diet.calories_target} cal/día` : 'No especificado'}\n\nFecha de creación: ${new Date(diet.created_at).toLocaleDateString('es-ES')}\n\nPLAN DE COMIDAS:\n${formatMealPlan(diet.meal_plan)}`;
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a'); link.href = url; link.download = `${diet.title.replace(/[^a-z0-9]/gi, '_')}_plan_dieta.txt`;
-    document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
+    const GREEN: [number, number, number] = [34, 197, 94];
+    const BLACK: [number, number, number] = [15, 15, 18];
+    const WHITE: [number, number, number] = [255, 255, 255];
+    const GREY: [number, number, number] = [240, 240, 240];
+    const TRAINER = 'JOSÉ ANTONIO FIGUEIRAS NÚÑEZ';
+    const userName = (user?.user_metadata?.name || user?.email || 'CLIENTE').toString().toUpperCase();
+
+    const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+
+    const drawHeader = () => {
+      doc.setFillColor(...BLACK);
+      doc.rect(0, 0, pageW, 18, 'F');
+      doc.setFillColor(...GREEN);
+      doc.rect(0, 18, pageW, 1.5, 'F');
+      doc.setTextColor(...WHITE);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text(userName, 12, 8);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.text(`PLAN DIETÉTICO · ${diet.title.toUpperCase()}`, 12, 13);
+      doc.setTextColor(...GREEN);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.text(TRAINER, pageW - 12, 8, { align: 'right' });
+      doc.setTextColor(...WHITE);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.text('NUTRICIÓN Y ENTRENAMIENTO', pageW - 12, 13, { align: 'right' });
+    };
+
+    const drawFooter = (pageNum: number) => {
+      doc.setFillColor(...GREEN);
+      doc.rect(0, pageH - 8, pageW, 8, 'F');
+      doc.setTextColor(...WHITE);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`JAFN FIT · ${TRAINER}`, 12, pageH - 3);
+      doc.text(String(pageNum), pageW - 12, pageH - 3, { align: 'right' });
+    };
+
+    // ===== COVER =====
+    doc.setFillColor(...BLACK);
+    doc.rect(0, 0, pageW, pageH, 'F');
+    doc.setFillColor(...GREEN);
+    doc.rect(0, pageH / 2 - 0.5, pageW, 1, 'F');
+    doc.setTextColor(...WHITE);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(28);
+    doc.text('PLAN DIETÉTICO', pageW / 2, pageH / 2 - 30, { align: 'center' });
+    doc.setTextColor(...GREEN);
+    doc.setFontSize(22);
+    doc.text('PERSONALIZADO', pageW / 2, pageH / 2 - 18, { align: 'center' });
+    doc.setTextColor(...WHITE);
+    doc.setFontSize(16);
+    doc.text(userName, pageW / 2, pageH / 2 + 18, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.text(diet.title, pageW / 2, pageH / 2 + 28, { align: 'center' });
+    doc.setTextColor(...GREEN);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.text(TRAINER, pageW / 2, pageH - 30, { align: 'center' });
+    doc.setTextColor(...WHITE);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text('NUTRICIÓN Y ENTRENAMIENTO', pageW / 2, pageH - 24, { align: 'center' });
+    if (diet.calories_target) {
+      doc.text(`Objetivo: ${diet.calories_target} kcal/día`, pageW / 2, pageH - 17, { align: 'center' });
+    }
+    doc.text(`Fecha: ${new Date(diet.created_at).toLocaleDateString('es-ES')}`, pageW / 2, pageH - 12, { align: 'center' });
+
+    const days: any[] = Array.isArray(diet.meal_plan?.days) ? diet.meal_plan.days : [];
+
+    const MEAL_ORDER = ['breakfast','desayuno','lunch','comida','snack','merienda','dinner','cena','otro'];
+    const MEAL_LABEL: Record<string, string> = {
+      breakfast: 'Desayuno', desayuno: 'Desayuno',
+      lunch: 'Comida', comida: 'Comida',
+      snack: 'Merienda', merienda: 'Merienda',
+      dinner: 'Cena', cena: 'Cena', otro: 'Otro',
+    };
+    const groupMeals = (meals: any[]) => {
+      const groups: Record<string, any[]> = {};
+      (meals || []).forEach((m: any) => {
+        const k = (m.meal_type || 'otro').toLowerCase();
+        (groups[k] = groups[k] || []).push(m);
+      });
+      return Object.keys(groups)
+        .sort((a, b) => MEAL_ORDER.indexOf(a) - MEAL_ORDER.indexOf(b))
+        .map((k) => ({ type: k, label: MEAL_LABEL[k] || k, items: groups[k] }));
+    };
+
+    if (days.length > 0) {
+      // ===== WEEKLY OVERVIEW =====
+      doc.addPage();
+      drawHeader();
+      doc.setTextColor(...BLACK);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.text(`RESUMEN · PLAN DIETÉTICO DE ${userName}`, 12, 28);
+
+      const allMealTypes = new Set<string>();
+      days.forEach((d) => groupMeals(d.meals || []).forEach((g) => allMealTypes.add(g.type)));
+      const mealCols = MEAL_ORDER.filter((m) => allMealTypes.has(m));
+      const head = [['', ...days.map((d, i) => d.day || `Día ${i + 1}`)]];
+      const body = mealCols.map((mt) => {
+        const row: string[] = [MEAL_LABEL[mt] || mt];
+        days.forEach((d) => {
+          const g = groupMeals(d.meals || []).find((x) => x.type === mt);
+          row.push(g ? g.items.map((m: any) => m.name).join('\no\n') : '—');
+        });
+        return row;
+      });
+
+      autoTable(doc, {
+        startY: 34,
+        head,
+        body,
+        theme: 'grid',
+        headStyles: { fillColor: GREEN, textColor: WHITE, fontStyle: 'bold', halign: 'center' },
+        alternateRowStyles: { fillColor: GREY },
+        styles: { fontSize: 8, cellPadding: 2, valign: 'middle', halign: 'center' },
+        columnStyles: { 0: { fillColor: BLACK, textColor: GREEN, fontStyle: 'bold', halign: 'center' } },
+        margin: { left: 8, right: 8, bottom: 12 },
+        didDrawPage: () => { drawFooter(doc.getCurrentPageInfo().pageNumber); },
+      });
+
+      // ===== PER-DAY DETAIL =====
+      days.forEach((day: any, idx: number) => {
+        doc.addPage();
+        drawHeader();
+        doc.setTextColor(...BLACK);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text(day.day || `Día ${idx + 1}`, 12, 28);
+
+        const groups = groupMeals(day.meals || []);
+        const body: any[] = [];
+        groups.forEach((g) => {
+          const platos = g.items.map((m: any) => m.name).join(' o ');
+          const recetas = g.items
+            .map((m: any) => {
+              const parts: string[] = [];
+              if (g.items.length > 1) parts.push(`[${m.name}]`);
+              if (m.quantity) parts.push(`CANTIDAD: ${m.quantity}`);
+              if (m.calories != null) parts.push(`${m.calories} kcal`);
+              if (m.notes) parts.push(`PREPARACIÓN: ${m.notes}`);
+              return parts.join('  ');
+            })
+            .join('\n\n');
+          body.push([g.label, platos, recetas || '—']);
+        });
+
+        autoTable(doc, {
+          startY: 34,
+          head: [['Comida', 'Platos', 'Recetas e ingredientes']],
+          body,
+          theme: 'grid',
+          headStyles: { fillColor: GREEN, textColor: WHITE, fontStyle: 'bold', halign: 'center' },
+          styles: { fontSize: 9, cellPadding: 3, valign: 'middle' },
+          columnStyles: {
+            0: { fillColor: BLACK, textColor: GREEN, fontStyle: 'bold', halign: 'center', cellWidth: 30 },
+            1: { fillColor: GREY, fontStyle: 'bold', cellWidth: 55, halign: 'center' },
+            2: { cellWidth: 'auto' },
+          },
+          margin: { left: 8, right: 8, bottom: 12 },
+          didDrawPage: () => { drawFooter(doc.getCurrentPageInfo().pageNumber); },
+        });
+      });
+    } else {
+      doc.addPage();
+      drawHeader();
+      doc.setTextColor(...BLACK);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('PLAN DE COMIDAS', 12, 28);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      const lines = doc.splitTextToSize(formatMealPlan(diet.meal_plan), pageW - 24);
+      doc.text(lines, 12, 38);
+      drawFooter(doc.getCurrentPageInfo().pageNumber);
+    }
+
+    doc.save(`dieta_${diet.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
   };
 
   useEffect(() => {
