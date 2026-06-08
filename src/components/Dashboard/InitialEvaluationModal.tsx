@@ -244,20 +244,22 @@ export const EVALUATION_BLOCKS: EvaluationBlock[] = [
 
 /**
  * Calcula el % de cumplimentación de un bloque concreto.
- * Considera respondido cualquier campo con valor distinto de null/undefined/'' y
- * para checkboxes los considera respondidos solo si están a true.
+ * Considera respondido cualquier campo con valor distinto de null/undefined/''.
+ * Los checkboxes (típicamente "marca las que apliquen") se consideran siempre
+ * respondidos, ya que tanto marcar como no marcar es una respuesta válida
+ * ("sí tengo esta condición" / "no la tengo").
  */
 export const getBlockCompletion = (
   block: EvaluationBlock,
   values: Record<string, any> | undefined | null
 ): { answered: number; total: number; percent: number } => {
   const total = block.fields.length;
-  if (!values) return { answered: 0, total, percent: 0 };
   let answered = 0;
   block.fields.forEach(f => {
-    const v = values[f.name];
+    const v = values ? values[f.name] : undefined;
     if (f.type === 'checkbox') {
-      if (v === true) answered++;
+      // Un checkbox opcional siempre cuenta como respondido.
+      answered++;
     } else if (v !== null && v !== undefined && v !== '') {
       answered++;
     }
