@@ -173,16 +173,29 @@ IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s)
     }
 
     // DIET
+    // Compute clinical targets from the questionnaire (Mifflin-St Jeor)
+    const targets = isGeneric ? genericTargets() : (computeTargets(initial) || genericTargets());
+
     const { data: meals } = await admin.from("meals_library").select("id, name, meal_type, calories, protein_g, carbs_g, fats_g, diet_tags");
     const mealsList = (meals || []).map(m => `- [${m.id}] ${m.name} (${m.meal_type}, ${m.calories ?? "?"} kcal)`).join("\n");
 
-    const systemPrompt = `Eres un nutricionista del método JAFN. Genera un plan de dieta. SOLO usa comidas de la biblioteca por su id. Devuelve JSON estricto.
-IMPORTANTE:
-- El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.
-- Para CADA día debes incluir EXACTAMENTE 2 OPCIONES por cada tipo de comida (breakfast, lunch, snack, dinner). Es decir, 8 entradas por día (2 breakfast, 2 lunch, 2 snack, 2 dinner). NUNCA repitas la misma comida dentro del mismo tipo y día.
-- Para CADA entrada, rellena el campo "quantity" con la cantidad en gramos/unidades/ml ajustada al peso, altura, sexo y objetivo del cliente (ej: "150 g de pechuga + 80 g arroz integral cocido").
-- Para CADA entrada, rellena el campo "notes" con las instrucciones de PREPARACIÓN paso a paso de la receta (ej: "Cocer el arroz 12 min, plancha la pechuga 4 min/lado con AOVE, salpimentar"). Las notas deben respetar las intolerancias, alergias y restricciones del cliente del cuestionario, y deben ajustar técnicas y acompañamientos a su objetivo (déficit, mantenimiento o volumen).${isGeneric ? "\n- El cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de ~2000 kcal con cantidades estándar para adulto promedio." : ""}`;
-    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${mealsList}\n\nDías a generar (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 2 opciones POR CADA tipo de comida (8 entradas/día), con quantity en gramos/unidades reales y notes con la preparación detallada y personalizada.`;
+    const systemPrompt = `Eres un nutricionista del método JAFN. Genera un plan de dieta calculado para los OBJETIVOS NUTRICIONALES CLÍNICOS dados (NO los inventes).
+
+OBJETIVOS DIARIOS OBLIGATORIOS (basados en Mifflin-St Jeor):
+- Calorías: ${targets.kcal} kcal/día (±10%)
+- Proteína: ${targets.protein_g} g
+- Hidratos: ${targets.carbs_g} g
+- Grasas: ${targets.fats_g} g
+- Objetivo: ${targets.goal} | TMB: ${targets.bmr} | GET: ${targets.tdee} | Actividad: ${targets.activity_factor}
+
+REGLAS:
+- El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) en este orden: ${durationConfig.days.join(", ")}.
+- Cada día EXACTAMENTE 2 opciones por tipo (breakfast, lunch, snack, dinner) = 8 entradas/día. Nunca repitas comida dentro del mismo tipo y día.
+- Puedes usar comidas existentes de la biblioteca (por meal_id) O crear nuevas (new_meal) si crees que conviene. Una entrada lleva meal_id O new_meal, NUNCA ambos.
+- Para new_meal indica ingredientes en gramos REALES en español estándar (ej: "pechuga de pollo", "arroz integral cocido", "aceite de oliva"). Los macros se calcularán automáticamente desde la base de datos española BEDCA, NO los inventes tú.
+- Cuando uses meal_id existente, rellena "quantity" en gramos/unidades para ajustar la ración a los objetivos del cliente.
+- "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones del cuestionario.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}`;
+    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día, ajustadas a ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F.`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -212,11 +225,33 @@ IMPORTANTE:
                         items: {
                           type: "object",
                           properties: {
-                            meal_id: { type: "string" },
-                            quantity: { type: "string" },
-                            notes: { type: "string" }
+                            meal_id: { type: "string", description: "ID existente de biblioteca; vacío si new_meal" },
+                            quantity: { type: "string", description: "Cantidad en g/ml/unid para meal_id existente" },
+                            notes: { type: "string" },
+                            new_meal: {
+                              type: "object",
+                              description: "Plato nuevo a crear. Macros se calculan desde BEDCA — NO los pongas.",
+                              properties: {
+                                name: { type: "string" },
+                                meal_type: { type: "string", enum: ["breakfast","lunch","snack","dinner"] },
+                                description: { type: "string" },
+                                ingredients_grams: {
+                                  type: "array",
+                                  items: {
+                                    type: "object",
+                                    properties: {
+                                      ingredient_name: { type: "string" },
+                                      grams: { type: "number" }
+                                    },
+                                    required: ["ingredient_name", "grams"]
+                                  }
+                                },
+                                diet_tags: { type: "array", items: { type: "string" } }
+                              },
+                              required: ["name", "meal_type", "ingredients_grams"]
+                            }
                           },
-                          required: ["meal_id", "quantity", "notes"]
+                          required: ["notes"]
                         }
                       }
                     },
