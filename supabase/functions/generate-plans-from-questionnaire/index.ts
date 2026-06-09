@@ -282,30 +282,76 @@ REGLAS:
 
     const { data: libFull } = await admin.from("meals_library").select("*");
     const libMap = new Map((libFull || []).map(m => [m.id, m] as const));
-    let enrichedDays = (args.days || []).map((d: any) => ({
-      day: d.day,
-      meals: (d.meals || []).filter((m: any) => libMap.has(m.meal_id)).map((m: any) => {
-        const lib = libMap.get(m.meal_id)!;
-        return {
+    const libByName = new Map((libFull || []).map(m => [normName(m.name || ""), m] as const));
+    let createdCount = 0;
+
+    const enrichedDaysRaw: any[] = [];
+    for (const d of (args.days || [])) {
+      const dayMeals: any[] = [];
+      for (const m of (d.meals || [])) {
+        let lib = m.meal_id ? libMap.get(m.meal_id) : undefined;
+
+        // If AI proposed a new meal, compute macros from BEDCA and insert into library
+        if (!lib && m.new_meal && Array.isArray(m.new_meal.ingredients_grams) && m.new_meal.ingredients_grams.length > 0) {
+          const nm = m.new_meal;
+          const existing = libByName.get(normName(nm.name || ""));
+          if (existing) {
+            lib = existing;
+          } else {
+            const computed = await computeMealFromIngredients(admin, nm.ingredients_grams);
+            const ingredientsText = nm.ingredients_grams.map((i: any) => `${i.grams} g ${i.ingredient_name}`).join(", ");
+            const sources = new Set(computed.ingredients_resolved.map(r => r.source));
+            const source = sources.has("bedca") || sources.has("cache") ? "bedca"
+              : sources.has("fallback") ? "fallback" : "estimated";
+            const { data: inserted, error: insErr } = await admin.from("meals_library").insert({
+              name: nm.name,
+              meal_type: nm.meal_type,
+              description: nm.description || null,
+              calories: computed.kcal,
+              protein_g: computed.protein_g,
+              carbs_g: computed.carbs_g,
+              fats_g: computed.fats_g,
+              ingredients: ingredientsText,
+              diet_tags: nm.diet_tags || [],
+              created_by_ai: true,
+              source,
+              bedca_refs: computed.ingredients_resolved,
+            }).select().single();
+            if (!insErr && inserted) {
+              lib = inserted as any;
+              libByName.set(normName(inserted.name), inserted as any);
+              libMap.set(inserted.id, inserted as any);
+              createdCount++;
+            }
+          }
+        }
+
+        if (!lib) continue;
+        dayMeals.push({
           meal_id: lib.id, name: lib.name, meal_type: lib.meal_type, image_url: lib.image_url,
           calories: lib.calories, protein_g: lib.protein_g, carbs_g: lib.carbs_g, fats_g: lib.fats_g,
-          quantity: m.quantity || "1 ración", notes: m.notes || ""
-        };
-      })
-    })).filter((d: any) => d.meals.length > 0);
-    enrichedDays = enrichedDays.slice(0, durationConfig.days.length);
+          quantity: m.quantity || "1 ración", notes: m.notes || "",
+        });
+      }
+      if (dayMeals.length > 0) enrichedDaysRaw.push({ day: d.day, meals: dayMeals });
+    }
+    const enrichedDays = enrichedDaysRaw.slice(0, durationConfig.days.length);
 
     const { error } = await admin.from("diet_plans").insert({
       title: (isGeneric ? "[Genérico] " : "") + args.title,
       description: args.description,
       user_id, assigned_to: user_id,
-      calories_target: args.calories_target,
+      calories_target: targets.kcal,
       status: "draft", generated_by_ai: true,
-      meal_plan: { duration: durationKey, duration_label: durationConfig.label, days: enrichedDays, is_generic: isGeneric }
+      meal_plan: {
+        duration: durationKey, duration_label: durationConfig.label,
+        days: enrichedDays, is_generic: isGeneric,
+        targets, created_meals_count: createdCount,
+      }
     });
     if (error) throw error;
 
-    return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ success: true, targets, created_meals_count: createdCount }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e: any) {
     console.error("generate-plans error", e);
     return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
