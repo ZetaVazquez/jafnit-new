@@ -101,6 +101,51 @@ export type Database = {
         }
         Relationships: []
       }
+      bedca_foods_cache: {
+        Row: {
+          bedca_id: string | null
+          carbs_g_100g: number | null
+          created_at: string
+          fats_g_100g: number | null
+          found: boolean
+          id: string
+          kcal_100g: number | null
+          name_normalized: string
+          protein_g_100g: number | null
+          query: string
+          raw_json: Json | null
+          updated_at: string
+        }
+        Insert: {
+          bedca_id?: string | null
+          carbs_g_100g?: number | null
+          created_at?: string
+          fats_g_100g?: number | null
+          found?: boolean
+          id?: string
+          kcal_100g?: number | null
+          name_normalized: string
+          protein_g_100g?: number | null
+          query: string
+          raw_json?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          bedca_id?: string | null
+          carbs_g_100g?: number | null
+          created_at?: string
+          fats_g_100g?: number | null
+          found?: boolean
+          id?: string
+          kcal_100g?: number | null
+          name_normalized?: string
+          protein_g_100g?: number | null
+          query?: string
+          raw_json?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       body_measurements: {
         Row: {
           body_fat_percentage: number | null
@@ -585,9 +630,11 @@ export type Database = {
       }
       meals_library: {
         Row: {
+          bedca_refs: Json | null
           calories: number | null
           carbs_g: number | null
           created_at: string
+          created_by_ai: boolean
           description: string | null
           diet_tags: string[] | null
           fats_g: number | null
@@ -597,12 +644,15 @@ export type Database = {
           meal_type: string
           name: string
           protein_g: number | null
+          source: string
           updated_at: string
         }
         Insert: {
+          bedca_refs?: Json | null
           calories?: number | null
           carbs_g?: number | null
           created_at?: string
+          created_by_ai?: boolean
           description?: string | null
           diet_tags?: string[] | null
           fats_g?: number | null
@@ -612,12 +662,15 @@ export type Database = {
           meal_type: string
           name: string
           protein_g?: number | null
+          source?: string
           updated_at?: string
         }
         Update: {
+          bedca_refs?: Json | null
           calories?: number | null
           carbs_g?: number | null
           created_at?: string
+          created_by_ai?: boolean
           description?: string | null
           diet_tags?: string[] | null
           fats_g?: number | null
@@ -627,6 +680,7 @@ export type Database = {
           meal_type?: string
           name?: string
           protein_g?: number | null
+          source?: string
           updated_at?: string
         }
         Relationships: []
@@ -1368,9 +1422,11 @@ export type Database = {
           p_protein_g: number
         }
         Returns: {
+          bedca_refs: Json | null
           calories: number | null
           carbs_g: number | null
           created_at: string
+          created_by_ai: boolean
           description: string | null
           diet_tags: string[] | null
           fats_g: number | null
@@ -1380,6 +1436,7 @@ export type Database = {
           meal_type: string
           name: string
           protein_g: number | null
+          source: string
           updated_at: string
         }
         SetofOptions: {
