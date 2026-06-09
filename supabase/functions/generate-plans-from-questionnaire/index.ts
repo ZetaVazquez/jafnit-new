@@ -1,4 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { computeTargets, genericTargets } from "../_shared/nutrition.ts";
+import { computeMealFromIngredients, normalize as normName } from "../_shared/bedca.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
