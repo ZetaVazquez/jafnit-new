@@ -250,6 +250,56 @@ export const ClientFormModal: React.FC<ClientFormModalProps> = ({
             </div>
           </div>
 
+          {/* Contacto y seguimiento */}
+          <div className="space-y-4 rounded-lg border border-[hsl(142,71%,45%)]/30 bg-[hsl(142,71%,45%)]/5 p-4">
+            <h3 className="text-lg font-semibold">💬 ¿Quieres más información?</h3>
+            <p className="text-sm text-muted-foreground">
+              Cuéntanos qué necesitas para empezar y nos pondremos en contacto contigo por email, WhatsApp o llamada.
+            </p>
+
+            <div>
+              <Label htmlFor="info_needed">¿Qué necesitas para empezar?</Label>
+              <Textarea
+                id="info_needed"
+                placeholder="Ej: información sobre los planes, precios, asesoramiento personal..."
+                value={formData.info_needed || ''}
+                onChange={(e) => handleInputChange('info_needed', e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="contact_message">Mensaje al entrenador</Label>
+              <Textarea
+                id="contact_message"
+                placeholder="Escribe aquí tu primer mensaje..."
+                value={formData.contact_message || ''}
+                onChange={(e) => handleInputChange('contact_message', e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label>Método de contacto preferido</Label>
+              <RadioGroup
+                value={formData.preferred_contact_method || ''}
+                onValueChange={(value) => handleInputChange('preferred_contact_method', value)}
+                className="flex gap-4 flex-wrap"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="email" id="pcm_email" />
+                  <Label htmlFor="pcm_email">Email</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="whatsapp" id="pcm_whatsapp" />
+                  <Label htmlFor="pcm_whatsapp">WhatsApp</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="llamada" id="pcm_llamada" />
+                  <Label htmlFor="pcm_llamada">Llamada</Label>
+                </div>
+              </RadioGroup>
+            </div>
+          </div>
+
           {/* Objetivos y Motivación */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">🧠 Objetivos y Motivación</h3>

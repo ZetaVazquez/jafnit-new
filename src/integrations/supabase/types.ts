@@ -198,6 +198,7 @@ export type Database = {
           body_fat_percentage: number | null
           city: string | null
           commitment_time: string | null
+          contact_message: string | null
           contracted_program: string | null
           created_at: string
           current_diet_type: string | null
@@ -213,6 +214,7 @@ export type Database = {
           height_cm: number | null
           hip_perimeter: number | null
           id: string
+          info_needed: string | null
           initial_weight: number | null
           intolerances_allergies: string | null
           main_objective: string | null
@@ -225,6 +227,7 @@ export type Database = {
           personal_motivation: string | null
           phone: string | null
           physical_limitations: string | null
+          preferred_contact_method: string | null
           professional_notes: string | null
           resting_heart_rate: number | null
           secondary_objectives: string | null
@@ -232,6 +235,7 @@ export type Database = {
           training_availability: string | null
           user_id: string
           waist_perimeter: number | null
+          wants_more_info: boolean | null
         }
         Insert: {
           acquisition_source?: string | null
@@ -242,6 +246,7 @@ export type Database = {
           body_fat_percentage?: number | null
           city?: string | null
           commitment_time?: string | null
+          contact_message?: string | null
           contracted_program?: string | null
           created_at?: string
           current_diet_type?: string | null
@@ -257,6 +262,7 @@ export type Database = {
           height_cm?: number | null
           hip_perimeter?: number | null
           id?: string
+          info_needed?: string | null
           initial_weight?: number | null
           intolerances_allergies?: string | null
           main_objective?: string | null
@@ -269,6 +275,7 @@ export type Database = {
           personal_motivation?: string | null
           phone?: string | null
           physical_limitations?: string | null
+          preferred_contact_method?: string | null
           professional_notes?: string | null
           resting_heart_rate?: number | null
           secondary_objectives?: string | null
@@ -276,6 +283,7 @@ export type Database = {
           training_availability?: string | null
           user_id: string
           waist_perimeter?: number | null
+          wants_more_info?: boolean | null
         }
         Update: {
           acquisition_source?: string | null
@@ -286,6 +294,7 @@ export type Database = {
           body_fat_percentage?: number | null
           city?: string | null
           commitment_time?: string | null
+          contact_message?: string | null
           contracted_program?: string | null
           created_at?: string
           current_diet_type?: string | null
@@ -301,6 +310,7 @@ export type Database = {
           height_cm?: number | null
           hip_perimeter?: number | null
           id?: string
+          info_needed?: string | null
           initial_weight?: number | null
           intolerances_allergies?: string | null
           main_objective?: string | null
@@ -313,6 +323,7 @@ export type Database = {
           personal_motivation?: string | null
           phone?: string | null
           physical_limitations?: string | null
+          preferred_contact_method?: string | null
           professional_notes?: string | null
           resting_heart_rate?: number | null
           secondary_objectives?: string | null
@@ -320,6 +331,7 @@ export type Database = {
           training_availability?: string | null
           user_id?: string
           waist_perimeter?: number | null
+          wants_more_info?: boolean | null
         }
         Relationships: []
       }
@@ -627,6 +639,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      lead_followups: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          next_action: string | null
+          next_action_date: string | null
+          note: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          next_action?: string | null
+          next_action_date?: string | null
+          note?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          next_action?: string | null
+          next_action_date?: string | null
+          note?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       meals_library: {
         Row: {
