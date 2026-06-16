@@ -17,6 +17,12 @@ export interface ClientFormData {
   payment_method?: string;
   next_renewal?: string;
   acquisition_source?: string;
+
+  // Contacto / Lead
+  wants_more_info?: boolean;
+  contact_message?: string;
+  info_needed?: string;
+  preferred_contact_method?: string;
   
   // Objetivos y Motivación
   main_objective?: string;
