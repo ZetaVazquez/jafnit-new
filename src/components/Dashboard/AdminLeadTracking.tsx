@@ -167,8 +167,10 @@ const AdminLeadTracking: React.FC<Props> = ({ onGoBack }) => {
           <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por nombre, email o teléfono..." className="pl-9 bg-white/5 border-white/10 text-white" />
         </div>
         {(['leads', 'clients', 'all'] as const).map(f => (
-          <Button key={f} variant={filter === f ? 'default' : 'outline'} onClick={() => setFilter(f)}
-            className={filter === f ? 'bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white' : 'border-white/10 text-white/70 hover:bg-white/5'}>
+          <Button key={f} onClick={() => setFilter(f)}
+            className={filter === f
+              ? 'bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white border border-[hsl(142,71%,45%)]'
+              : 'bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10'}>
             {f === 'leads' ? 'Sin suscripción' : f === 'clients' ? 'Suscritos' : 'Todos'}
           </Button>
         ))}

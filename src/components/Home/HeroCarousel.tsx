@@ -39,7 +39,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
   }, [nextSlide]);
 
   const handleScrollToPrograms = () => {
-    const el = document.getElementById('programas');
+    const el = document.getElementById('pricing');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
