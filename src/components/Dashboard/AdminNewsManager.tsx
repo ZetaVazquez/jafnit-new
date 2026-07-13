@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Plus, Edit, Trash2, Upload, Calendar } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Upload, Calendar, LinkIcon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -19,6 +19,7 @@ interface NewsItem {
   title: string;
   content: string;
   image_url?: string;
+  link_url?: string | null;
   created_at: string;
   published: boolean;
 }
@@ -31,6 +32,7 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
+    link_url: '',
     published: true
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -102,9 +104,10 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
         title: formData.title,
         content: formData.content,
         image_url: imageUrl,
+        link_url: formData.link_url?.trim() ? formData.link_url.trim() : null,
         published: formData.published,
         created_by: user.id,
-      };
+      } as any;
 
       if (editingNews) {
         const { error } = await supabase
@@ -129,7 +132,7 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
         });
       }
 
-      setFormData({ title: '', content: '', published: true });
+      setFormData({ title: '', content: '', link_url: '', published: true });
       setImageFile(null);
       setIsCreating(false);
       setEditingNews(null);
@@ -138,7 +141,7 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
       console.error('Error saving news:', error);
       toast({
         title: "Error",
-        description: "Error al guardar la noticia",
+        description: (error as any)?.message || "Error al guardar la noticia",
         variant: "destructive",
       });
     } finally {
@@ -151,6 +154,7 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
     setFormData({
       title: newsItem.title,
       content: newsItem.content,
+      link_url: newsItem.link_url || '',
       published: newsItem.published
     });
     setIsCreating(true);
@@ -183,7 +187,7 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
   };
 
   const resetForm = () => {
-    setFormData({ title: '', content: '', published: true });
+    setFormData({ title: '', content: '', link_url: '', published: true });
     setImageFile(null);
     setIsCreating(false);
     setEditingNews(null);
@@ -237,6 +241,19 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
                   required
                   placeholder="Escribe el contenido de la noticia"
                   rows={6}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="link_url" className="flex items-center gap-2">
+                  <LinkIcon className="w-4 h-4" /> Enlace (opcional)
+                </Label>
+                <Input
+                  id="link_url"
+                  type="url"
+                  value={formData.link_url}
+                  onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+                  placeholder="https://ejemplo.com/articulo"
                 />
               </div>
 
