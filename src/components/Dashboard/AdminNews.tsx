@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calendar, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -11,6 +11,7 @@ interface NewsItem {
   title: string;
   content: string;
   image_url?: string;
+  link_url?: string | null;
   created_at: string;
 }
 
@@ -163,6 +164,17 @@ const AdminNews: React.FC = () => {
                       <p className="text-gray-600 leading-relaxed">
                         {isExpanded ? item.content : truncatedContent}
                       </p>
+                      {item.link_url && (
+                        <a
+                          href={item.link_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 text-nutrition-green text-sm mt-3 font-medium hover:underline"
+                        >
+                          <ExternalLink className="w-4 h-4" /> Ver enlace
+                        </a>
+                      )}
                       {item.content.length > 150 && (
                         <p className="text-nutrition-green text-sm mt-2 font-medium">
                           {isExpanded ? 'Hacer clic para contraer' : 'Hacer clic para leer más'}
