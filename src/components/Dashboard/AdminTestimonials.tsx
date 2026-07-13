@@ -179,16 +179,17 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
   }
 
   return (
-    <Card>
+    <div className="min-h-screen bg-[hsl(220,20%,8%)] text-white p-4 md:p-8">
+    <Card className="bg-white/5 border-white/10 backdrop-blur-sm text-white">
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+        <CardTitle className="flex items-center justify-between text-white">
           <div className="flex items-center gap-4">
             {onBack && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onBack}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 border border-white/10"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Volver
@@ -196,21 +197,21 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
             )}
             <span>Gestión de Comentarios</span>
           </div>
-          <Badge variant="outline">
+          <Badge variant="outline" className="text-white/80 border-white/20">
             {testimonials.filter(t => t.status === 'pending').length} pendientes
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
         {testimonials.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-white/50">
             No hay comentarios para revisar
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <Table>
+            <Table className="text-white/80">
               <TableHeader>
-                <TableRow>
+                <TableRow className="border-white/10 hover:bg-transparent">
                   <TableHead>Nombre</TableHead>
                   <TableHead>Comentario</TableHead>
                   <TableHead>Rating</TableHead>
@@ -221,8 +222,8 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
               </TableHeader>
               <TableBody>
                 {testimonials.map((testimonial) => (
-                  <TableRow key={testimonial.id}>
-                    <TableCell className="font-medium">
+                  <TableRow key={testimonial.id} className="border-white/10 hover:bg-white/5">
+                    <TableCell className="font-medium text-white">
                       {testimonial.name}
                     </TableCell>
                     <TableCell className="max-w-md">
@@ -242,7 +243,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
                     <TableCell>
                       {getStatusBadge(testimonial.status)}
                     </TableCell>
-                    <TableCell className="text-sm text-gray-500">
+                    <TableCell className="text-sm text-white/50">
                       {formatDate(testimonial.created_at)}
                     </TableCell>
                     <TableCell>
@@ -251,6 +252,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
                           size="sm"
                           variant="outline"
                           onClick={() => { setSelected(testimonial); setIsDialogOpen(true); }}
+                          className="border-white/20 text-white/80 hover:bg-white/10"
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
@@ -260,7 +262,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
                               size="sm"
                               variant="outline"
                               onClick={() => updateTestimonialStatus(testimonial.id, 'approved')}
-                              className="text-green-600 hover:text-green-700"
+                              className="text-green-400 hover:text-green-300 border-green-500/30 hover:bg-green-500/10"
                             >
                               <Check className="w-4 h-4" />
                             </Button>
@@ -268,7 +270,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
                               size="sm"
                               variant="outline"
                               onClick={() => updateTestimonialStatus(testimonial.id, 'rejected')}
-                              className="text-red-600 hover:text-red-700"
+                              className="text-red-400 hover:text-red-300 border-red-500/30 hover:bg-red-500/10"
                             >
                               <X className="w-4 h-4" />
                             </Button>
@@ -278,7 +280,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
                           size="sm"
                           variant="outline"
                           onClick={() => deleteTestimonial(testimonial.id)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-red-400 hover:text-red-300 border-red-500/30 hover:bg-red-500/10"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -331,6 +333,7 @@ const AdminTestimonials: React.FC<AdminTestimonialsProps> = ({ onBack }) => {
         </Dialog>
       </CardContent>
     </Card>
+    </div>
   );
 };
 

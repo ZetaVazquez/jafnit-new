@@ -3,168 +3,163 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, Check, X, Eye, DollarSign } from 'lucide-react';
+import { ArrowLeft, Mail, AlertTriangle, Clock, DollarSign } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { PendingPayment } from '@/types/database';
 
 interface AdminPendingPaymentsProps {
   onGoBack: () => void;
 }
 
+interface Profile {
+  id: string;
+  name: string | null;
+  email: string | null;
+  created_at: string;
+}
+
+interface ActiveSub {
+  user_id: string;
+  plan_type: string | null;
+  end_date: string | null;
+  amount?: number | null;
+  source: 'subscriptions' | 'stripe';
+}
+
+// Precios de referencia (memoria del proyecto)
+const PLAN_PRICE: Record<string, number> = {
+  basic: 49,
+  monthly: 79,
+  premium: 79,
+  quarterly: 199,
+  pro: 199,
+};
+
+const ADMIN_EMAILS = ['josefiguenu@gmail.com', 'consultajafn@gmail.com', 'zaiidav347@gmail.com'];
+
+const daysBetween = (a: Date, b: Date) => Math.floor((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24));
+
 const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack }) => {
-  const [pendingPayments, setPendingPayments] = useState<PendingPayment[]>([]);
-  const [selectedPayment, setSelectedPayment] = useState<PendingPayment | null>(null);
-  const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [inactive, setInactive] = useState<Array<Profile & { amountDue: number; daysInactive: number }>>([]);
+  const [expiring, setExpiring] = useState<Array<Profile & { planType: string; endDate: string; daysLeft: number; amount: number }>>([]);
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchPendingPayments();
+    load();
   }, []);
 
-  const fetchPendingPayments = async () => {
+  const load = async () => {
     try {
-      // First get pending payments
-      const { data: paymentsData, error: paymentsError } = await supabase
-        .from('pending_payments')
-        .select('*')
-        .order('created_at', { ascending: false });
+      setLoading(true);
+      const [profilesRes, subsRes, stripeRes] = await Promise.all([
+        supabase.from('profiles').select('id, name, email, created_at'),
+        supabase.from('subscriptions').select('user_id, plan_type, end_date, amount, status').eq('status', 'active'),
+        supabase.from('stripe_subscriptions').select('user_id, plan_type, current_period_end, status'),
+      ]);
 
-      if (paymentsError) throw paymentsError;
+      if (profilesRes.error) throw profilesRes.error;
 
-      // Then get profiles for each payment
-      const paymentsWithProfiles = await Promise.all(
-        (paymentsData || []).map(async (payment) => {
-          const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('id, name, email, created_at, updated_at')
-            .eq('id', payment.user_id)
-            .maybeSingle();
+      const now = new Date();
+      const activeMap = new Map<string, ActiveSub>();
 
-          if (profileError) {
-            console.error('Error fetching profile:', profileError);
-          }
-
-          return {
-            ...payment,
-            profiles: profileData || null
-          } as PendingPayment;
-        })
-      );
-
-      setPendingPayments(paymentsWithProfiles);
-    } catch (error) {
-      console.error('Error fetching pending payments:', error);
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar los pagos pendientes.",
-        variant: "destructive",
+      (subsRes.data || []).forEach((s: any) => {
+        const end = s.end_date ? new Date(s.end_date) : null;
+        if (!end || end > now) {
+          activeMap.set(s.user_id, {
+            user_id: s.user_id,
+            plan_type: s.plan_type,
+            end_date: s.end_date,
+            amount: s.amount,
+            source: 'subscriptions',
+          });
+        }
       });
+
+      (stripeRes.data || []).forEach((s: any) => {
+        if (s.status !== 'active') return;
+        const end = s.current_period_end ? new Date(s.current_period_end) : null;
+        if (!end || end > now) {
+          if (!activeMap.has(s.user_id)) {
+            activeMap.set(s.user_id, {
+              user_id: s.user_id,
+              plan_type: s.plan_type,
+              end_date: s.current_period_end,
+              source: 'stripe',
+            });
+          }
+        }
+      });
+
+      const profiles = (profilesRes.data || []).filter((p: any) => !ADMIN_EMAILS.includes(p.email || ''));
+
+      const inactiveList: typeof inactive = [];
+      const expiringList: typeof expiring = [];
+
+      profiles.forEach((p: any) => {
+        const sub = activeMap.get(p.id);
+        if (!sub) {
+          const daysInactive = daysBetween(new Date(p.created_at), now);
+          inactiveList.push({
+            ...p,
+            amountDue: PLAN_PRICE.monthly,
+            daysInactive,
+          });
+        } else if (sub.end_date) {
+          const end = new Date(sub.end_date);
+          const daysLeft = daysBetween(now, end);
+          if (daysLeft <= 10 && daysLeft >= 0) {
+            expiringList.push({
+              ...p,
+              planType: sub.plan_type || 'monthly',
+              endDate: sub.end_date,
+              daysLeft,
+              amount: sub.amount || PLAN_PRICE[sub.plan_type || 'monthly'] || PLAN_PRICE.monthly,
+            });
+          }
+        }
+      });
+
+      inactiveList.sort((a, b) => b.daysInactive - a.daysInactive);
+      expiringList.sort((a, b) => a.daysLeft - b.daysLeft);
+
+      setInactive(inactiveList);
+      setExpiring(expiringList);
+    } catch (err: any) {
+      console.error('Error cargando pagos:', err);
+      toast({ title: 'Error', description: err.message || 'No se pudo cargar la información.', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleApprovePayment = async (payment: PendingPayment) => {
-    try {
-      // Calcular fechas de suscripción
-      const startDate = new Date();
-      const endDate = new Date();
-      if (payment.plan_type === 'monthly') {
-        endDate.setMonth(endDate.getMonth() + 1);
-      } else {
-        endDate.setMonth(endDate.getMonth() + 3);
-      }
-
-      // Crear o actualizar suscripción
-      const { error: subscriptionError } = await supabase
-        .from('subscriptions')
-        .upsert({
-          user_id: payment.user_id,
-          plan_type: payment.plan_type,
-          status: 'active',
-          start_date: startDate.toISOString(),
-          end_date: endDate.toISOString(),
-          payment_method: 'stripe',
-          amount: payment.amount
-        });
-
-      if (subscriptionError) throw subscriptionError;
-
-      // Registrar ganancia para el admin
-      const { error: earningsError } = await supabase
-        .from('admin_earnings')
-        .insert({
-          admin_id: (await supabase.auth.getUser()).data.user?.id,
-          amount: payment.amount,
-          description: `Pago ${payment.plan_type} - ${payment.profiles?.name}`,
-          earning_date: new Date().toISOString().split('T')[0]
-        });
-
-      if (earningsError) throw earningsError;
-
-      // Actualizar estado del pago
-      const { error: updateError } = await supabase
-        .from('pending_payments')
-        .update({ status: 'approved' })
-        .eq('id', payment.id);
-
-      if (updateError) throw updateError;
-
-      toast({
-        title: "Pago aprobado",
-        description: `Suscripción activada para ${payment.profiles?.name}`,
-      });
-
-      fetchPendingPayments();
-    } catch (error) {
-      console.error('Error approving payment:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo aprobar el pago.",
-        variant: "destructive",
-      });
+  const sendReminder = (email: string | null, name: string | null, daysLeft?: number) => {
+    if (!email) {
+      toast({ title: 'Sin email', description: 'Este usuario no tiene email registrado.', variant: 'destructive' });
+      return;
     }
-  };
-
-  const handleRejectPayment = async (payment: PendingPayment) => {
-    try {
-      const { error } = await supabase
-        .from('pending_payments')
-        .update({ status: 'rejected' })
-        .eq('id', payment.id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Pago rechazado",
-        description: `Pago rechazado para ${payment.profiles?.name}`,
-      });
-
-      fetchPendingPayments();
-    } catch (error) {
-      console.error('Error rejecting payment:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo rechazar el pago.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const viewReceipt = (payment: PendingPayment) => {
-    setSelectedPayment(payment);
-    setShowReceiptModal(true);
+    const subject = encodeURIComponent(
+      daysLeft !== undefined
+        ? `Tu plan JAFN vence en ${daysLeft} día${daysLeft === 1 ? '' : 's'}`
+        : 'Renueva tu plan JAFN y sigue avanzando'
+    );
+    const body = encodeURIComponent(
+      `Hola ${name || ''},\n\n` +
+        (daysLeft !== undefined
+          ? `Te escribimos para recordarte que tu plan JAFN vence en ${daysLeft} día${daysLeft === 1 ? '' : 's'}. Renueva antes de que finalice para no perder el acceso a tus programas, seguimiento y comunidad.\n\n`
+          : `Vimos que aún no has activado tu plan JAFN. Si necesitas ayuda para elegir el plan que mejor se adapta a tus objetivos, estamos aquí para asesorarte.\n\n`) +
+        `Puedes gestionar tu suscripción desde el panel de cliente en nuestra web.\n\n` +
+        `Un saludo,\nEquipo JAFN`
+    );
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   };
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[hsl(220,20%,8%)]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[hsl(var(--accent-green-light))] mx-auto"></div>
-          <p className="mt-4 text-white/60">Cargando pagos pendientes...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[hsl(var(--accent-green-light))] mx-auto"></div>
+          <p className="mt-4 text-white/60">Cargando información...</p>
         </div>
       </div>
     );
@@ -173,150 +168,143 @@ const AdminPendingPayments: React.FC<AdminPendingPaymentsProps> = ({ onGoBack })
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)] text-white">
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <Button
-              variant="ghost"
-              onClick={onGoBack}
-              className="mr-4 text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver
-            </Button>
-            <h1 className="text-3xl font-bold text-white">Pagos <span className="text-[hsl(var(--accent-green-light))] italic">Pendientes</span></h1>
-          </div>
+        <div className="flex items-center mb-6">
+          <Button
+            variant="ghost"
+            onClick={onGoBack}
+            className="mr-4 text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Volver
+          </Button>
+          <h1 className="text-3xl font-bold text-white">
+            Pagos <span className="text-[hsl(var(--accent-green-light))] italic">Pendientes</span>
+          </h1>
         </div>
 
-        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+        {/* Usuarios inactivos */}
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm mb-6">
           <CardHeader>
-            <CardTitle className="flex items-center text-white">
-              <DollarSign className="w-5 h-5 mr-2" />
-              Pagos Pendientes de Aprobación
+            <CardTitle className="flex items-center text-white gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+              Usuarios inactivos ({inactive.length})
             </CardTitle>
+            <p className="text-white/50 text-sm">Registrados pero sin plan activo.</p>
           </CardHeader>
           <CardContent>
-            <Table className="text-white/80">
-              <TableHeader>
-                <TableRow className="border-white/10 hover:bg-transparent">
-                  <TableHead>Cliente</TableHead>
-                  <TableHead>Plan</TableHead>
-                  <TableHead>Cantidad</TableHead>
-                  <TableHead>Referencia</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Fecha</TableHead>
-                  <TableHead>Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pendingPayments.map((payment) => (
-                  <TableRow key={payment.id} className="border-white/10 hover:bg-white/5">
-                    <TableCell>
-                      <div>
-                        <div className="font-medium text-white">{payment.profiles?.name || 'Usuario desconocido'}</div>
-                        <div className="text-sm text-white/50">{payment.profiles?.email || 'Email no disponible'}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="capitalize">{payment.plan_type}</TableCell>
-                    <TableCell className="font-medium text-[hsl(var(--accent-green-light))]">€{payment.amount}</TableCell>
-                    <TableCell>{payment.payment_reference || 'N/A'}</TableCell>
-                    <TableCell>
-                      <Badge 
-                        variant={payment.status === 'pending' ? 'default' : 
-                                payment.status === 'approved' ? 'secondary' : 'destructive'}
-                      >
-                        {payment.status === 'pending' ? 'Pendiente' :
-                         payment.status === 'approved' ? 'Aprobado' : 'Rechazado'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(payment.created_at).toLocaleDateString('es-ES')}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => viewReceipt(payment)}
-                          className="text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        {payment.status === 'pending' && (
-                          <>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleApprovePayment(payment)}
-                              className="text-[hsl(var(--accent-green-light))] hover:text-white hover:bg-[hsl(var(--accent-green-light))]/20 border border-[hsl(var(--accent-green-light))]/30"
-                            >
-                              <Check className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRejectPayment(payment)}
-                              className="text-red-400 hover:text-red-300 hover:bg-red-500/20 border border-red-500/30"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </TableCell>
+            {inactive.length === 0 ? (
+              <div className="text-center py-6 text-white/50">No hay usuarios inactivos.</div>
+            ) : (
+              <Table className="text-white/80">
+                <TableHeader>
+                  <TableRow className="border-white/10 hover:bg-transparent">
+                    <TableHead>Cliente</TableHead>
+                    <TableHead>Debe pagar</TableHead>
+                    <TableHead>Inactivo desde</TableHead>
+                    <TableHead>Días inactivo</TableHead>
+                    <TableHead className="text-right">Acción</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            {pendingPayments.length === 0 && (
-              <div className="text-center py-8 text-white/50">
-                No hay pagos pendientes.
-              </div>
+                </TableHeader>
+                <TableBody>
+                  {inactive.map((u) => (
+                    <TableRow key={u.id} className="border-white/10 hover:bg-white/5">
+                      <TableCell>
+                        <div className="font-medium text-white">{u.name || 'Sin nombre'}</div>
+                        <div className="text-sm text-white/50">{u.email || 'Sin email'}</div>
+                      </TableCell>
+                      <TableCell className="font-medium text-[hsl(var(--accent-green-light))]">
+                        <div className="flex items-center gap-1"><DollarSign className="w-4 h-4" />€{u.amountDue}</div>
+                        <div className="text-xs text-white/40">(plan mensual)</div>
+                      </TableCell>
+                      <TableCell>{new Date(u.created_at).toLocaleDateString('es-ES')}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="text-red-400 border-red-500/30">
+                          {u.daysInactive} días
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          size="sm"
+                          onClick={() => sendReminder(u.email, u.name)}
+                          className="bg-[hsl(var(--accent-green-light))]/20 text-[hsl(var(--accent-green-light))] hover:bg-[hsl(var(--accent-green-light))]/30 border border-[hsl(var(--accent-green-light))]/30"
+                        >
+                          <Mail className="w-4 h-4 mr-2" />
+                          Enviar recordatorio
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </CardContent>
         </Card>
 
-        {/* Modal para ver comprobante */}
-        <Dialog open={showReceiptModal} onOpenChange={setShowReceiptModal}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Comprobante de Pago</DialogTitle>
-            </DialogHeader>
-            {selectedPayment && (
-              <div className="space-y-4">
-                <div>
-                  <strong>Cliente:</strong> {selectedPayment.profiles?.name || 'Usuario desconocido'}
-                </div>
-                <div>
-                  <strong>Plan:</strong> {selectedPayment.plan_type}
-                </div>
-                <div>
-                  <strong>Cantidad:</strong> €{selectedPayment.amount}
-                </div>
-                {selectedPayment.payment_reference && (
-                  <div>
-                    <strong>Referencia:</strong> {selectedPayment.payment_reference}
-                  </div>
-                )}
-                {selectedPayment.notes && (
-                  <div>
-                    <strong>Notas:</strong> {selectedPayment.notes}
-                  </div>
-                )}
-                {selectedPayment.receipt_url && (
-                  <div>
-                    <strong>Comprobante:</strong>
-                    <img 
-                      src={`${supabase.storage.from('payment-receipts').getPublicUrl(selectedPayment.receipt_url).data.publicUrl}`}
-                      alt="Comprobante de pago"
-                      className="mt-2 max-w-full h-auto rounded border"
-                    />
-                  </div>
-                )}
-              </div>
+        {/* Suscripciones próximas a vencer */}
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center text-white gap-2">
+              <Clock className="w-5 h-5 text-yellow-400" />
+              Planes próximos a vencer ({expiring.length})
+            </CardTitle>
+            <p className="text-white/50 text-sm">Suscripciones activas que finalizan en 10 días o menos.</p>
+          </CardHeader>
+          <CardContent>
+            {expiring.length === 0 ? (
+              <div className="text-center py-6 text-white/50">No hay planes próximos a vencer.</div>
+            ) : (
+              <Table className="text-white/80">
+                <TableHeader>
+                  <TableRow className="border-white/10 hover:bg-transparent">
+                    <TableHead>Cliente</TableHead>
+                    <TableHead>Plan</TableHead>
+                    <TableHead>Vence el</TableHead>
+                    <TableHead>Días restantes</TableHead>
+                    <TableHead className="text-right">Acción</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {expiring.map((u) => (
+                    <TableRow key={u.id} className="border-white/10 hover:bg-white/5">
+                      <TableCell>
+                        <div className="font-medium text-white">{u.name || 'Sin nombre'}</div>
+                        <div className="text-sm text-white/50">{u.email || 'Sin email'}</div>
+                      </TableCell>
+                      <TableCell className="capitalize">
+                        {u.planType} <span className="text-white/40">(€{u.amount})</span>
+                      </TableCell>
+                      <TableCell>{new Date(u.endDate).toLocaleDateString('es-ES')}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="outline"
+                          className={
+                            u.daysLeft <= 3
+                              ? 'text-red-400 border-red-500/30'
+                              : u.daysLeft <= 7
+                              ? 'text-yellow-400 border-yellow-500/30'
+                              : 'text-white/70 border-white/20'
+                          }
+                        >
+                          {u.daysLeft} día{u.daysLeft === 1 ? '' : 's'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          size="sm"
+                          onClick={() => sendReminder(u.email, u.name, u.daysLeft)}
+                          className="bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30 border border-yellow-500/30"
+                        >
+                          <Mail className="w-4 h-4 mr-2" />
+                          Avisar vencimiento
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
-          </DialogContent>
-        </Dialog>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
