@@ -110,12 +110,22 @@ const AdminNewsManager: React.FC<AdminNewsManagerProps> = ({ onGoBack }) => {
       } as any;
 
       if (editingNews) {
-        const { error } = await supabase
+        const { data: updated, error } = await supabase
           .from('admin_news')
-          .update(newsData)
-          .eq('id', editingNews.id);
+          .update({
+            title: newsData.title,
+            content: newsData.content,
+            image_url: newsData.image_url,
+            link_url: newsData.link_url,
+            published: newsData.published,
+          })
+          .eq('id', editingNews.id)
+          .select();
 
         if (error) throw error;
+        if (!updated || updated.length === 0) {
+          throw new Error('No se pudo actualizar la noticia. Verifica tus permisos.');
+        }
         toast({
           title: "Éxito",
           description: "Noticia actualizada correctamente",

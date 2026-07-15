@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Check, Star } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { PLANS, PlanId } from '@/config/plans';
 
 interface PlanRecommendationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDecideLater: () => void;
-  recommendedPlan: 'basic' | 'premium' | 'pro';
+  recommendedPlan: PlanId;
   fromQuestionnaire?: boolean;
 }
 
@@ -23,59 +23,11 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   recommendedPlan,
   fromQuestionnaire = false
 }) => {
-  const [selectedPlan, setSelectedPlan] = useState(recommendedPlan);
+  const [selectedPlan, setSelectedPlan] = useState<PlanId>(recommendedPlan);
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const plans = {
-    basic: {
-      name: 'Plan Básico',
-      price: '€75',
-      duration: 'Pago único',
-      features: [
-        'Dirigido a principiantes que quieren orden',
-        'Nutrición personalizada con menú adaptado',
-        'Entrenamiento no incluido',
-        'Hábitos con guías básicas',
-        'Seguimiento: 1 revisión por mensaje',
-        'Sin análisis',
-        'Sin soporte',
-        'Extras: Guía de compras y batch cooking'
-      ]
-    },
-    premium: {
-      name: 'Plan Premium',
-      price: '€120',
-      duration: 'Por mes',
-      features: [
-        'Dirigido a personas que buscan mejorar composición corporal',
-        'Nutrición incluida + organización de comidas',
-        'Entrenamiento: Plan para casa o gimnasio',
-        'Hábitos: Plan estructurado + herramientas',
-        'Seguimiento: 1 consulta online o presencial mensual',
-        'Sin análisis',
-        'Soporte: Acceso básico a herramientas',
-        'Extras: Plantillas de control y rutinas'
-      ]
-    },
-    pro: {
-      name: 'Plan PRO',
-      price: '€300',
-      duration: 'Duración mínima 6 meses',
-      features: [
-        'Dirigido a personas comprometidas con un cambio completo',
-        'Nutrición incluida + revisión y ajustes avanzados',
-        'Entrenamiento completo, progresivo y evaluado',
-        'Hábitos: Fases inicio - media - consolidación',
-        'Seguimiento: Revisión quincenal por vídeo o mensaje',
-        'Análisis: Informe mensual con métricas y feedback',
-        'Soporte directo por WhatsApp (24h hábiles)',
-        'Extras: Retos, comunidad privada y evolución total'
-      ]
-    }
-  };
-
-  const handlePlanSelection = (planType: 'basic' | 'premium' | 'pro') => {
+  const handlePlanSelection = (planType: PlanId) => {
     if (!user) {
       toast({
         title: "Error",
@@ -84,23 +36,14 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       });
       return;
     }
-
-    // URLs específicas para cada plan
-    const planUrls = {
-      'basic': 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
-      'premium': 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01',
-      'pro': 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02'
-    };
-
-    const url = planUrls[planType];
-    if (url) {
-      window.open(url, '_blank');
+    const plan = PLANS.find(p => p.id === planType);
+    if (plan?.stripeUrl) {
+      window.open(plan.stripeUrl, '_blank');
       toast({
         title: "Redirigiendo a Stripe",
         description: "Te hemos redirigido a la página de pago segura"
       });
     }
-    
     onClose();
   };
 
@@ -135,20 +78,20 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {Object.entries(plans).map(([key, plan]) => (
+                {PLANS.map((plan) => (
                   <Card
-                    key={key}
+                    key={plan.id}
                     className={`cursor-pointer transition-all duration-300 border-2 bg-white/90 backdrop-blur-sm hover-lift ${
-                      selectedPlan === key
+                      selectedPlan === plan.id
                         ? 'border-nutrition-green ring-2 ring-nutrition-green/50'
                         : 'border-gray-200 hover:border-nutrition-green-light'
                     } ${
-                      recommendedPlan === key ? 'ring-2 ring-nutrition-accent' : ''
+                      recommendedPlan === plan.id ? 'ring-2 ring-nutrition-accent' : ''
                     }`}
-                    onClick={() => setSelectedPlan(key as 'basic' | 'premium' | 'pro')}
+                    onClick={() => setSelectedPlan(plan.id)}
                   >
                     <CardHeader className="text-center pb-4">
-                      {recommendedPlan === key && (
+                      {recommendedPlan === plan.id && (
                         <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-2">
                           Recomendado
                         </div>
@@ -157,7 +100,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                         {plan.name}
                       </CardTitle>
                       <div className="text-2xl font-bold text-nutrition-green title-main">
-                        {plan.price}
+                        {plan.priceLabel}
                       </div>
                       <p className="text-nutrition-gray text-sm">{plan.duration}</p>
                     </CardHeader>
@@ -171,7 +114,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                         ))}
                       </ul>
                       <Button
-                        onClick={() => handlePlanSelection(key as 'basic' | 'premium' | 'pro')}
+                        onClick={() => handlePlanSelection(plan.id)}
                         className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold"
                       >
                         Quiero este plan

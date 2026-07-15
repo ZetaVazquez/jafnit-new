@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import ClientDetailsModal from './ClientDetailsModal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -56,7 +57,8 @@ const AdminLeadTracking: React.FC<Props> = ({ onGoBack }) => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<'all' | 'leads' | 'clients'>('leads');
+  const [filter, setFilter] = useState<'all' | 'leads' | 'clients'>('all');
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [selected, setSelected] = useState<Lead | null>(null);
   const [followups, setFollowups] = useState<Followup[]>([]);
   const [latestStatus, setLatestStatus] = useState<Record<string, string>>({});
@@ -155,9 +157,9 @@ const AdminLeadTracking: React.FC<Props> = ({ onGoBack }) => {
             <ArrowLeft className="w-4 h-4 mr-2" /> Volver
           </Button>
           <h1 className="text-3xl md:text-4xl font-bold text-white">
-            Seguimiento de <span className="text-[hsl(var(--accent-green-light))] italic">Leads</span>
+            Seguimiento de <span className="text-[hsl(var(--accent-green-light))] italic">Usuarios</span>
           </h1>
-          <p className="text-white/50 mt-1">Gestiona contactos y potenciales clientes</p>
+          <p className="text-white/50 mt-1">Seguimiento de todos los usuarios: activos y potenciales clientes</p>
         </div>
       </div>
 
@@ -278,6 +280,15 @@ const AdminLeadTracking: React.FC<Props> = ({ onGoBack }) => {
               </div>
 
               <div className="border-t border-white/10 pt-4">
+                <Button
+                  onClick={() => setDetailsOpen(true)}
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20"
+                >
+                  Ver ficha completa del usuario
+                </Button>
+              </div>
+
+              <div className="border-t border-white/10 pt-4">
                 <h4 className="font-semibold mb-3">Historial</h4>
                 {followups.length === 0 ? (
                   <p className="text-sm text-white/50">Sin seguimientos todavía.</p>
@@ -300,6 +311,16 @@ const AdminLeadTracking: React.FC<Props> = ({ onGoBack }) => {
           )}
         </DialogContent>
       </Dialog>
+
+      {selected && (
+        <ClientDetailsModal
+          isOpen={detailsOpen}
+          onClose={() => setDetailsOpen(false)}
+          clientId={selected.user_id}
+          clientName={selected.full_name || 'Usuario'}
+          clientEmail={selected.email || ''}
+        />
+      )}
     </div>
   );
 };

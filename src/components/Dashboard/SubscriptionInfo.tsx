@@ -87,7 +87,7 @@ const SubscriptionInfo: React.FC = () => {
           </div>
         )}
       </CardContent>
-      <PlanRecommendationModal isOpen={showPlansModal} onClose={() => setShowPlansModal(false)} onDecideLater={() => setShowPlansModal(false)} recommendedPlan="premium" fromQuestionnaire={false} />
+      <PlanRecommendationModal isOpen={showPlansModal} onClose={() => setShowPlansModal(false)} onDecideLater={() => setShowPlansModal(false)} recommendedPlan="constructor" fromQuestionnaire={false} />
     </Card>
   );
 };
