@@ -172,7 +172,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ onGoBack }) => {
         </div>
       </main>
 
-      <PlanRecommendationModal isOpen={showPlansModal} onClose={() => setShowPlansModal(false)} onDecideLater={() => setShowPlansModal(false)} recommendedPlan="premium" fromQuestionnaire={false} />
+      <PlanRecommendationModal isOpen={showPlansModal} onClose={() => setShowPlansModal(false)} onDecideLater={() => setShowPlansModal(false)} recommendedPlan="constructor" fromQuestionnaire={false} />
       <ChangeEmailModal isOpen={showChangeEmail} onClose={() => setShowChangeEmail(false)} currentEmail={user?.email || ''} />
       <ChangePasswordModal isOpen={showChangePassword} onClose={() => setShowChangePassword(false)} />
       <InitialEvaluationModal

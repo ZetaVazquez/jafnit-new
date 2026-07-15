@@ -257,7 +257,7 @@ const Index = () => {
           isOpen={showPlanModal}
           onClose={() => setShowPlanModal(false)}
           onDecideLater={() => setShowPlanModal(false)}
-          recommendedPlan="premium"
+          recommendedPlan="constructor"
           fromQuestionnaire={false}
         />
         <AuthModal
