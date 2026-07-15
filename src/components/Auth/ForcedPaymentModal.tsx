@@ -3,9 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check, Clock, Users, Trophy, Zap, X } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { PLANS, PlanId } from '@/config/plans';
 
 interface ForcedPaymentModalProps {
   isOpen: boolean;
@@ -77,28 +77,20 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
     }
   };
 
-  const handlePlanSelection = (planType: string) => {
+  const handlePlanSelection = (planType: PlanId) => {
     setLoading(true);
-    
     try {
-      // Open Stripe payment page directly
-      window.open('https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00', '_blank');
-      
+      const plan = PLANS.find(p => p.id === planType);
+      if (plan?.stripeUrl) {
+        window.open(plan.stripeUrl, '_blank');
+      }
       toast({
         title: "Redirigiendo a Stripe",
         description: "Te hemos redirigido a la página de pago segura. Una vez completado el pago, tu suscripción será activada."
       });
-      
-      // Para simular que el pago se completó (ya que no podemos verificar automáticamente)
-      // En un escenario real, esto sería manejado por webhooks o verificación manual
       setTimeout(() => {
         onPaymentCompleted();
-        toast({
-          title: "¡Proceso iniciado!",
-          description: "Una vez completado el pago en Stripe, tu suscripción será activada automáticamente.",
-        });
       }, 2000);
-      
     } catch (error) {
       console.error('Error opening payment:', error);
       toast({
@@ -111,55 +103,15 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
     }
   };
 
-  const plans = [
-    {
-      id: 'basic',
-      name: 'Plan Básico',
-      price: '75€',
-      period: 'pago único',
-      description: 'Perfecto para empezar tu transformación',
-      features: [
-        'Plan de alimentación personalizado',
-        'Rutina de ejercicios básica',
-        'Acceso a recursos educativos',
-        'Soporte por email'
-      ],
-      color: 'from-blue-500 to-blue-600',
-      popular: false
-    },
-    {
-      id: 'premium',
-      name: 'Plan Premium',
-      price: '120€',
-      period: 'al mes',
-      description: 'La opción más completa para resultados óptimos',
-      features: [
-        'Todo lo del Plan Básico',
-        'Seguimiento personalizado semanal',
-        'Ajustes constantes del plan',
-        'Soporte prioritario',
-        'Acceso a comunidad exclusiva'
-      ],
-      color: 'from-nutrition-green to-nutrition-green-dark',
-      popular: true
-    },
-    {
-      id: 'pro',
-      name: 'Plan PRO',
-      price: '300€',
-      period: 'al mes (mínimo 6 meses)',
-      description: 'Transformación completa con acompañamiento intensivo',
-      features: [
-        'Todo lo del Plan Premium',
-        'Consultas semanales 1:1',
-        'Plan de suplementación',
-        'Análisis corporal detallado',
-        'Garantía de resultados'
-      ],
-      color: 'from-purple-500 to-purple-600',
-      popular: false
-    }
-  ];
+  const plans = PLANS.map(p => ({
+    id: p.id,
+    name: p.name,
+    price: p.priceLabel,
+    period: p.duration,
+    description: p.tagline,
+    features: p.features,
+    popular: p.highlighted,
+  }));
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal} modal={true}>

@@ -3,79 +3,43 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Check, CreditCard, AlertCircle } from 'lucide-react';
+import { PLANS, PlanId } from '@/config/plans';
+import { useToast } from '@/hooks/use-toast';
 
 interface ChangePlanProps {
   onGoBack: () => void;
 }
 
 const ChangePlan: React.FC<ChangePlanProps> = ({ onGoBack }) => {
-  const [currentPlan, setCurrentPlan] = useState('monthly'); // Plan actual del usuario
-  const [selectedPlan, setSelectedPlan] = useState(currentPlan);
+  const { toast } = useToast();
+  const [currentPlan, setCurrentPlan] = useState<PlanId>('constructor');
+  const [selectedPlan, setSelectedPlan] = useState<PlanId>(currentPlan);
 
-  const plans = [
-    {
-      id: 'monthly',
-      name: 'Plan Mensual',
-      duration: '1 mes',
-      price: 75,
-      features: [
-        'Evaluación inicial completa',
-        'Plan de alimentación personalizado',
-        'Rutina de ejercicios básica',
-        'Seguimiento semanal',
-        'Soporte por WhatsApp',
-        'Acceso a recursos básicos'
-      ]
-    },
-    {
-      id: 'quarterly',
-      name: 'Plan Trimestral',
-      duration: '3 meses',
-      price: 210,
-      features: [
-        'Todo lo del plan mensual',
-        'Evaluación médica avanzada',
-        'Plan de suplementación',
-        'Rutina de ejercicios avanzada',
-        'Seguimiento bisemanal',
-        'Recetas personalizadas',
-        'Acceso a la app móvil premium',
-        '2 sesiones de entrenamiento personal',
-        'Ahorro de €15 al mes'
-      ],
-      popular: true
-    }
-  ];
-
-  const getCurrentPlan = () => plans.find(plan => plan.id === currentPlan);
-  const getSelectedPlan = () => plans.find(plan => plan.id === selectedPlan);
+  const plans = PLANS;
+  const getCurrentPlan = () => plans.find(p => p.id === currentPlan);
+  const getSelectedPlan = () => plans.find(p => p.id === selectedPlan);
 
   const calculateDifference = () => {
     const current = getCurrentPlan();
     const selected = getSelectedPlan();
     if (!current || !selected) return 0;
-    
-    // Calcular precio mensual equivalente
-    const currentMonthlyPrice = current.id === 'monthly' ? current.price : current.price / 3;
-    const selectedMonthlyPrice = selected.id === 'monthly' ? selected.price : selected.price / 3;
-    
-    return selectedMonthlyPrice - currentMonthlyPrice;
+    return selected.price - current.price;
   };
 
   const handleChangePlan = () => {
-    const difference = calculateDifference();
-    if (difference > 0) {
-      alert(`Se te cobrará la diferencia de €${difference.toFixed(2)} al mes`);
-    } else if (difference < 0) {
-      alert('El cambio a un plan inferior no incluye reembolso del dinero ya pagado');
-    } else {
-      alert('Ya tienes este plan activo');
+    const selected = getSelectedPlan();
+    if (!selected) return;
+    if (selected.id === currentPlan) {
+      toast({ title: 'Ya tienes este plan activo' });
       return;
     }
-    
-    // Aquí iría la lógica de cambio de plan
-    setCurrentPlan(selectedPlan);
-    alert('Plan cambiado exitosamente');
+    if (selected.stripeUrl) {
+      window.open(selected.stripeUrl, '_blank');
+      toast({
+        title: 'Redirigiendo a Stripe',
+        description: 'Completa el pago en Stripe para activar el nuevo plan.',
+      });
+    }
   };
 
   return (
@@ -126,7 +90,7 @@ const ChangePlan: React.FC<ChangePlanProps> = ({ onGoBack }) => {
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold text-nutrition-green">
-                  €{getCurrentPlan()?.price}
+                  {getCurrentPlan()?.priceLabel}
                 </div>
                 <p className="text-sm text-nutrition-gray">por período</p>
               </div>
@@ -135,7 +99,7 @@ const ChangePlan: React.FC<ChangePlanProps> = ({ onGoBack }) => {
         </Card>
 
         {/* Plans */}
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
           {plans.map((plan) => (
             <Card
               key={plan.id}
@@ -151,7 +115,7 @@ const ChangePlan: React.FC<ChangePlanProps> = ({ onGoBack }) => {
               <CardHeader className="text-center">
                 <CardTitle className="text-xl text-nutrition-black">
                   {plan.name}
-                  {plan.popular && (
+                  {plan.highlighted && (
                     <span className="ml-2 inline-block bg-nutrition-accent text-white px-2 py-1 rounded-full text-xs">
                       Más Popular
                     </span>
@@ -164,7 +128,7 @@ const ChangePlan: React.FC<ChangePlanProps> = ({ onGoBack }) => {
                 </CardTitle>
                 <p className="text-nutrition-gray">{plan.duration}</p>
                 <div className="text-3xl font-bold text-nutrition-green">
-                  €{plan.price}
+                  {plan.priceLabel}
                 </div>
               </CardHeader>
               <CardContent>
@@ -198,7 +162,7 @@ const ChangePlan: React.FC<ChangePlanProps> = ({ onGoBack }) => {
                   {calculateDifference() > 0 && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                       <p className="text-blue-800 text-sm">
-                        <strong>Upgrade:</strong> Se te cobrará una diferencia de €{calculateDifference().toFixed(2)} al mes.
+                        <strong>Upgrade:</strong> Diferencia de €{calculateDifference().toFixed(2)} respecto a tu plan actual.
                       </p>
                     </div>
                   )}
