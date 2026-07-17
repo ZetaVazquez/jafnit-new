@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Users, FileText, Dumbbell, DollarSign, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList, Library, UtensilsCrossed, UserCheck } from 'lucide-react';
+import { Users, FileText, Dumbbell, DollarSign, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList, Library, UtensilsCrossed, UserCheck, Shield } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AdminClientsTable from './AdminClientsTable';
@@ -14,6 +14,7 @@ import AdminNewsManager from './AdminNewsManager';
 import AdminTestimonials from './AdminTestimonials';
 import AdminQuestionnaireResponses from './AdminQuestionnaireResponses';
 import AdminLeadTracking from './AdminLeadTracking';
+import AdminAuditLog from './AdminAuditLog';
 import { useToast } from '@/hooks/use-toast';
 
 interface AdminDashboardProps {
@@ -22,7 +23,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library' | 'leads'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library' | 'leads' | 'audit'>('overview');
   const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
@@ -97,6 +98,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
     { view: 'exercise-library' as const, icon: Library, color: 'from-pink-500/20 to-pink-600/10 border-pink-500/30', iconColor: 'text-pink-400', title: 'Biblioteca Ejercicios', subtitle: 'Videos y fichas' },
     { view: 'meal-library' as const, icon: UtensilsCrossed, color: 'from-lime-500/20 to-lime-600/10 border-lime-500/30', iconColor: 'text-lime-400', title: 'Biblioteca Comidas', subtitle: 'Recetas con foto' },
     { view: 'leads' as const, icon: UserCheck, color: 'from-cyan-500/20 to-cyan-600/10 border-cyan-500/30', iconColor: 'text-cyan-400', title: 'Seguimiento de Leads', subtitle: 'Contactos y CRM' },
+    { view: 'audit' as const, icon: Shield, color: 'from-slate-500/20 to-slate-600/10 border-slate-500/30', iconColor: 'text-slate-300', title: 'Auditoría', subtitle: 'Acciones de admin' },
   ];
 
   const renderContent = () => {
@@ -112,6 +114,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
       case 'testimonials': return <AdminTestimonials onBack={() => setCurrentView('overview')} />;
       case 'questionnaire': return <AdminQuestionnaireResponses onGoBack={() => setCurrentView('overview')} />;
       case 'leads': return <AdminLeadTracking onGoBack={() => setCurrentView('overview')} />;
+      case 'audit': return <AdminAuditLog onGoBack={() => setCurrentView('overview')} />;
       default:
         return (
           <div className="container mx-auto px-4 py-8">
