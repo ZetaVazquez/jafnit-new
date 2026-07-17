@@ -34,6 +34,7 @@ import Gifts from './Gifts';
 import WelcomeGiftModal from './WelcomeGiftModal';
 import SubscriptionInfo from './SubscriptionInfo';
 import InitialEvaluationModal from './InitialEvaluationModal';
+import NotificationBell from './NotificationBell';
 import { TodayGoalsWidget, WorkoutStatsWidget, ActiveDaysWidget } from './DashboardWidgets';
 import { useToast } from '@/hooks/use-toast';
 
@@ -258,14 +259,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Chat
               </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={handleChatWithTrainer}
-                className="text-white/60 hover:text-white hover:bg-white/10"
-              >
-                <Bell className="w-4 h-4" />
-              </Button>
+              <NotificationBell onNavigate={(view) => setCurrentView(view)} />
               {onNavigateToHome && (
                 <Button
                   variant="outline"
