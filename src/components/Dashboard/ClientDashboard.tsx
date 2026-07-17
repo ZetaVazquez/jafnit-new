@@ -12,7 +12,6 @@ import {
   Apple, 
   Dumbbell,
   LogOut,
-  Bell,
   MessageCircle,
   Home,
   Newspaper,
