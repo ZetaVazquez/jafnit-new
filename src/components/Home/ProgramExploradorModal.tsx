@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Check, Monitor, Search, Target, Zap, Users, ArrowRight, X } from 'lucide-react';
 
@@ -14,6 +14,8 @@ const ProgramExploradorModal: React.FC<ProgramExploradorModalProps> = ({ isOpen,
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[hsl(220,20%,8%)] border-white/10 text-white p-0 [&>button]:hidden">
+        <DialogTitle className="sr-only">Programa Explorador</DialogTitle>
+        <DialogDescription className="sr-only">Detalles del programa Explorador.</DialogDescription>
         {/* Close button */}
         <button onClick={onClose} className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 hover:bg-white/20 transition-colors">
           <X className="w-5 h-5 text-white" />
