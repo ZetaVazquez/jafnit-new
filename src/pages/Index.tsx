@@ -26,6 +26,7 @@ import ProgramExploradorModal from '@/components/Home/ProgramExploradorModal';
 import ProgramConstructorModal from '@/components/Home/ProgramConstructorModal';
 import ProgramEstrategaModal from '@/components/Home/ProgramEstrategaModal';
 import AboutUsDetailModal from '@/components/Home/AboutUsDetailModal';
+import CoachChat from '@/components/Coach/CoachChat';
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -42,7 +43,8 @@ const Index = () => {
   const [showConstructorModal, setShowConstructorModal] = useState(false);
   const [showEstrategaModal, setShowEstrategaModal] = useState(false);
   const [showAboutDetailModal, setShowAboutDetailModal] = useState(false);
-  const { user, isAdmin, signOut } = useAuth();
+  const [showCoach, setShowCoach] = useState(false);
+  const { user, isAdmin, signOut, hasActiveSubscription } = useAuth();
 
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
@@ -68,7 +70,12 @@ const Index = () => {
 
   const handleClientFormComplete = () => {
     setShowClientForm(false);
-    setShowDashboard(true);
+    // Non-active clients get the AI Coach; active/admin go straight to dashboard.
+    if (!isAdmin && !hasActiveSubscription) {
+      setShowCoach(true);
+    } else {
+      setShowDashboard(true);
+    }
   };
 
   const handleBackToHome = () => {
@@ -151,6 +158,15 @@ const Index = () => {
           onViewChange={setDashboardView}
         />
       </SubscriptionGuard>
+    );
+  }
+
+  if (showCoach && user) {
+    return (
+      <CoachChat
+        onClose={() => { setShowCoach(false); setShowDashboard(true); }}
+        onOpenPlans={() => { setShowCoach(false); setShowPlanModal(true); }}
+      />
     );
   }
 

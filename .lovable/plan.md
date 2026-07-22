@@ -1,109 +1,65 @@
 
-# Plan: Cálculo nutricional clínico + BEDCA + auto-creación de platos
+# Coach IA para clientes NO activos
 
-## Objetivo
-Que `generate-plans-from-questionnaire` deje de "ir a ojo": calcule calorías/macros con fórmulas validadas a partir del cuestionario, use BEDCA (Base de Datos Española de Composición de Alimentos) como fuente real de macros por ingrediente, y permita a la IA proponer platos nuevos que se añaden automáticamente a `meals_library`.
+Un chat automático que aparece justo después de terminar el cuestionario de la home. Habla en tono cercano de personal trainer, ya conoce las respuestas del cuestionario, pide medidas clave paso a paso, las guarda en su ficha, y al final ofrece un mini-plan orientativo con consejos generales de mejora e invita a suscribirse para el plan real.
 
----
+## Cómo se comportará
 
-## 1. Cálculo clínico (no LLM)
+1. Al terminar el cuestionario de la home (usuario recién registrado, aún no activo), en vez de pasar directo al modal de pago, se abre la conversación con el "Coach JAFN".
+2. El coach saluda por su nombre, resume en 1–2 frases lo que ha entendido del cuestionario (objetivo, situación, disponibilidad) y le propone hacer una "mini-valoración" de 4–6 preguntas.
+3. Va preguntando de una en una, con lenguaje natural, y **guarda cada respuesta** en la ficha del cliente:
+   - Peso actual, altura, edad (si no las tiene ya)
+   - Perímetro de cintura
+   - Nivel de actividad diaria real (sedentario / ligero / activo)
+   - Horas de sueño medias
+   - Nº de comidas al día y consumo de agua aproximado
+4. Con esos datos + los del cuestionario da un **mini-diagnóstico orientativo**: IMC, punto de partida, 3 palancas de mejora priorizadas (ej. "duermes poco → recuperación", "poca proteína → saciedad", "sedentarismo → 8k pasos").
+5. Cierra con un mensaje motivacional del estilo "esto es una foto general; para tu plan individualizado con seguimiento real, mira los programas" + botón que abre el modal de suscripción.
+6. La conversación queda **guardada como un único hilo por usuario** y se puede retomar desde su área privada (badge de "Coach IA" en el sidebar). Al volver, el coach reanuda desde donde lo dejaron.
 
-Se hace en el edge function ANTES de llamar a la IA. La IA recibe los números, no los inventa.
+Reglas importantes:
+- El coach **no** prescribe rutinas ni dietas concretas (nada de "haz 4x10 sentadillas" o "come 150g de pollo"): solo hábitos, principios y siguientes pasos.
+- Todo en castellano, tuteando, tono José Antonio (directo, cercano, motivador).
+- Se muestra como personal trainer, sin destapar que es IA salvo si el usuario lo pregunta directamente.
 
-**Inputs del cuestionario** (de `initial_evaluations`):
-- Bloque 1: sexo, edad
-- Bloque 4: nivel de actividad / días de entrenamiento
-- Bloque 8: peso (kg), altura (cm)
-- Objetivo: déficit / mantenimiento / volumen
+## Dónde vive en la app
 
-**Fórmulas:**
-1. **TMB** — Mifflin-St Jeor:
-   - Hombre: `10·kg + 6.25·cm − 5·edad + 5`
-   - Mujer: `10·kg + 6.25·cm − 5·edad − 161`
-2. **GET** = TMB × factor de actividad (1.2 sedentario → 1.9 muy activo, mapeado desde bloque 4).
-3. **Objetivo calórico**:
-   - Déficit: GET − 400 kcal (mínimo TMB · 1.1, nunca <1200 ♀ / <1500 ♂)
-   - Mantenimiento: GET
-   - Volumen: GET + 300 kcal
-4. **Macros**:
-   - Proteína: 1.8 g/kg (déficit) · 1.6 g/kg (mant.) · 2.0 g/kg (volumen)
-   - Grasa: 25% de calorías (mín 0.8 g/kg)
-   - HC: resto
+- **Auto-apertura**: al completar `Questionnaire.tsx` (home). En vez de saltar solo a `AuthModal → ClientForm`, tras el registro se abre el chat como pantalla completa.
+- **Acceso permanente** para clientes no activos: nueva entrada "Coach IA" en el sidebar/menú del usuario logueado sin suscripción, y CTA en su dashboard vacío.
+- Para clientes activos no se muestra (ya tienen plan real).
 
-Si faltan datos del cuestionario → plan genérico 2000 kcal (como ahora).
+## Detalles técnicos
 
----
+Modelo: Lovable AI Gateway con `google/gemini-3.6-flash` (rápido y barato para chat multivuelta). System prompt en servidor, nunca en cliente.
 
-## 2. Integración BEDCA
+Backend (nuevas piezas):
+- Tabla `coach_conversations` (una fila por usuario): `user_id` (PK única), `messages jsonb[]`, `updated_at`. RLS: el usuario ve/edita solo la suya; admin puede leer todas.
+- Tabla `coach_measurements`: `user_id`, `weight_kg`, `height_cm`, `age`, `waist_cm`, `activity_level`, `sleep_hours`, `meals_per_day`, `water_l`, `updated_at`. Upsert por `user_id`. RLS igual.
+- Edge function `coach-chat`:
+  - Entrada: `{ messages }` (el hilo completo se manda cada vez — el modelo es stateless).
+  - Carga respuestas del cuestionario (`questionnaire_responses` + `client_forms`) y medidas ya guardadas, las inyecta en el system prompt.
+  - Usa AI SDK con streaming (`streamText` + `toUIMessageStreamResponse`) y define **tools**:
+    - `save_measurement({ field, value })` → upsert en `coach_measurements`.
+    - `mark_ready_for_diagnosis()` → señal al front para renderizar el bloque final con CTA a planes.
+  - Al finalizar (`onFinish`) persiste el hilo actualizado en `coach_conversations`.
+- RPC `admin_read_coach_conversation(p_user_id)` con `SECURITY DEFINER` para que el admin lo vea desde su panel.
 
-BEDCA expone un servicio web público (XML) en `https://www.bedca.net/bdpub/procquery.php`. Devuelve por alimento: kcal, proteína, HC, grasa, fibra, etc.
+Frontend (nuevas piezas):
+- Instalar AI Elements (`conversation`, `message`, `prompt-input`, `shimmer`) y `@ai-sdk/react` + `ai`.
+- `src/components/Coach/CoachChat.tsx`: usa `useChat` con `DefaultChatTransport` apuntando a la edge function, `id = user.id` (hilo único), carga los mensajes previos al montar.
+- `src/components/Coach/CoachLauncher.tsx`: envoltorio full-screen con el branding (avatar JAFN, verde/negro).
+- Enganches en `Index.tsx`: tras `handleClientFormComplete` → abrir `CoachLauncher` en vez de dashboard directo; añadir botón "Coach IA" cuando `!hasActiveSubscription`.
+- En `AdminClientsTable`: botón "Ver chat coach" que abre el hilo en modo lectura.
 
-**Implementación:**
-- Nueva tabla `bedca_foods_cache` (clave: nombre normalizado) para no martillear BEDCA y cachear resultados localmente.
-  - Campos: `name_normalized`, `bedca_id`, `kcal_100g`, `protein_g_100g`, `carbs_g_100g`, `fats_g_100g`, `raw_json`.
-- Helper en `supabase/functions/_shared/bedca.ts`:
-  - `lookupFood(name)` → consulta cache, si no existe pide a BEDCA (XML POST), parsea, guarda y devuelve macros por 100 g.
-- Fallback: si BEDCA no encuentra el alimento, se marca como `source: 'estimated'` y se usa estimación conservadora con un aviso al admin en el plato.
+Seguridad:
+- `LOVABLE_API_KEY` ya está — no pedimos nada al usuario.
+- Toda llamada al modelo desde la edge function; nunca desde el navegador.
+- RLS en ambas tablas nuevas + GRANTs a `authenticated` y `service_role`.
 
----
+## Fuera de alcance (para no inflar esto)
+- Notificaciones por email del coach.
+- Voz / audio.
+- Recordatorios diarios automáticos.
+- Panel admin para editar el system prompt (irá hardcodeado inicialmente; se puede iterar después).
 
-## 3. La IA puede crear platos nuevos
-
-Hoy la IA está limitada a la biblioteca. Cambiamos el schema del tool:
-
-**Tool `build_diet_plan`** acepta dos tipos de entrada de comida:
-- `meal_id` existente, **o**
-- `new_meal` con: `name`, `meal_type`, `ingredients_grams` = `[{ ingredient_name, grams }, ...]`, `preparation_notes`, opcional `diet_tags`.
-
-**Flujo tras la respuesta de la IA:**
-1. Para cada `new_meal`:
-   - Por cada ingrediente → `bedca.lookupFood()` → macros reales por 100 g → multiplicar por gramos.
-   - Sumar macros del plato.
-   - Buscar duplicado en `meals_library` por nombre normalizado; si no existe, `INSERT` con `created_by_ai = true`, `source = 'bedca'`.
-   - Usar el nuevo `id` en el plan.
-2. Validar que el total diario del plan cuadra con `calories_target ±10%`; si no cuadra, ajustar gramos proporcionalmente (no relanzar IA).
-
-**Resultado:** la biblioteca crece sola con macros verificados; los siguientes planes ya tienen más opciones reutilizables.
-
----
-
-## 4. Cambios concretos
-
-### DB (migración)
-- `meals_library`: añadir `created_by_ai boolean default false`, `source text` (`'manual' | 'bedca' | 'estimated'`), `bedca_refs jsonb` (lista de ingredientes consultados).
-- Nueva tabla `bedca_foods_cache` con RLS (lectura `authenticated`, escritura solo `service_role`).
-- Índice único sobre `meals_library.name` (normalizado en minúsculas) para evitar duplicados.
-
-### Edge function `generate-plans-from-questionnaire`
-- Añadir bloque de cálculo clínico (sección 1) → produce `targets = { kcal, protein_g, carbs_g, fats_g }`.
-- Pasar `targets` al system prompt como objetivos OBLIGATORIOS.
-- Ampliar el JSON-schema del tool para aceptar `new_meal`.
-- Tras recibir la respuesta: resolver `new_meal` con BEDCA, insertar en `meals_library`, enriquecer el plan.
-- Devolver al cliente un resumen: `{ targets, created_meals_count }`.
-
-### Nuevo shared module
-- `supabase/functions/_shared/bedca.ts` (lookup + cache).
-- `supabase/functions/_shared/nutrition.ts` (Mifflin-St Jeor, factores actividad, reparto macros).
-
-### Frontend
-- En el modal de generación con IA: mostrar los targets calculados (kcal/proteína/HC/grasa) antes y después.
-- En `AdminMealLibrary`: badge "Auto-creado por IA (BEDCA)" para platos con `created_by_ai`.
-
----
-
-## 5. Detalles técnicos / riesgos
-
-- **BEDCA es lento y a veces inestable.** El cache local lo mitiga; la primera vez un plan puede tardar 5-15 s extra mientras se cachean ingredientes nuevos.
-- **Idioma:** BEDCA está en español; la IA debe nombrar ingredientes en español estándar (ej. "pechuga de pollo", "arroz integral cocido"). Lo forzamos en el prompt.
-- **Licencia BEDCA:** uso permitido citando la fuente. Añadir nota "Datos nutricionales: BEDCA" en el PDF del plan.
-- **Alternativa si BEDCA falla:** se puede sustituir el helper por USDA FoodData Central (en inglés) sin tocar el resto. La arquitectura lo permite.
-
----
-
-## Entregables
-1. Migración SQL (tabla cache + columnas nuevas en `meals_library`).
-2. `_shared/nutrition.ts` y `_shared/bedca.ts`.
-3. Reescritura parcial de `generate-plans-from-questionnaire/index.ts`.
-4. Ajustes UI menores en el modal de generación y `AdminMealLibrary`.
-
-¿Procedo con esta implementación?
+¿Le damos caña con esto tal cual?
