@@ -374,6 +374,72 @@ export type Database = {
         }
         Relationships: []
       }
+      coach_conversations: {
+        Row: {
+          created_at: string
+          messages: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          messages?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          messages?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      coach_measurements: {
+        Row: {
+          activity_level: string | null
+          age: number | null
+          created_at: string
+          extra: Json
+          height_cm: number | null
+          meals_per_day: number | null
+          sleep_hours: number | null
+          updated_at: string
+          user_id: string
+          waist_cm: number | null
+          water_l: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          activity_level?: string | null
+          age?: number | null
+          created_at?: string
+          extra?: Json
+          height_cm?: number | null
+          meals_per_day?: number | null
+          sleep_hours?: number | null
+          updated_at?: string
+          user_id: string
+          waist_cm?: number | null
+          water_l?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          activity_level?: string | null
+          age?: number | null
+          created_at?: string
+          extra?: Json
+          height_cm?: number | null
+          meals_per_day?: number | null
+          sleep_hours?: number | null
+          updated_at?: string
+          user_id?: string
+          waist_cm?: number | null
+          water_l?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
       daily_goals: {
         Row: {
           created_at: string
@@ -1391,6 +1457,21 @@ export type Database = {
       admin_delete_exercise: { Args: { p_id: string }; Returns: undefined }
       admin_delete_meal: { Args: { p_id: string }; Returns: undefined }
       admin_delete_workout_plan: { Args: { p_id: string }; Returns: undefined }
+      admin_read_coach_conversation: {
+        Args: { p_user_id: string }
+        Returns: {
+          created_at: string
+          messages: Json
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coach_conversations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       admin_update_diet_plan: {
         Args: {
           p_assigned_to: string
