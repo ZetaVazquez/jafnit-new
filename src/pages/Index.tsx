@@ -42,7 +42,7 @@ const Index = () => {
   const [showConstructorModal, setShowConstructorModal] = useState(false);
   const [showEstrategaModal, setShowEstrategaModal] = useState(false);
   const [showAboutDetailModal, setShowAboutDetailModal] = useState(false);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
 
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
@@ -76,7 +76,12 @@ const Index = () => {
     setDashboardView('dashboard');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (e) {
+      console.error('Logout failed', e);
+    }
     setShowDashboard(false);
     setDashboardView('dashboard');
   };
