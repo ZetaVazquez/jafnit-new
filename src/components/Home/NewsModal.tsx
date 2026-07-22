@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NewsItem } from '@/types';
@@ -26,7 +27,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
 
   if (!isOpen || !newsItem) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative z-[10000]">
         {/* Header sticky con la cruz */}
@@ -66,7 +67,8 @@ const NewsModal: React.FC<NewsModalProps> = ({ isOpen, onClose, newsItem }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
