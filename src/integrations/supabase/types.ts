@@ -1453,10 +1453,37 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_delete_coach_conversation: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
+      admin_delete_coach_measurements: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
       admin_delete_diet_plan: { Args: { p_id: string }; Returns: undefined }
       admin_delete_exercise: { Args: { p_id: string }; Returns: undefined }
       admin_delete_meal: { Args: { p_id: string }; Returns: undefined }
       admin_delete_workout_plan: { Args: { p_id: string }; Returns: undefined }
+      admin_list_coach_users: {
+        Args: never
+        Returns: {
+          activity_level: string
+          age: number
+          email: string
+          has_conversation: boolean
+          height_cm: number
+          last_activity: string
+          meals_per_day: number
+          msg_count: number
+          name: string
+          sleep_hours: number
+          user_id: string
+          waist_cm: number
+          water_l: number
+          weight_kg: number
+        }[]
+      }
       admin_read_coach_conversation: {
         Args: { p_user_id: string }
         Returns: {
@@ -1468,6 +1495,39 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "coach_conversations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_update_coach_measurements: {
+        Args: {
+          p_activity_level: string
+          p_age: number
+          p_height_cm: number
+          p_meals_per_day: number
+          p_sleep_hours: number
+          p_user_id: string
+          p_waist_cm: number
+          p_water_l: number
+          p_weight_kg: number
+        }
+        Returns: {
+          activity_level: string | null
+          age: number | null
+          created_at: string
+          extra: Json
+          height_cm: number | null
+          meals_per_day: number | null
+          sleep_hours: number | null
+          updated_at: string
+          user_id: string
+          waist_cm: number | null
+          water_l: number | null
+          weight_kg: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coach_measurements"
           isOneToOne: true
           isSetofReturn: false
         }
