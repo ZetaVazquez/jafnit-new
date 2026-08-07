@@ -8,6 +8,14 @@ import { toast } from 'sonner';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
+/**
+ * In-memory store: the conversation survives closing/reopening the chat and
+ * switching sections of the SPA, and is only lost on a full page reload or
+ * when the user enters the client/admin dashboard (cleared via clearCoachChat).
+ */
+let coachMemory: Msg[] = [];
+export const clearCoachChat = () => { coachMemory = []; };
+
 interface CoachChatProps {
   onClose: () => void;
   onOpenPlans?: () => void;
@@ -25,7 +33,7 @@ const formatText = (text: string) => {
 
 const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   const { user, profile } = useAuth();
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [messages, setMessages] = useState<Msg[]>(coachMemory);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -33,11 +41,17 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const sendMessage = async (userMessage: Msg | null) => {
-    if (!user) return;
+  // Keep the in-memory copy in sync so the thread survives view changes.
+  useEffect(() => { coachMemory = messages; }, [messages]);
+
+  const sendMessage = async (userMessage: Msg | null, history: Msg[] = []) => {
     setLoading(true);
     try {
-      const payload = userMessage ? [{ role: 'user', content: userMessage.content }] : [];
+      // Registered users: the server holds the thread, so only the new message is sent.
+      // Guests: the whole thread travels with the request.
+      const payload = user
+        ? (userMessage ? [{ role: 'user', content: userMessage.content }] : [])
+        : [...history, ...(userMessage ? [userMessage] : [])];
       const { data, error } = await supabase.functions.invoke('coach-chat', {
         body: { messages: payload },
       });
@@ -58,14 +72,18 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
 
   // Load prior conversation on mount; if empty, trigger opening greeting.
   useEffect(() => {
-    if (!user) return;
     (async () => {
+      if (!user) {
+        setInitialLoading(false);
+        if (coachMemory.length === 0) await sendMessage(null, []);
+        return;
+      }
       const { data } = await supabase
         .from('coach_conversations')
         .select('messages')
         .eq('user_id', user.id)
         .maybeSingle();
-      const prior = ((data?.messages as any) || []) as Msg[];
+      const prior = (((data?.messages as any) || []) as Msg[]);
       setMessages(prior);
       setInitialLoading(false);
       if (prior.length === 0) {
@@ -83,9 +101,10 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
     const trimmed = input.trim();
     if (!trimmed || loading) return;
     const userMsg: Msg = { role: 'user', content: trimmed };
+    const history = messages;
     setMessages(prev => [...prev, userMsg]);
     setInput('');
-    await sendMessage(userMsg);
+    await sendMessage(userMsg, history);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

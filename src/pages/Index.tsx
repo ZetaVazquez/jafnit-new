@@ -26,7 +26,7 @@ import ProgramExploradorModal from '@/components/Home/ProgramExploradorModal';
 import ProgramConstructorModal from '@/components/Home/ProgramConstructorModal';
 import ProgramEstrategaModal from '@/components/Home/ProgramEstrategaModal';
 import AboutUsDetailModal from '@/components/Home/AboutUsDetailModal';
-import CoachChat from '@/components/Coach/CoachChat';
+import CoachChat, { clearCoachChat } from '@/components/Coach/CoachChat';
 import { MessageCircle } from 'lucide-react';
 
 const Index = () => {
@@ -61,6 +61,7 @@ const Index = () => {
   };
 
   const handleGoToDashboard = () => {
+    clearCoachChat();
     setShowDashboard(true);
   };
 
@@ -162,7 +163,11 @@ const Index = () => {
     );
   }
 
-  if (showCoach && user) {
+  if (showDashboard && user) {
+    clearCoachChat();
+  }
+
+  if (showCoach) {
     return (
       <CoachChat
         onClose={() => setShowCoach(false)}
