@@ -109,34 +109,41 @@ Deno.serve(async (req) => {
   try {
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
-    const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      global: { headers: { Authorization: `Bearer ${token}` } },
-    });
-    const { data: userData, error: userErr } = await userClient.auth.getUser();
-    if (userErr || !userData.user) {
-      return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    // Auth is OPTIONAL: visitors can chat with "Jose" without registering (guest mode).
+    let user: { id: string } | null = null;
+    if (token && token !== SUPABASE_ANON_KEY) {
+      const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: { headers: { Authorization: `Bearer ${token}` } },
+      });
+      const { data: userData } = await userClient.auth.getUser();
+      user = userData?.user ?? null;
     }
-    const user = userData.user;
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
     const { messages: incomingMessages }: { messages: ChatMessage[] } = await req.json();
 
-    // Load context in parallel
-    const [profileRes, questRes, formRes, measRes, convRes] = await Promise.all([
-      admin.from("profiles").select("name").eq("id", user.id).maybeSingle(),
-      admin.from("questionnaire_responses").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
-      admin.from("client_forms").select("*").eq("user_id", user.id).maybeSingle(),
-      admin.from("coach_measurements").select("*").eq("user_id", user.id).maybeSingle(),
-      admin.from("coach_conversations").select("messages").eq("user_id", user.id).maybeSingle(),
-    ]);
-
-    const priorMessages: ChatMessage[] = (convRes.data?.messages as ChatMessage[]) || [];
-    const systemPrompt = buildSystemPrompt({
-      name: profileRes.data?.name || "amig@",
-      questionnaire: questRes.data,
-      clientForm: formRes.data,
-      measurements: measRes.data,
-    });
+    // Registered users: load their stored context + history. Guests: history comes from the client.
+    let priorMessages: ChatMessage[] = [];
+    let systemPrompt: string;
+    if (user) {
+      const [profileRes, questRes, formRes, measRes, convRes] = await Promise.all([
+        admin.from("profiles").select("name").eq("id", user.id).maybeSingle(),
+        admin.from("questionnaire_responses").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+        admin.from("client_forms").select("*").eq("user_id", user.id).maybeSingle(),
+        admin.from("coach_measurements").select("*").eq("user_id", user.id).maybeSingle(),
+        admin.from("coach_conversations").select("messages").eq("user_id", user.id).maybeSingle(),
+      ]);
+      priorMessages = (convRes.data?.messages as ChatMessage[]) || [];
+      systemPrompt = buildSystemPrompt({
+        name: profileRes.data?.name || "amig@",
+        questionnaire: questRes.data,
+        clientForm: formRes.data,
+        measurements: measRes.data,
+      });
+    } else {
+      systemPrompt = buildSystemPrompt({ name: "amig@", questionnaire: null, clientForm: null, measurements: null })
+        + `\n\nMODO VISITA: esta persona aún no está registrada. No le pidas que se registre para seguir hablando; ayúdale igual. Si en algún momento encaja, invítale con naturalidad a dejar sus datos o a ver los programas.`;
+    }
 
     // Merge prior + new incoming user messages. Client sends only NEW user message(s).
     const fullMessages: ChatMessage[] = [
@@ -188,9 +195,11 @@ Deno.serve(async (req) => {
             const allowed = ["weight_kg", "height_cm", "age", "waist_cm", "activity_level", "sleep_hours", "meals_per_day", "water_l"];
             if (allowed.includes(field)) {
               savedMeasurements[field] = value;
-              const upsertRow: any = { user_id: user.id, [field]: value, updated_at: new Date().toISOString() };
-              const { error: upErr } = await admin.from("coach_measurements").upsert(upsertRow, { onConflict: "user_id" });
-              if (upErr) result = { ok: false, error: upErr.message };
+              if (user) {
+                const upsertRow: any = { user_id: user.id, [field]: value, updated_at: new Date().toISOString() };
+                const { error: upErr } = await admin.from("coach_measurements").upsert(upsertRow, { onConflict: "user_id" });
+                if (upErr) result = { ok: false, error: upErr.message };
+              }
             } else {
               result = { ok: false, error: "campo no permitido" };
             }
@@ -208,13 +217,15 @@ Deno.serve(async (req) => {
       break;
     }
 
-    // Persist conversation (strip system + tool internals for storage; keep user/assistant text)
-    const persistable = fullMessages.filter(m => m.role === "user" || (m.role === "assistant" && !m.tool_calls));
-    await admin.from("coach_conversations").upsert({
-      user_id: user.id,
-      messages: persistable,
-      updated_at: new Date().toISOString(),
-    }, { onConflict: "user_id" });
+    // Persist conversation only for registered users (guests keep it in the browser session).
+    if (user) {
+      const persistable = fullMessages.filter(m => m.role === "user" || (m.role === "assistant" && !m.tool_calls));
+      await admin.from("coach_conversations").upsert({
+        user_id: user.id,
+        messages: persistable,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id" });
+    }
 
     return new Response(JSON.stringify({
       reply: assistantFinal?.content || "",

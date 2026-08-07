@@ -26,7 +26,7 @@ import ProgramExploradorModal from '@/components/Home/ProgramExploradorModal';
 import ProgramConstructorModal from '@/components/Home/ProgramConstructorModal';
 import ProgramEstrategaModal from '@/components/Home/ProgramEstrategaModal';
 import AboutUsDetailModal from '@/components/Home/AboutUsDetailModal';
-import CoachChat from '@/components/Coach/CoachChat';
+import CoachChat, { clearCoachChat } from '@/components/Coach/CoachChat';
 import { MessageCircle } from 'lucide-react';
 
 const Index = () => {
@@ -61,6 +61,7 @@ const Index = () => {
   };
 
   const handleGoToDashboard = () => {
+    clearCoachChat();
     setShowDashboard(true);
   };
 
@@ -148,6 +149,7 @@ const Index = () => {
   };
 
   if (showDashboard && user) {
+    clearCoachChat();
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
@@ -162,7 +164,7 @@ const Index = () => {
     );
   }
 
-  if (showCoach && user) {
+  if (showCoach) {
     return (
       <CoachChat
         onClose={() => setShowCoach(false)}
@@ -277,10 +279,7 @@ const Index = () => {
         <Footer />
         {!isAdmin && !hasActiveSubscription && (
           <button
-            onClick={() => {
-              if (user) setShowCoach(true);
-              else handleLogin();
-            }}
+            onClick={() => setShowCoach(true)}
             aria-label="Hablar con José Antonio"
             className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full bg-primary px-5 py-3.5 text-primary-foreground font-montserrat font-bold shadow-[0_10px_40px_-10px_hsl(var(--primary))] hover:bg-primary/90 transition-transform hover:scale-105"
           >
