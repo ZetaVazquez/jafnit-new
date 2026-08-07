@@ -149,6 +149,7 @@ const Index = () => {
   };
 
   if (showDashboard && user) {
+    clearCoachChat();
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
@@ -161,10 +162,6 @@ const Index = () => {
         />
       </SubscriptionGuard>
     );
-  }
-
-  if (showDashboard && user) {
-    clearCoachChat();
   }
 
   if (showCoach) {
