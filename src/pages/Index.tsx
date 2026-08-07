@@ -264,11 +264,11 @@ const Index = () => {
         />
         <main>
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
+          <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
           <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} onOpenAboutDetail={() => setShowAboutDetailModal(true)} />
           <Services />
           <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
           <Results />
-          <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
           <News />
           <FAQ />
           <Contact />
