@@ -28,7 +28,11 @@ Deno.serve(async (req) => {
     const { data: roleData } = await admin.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
     if (!roleData) return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
-    const { user_id, type, duration } = await req.json();
+    const { user_id, type, duration, instructions } = await req.json();
+    const adminInstructions = typeof instructions === "string" ? instructions.trim().slice(0, 3000) : "";
+    const instructionsBlock = adminInstructions
+      ? `\n\nPAUTAS OBLIGATORIAS DEL ADMINISTRADOR (tienen PRIORIDAD sobre cualquier otra preferencia, salvo alergias/intolerancias del cliente):\n${adminInstructions}`
+      : "";
     if (!user_id || !["workout", "diet"].includes(type)) {
       return new Response(JSON.stringify({ error: "invalid params" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
@@ -75,7 +79,7 @@ Deno.serve(async (req) => {
       const exList = (exercises || []).map(e => `- [${e.id}] ${e.name} (${e.muscle_group}, ${e.difficulty})`).join("\n");
 
       const systemPrompt = `Eres un entrenador personal experto del método JAFN. Genera un plan de entrenamiento adaptado a los datos del cliente. SOLO puedes elegir ejercicios de la biblioteca proporcionada usando su exact id. Devuelve JSON estricto.
-IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.${isGeneric ? "\nEl cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de dificultad intermedia." : ""}`;
+IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.${isGeneric ? "\nEl cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de dificultad intermedia." : ""}${instructionsBlock}`;
       const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible:\n${exList}\n\nDías a generar (${durationConfig.days.length}): ${durationConfig.days.join(", ")}`;
 
       const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -194,7 +198,7 @@ REGLAS:
 - Puedes usar comidas existentes de la biblioteca (por meal_id) O crear nuevas (new_meal) si crees que conviene. Una entrada lleva meal_id O new_meal, NUNCA ambos.
 - Para new_meal indica ingredientes en gramos REALES en español estándar (ej: "pechuga de pollo", "arroz integral cocido", "aceite de oliva"). Los macros se calcularán automáticamente desde la base de datos española BEDCA, NO los inventes tú.
 - Cuando uses meal_id existente, rellena "quantity" en gramos/unidades para ajustar la ración a los objetivos del cliente.
-- "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones del cuestionario.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}`;
+- "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones del cuestionario.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}${instructionsBlock}`;
     const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día, ajustadas a ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F.`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
