@@ -104,8 +104,8 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             <Dumbbell className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <div className="font-montserrat font-bold text-white">Coach JAFN</div>
-            <div className="text-xs text-primary/80">En línea · Personal Trainer</div>
+            <div className="font-montserrat font-bold text-white">José Antonio Figueiras</div>
+            <div className="text-xs text-primary/80">En línea · Entrenador personal</div>
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:text-primary">
