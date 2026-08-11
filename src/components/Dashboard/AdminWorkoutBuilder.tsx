@@ -50,6 +50,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
   const [description, setDescription] = useState('');
   const [difficulty, setDifficulty] = useState('intermediate');
   const [duration, setDuration] = useState<Duration>('1_week');
+  const [aiInstructions, setAiInstructions] = useState('');
   const [days, setDays] = useState<DayPlan[]>([]);
   const [expandedDay, setExpandedDay] = useState<number>(0);
   const [pickerOpen, setPickerOpen] = useState<{ dayIndex: number } | null>(null);
@@ -179,7 +180,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
     setGenerating(clientId);
     try {
       const { data, error } = await supabase.functions.invoke('generate-plans-from-questionnaire', {
-        body: { user_id: clientId, type: 'workout', duration }
+        body: { user_id: clientId, type: 'workout', duration, instructions: aiInstructions.trim() || undefined }
       });
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || 'Error generando');
@@ -243,11 +244,23 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
                 ))}
               </div>
               {selectedClient && (
-                <Button type="button" size="sm" disabled={generating === selectedClient} onClick={() => generateWithAI(selectedClient)}
-                  className="mt-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/30">
-                  {generating === selectedClient ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
-                  Generar borrador con IA desde cuestionario
-                </Button>
+                <div className="mt-3 rounded-lg border border-purple-500/30 bg-purple-500/5 p-3">
+                  <label className="block text-sm text-purple-200 mb-2 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" /> Pautas para la IA (opcional)
+                  </label>
+                  <Textarea
+                    value={aiInstructions}
+                    onChange={e => setAiInstructions(e.target.value)}
+                    rows={3}
+                    placeholder="Ej: full body 3 días, sin material, evitar impacto en rodillas, prioriza fuerza en tren superior…"
+                    className="bg-white/5 border-white/10 text-white mb-2"
+                  />
+                  <Button type="button" size="sm" disabled={generating === selectedClient} onClick={() => generateWithAI(selectedClient)}
+                    className="mt-2 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/30">
+                    {generating === selectedClient ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                    Generar borrador con IA desde cuestionario
+                  </Button>
+                </div>
               )}
             </div>
 
