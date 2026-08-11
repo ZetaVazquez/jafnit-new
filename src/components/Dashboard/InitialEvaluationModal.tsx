@@ -692,6 +692,14 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               })()}
             </div>
 
+            <div className="mb-6 rounded-xl border border-[hsl(var(--accent-green))]/25 bg-[hsl(var(--accent-green))]/10 px-4 py-3">
+              <p className="text-sm text-white/75 leading-relaxed">
+                <strong className="text-[hsl(var(--accent-green-light))]">Importante:</strong> si no conoces el dato de alguna pregunta de este bloque
+                (analíticas, medidas, valores clínicos...), escribe simplemente <strong className="text-white">“-”</strong>. Tu entrenador lo verá marcado
+                en su panel y lo resolverá contigo (midiéndolo, revisando tu analítica o preguntándotelo directamente).
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {block.fields.map(renderField)}
             </div>
