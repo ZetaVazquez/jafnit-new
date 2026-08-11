@@ -50,26 +50,18 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={() => { onClose(); window.location.href = '/'; }}>
-        <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-nutrition-green-lighter to-white">
-          {/* Decorative background elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-            <div className="geometric-shape circle-shape w-16 h-16 top-5 left-5 animate-pulse-slow"></div>
-            <div className="geometric-shape circle-shape w-12 h-12 top-1/2 right-5 animate-bounce-gentle"></div>
-            <div className="geometric-shape triangle-shape triangle-up bottom-5 left-1/4 animate-float"></div>
-            <div className="geometric-shape triangle-shape triangle-down top-1/4 right-1/4 animate-pulse-slow"></div>
-          </div>
-
+        <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto bg-[hsl(220,20%,8%)] border-white/10 text-white">
           <div className="relative z-10">
             <DialogHeader className="mb-6">
-              <DialogTitle className="text-2xl md:text-3xl font-bold text-nutrition-green flex items-center justify-center title-main">
-                <Star className="w-6 h-6 mr-2" />
+              <DialogTitle className="text-2xl md:text-3xl font-bold text-white flex items-center justify-center">
+                <Star className="w-6 h-6 mr-2 text-[hsl(var(--accent-green-light))]" />
                 Plan Recomendado Para Ti
               </DialogTitle>
             </DialogHeader>
 
             <div className="space-y-6">
               <div className="text-center">
-                <p className="text-lg text-nutrition-gray">
+                <p className="text-lg text-white/60">
                   {fromQuestionnaire 
                     ? "Basándote en tus respuestas del cuestionario, hemos seleccionado el mejor plan para ti:"
                     : "¿Qué plan quieres comprar?"
@@ -81,41 +73,43 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                 {PLANS.map((plan) => (
                   <Card
                     key={plan.id}
-                    className={`cursor-pointer transition-all duration-300 border-2 bg-white/90 backdrop-blur-sm hover-lift ${
+                    className={`cursor-pointer transition-all duration-300 border bg-white/5 backdrop-blur-sm hover:scale-[1.02] ${
                       selectedPlan === plan.id
-                        ? 'border-nutrition-green ring-2 ring-nutrition-green/50'
-                        : 'border-gray-200 hover:border-nutrition-green-light'
-                    } ${
-                      recommendedPlan === plan.id ? 'ring-2 ring-nutrition-accent' : ''
+                        ? 'border-[hsl(var(--accent-green))] ring-2 ring-[hsl(var(--accent-green))]/40'
+                        : 'border-white/10 hover:border-white/25'
                     }`}
                     onClick={() => setSelectedPlan(plan.id)}
                   >
                     <CardHeader className="text-center pb-4">
                       {recommendedPlan === plan.id && (
-                        <div className="inline-block bg-nutrition-accent text-white px-3 py-1 rounded-full text-sm font-medium mb-2">
+                        <div className="mx-auto inline-block bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green-light))] border border-[hsl(var(--accent-green))]/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">
                           Recomendado
                         </div>
                       )}
-                      <CardTitle className="text-lg font-bold text-nutrition-black title-playful">
+                      <CardTitle className="text-lg font-bold text-white">
                         {plan.name}
                       </CardTitle>
-                      <div className="text-2xl font-bold text-nutrition-green title-main">
+                      <div className="text-3xl font-bold text-white">
                         {plan.priceLabel}
                       </div>
-                      <p className="text-nutrition-gray text-sm">{plan.duration}</p>
+                      <p className="text-white/40 text-sm">{plan.duration}</p>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2 mb-4">
                         {plan.features.map((feature, index) => (
                           <li key={index} className="flex items-start text-xs">
-                            <Check className="w-3 h-3 mr-2 mt-0.5 text-nutrition-green flex-shrink-0" />
-                            <span className="text-nutrition-gray leading-relaxed">{feature}</span>
+                            <Check className="w-3 h-3 mr-2 mt-0.5 text-[hsl(var(--accent-green-light))] flex-shrink-0" />
+                            <span className="text-white/70 leading-relaxed">{feature}</span>
                           </li>
                         ))}
                       </ul>
                       <Button
                         onClick={() => handlePlanSelection(plan.id)}
-                        className="w-full bg-gradient-to-r from-nutrition-green to-nutrition-green-emerald hover:from-nutrition-green-dark hover:to-nutrition-green text-white font-bold"
+                        className={`w-full font-semibold ${
+                          recommendedPlan === plan.id
+                            ? 'btn-cta'
+                            : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+                        }`}
                       >
                         Quiero este plan
                       </Button>
@@ -131,7 +125,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                     onDecideLater();
                     window.location.href = '/';
                   }}
-                  className="px-8 py-2"
+                  className="px-8 py-2 bg-transparent border-white/20 text-white/70 hover:bg-white/10 hover:text-white"
                 >
                   Decidir Más Tarde
                 </Button>
