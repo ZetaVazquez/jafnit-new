@@ -70,12 +70,11 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
     }
   };
 
-  // Load prior conversation on mount; if empty, trigger opening greeting.
+  // Load prior conversation on mount. The client always speaks first: no auto-greeting.
   useEffect(() => {
     (async () => {
       if (!user) {
         setInitialLoading(false);
-        if (coachMemory.length === 0) await sendMessage(null, []);
         return;
       }
       const { data } = await supabase
@@ -86,9 +85,6 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       const prior = (((data?.messages as any) || []) as Msg[]);
       setMessages(prior);
       setInitialLoading(false);
-      if (prior.length === 0) {
-        await sendMessage(null); // greeting
-      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
@@ -115,7 +111,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur flex flex-col">
+    <div className="fixed inset-0 z-[100] bg-[hsl(0_0%_6%)] flex flex-col">
       {/* Header */}
       <div className="border-b border-primary/20 bg-black/40 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -140,14 +136,19 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
               <Loader2 className="w-6 h-6 text-primary animate-spin" />
             </div>
           )}
+          {!initialLoading && messages.length === 0 && (
+            <div className="text-center py-10 text-white/60 text-sm">
+              Escríbeme y te contesto personalmente 💬
+            </div>
+          )}
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {m.role === 'assistant' ? (
-                <div className="max-w-[85%] text-white/90 whitespace-pre-wrap leading-relaxed">
+                <div className="max-w-[85%] text-white whitespace-pre-wrap leading-relaxed">
                   {formatText(m.content)}
                 </div>
               ) : (
-                <div className="max-w-[85%] px-4 py-2.5 rounded-2xl bg-primary text-primary-foreground whitespace-pre-wrap">
+                <div className="max-w-[85%] px-4 py-2.5 rounded-2xl bg-[hsl(142_71%_45%)] text-black font-medium whitespace-pre-wrap">
                   {m.content}
                 </div>
               )}
@@ -185,7 +186,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             placeholder="Escribe tu respuesta…"
             rows={1}
             disabled={loading || initialLoading}
-            className="min-h-[44px] max-h-32 resize-none bg-background border-primary/30 focus-visible:ring-primary"
+            className="min-h-[44px] max-h-32 resize-none bg-white/5 text-white placeholder:text-white/40 border-primary/30 focus-visible:ring-primary"
           />
           <Button
             onClick={handleSend}
