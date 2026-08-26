@@ -243,7 +243,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="font-semibold text-white">{m.name}</h3>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] capitalize">{m.meal_type}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))]">{typeLabel(m.meal_type)}</span>
                 </div>
                 {m.description && <p className="text-sm text-white/50 line-clamp-2">{m.description}</p>}
                 <div className="flex items-center gap-3 text-xs text-white/40 mt-2">
