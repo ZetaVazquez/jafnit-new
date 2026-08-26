@@ -21,14 +21,19 @@ interface Meal {
   diet_tags: string[] | null;
 }
 
+// IMPORTANTE: los valores deben coincidir con los que usa la IA y los planes de dieta
+// (breakfast/lunch/snack/dinner). Las etiquetas en español son solo de interfaz.
 const MEAL_TYPES = [
-  { value: 'desayuno', label: 'Desayuno' },
-  { value: 'almuerzo', label: 'Almuerzo' },
-  { value: 'cena', label: 'Cena' },
-  { value: 'snack', label: 'Snack' },
+  { value: 'breakfast', label: 'Desayuno' },
+  { value: 'lunch', label: 'Almuerzo / Comida' },
+  { value: 'dinner', label: 'Cena' },
+  { value: 'snack', label: 'Snack / Merienda' },
   { value: 'pre_entreno', label: 'Pre-entreno' },
   { value: 'post_entreno', label: 'Post-entreno' },
 ];
+
+const typeLabel = (v: string) => MEAL_TYPES.find(t => t.value === v)?.label ?? v;
+
 
 const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const [meals, setMeals] = useState<Meal[]>([]);
