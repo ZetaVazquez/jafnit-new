@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, Plus, Edit, Trash2, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Upload, Image as ImageIcon, Loader2, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -21,14 +21,19 @@ interface Meal {
   diet_tags: string[] | null;
 }
 
+// IMPORTANTE: los valores deben coincidir con los que usa la IA y los planes de dieta
+// (breakfast/lunch/snack/dinner). Las etiquetas en español son solo de interfaz.
 const MEAL_TYPES = [
-  { value: 'desayuno', label: 'Desayuno' },
-  { value: 'almuerzo', label: 'Almuerzo' },
-  { value: 'cena', label: 'Cena' },
-  { value: 'snack', label: 'Snack' },
+  { value: 'breakfast', label: 'Desayuno' },
+  { value: 'lunch', label: 'Almuerzo / Comida' },
+  { value: 'dinner', label: 'Cena' },
+  { value: 'snack', label: 'Snack / Merienda' },
   { value: 'pre_entreno', label: 'Pre-entreno' },
   { value: 'post_entreno', label: 'Post-entreno' },
 ];
+
+const typeLabel = (v: string) => MEAL_TYPES.find(t => t.value === v)?.label ?? v;
+
 
 const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const [meals, setMeals] = useState<Meal[]>([]);
@@ -41,12 +46,21 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const fileInput = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
+  // --- Generación de fotos con IA (reanudable) ---
+  const [genRunning, setGenRunning] = useState(false);
+  const [genCurrent, setGenCurrent] = useState<string | null>(null);
+  const [genOk, setGenOk] = useState(0);
+  const [genFail, setGenFail] = useState(0);
+  const [genMessage, setGenMessage] = useState<string | null>(null);
+  const stopRef = useRef(false);
+
   const [form, setForm] = useState({
-    name: '', meal_type: 'desayuno', description: '', image_url: '',
+    name: '', meal_type: 'breakfast', description: '', image_url: '',
     calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: ''
   });
 
   useEffect(() => { fetchMeals(); }, []);
+
 
   const fetchMeals = async () => {
     const { data, error } = await supabase.from('meals_library').select('*').order('meal_type').order('name');
@@ -55,7 +69,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   };
 
   const resetForm = () => {
-    setForm({ name: '', meal_type: 'desayuno', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: '' });
+    setForm({ name: '', meal_type: 'breakfast', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: '' });
     setEditing(null); setShowForm(false);
   };
 
@@ -146,9 +160,49 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     return true;
   });
 
+  const pendingPhotos = meals.filter(m => !m.image_url);
+  const withPhotos = meals.length - pendingPhotos.length;
+  const pct = meals.length ? Math.round((withPhotos / meals.length) * 100) : 0;
+
+  /**
+   * Genera las fotos que faltan, plato a plato, para poder mostrar el progreso
+   * y reanudar más tarde: solo se procesan los platos sin image_url.
+   */
+  const generatePendingPhotos = async () => {
+    stopRef.current = false;
+    setGenRunning(true); setGenOk(0); setGenFail(0); setGenMessage(null);
+    const queue = meals.filter(m => !m.image_url);
+    let ok = 0, fail = 0;
+    for (const meal of queue) {
+      if (stopRef.current) { setGenMessage('Generación pausada. Puedes reanudarla cuando quieras.'); break; }
+      setGenCurrent(meal.name);
+      const { data, error } = await supabase.functions.invoke('generate-meal-photos', {
+        body: { meal_id: meal.id },
+      });
+      const payload: any = data || {};
+      if (payload.image_url) {
+        ok++; setGenOk(ok);
+        setMeals(prev => prev.map(x => x.id === meal.id ? { ...x, image_url: payload.image_url } : x));
+      } else if (payload.code === 'no_credits' || /credit/i.test(payload.error || error?.message || '')) {
+        setGenMessage('Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.');
+        break;
+      } else if (payload.code === 'rate_limit') {
+        await new Promise(r => setTimeout(r, 8000));
+        continue;
+      } else {
+        fail++; setGenFail(fail);
+      }
+      await new Promise(r => setTimeout(r, 600));
+    }
+    setGenCurrent(null); setGenRunning(false);
+    if (ok > 0) toast({ title: `${ok} foto(s) generadas` });
+    fetchMeals();
+  };
+
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
       <div className="container mx-auto px-4 py-8">
+
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Button onClick={onGoBack} variant="ghost" className="text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10 border border-white/10">
@@ -215,6 +269,41 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
           </form>
         )}
 
+        {/* Progreso de fotos generadas con IA (reanudable) */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5 mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div>
+              <h3 className="text-white font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4 text-[hsl(var(--accent-green))]" /> Fotos con IA</h3>
+              <p className="text-sm text-white/50">{withPhotos} de {meals.length} platos con foto · {pendingPhotos.length} pendientes</p>
+            </div>
+            <div className="flex gap-2">
+              {!genRunning ? (
+                <Button onClick={generatePendingPhotos} disabled={pendingPhotos.length === 0} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">
+                  <Sparkles className="w-4 h-4 mr-2" />{genOk + genFail > 0 ? 'Reanudar generación' : 'Generar fotos pendientes'}
+                </Button>
+              ) : (
+                <Button onClick={() => { stopRef.current = true; }} variant="ghost" className="text-white/70 border border-white/10">Pausar</Button>
+              )}
+            </div>
+          </div>
+          <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+            <div className="h-full bg-[hsl(var(--accent-green))] transition-all" style={{ width: `${pct}%` }} />
+          </div>
+          <div className="mt-2 text-sm text-white/60 flex flex-wrap gap-4 items-center">
+            <span>{pct}% completado</span>
+            {genRunning && genCurrent && (
+              <span className="flex items-center gap-2 text-[hsl(var(--accent-green-light))]">
+                <Loader2 className="w-4 h-4 animate-spin" /> Generando: {genCurrent}
+              </span>
+            )}
+            {genOk > 0 && <span className="text-[hsl(var(--accent-green))]">{genOk} generadas</span>}
+            {genFail > 0 && <span className="text-red-400">{genFail} con error</span>}
+          </div>
+          {genMessage && <p className="mt-2 text-sm text-amber-400">{genMessage}</p>}
+        </div>
+
+
+
         <div className="rounded-xl border border-white/10 bg-white/5 p-4 mb-4 flex flex-wrap gap-3 items-center">
           <Input placeholder="Buscar comida..." value={search} onChange={e => setSearch(e.target.value)} className="bg-white/5 border-white/10 text-white max-w-xs" />
           <Select value={filter} onValueChange={setFilter}>
@@ -238,7 +327,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="font-semibold text-white">{m.name}</h3>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] capitalize">{m.meal_type}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))]">{typeLabel(m.meal_type)}</span>
                 </div>
                 {m.description && <p className="text-sm text-white/50 line-clamp-2">{m.description}</p>}
                 <div className="flex items-center gap-3 text-xs text-white/40 mt-2">
