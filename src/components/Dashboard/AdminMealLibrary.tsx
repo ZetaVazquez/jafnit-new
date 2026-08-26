@@ -46,12 +46,21 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const fileInput = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
+  // --- Generación de fotos con IA (reanudable) ---
+  const [genRunning, setGenRunning] = useState(false);
+  const [genCurrent, setGenCurrent] = useState<string | null>(null);
+  const [genOk, setGenOk] = useState(0);
+  const [genFail, setGenFail] = useState(0);
+  const [genMessage, setGenMessage] = useState<string | null>(null);
+  const stopRef = useRef(false);
+
   const [form, setForm] = useState({
     name: '', meal_type: 'breakfast', description: '', image_url: '',
     calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: ''
   });
 
   useEffect(() => { fetchMeals(); }, []);
+
 
   const fetchMeals = async () => {
     const { data, error } = await supabase.from('meals_library').select('*').order('meal_type').order('name');
