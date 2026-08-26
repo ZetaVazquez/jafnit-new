@@ -269,6 +269,41 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
           </form>
         )}
 
+        {/* Progreso de fotos generadas con IA (reanudable) */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5 mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div>
+              <h3 className="text-white font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4 text-[hsl(var(--accent-green))]" /> Fotos con IA</h3>
+              <p className="text-sm text-white/50">{withPhotos} de {meals.length} platos con foto · {pendingPhotos.length} pendientes</p>
+            </div>
+            <div className="flex gap-2">
+              {!genRunning ? (
+                <Button onClick={generatePendingPhotos} disabled={pendingPhotos.length === 0} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">
+                  <Sparkles className="w-4 h-4 mr-2" />{genOk + genFail > 0 ? 'Reanudar generación' : 'Generar fotos pendientes'}
+                </Button>
+              ) : (
+                <Button onClick={() => { stopRef.current = true; }} variant="ghost" className="text-white/70 border border-white/10">Pausar</Button>
+              )}
+            </div>
+          </div>
+          <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+            <div className="h-full bg-[hsl(var(--accent-green))] transition-all" style={{ width: `${pct}%` }} />
+          </div>
+          <div className="mt-2 text-sm text-white/60 flex flex-wrap gap-4 items-center">
+            <span>{pct}% completado</span>
+            {genRunning && genCurrent && (
+              <span className="flex items-center gap-2 text-[hsl(var(--accent-green-light))]">
+                <Loader2 className="w-4 h-4 animate-spin" /> Generando: {genCurrent}
+              </span>
+            )}
+            {genOk > 0 && <span className="text-[hsl(var(--accent-green))]">{genOk} generadas</span>}
+            {genFail > 0 && <span className="text-red-400">{genFail} con error</span>}
+          </div>
+          {genMessage && <p className="mt-2 text-sm text-amber-400">{genMessage}</p>}
+        </div>
+
+
+
         <div className="rounded-xl border border-white/10 bg-white/5 p-4 mb-4 flex flex-wrap gap-3 items-center">
           <Input placeholder="Buscar comida..." value={search} onChange={e => setSearch(e.target.value)} className="bg-white/5 border-white/10 text-white max-w-xs" />
           <Select value={filter} onValueChange={setFilter}>
