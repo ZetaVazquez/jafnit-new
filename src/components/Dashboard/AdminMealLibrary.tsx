@@ -160,9 +160,49 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     return true;
   });
 
+  const pendingPhotos = meals.filter(m => !m.image_url);
+  const withPhotos = meals.length - pendingPhotos.length;
+  const pct = meals.length ? Math.round((withPhotos / meals.length) * 100) : 0;
+
+  /**
+   * Genera las fotos que faltan, plato a plato, para poder mostrar el progreso
+   * y reanudar más tarde: solo se procesan los platos sin image_url.
+   */
+  const generatePendingPhotos = async () => {
+    stopRef.current = false;
+    setGenRunning(true); setGenOk(0); setGenFail(0); setGenMessage(null);
+    const queue = meals.filter(m => !m.image_url);
+    let ok = 0, fail = 0;
+    for (const meal of queue) {
+      if (stopRef.current) { setGenMessage('Generación pausada. Puedes reanudarla cuando quieras.'); break; }
+      setGenCurrent(meal.name);
+      const { data, error } = await supabase.functions.invoke('generate-meal-photos', {
+        body: { meal_id: meal.id },
+      });
+      const payload: any = data || {};
+      if (payload.image_url) {
+        ok++; setGenOk(ok);
+        setMeals(prev => prev.map(x => x.id === meal.id ? { ...x, image_url: payload.image_url } : x));
+      } else if (payload.code === 'no_credits' || /credit/i.test(payload.error || error?.message || '')) {
+        setGenMessage('Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.');
+        break;
+      } else if (payload.code === 'rate_limit') {
+        await new Promise(r => setTimeout(r, 8000));
+        continue;
+      } else {
+        fail++; setGenFail(fail);
+      }
+      await new Promise(r => setTimeout(r, 600));
+    }
+    setGenCurrent(null); setGenRunning(false);
+    if (ok > 0) toast({ title: `${ok} foto(s) generadas` });
+    fetchMeals();
+  };
+
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
       <div className="container mx-auto px-4 py-8">
+
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Button onClick={onGoBack} variant="ghost" className="text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10 border border-white/10">
