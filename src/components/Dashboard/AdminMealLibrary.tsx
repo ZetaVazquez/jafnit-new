@@ -176,21 +176,59 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     for (const meal of queue) {
       if (stopRef.current) { setGenMessage('Generación pausada. Puedes reanudarla cuando quieras.'); break; }
       setGenCurrent(meal.name);
-      const { data, error } = await supabase.functions.invoke('generate-meal-photos', {
-        body: { meal_id: meal.id },
-      });
-      const payload: any = data || {};
+      let data: unknown = null;
+      let invocationError: unknown = null;
+
+      try {
+        const result = await supabase.functions.invoke('generate-meal-photos', {
+          body: { meal_id: meal.id },
+        });
+        data = result.data;
+        invocationError = result.error;
+      } catch (error) {
+        invocationError = error;
+      }
+
+      let payload = data && typeof data === 'object' ? data as Record<string, unknown> : {};
+
+      // functions.invoke keeps the JSON body of non-2xx responses in error.context.
+      // Read it so a terminal 402 stops the queue instead of trying every pending dish.
+      if (invocationError && typeof invocationError === 'object' && 'context' in invocationError) {
+        const context = (invocationError as { context?: Response }).context;
+        if (context) {
+          try {
+            const errorBody = await context.clone().json();
+            if (errorBody && typeof errorBody === 'object') payload = errorBody as Record<string, unknown>;
+          } catch {
+            // Keep the original function error when its response is not JSON.
+          }
+        }
+      }
+
       if (payload.image_url) {
         ok++; setGenOk(ok);
-        setMeals(prev => prev.map(x => x.id === meal.id ? { ...x, image_url: payload.image_url } : x));
-      } else if (payload.code === 'no_credits' || /credit/i.test(payload.error || error?.message || '')) {
+        setMeals(prev => prev.map(x => x.id === meal.id ? { ...x, image_url: String(payload.image_url) } : x));
+      } else if (payload.code === 'no_credits') {
+        stopRef.current = true;
         setGenMessage('Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.');
+        toast({
+          title: 'Generación pausada',
+          description: typeof payload.error === 'string' ? payload.error : 'No quedan créditos de IA. Las fotos ya creadas se han conservado.',
+          variant: 'destructive',
+        });
         break;
       } else if (payload.code === 'rate_limit') {
         await new Promise(r => setTimeout(r, 8000));
         continue;
       } else {
         fail++; setGenFail(fail);
+        const message = typeof payload.error === 'string'
+          ? payload.error
+          : invocationError instanceof Error
+            ? invocationError.message
+            : 'No se pudo generar la foto.';
+        setGenMessage(`Error en ${meal.name}: ${message}`);
+        break;
       }
       await new Promise(r => setTimeout(r, 600));
     }
