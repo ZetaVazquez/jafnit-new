@@ -47,7 +47,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const { toast } = useToast();
 
   const [form, setForm] = useState({
-    name: '', meal_type: 'desayuno', description: '', image_url: '',
+    name: '', meal_type: 'breakfast', description: '', image_url: '',
     calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: ''
   });
 
@@ -60,7 +60,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   };
 
   const resetForm = () => {
-    setForm({ name: '', meal_type: 'desayuno', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: '' });
+    setForm({ name: '', meal_type: 'breakfast', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: '' });
     setEditing(null); setShowForm(false);
   };
 
