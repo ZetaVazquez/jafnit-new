@@ -52,7 +52,18 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const [genOk, setGenOk] = useState(0);
   const [genFail, setGenFail] = useState(0);
   const [genMessage, setGenMessage] = useState<string | null>(null);
+  const [autoRetry, setAutoRetry] = useState(true);
+  const [retryIn, setRetryIn] = useState<number | null>(null);
   const stopRef = useRef(false);
+  const autoRetryRef = useRef(true);
+  const retryTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Último plato que se quedó sin procesar por falta de créditos: al reanudar se empieza por él.
+  const resumeFromRef = useRef<string | null>(null);
+  const generateRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => { autoRetryRef.current = autoRetry; }, [autoRetry]);
+  useEffect(() => () => { if (retryTimerRef.current) clearInterval(retryTimerRef.current); }, []);
+
 
   const [form, setForm] = useState({
     name: '', meal_type: 'breakfast', description: '', image_url: '',
