@@ -248,21 +248,29 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
 
       if (payload.image_url) {
         ok++; setGenOk(ok);
+        resumeFromRef.current = null;
         setMeals(prev => prev.map(x => x.id === meal.id ? { ...x, image_url: String(payload.image_url) } : x));
       } else if (payload.code === 'no_credits') {
         stopRef.current = true;
-        setGenMessage('Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.');
+        resumeFromRef.current = meal.id;
+        setGenMessage(
+          autoRetryRef.current
+            ? 'Sin créditos de IA. Reintentaré automáticamente desde este plato cuando vuelva a haber créditos.'
+            : 'Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.'
+        );
         toast({
           title: 'Generación pausada',
           description: typeof payload.error === 'string' ? payload.error : 'No quedan créditos de IA. Las fotos ya creadas se han conservado.',
           variant: 'destructive',
         });
+        if (autoRetryRef.current) scheduleAutoRetry(300);
         break;
       } else if (payload.code === 'rate_limit') {
         await new Promise(r => setTimeout(r, 8000));
         continue;
       } else {
         fail++; setGenFail(fail);
+        resumeFromRef.current = meal.id;
         const message = typeof payload.error === 'string'
           ? payload.error
           : invocationError instanceof Error
@@ -277,6 +285,9 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     if (ok > 0) toast({ title: `${ok} foto(s) generadas` });
     fetchMeals();
   };
+
+  useEffect(() => { generateRef.current = generatePendingPhotos; });
+
 
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
