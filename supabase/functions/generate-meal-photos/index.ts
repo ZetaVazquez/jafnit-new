@@ -74,14 +74,17 @@ Deno.serve(async (req) => {
     if (!aiResp.ok) {
       const text = await aiResp.text();
       console.error("AI image error", aiResp.status, text);
+      // Se devuelve 200 con el estado dentro del cuerpo: el cliente pausa la cola
+      // y el preview no marca la invocación como error de runtime.
       if (aiResp.status === 402) {
-        return json({ error: "Sin créditos de IA. Recarga créditos y reanuda la generación.", code: "no_credits", meal_id: meal.id, meal_name: meal.name }, 402);
+        return json({ ok: false, error: "Sin créditos de IA. Recarga créditos y reanuda la generación.", code: "no_credits", meal_id: meal.id, meal_name: meal.name });
       }
       if (aiResp.status === 429) {
-        return json({ error: "Límite de peticiones alcanzado, espera unos segundos.", code: "rate_limit", meal_id: meal.id, meal_name: meal.name }, 429);
+        return json({ ok: false, error: "Límite de peticiones alcanzado, espera unos segundos.", code: "rate_limit", meal_id: meal.id, meal_name: meal.name });
       }
-      return json({ error: `Error de la IA (${aiResp.status})`, meal_id: meal.id, meal_name: meal.name }, 502);
+      return json({ ok: false, error: `Error de la IA (${aiResp.status})`, code: "ai_error", meal_id: meal.id, meal_name: meal.name });
     }
+
 
     const aiData = await aiResp.json();
     const b64 = aiData?.data?.[0]?.b64_json;
