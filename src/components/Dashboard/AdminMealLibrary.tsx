@@ -52,7 +52,18 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const [genOk, setGenOk] = useState(0);
   const [genFail, setGenFail] = useState(0);
   const [genMessage, setGenMessage] = useState<string | null>(null);
+  const [autoRetry, setAutoRetry] = useState(true);
+  const [retryIn, setRetryIn] = useState<number | null>(null);
   const stopRef = useRef(false);
+  const autoRetryRef = useRef(true);
+  const retryTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Último plato que se quedó sin procesar por falta de créditos: al reanudar se empieza por él.
+  const resumeFromRef = useRef<string | null>(null);
+  const generateRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => { autoRetryRef.current = autoRetry; }, [autoRetry]);
+  useEffect(() => () => { if (retryTimerRef.current) clearInterval(retryTimerRef.current); }, []);
+
 
   const [form, setForm] = useState({
     name: '', meal_type: 'breakfast', description: '', image_url: '',
@@ -164,15 +175,45 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const withPhotos = meals.length - pendingPhotos.length;
   const pct = meals.length ? Math.round((withPhotos / meals.length) * 100) : 0;
 
+  const cancelAutoRetry = () => {
+    if (retryTimerRef.current) { clearInterval(retryTimerRef.current); retryTimerRef.current = null; }
+    setRetryIn(null);
+  };
+
+  /**
+   * Programa un reintento automático: cada minuto descuenta y, al llegar a 0,
+   * vuelve a lanzar la cola desde el último plato que quedó sin foto.
+   */
+  const scheduleAutoRetry = (seconds = 300) => {
+    cancelAutoRetry();
+    setRetryIn(seconds);
+    retryTimerRef.current = setInterval(() => {
+      setRetryIn(prev => {
+        if (prev === null) return null;
+        if (prev <= 30) {
+          cancelAutoRetry();
+          generateRef.current?.();
+          return null;
+        }
+        return prev - 30;
+      });
+    }, 30000);
+  };
+
   /**
    * Genera las fotos que faltan, plato a plato, para poder mostrar el progreso
    * y reanudar más tarde: solo se procesan los platos sin image_url.
    */
   const generatePendingPhotos = async () => {
+    cancelAutoRetry();
     stopRef.current = false;
     setGenRunning(true); setGenOk(0); setGenFail(0); setGenMessage(null);
-    const queue = meals.filter(m => !m.image_url);
+    let queue = meals.filter(m => !m.image_url);
+    // Reanudar desde el plato en el que se cortó por falta de créditos.
+    const resumeIdx = resumeFromRef.current ? queue.findIndex(m => m.id === resumeFromRef.current) : -1;
+    if (resumeIdx > 0) queue = [...queue.slice(resumeIdx), ...queue.slice(0, resumeIdx)];
     let ok = 0, fail = 0;
+
     for (const meal of queue) {
       if (stopRef.current) { setGenMessage('Generación pausada. Puedes reanudarla cuando quieras.'); break; }
       setGenCurrent(meal.name);
@@ -207,21 +248,29 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
 
       if (payload.image_url) {
         ok++; setGenOk(ok);
+        resumeFromRef.current = null;
         setMeals(prev => prev.map(x => x.id === meal.id ? { ...x, image_url: String(payload.image_url) } : x));
       } else if (payload.code === 'no_credits') {
         stopRef.current = true;
-        setGenMessage('Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.');
+        resumeFromRef.current = meal.id;
+        setGenMessage(
+          autoRetryRef.current
+            ? 'Sin créditos de IA. Reintentaré automáticamente desde este plato cuando vuelva a haber créditos.'
+            : 'Sin créditos de IA. Recarga créditos y pulsa "Reanudar" para continuar donde se quedó.'
+        );
         toast({
           title: 'Generación pausada',
           description: typeof payload.error === 'string' ? payload.error : 'No quedan créditos de IA. Las fotos ya creadas se han conservado.',
           variant: 'destructive',
         });
+        if (autoRetryRef.current) scheduleAutoRetry(300);
         break;
       } else if (payload.code === 'rate_limit') {
         await new Promise(r => setTimeout(r, 8000));
         continue;
       } else {
         fail++; setGenFail(fail);
+        resumeFromRef.current = meal.id;
         const message = typeof payload.error === 'string'
           ? payload.error
           : invocationError instanceof Error
@@ -236,6 +285,9 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     if (ok > 0) toast({ title: `${ok} foto(s) generadas` });
     fetchMeals();
   };
+
+  useEffect(() => { generateRef.current = generatePendingPhotos; });
+
 
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
@@ -314,13 +366,22 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
               <h3 className="text-white font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4 text-[hsl(var(--accent-green))]" /> Fotos con IA</h3>
               <p className="text-sm text-white/50">{withPhotos} de {meals.length} platos con foto · {pendingPhotos.length} pendientes</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="flex items-center gap-2 text-sm text-white/60 mr-2">
+                <input
+                  type="checkbox"
+                  checked={autoRetry}
+                  onChange={(e) => { setAutoRetry(e.target.checked); if (!e.target.checked) cancelAutoRetry(); }}
+                  className="accent-[hsl(var(--accent-green))]"
+                />
+                Reintentar automáticamente
+              </label>
               {!genRunning ? (
                 <Button onClick={generatePendingPhotos} disabled={pendingPhotos.length === 0} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">
                   <Sparkles className="w-4 h-4 mr-2" />{genOk + genFail > 0 ? 'Reanudar generación' : 'Generar fotos pendientes'}
                 </Button>
               ) : (
-                <Button onClick={() => { stopRef.current = true; }} variant="ghost" className="text-white/70 border border-white/10">Pausar</Button>
+                <Button onClick={() => { stopRef.current = true; cancelAutoRetry(); }} variant="ghost" className="text-white/70 border border-white/10">Pausar</Button>
               )}
             </div>
           </div>
@@ -336,8 +397,12 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
             )}
             {genOk > 0 && <span className="text-[hsl(var(--accent-green))]">{genOk} generadas</span>}
             {genFail > 0 && <span className="text-red-400">{genFail} con error</span>}
+            {retryIn !== null && (
+              <span className="text-amber-400">Reintento automático en {Math.ceil(retryIn / 60)} min</span>
+            )}
           </div>
           {genMessage && <p className="mt-2 text-sm text-amber-400">{genMessage}</p>}
+
         </div>
 
 
