@@ -366,13 +366,22 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
               <h3 className="text-white font-semibold flex items-center gap-2"><Sparkles className="w-4 h-4 text-[hsl(var(--accent-green))]" /> Fotos con IA</h3>
               <p className="text-sm text-white/50">{withPhotos} de {meals.length} platos con foto · {pendingPhotos.length} pendientes</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="flex items-center gap-2 text-sm text-white/60 mr-2">
+                <input
+                  type="checkbox"
+                  checked={autoRetry}
+                  onChange={(e) => { setAutoRetry(e.target.checked); if (!e.target.checked) cancelAutoRetry(); }}
+                  className="accent-[hsl(var(--accent-green))]"
+                />
+                Reintentar automáticamente
+              </label>
               {!genRunning ? (
                 <Button onClick={generatePendingPhotos} disabled={pendingPhotos.length === 0} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">
                   <Sparkles className="w-4 h-4 mr-2" />{genOk + genFail > 0 ? 'Reanudar generación' : 'Generar fotos pendientes'}
                 </Button>
               ) : (
-                <Button onClick={() => { stopRef.current = true; }} variant="ghost" className="text-white/70 border border-white/10">Pausar</Button>
+                <Button onClick={() => { stopRef.current = true; cancelAutoRetry(); }} variant="ghost" className="text-white/70 border border-white/10">Pausar</Button>
               )}
             </div>
           </div>
@@ -388,8 +397,12 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
             )}
             {genOk > 0 && <span className="text-[hsl(var(--accent-green))]">{genOk} generadas</span>}
             {genFail > 0 && <span className="text-red-400">{genFail} con error</span>}
+            {retryIn !== null && (
+              <span className="text-amber-400">Reintento automático en {Math.ceil(retryIn / 60)} min</span>
+            )}
           </div>
           {genMessage && <p className="mt-2 text-sm text-amber-400">{genMessage}</p>}
+
         </div>
 
 
