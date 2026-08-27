@@ -175,15 +175,45 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const withPhotos = meals.length - pendingPhotos.length;
   const pct = meals.length ? Math.round((withPhotos / meals.length) * 100) : 0;
 
+  const cancelAutoRetry = () => {
+    if (retryTimerRef.current) { clearInterval(retryTimerRef.current); retryTimerRef.current = null; }
+    setRetryIn(null);
+  };
+
+  /**
+   * Programa un reintento automático: cada minuto descuenta y, al llegar a 0,
+   * vuelve a lanzar la cola desde el último plato que quedó sin foto.
+   */
+  const scheduleAutoRetry = (seconds = 300) => {
+    cancelAutoRetry();
+    setRetryIn(seconds);
+    retryTimerRef.current = setInterval(() => {
+      setRetryIn(prev => {
+        if (prev === null) return null;
+        if (prev <= 30) {
+          cancelAutoRetry();
+          generateRef.current?.();
+          return null;
+        }
+        return prev - 30;
+      });
+    }, 30000);
+  };
+
   /**
    * Genera las fotos que faltan, plato a plato, para poder mostrar el progreso
    * y reanudar más tarde: solo se procesan los platos sin image_url.
    */
   const generatePendingPhotos = async () => {
+    cancelAutoRetry();
     stopRef.current = false;
     setGenRunning(true); setGenOk(0); setGenFail(0); setGenMessage(null);
-    const queue = meals.filter(m => !m.image_url);
+    let queue = meals.filter(m => !m.image_url);
+    // Reanudar desde el plato en el que se cortó por falta de créditos.
+    const resumeIdx = resumeFromRef.current ? queue.findIndex(m => m.id === resumeFromRef.current) : -1;
+    if (resumeIdx > 0) queue = [...queue.slice(resumeIdx), ...queue.slice(0, resumeIdx)];
     let ok = 0, fail = 0;
+
     for (const meal of queue) {
       if (stopRef.current) { setGenMessage('Generación pausada. Puedes reanudarla cuando quieras.'); break; }
       setGenCurrent(meal.name);
