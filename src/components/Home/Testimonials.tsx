@@ -115,14 +115,6 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
 
   return (
     <section id="testimonios" className="relative py-24 dark-section overflow-hidden">
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: `
-          radial-gradient(circle at 30% 20%, hsla(var(--accent-green) / 0.05) 0%, transparent 50%),
-          radial-gradient(circle at 70% 80%, hsla(var(--accent-green) / 0.04) 0%, transparent 50%)
-        `
-      }}></div>
-
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-16">

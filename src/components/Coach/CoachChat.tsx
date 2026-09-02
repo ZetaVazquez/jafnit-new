@@ -119,8 +119,8 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             <Dumbbell className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <div className="font-montserrat font-bold text-white">José Antonio Figueiras</div>
-            <div className="text-xs text-primary/80">En línea · Entrenador personal</div>
+            <div className="font-montserrat font-bold text-white">FIT</div>
+            <div className="text-xs text-primary/80">En línea · Asistente de JAFN</div>
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:text-primary">
@@ -137,8 +137,10 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             </div>
           )}
           {!initialLoading && messages.length === 0 && (
-            <div className="text-center py-10 text-white/60 text-sm">
-              Escríbeme y te contesto personalmente 💬
+            <div className="flex justify-start">
+              <div className="max-w-[85%] text-white whitespace-pre-wrap leading-relaxed">
+                ¡Hola! 👋 Mi nombre es <strong>FIT</strong> y estoy aquí a tu disposición para ayudarte con cualquier duda sobre la web, los programas o el método JAFN. ¿En qué puedo ayudarte? 💪
+              </div>
             </div>
           )}
           {messages.map((m, i) => (
