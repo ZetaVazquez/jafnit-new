@@ -266,12 +266,18 @@ const Index = () => {
           isAdmin={isAdmin}
         />
         <main>
+          {/* 1. Vista principal (hero) */}
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
-          <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
-          <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} onOpenAboutDetail={() => setShowAboutDetailModal(true)} />
+          {/* 2. Nuestros servicios */}
           <Services />
-          <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
+          {/* 3. Resultados con JAFN */}
           <Results />
+          {/* 4. Opiniones de los clientes */}
+          <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
+          {/* 5. Tipos de programas / precios */}
+          <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
+          {/* Resto de secciones */}
+          <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} onOpenAboutDetail={() => setShowAboutDetailModal(true)} />
           <News />
           <FAQ />
           <Contact />
