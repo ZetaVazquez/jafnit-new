@@ -294,7 +294,7 @@ const Index = () => {
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
             </span>
             <MessageCircle className="w-5 h-5" />
-            <span className="hidden sm:inline">Habla con Jose 💬</span>
+            <span className="hidden sm:inline">Habla con FIT 💬</span>
           </button>
         )}
         <PlanRecommendationModal
