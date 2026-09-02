@@ -1,7 +1,6 @@
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { ChevronRight, CheckCircle, BarChart3, Target, Play, Pause } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ChevronRight, CheckCircle, BarChart3, Target } from 'lucide-react';
 
 interface HeroCarouselProps {
   onStartQuestionnaire: () => void;
@@ -16,18 +15,6 @@ const heroImages = [
 
 const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const toggleVideo = () => {
-    if (!videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % heroImages.length);
