@@ -7,10 +7,10 @@ import { Check, Crown, Search, Hammer, Sparkles, RefreshCw, ArrowRight, X, Users
 interface ProgramEstrategaModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onStartQuestionnaire: () => void;
+  onStartRegistration: () => void;
 }
 
-const ProgramEstrategaModal: React.FC<ProgramEstrategaModalProps> = ({ isOpen, onClose, onStartQuestionnaire }) => {
+const ProgramEstrategaModal: React.FC<ProgramEstrategaModalProps> = ({ isOpen, onClose, onStartRegistration }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[hsl(220,20%,8%)] border-white/10 text-white p-0 [&>button]:hidden">
@@ -163,8 +163,8 @@ const ProgramEstrategaModal: React.FC<ProgramEstrategaModalProps> = ({ isOpen, o
 
           {/* CTA */}
           <div className="text-center pt-6 border-t border-white/10">
-            <Button onClick={() => { onClose(); onStartQuestionnaire(); }} className="btn-cta text-base px-10 py-4">
-              Solicitar Evaluación Inicial <ArrowRight className="w-5 h-5 ml-2" />
+            <Button onClick={() => { onClose(); onStartRegistration(); }} className="btn-cta text-base px-10 py-4">
+              Crear cuenta y empezar <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
         </div>

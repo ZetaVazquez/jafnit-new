@@ -142,6 +142,13 @@ const Index = () => {
     setShowClientForm(true);
   };
 
+  // Al elegir un programa se abre directamente el modal de creación de usuario,
+  // sin pasar por la evaluación inicial.
+  const handleStartRegistration = () => {
+    setAuthModalTab('register');
+    setShowAuthModal(true);
+  };
+
   const handleOpenProgramModal = (programId: string) => {
     if (programId === 'explorador') setShowExploradorModal(true);
     else if (programId === 'constructor') setShowConstructorModal(true);
@@ -321,17 +328,17 @@ const Index = () => {
         <ProgramExploradorModal
           isOpen={showExploradorModal}
           onClose={() => setShowExploradorModal(false)}
-          onStartQuestionnaire={handleStartQuestionnaire}
+          onStartRegistration={handleStartRegistration}
         />
         <ProgramConstructorModal
           isOpen={showConstructorModal}
           onClose={() => setShowConstructorModal(false)}
-          onStartQuestionnaire={handleStartQuestionnaire}
+          onStartRegistration={handleStartRegistration}
         />
         <ProgramEstrategaModal
           isOpen={showEstrategaModal}
           onClose={() => setShowEstrategaModal(false)}
-          onStartQuestionnaire={handleStartQuestionnaire}
+          onStartRegistration={handleStartRegistration}
         />
         <AboutUsDetailModal
           isOpen={showAboutDetailModal}

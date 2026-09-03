@@ -7,10 +7,10 @@ import { Check, Monitor, Search, Target, Zap, Users, ArrowRight, X } from 'lucid
 interface ProgramExploradorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onStartQuestionnaire: () => void;
+  onStartRegistration: () => void;
 }
 
-const ProgramExploradorModal: React.FC<ProgramExploradorModalProps> = ({ isOpen, onClose, onStartQuestionnaire }) => {
+const ProgramExploradorModal: React.FC<ProgramExploradorModalProps> = ({ isOpen, onClose, onStartRegistration }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[hsl(220,20%,8%)] border-white/10 text-white p-0 [&>button]:hidden">
@@ -144,10 +144,10 @@ const ProgramExploradorModal: React.FC<ProgramExploradorModalProps> = ({ isOpen,
 
           {/* CTA */}
           <div className="text-center pt-6 border-t border-white/10">
-            <Button onClick={() => { onClose(); onStartQuestionnaire(); }} className="btn-cta text-base px-10 py-4">
+            <Button onClick={() => { onClose(); onStartRegistration(); }} className="btn-cta text-base px-10 py-4">
               Empezar Explorador <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-            <p className="text-xs text-white/30 mt-3">Si tras aplicar Explorador necesitas mayor profundidad, podrás ascender.</p>
+            <p className="text-xs text-white/30 mt-3">Crea tu cuenta para empezar. Si tras aplicar Explorador necesitas mayor profundidad, podrás ascender.</p>
           </div>
         </div>
       </DialogContent>
