@@ -7,10 +7,10 @@ import { Check, Hammer, Dumbbell, Utensils, ClipboardCheck, Calendar, ArrowRight
 interface ProgramConstructorModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onStartQuestionnaire: () => void;
+  onStartRegistration: () => void;
 }
 
-const ProgramConstructorModal: React.FC<ProgramConstructorModalProps> = ({ isOpen, onClose, onStartQuestionnaire }) => {
+const ProgramConstructorModal: React.FC<ProgramConstructorModalProps> = ({ isOpen, onClose, onStartRegistration }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[hsl(220,20%,8%)] border-white/10 text-white p-0 [&>button]:hidden">
@@ -141,8 +141,8 @@ const ProgramConstructorModal: React.FC<ProgramConstructorModalProps> = ({ isOpe
                 Normas del programa
               </h3>
               <p className="text-sm text-white/60 mb-4">Para que el método funcione, se respetan estas reglas estructuradas.</p>
-              <Button onClick={() => { onClose(); onStartQuestionnaire(); }} className="btn-cta w-full py-3">
-                Solicitar Evaluación Inicial <ArrowRight className="w-4 h-4 ml-2" />
+              <Button onClick={() => { onClose(); onStartRegistration(); }} className="btn-cta w-full py-3">
+                Crear cuenta y empezar <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
           </div>
@@ -154,7 +154,7 @@ const ProgramConstructorModal: React.FC<ProgramConstructorModalProps> = ({ isOpe
               <span className="text-white/40 ml-2">/mes</span>
             </div>
             <p className="text-sm text-white/50 mb-6">Planificación real. Seguimiento real. Resultados reales.</p>
-            <Button onClick={() => { onClose(); onStartQuestionnaire(); }} className="btn-cta text-base px-10 py-4">
+            <Button onClick={() => { onClose(); onStartRegistration(); }} className="btn-cta text-base px-10 py-4">
               Empezar Constructor <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
