@@ -177,10 +177,10 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
             });
             return;
           } else {
-            const { error } = await supabase
-              .from('subscriptions')
-              .delete()
-              .eq('id', client.subscription_id);
+            const { error } = await supabase.rpc('admin_update_subscription_end_date', {
+              p_subscription_id: client.subscription_id,
+              p_remove: true,
+            });
 
             if (error) throw error;
           }
@@ -213,40 +213,22 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
               description: "Para cambiar el tipo de plan en Stripe, debe hacerse desde el panel de Stripe. Solo se actualizó la fecha.",
             });
           } else {
-            // Actualizar suscripción tradicional
+            // Guardar plan, estado y fechas en una única operación administrativa.
             const { error } = await supabase.rpc('admin_update_subscription_end_date', {
               p_subscription_id: client.subscription_id,
               p_new_end: endDate.toISOString(),
+              p_user_id: clientId,
+              p_plan_type: planType,
             });
             if (error) throw error;
-
-            // Actualizar también el tipo de plan
-            const { error: updateError } = await supabase
-              .from('subscriptions')
-              .update({
-                plan_type: planType,
-                status: 'active',
-                start_date: startDate.toISOString(),
-                amount: amount,
-                updated_at: new Date().toISOString()
-              })
-              .eq('id', client.subscription_id);
-
-            if (updateError) throw updateError;
           }
         } else {
-          // Crear nueva suscripción tradicional
-          const { error } = await supabase
-            .from('subscriptions')
-            .insert({
-              user_id: clientId,
-              plan_type: planType,
-              status: 'active',
-              start_date: startDate.toISOString(),
-              end_date: endDate.toISOString(),
-              amount: amount,
-              payment_method: 'manual'
-            });
+          // Crear la suscripción mediante la misma operación administrativa segura.
+          const { error } = await supabase.rpc('admin_update_subscription_end_date', {
+            p_new_end: endDate.toISOString(),
+            p_user_id: clientId,
+            p_plan_type: planType,
+          });
 
           if (error) throw error;
         }
@@ -257,7 +239,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         description: `El plan del cliente ha sido ${planType === 'none' ? 'eliminado' : 'actualizado'} correctamente.`,
       });
 
-      fetchClients(); // Refrescar la lista
+      await fetchClients(); // Refrescar la lista con el valor realmente guardado
       setEditingPlan(null);
     } catch (error) {
       console.error('Error updating plan:', error);
@@ -304,7 +286,7 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
         description: "La fecha de vencimiento ha sido actualizada correctamente.",
       });
 
-      fetchClients(); // Refrescar la lista
+      await fetchClients(); // La operación reactiva el plan si la fecha vuelve a ser futura
       setEditingDate(null);
     } catch (error: any) {
       console.error('Error updating expiration date:', error);
