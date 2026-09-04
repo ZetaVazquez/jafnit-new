@@ -1499,6 +1499,31 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_remove_client_subscription: {
+        Args: { p_subscription_id: string }
+        Returns: undefined
+      }
+      admin_set_client_subscription: {
+        Args: { p_plan_type: string; p_user_id: string }
+        Returns: {
+          amount: number
+          created_at: string
+          end_date: string | null
+          id: string
+          payment_method: string | null
+          plan_type: string
+          start_date: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "subscriptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       admin_update_coach_measurements: {
         Args: {
           p_activity_level: string
