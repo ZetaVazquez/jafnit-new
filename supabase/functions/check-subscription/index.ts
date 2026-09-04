@@ -22,8 +22,18 @@ serve(async (req) => {
 
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) {
-      logStep("ERROR: STRIPE_SECRET_KEY is not set");
-      throw new Error("STRIPE_SECRET_KEY is not set");
+      // Stripe no configurado: no es un error fatal, simplemente no hay datos de Stripe.
+      logStep("STRIPE_SECRET_KEY not set - returning unsubscribed state");
+      return new Response(JSON.stringify({
+        subscribed: false,
+        plan_type: null,
+        subscription_end: null,
+        is_basic_plan: false,
+        stripe_configured: false,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
     }
     logStep("Stripe key verified", { keyExists: !!stripeKey, keyPrefix: stripeKey.substring(0, 7) });
 
