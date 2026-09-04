@@ -95,13 +95,13 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramMo
   };
 
   return (
-    <section id="pricing" className="py-20 dark-section relative overflow-hidden">
+    <section id="pricing" className="py-14 md:py-20 dark-section relative overflow-hidden">
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               Elige el{' '}
               <em className="heading-accent not-italic font-bold italic">nivel adecuado</em>{' '}
               según tu momento
@@ -116,7 +116,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramMo
         </div>
 
         {/* Plan Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+        <div className="grid md:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto mb-10 md:mb-16">
           {plans.map((plan, index) => (
             <ScrollReveal key={plan.id} direction="up" delay={index * 150}>
               <div

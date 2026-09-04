@@ -32,16 +32,16 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-20 dark-section relative overflow-hidden">
+    <section id="faq" className="py-14 md:py-20 dark-section relative overflow-hidden">
       {/* Subtle radial glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[hsla(var(--accent-green)/0.05)] blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
               Preguntas{' '}
               <em className="heading-accent not-italic font-bold italic">Frecuentes</em>
             </h2>

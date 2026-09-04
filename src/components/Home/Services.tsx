@@ -68,7 +68,7 @@ const ServiceCard: React.FC<{ service: typeof services[0]; index: number }> = ({
 
 const Services: React.FC = () => {
   return (
-    <section id="servicios" className="relative py-24 dark-section overflow-hidden">
+    <section id="servicios" className="relative py-14 md:py-24 dark-section overflow-hidden">
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: `
@@ -79,9 +79,9 @@ const Services: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Nuestros <em className="heading-accent not-italic italic">Servicios</em>
             </h2>
           </ScrollReveal>
@@ -101,8 +101,8 @@ const Services: React.FC = () => {
 
         {/* CTA banner */}
         <ScrollReveal direction="up" delay={400}>
-          <div className="mt-16 glass-card-light p-8 lg:p-10 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+          <div className="mt-10 md:mt-16 glass-card-light p-6 md:p-8 lg:p-10 text-center">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4">
               ¿Necesitas algo más <em className="heading-accent not-italic italic">específico</em>?
             </h3>
             <p className="text-white/60 mb-8 max-w-2xl mx-auto">
@@ -121,11 +121,11 @@ const Services: React.FC = () => {
 
         {/* Communication Section */}
         <ScrollReveal direction="up" delay={300}>
-          <div className="mt-16 glass-card-light overflow-hidden">
-            <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
+          <div className="mt-10 md:mt-16 glass-card-light overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-6 md:gap-8 p-5 sm:p-8 lg:p-12 items-center">
               {/* Text Content */}
               <div className="order-2 lg:order-1">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-6">
                   💬 El diálogo constante es <em className="heading-accent not-italic italic">fundamental</em>
                 </h3>
                 <div className="space-y-4 text-white/60">

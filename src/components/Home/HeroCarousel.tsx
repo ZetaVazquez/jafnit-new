@@ -48,12 +48,12 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
 
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-32 lg:pt-40 pb-16 min-h-screen flex flex-col justify-between">
+      <div className="relative z-10 container mx-auto px-4 pt-24 sm:pt-28 lg:pt-40 pb-10 lg:pb-16 min-h-screen flex flex-col justify-between gap-8">
         {/* Main content area: centered hero text */}
         <div className="flex-1 flex items-center justify-center relative">
           <div className="space-y-6 lg:space-y-8 text-center max-w-3xl">
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05]">
+              <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] md:leading-[1.05]">
                 Mejora tu{' '}
                 <em className="heading-accent not-italic font-bold italic">ESTRUCTURA</em>
                 <br />

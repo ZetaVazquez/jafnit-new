@@ -114,12 +114,12 @@ const Testimonials: React.FC<TestimonialsProps> = ({ onStartQuestionnaire }) => 
   };
 
   return (
-    <section id="testimonios" className="relative py-24 dark-section overflow-hidden">
+    <section id="testimonios" className="relative py-14 md:py-24 dark-section overflow-hidden">
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Opiniones de Nuestros <em className="heading-accent not-italic italic">Clientes</em>
             </h2>
           </ScrollReveal>

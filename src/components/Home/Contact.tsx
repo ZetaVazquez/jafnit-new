@@ -6,16 +6,16 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contacto" className="py-20 dark-section relative overflow-hidden">
+    <section id="contacto" className="py-14 md:py-20 dark-section relative overflow-hidden">
       {/* Subtle radial glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[hsla(var(--accent-green)/0.06)] blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
               <em className="heading-accent not-italic font-bold italic">Contáctame</em>
             </h2>
           </ScrollReveal>

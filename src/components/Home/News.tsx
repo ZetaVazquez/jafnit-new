@@ -159,16 +159,16 @@ Elige UN pequeño cambio y comprométete solo con eso. Cuando sea natural (2-3 s
   };
 
   return (
-    <section id="noticias" className="py-20 dark-section relative overflow-hidden">
+    <section id="noticias" className="py-14 md:py-20 dark-section relative overflow-hidden">
       {/* Subtle radial glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[hsla(var(--accent-green)/0.06)] blur-[120px]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
               Noticias y{' '}
               <em className="heading-accent not-italic font-bold italic">Actualizaciones</em>
             </h2>
