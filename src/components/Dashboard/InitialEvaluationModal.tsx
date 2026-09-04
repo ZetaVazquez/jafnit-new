@@ -536,7 +536,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               onClick={() => setShowIntro(false)}
               className="flex-1 btn-cta h-12 text-base"
             >
-              Comenzar evaluación
+              {alreadyCompleted ? 'Revisar mis respuestas' : hasAnyAnswers ? 'Continuar evaluación' : 'Comenzar evaluación'}
               <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
             {onClose && (
