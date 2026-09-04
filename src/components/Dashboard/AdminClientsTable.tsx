@@ -159,6 +159,8 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
   };
 
   const updateClientPlan = async (clientId: string, planType: string) => {
+    // Cerrar el selector inmediatamente al elegir una opción
+    setEditingPlan(null);
     try {
       const client = clients.find(c => c.id === clientId);
       if (!client) return;
