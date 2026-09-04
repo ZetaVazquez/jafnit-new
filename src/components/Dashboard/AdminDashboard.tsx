@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Users, FileText, Dumbbell, DollarSign, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList, Library, UtensilsCrossed, UserCheck, Shield, Bot, LineChart } from 'lucide-react';
+import { Users, FileText, Dumbbell, DollarSign, Home, LogOut, Clock, PlusCircle, MessageSquare, ClipboardList, Library, UtensilsCrossed, UserCheck, LineChart } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import AdminClientsTable from './AdminClientsTable';
@@ -23,7 +23,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library' | 'leads' | 'audit' | 'coach-review' | 'progress-review'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library' | 'leads' | 'progress-review'>('overview');
   const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
@@ -98,9 +98,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
     { view: 'exercise-library' as const, icon: Library, color: 'from-pink-500/20 to-pink-600/10 border-pink-500/30', iconColor: 'text-pink-400', title: 'Biblioteca Ejercicios', subtitle: 'Videos y fichas' },
     { view: 'meal-library' as const, icon: UtensilsCrossed, color: 'from-lime-500/20 to-lime-600/10 border-lime-500/30', iconColor: 'text-lime-400', title: 'Biblioteca Comidas', subtitle: 'Recetas con foto' },
     { view: 'leads' as const, icon: UserCheck, color: 'from-cyan-500/20 to-cyan-600/10 border-cyan-500/30', iconColor: 'text-cyan-400', title: 'Seguimiento de Leads', subtitle: 'Contactos y CRM' },
-    { view: 'audit' as const, icon: Shield, color: 'from-slate-500/20 to-slate-600/10 border-slate-500/30', iconColor: 'text-slate-300', title: 'Auditoría', subtitle: 'Acciones de admin' },
     { view: 'progress-review' as const, icon: LineChart, color: 'from-amber-500/20 to-amber-600/10 border-amber-500/30', iconColor: 'text-amber-400', title: 'Evaluación de Progreso', subtitle: 'Cumplimiento del cliente' },
-    { view: 'coach-review' as const, icon: Bot, color: 'from-green-500/20 to-green-600/10 border-green-500/30', iconColor: 'text-green-400', title: 'Revisión Coach IA', subtitle: 'Chats y medidas' },
   ];
 
   const renderContent = () => {
