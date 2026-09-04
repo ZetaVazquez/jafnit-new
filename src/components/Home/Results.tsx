@@ -29,10 +29,10 @@ const Results: React.FC = () => {
   const next = () => setCurrent((c) => (c + 1) % results.length);
 
   return (
-    <section id="resultados" className="dark-section py-20 lg:py-28">
+    <section id="resultados" className="dark-section py-14 md:py-20 lg:py-28">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 md:mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
             <TrendingUp className="w-4 h-4 text-[hsl(var(--accent-green))]" />
             <span className="text-white/70 text-sm font-medium">Transformaciones reales</span>
@@ -46,7 +46,7 @@ const Results: React.FC = () => {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 max-w-4xl mx-auto mb-10 md:mb-16">
           {stats.map((stat, i) => (
             <div
               key={i}
@@ -147,7 +147,7 @@ const Results: React.FC = () => {
         </div>
 
         {/* Bottom CTA Banner */}
-        <div className="mt-16 max-w-4xl mx-auto rounded-2xl bg-gradient-to-r from-[hsl(var(--accent-green))]/10 to-transparent border border-[hsl(var(--accent-green))]/20 p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
+        <div className="mt-10 md:mt-16 max-w-4xl mx-auto rounded-2xl bg-gradient-to-r from-[hsl(var(--accent-green))]/10 to-transparent border border-[hsl(var(--accent-green))]/20 p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
           <div className="flex-1 text-center md:text-left">
             <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
               ¿Quieres ser el próximo?
