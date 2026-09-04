@@ -19,7 +19,10 @@ interface Exercise {
   equipment: string | null;
 }
 
-const MUSCLE_GROUPS = ['pecho', 'espalda', 'piernas', 'hombros', 'brazos', 'core', 'cardio', 'glúteos', 'full body'];
+const MUSCLE_GROUPS = [
+  'pecho', 'espalda', 'piernas', 'hombros', 'brazos', 'core',
+  'cardio', 'glúteos', 'tren superior', 'tren inferior', 'full body',
+];
 const DIFFICULTIES = [
   { value: 'beginner', label: 'Principiante' },
   { value: 'intermediate', label: 'Intermedio' },

@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
 
     if (type === "workout") {
       const { data: exercises } = await admin.from("exercises_library").select("id, name, muscle_group, difficulty, equipment");
-      const exList = (exercises || []).map(e => `- [${e.id}] ${e.name} (${e.muscle_group}, ${e.difficulty})`).join("\n");
+      const exList = (exercises || []).map(e => `- [${e.id}] ${e.name} (${e.muscle_group}, ${e.difficulty}, material: ${e.equipment || "sin especificar"})`).join("\n");
 
       const systemPrompt = `Eres un entrenador personal experto del método JAFN. Genera un plan de entrenamiento adaptado a los datos del cliente. SOLO puedes elegir ejercicios de la biblioteca proporcionada usando su exact id. Devuelve JSON estricto.
 IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) usando estos nombres en este orden: ${durationConfig.days.join(", ")}. NO añadas días extra.${isGeneric ? "\nEl cliente NO ha rellenado cuestionario: genera un plan GENÉRICO equilibrado de dificultad intermedia." : ""}${instructionsBlock}`;
@@ -155,6 +155,7 @@ IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s)
           const lib = libMap.get(it.exercise_id)!;
           return {
             exercise_id: lib.id, name: lib.name, muscle_group: lib.muscle_group,
+            equipment: lib.equipment, instructions: lib.instructions,
             video_url: lib.video_url, thumbnail_url: lib.thumbnail_url,
             sets: it.sets, reps: it.reps, rest_seconds: it.rest_seconds, notes: it.notes || ""
           };

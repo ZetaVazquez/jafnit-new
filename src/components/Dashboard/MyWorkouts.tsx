@@ -392,7 +392,15 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
                                     <div className="flex-1">
                                       <div className="text-white font-semibold">{it.name}</div>
                                       <div className="text-xs text-white/40 capitalize mb-2">{it.muscle_group}</div>
+                                      {it.equipment && (
+                                        <div className="text-xs text-[hsl(var(--accent-green))] mb-1">
+                                          Material: {it.equipment}
+                                        </div>
+                                      )}
                                       <div className="text-sm text-white/70">{it.sets} series × {it.reps} reps · {it.rest_seconds}s descanso</div>
+                                      {it.instructions && (
+                                        <div className="text-xs text-white/50 mt-1 leading-relaxed">{it.instructions}</div>
+                                      )}
                                       {it.notes && <div className="text-xs text-white/50 mt-1 italic">{it.notes}</div>}
                                     </div>
                                   </div>
