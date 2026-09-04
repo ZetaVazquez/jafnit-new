@@ -159,6 +159,8 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
   };
 
   const updateClientPlan = async (clientId: string, planType: string) => {
+    // Cerrar el selector inmediatamente al elegir una opción
+    setEditingPlan(null);
     try {
       const client = clients.find(c => c.id === clientId);
       if (!client) return;
@@ -485,20 +487,14 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
                           <Input
                             type="date"
                             defaultValue={client.end_date ? new Date(client.end_date).toISOString().split('T')[0] : ''}
-                            onBlur={(e) => {
+                            onChange={(e) => {
                               if (e.target.value) {
                                 updateClientExpirationDate(client.id, e.target.value);
-                              } else {
-                                setEditingDate(null);
                               }
                             }}
                             onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                if (e.currentTarget.value) {
-                                  updateClientExpirationDate(client.id, e.currentTarget.value);
-                                } else {
-                                  setEditingDate(null);
-                                }
+                              if (e.key === 'Enter' && e.currentTarget.value) {
+                                updateClientExpirationDate(client.id, e.currentTarget.value);
                               } else if (e.key === 'Escape') {
                                 setEditingDate(null);
                               }
@@ -506,6 +502,15 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
                             className="w-36"
                             autoFocus
                           />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setEditingDate(null)}
+                            className="text-white/50 hover:text-white"
+                            title="Cancelar"
+                          >
+                            ✕
+                          </Button>
                         </div>
                       ) : (
                         <div className="flex items-center space-x-2">
