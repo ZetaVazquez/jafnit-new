@@ -18,6 +18,10 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   duration = 600,
 }) => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
+  // En móvil, retardos escalonados largos dejan huecos en blanco al hacer scroll:
+  // se limita el retardo máximo para que el contenido aparezca con rapidez.
+  const effectiveDelay =
+    typeof window !== 'undefined' && window.innerWidth < 768 ? Math.min(delay, 200) : delay;
 
   const getAnimationClasses = () => {
     const baseClasses = `transition-all duration-700 ease-out`;
@@ -44,7 +48,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     <div
       ref={ref}
       className={cn(getAnimationClasses(), className)}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{ transitionDelay: `${effectiveDelay}ms` }}
     >
       {children}
     </div>
