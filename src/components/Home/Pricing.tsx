@@ -116,7 +116,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramMo
         </div>
 
         {/* Plan Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+        <div className="grid md:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto mb-10 md:mb-16">
           {plans.map((plan, index) => (
             <ScrollReveal key={plan.id} direction="up" delay={index * 150}>
               <div

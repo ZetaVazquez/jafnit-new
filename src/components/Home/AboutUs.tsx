@@ -22,7 +22,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetai
         {/* Header */}
         <ScrollReveal direction="down">
           <div className="mb-6">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-2">
               Sobre <em className="heading-accent not-italic font-bold italic">Mí</em>
             </h2>
             <div className="w-20 h-1 bg-[hsl(var(--accent-green))] rounded-full" />
@@ -30,7 +30,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetai
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={100}>
-          <p className="text-lg text-[hsl(var(--text-secondary))] max-w-3xl mb-16">
+          <p className="text-base md:text-lg text-[hsl(var(--text-secondary))] max-w-3xl mb-10 md:mb-16">
             Soy <strong className="text-[hsl(var(--text-primary))]">José Antonio Figueiras Núñez</strong>, el coach que te ayudará
             a encontrar la estrategia adecuada.
           </p>
@@ -101,7 +101,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetai
         </ScrollReveal>
 
         {/* 3 Pillars */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
+        <div className="grid md:grid-cols-3 gap-5 md:gap-6 mb-10 md:mb-16">
           {[
             { icon: Target, title: 'Estrategia', desc: 'Enfocaremos el progreso como un estratega.' },
             { icon: Brain, title: 'Mentalidad', desc: 'Trabajaremos de manera integral física y mentalmente.' },
@@ -121,7 +121,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetai
 
         {/* Timeline */}
         <ScrollReveal direction="up" delay={200}>
-          <div className="glass-card-light p-8 mb-16">
+          <div className="glass-card-light p-5 sm:p-8 mb-10 md:mb-16">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
               {/* Horizontal line on desktop */}
               <div className="hidden md:block absolute top-6 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-[hsl(var(--accent-green))] via-[hsla(var(--accent-green)/0.5)] to-[hsl(var(--accent-green))]" />
@@ -169,7 +169,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetai
         </ScrollReveal>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-10 md:mt-16">
           {[
             { value: '100+', label: 'Clientes Asesorados' },
             { value: '+3', label: 'Años de Experiencia' },
