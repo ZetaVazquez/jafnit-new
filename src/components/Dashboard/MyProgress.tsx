@@ -21,6 +21,7 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
   const [goals, setGoals] = useState<DailyGoal[]>([]);
   const [loading, setLoading] = useState(true);
   const [showMeasurements, setShowMeasurements] = useState(false);
+  const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchProgressData = async () => {
@@ -38,6 +39,12 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
         if (measurementsError) { console.error('Error fetching measurements:', measurementsError); return; }
         const chartData = processActivityData(activityData || [], totalHabits);
         setProgressData(chartData);
+        const { data: reviewsData } = await supabase
+          .from('client_progress_reviews')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('review_date', { ascending: true });
+        setReviews(reviewsData || []);
         setGoals([]);
         setBodyMeasurements(measurementsData || []);
       } catch (error) { console.error('Error:', error); } finally { setLoading(false); }
@@ -94,6 +101,15 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
     return streak;
   }
   const currentStreak = calculateCurrentStreak();
+  const latestReview = reviews[reviews.length - 1];
+  const reviewChartData = reviews.map((r) => ({
+    displayDate: new Date(r.review_date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }),
+    completionRate: r.compliance_pct ?? 0,
+    diet: r.diet_pct ?? 0,
+    workout: r.training_pct ?? 0,
+    water: r.water_pct ?? 0,
+    sleep: r.sleep_pct ?? 0,
+  }));
 
   if (showMeasurements) {
     return (
@@ -138,9 +154,9 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
             <CardContent className="py-6 text-center">
               <BarChart3 className="w-8 h-8 text-blue-400 mx-auto mb-2" />
               <div className="text-2xl font-bold text-white">
-                {progressData.length > 0 ? Math.round(progressData.reduce((acc, day) => acc + day.completionRate, 0) / progressData.length) : 0}%
+                {latestReview ? `${latestReview.compliance_pct}%` : '--'}
               </div>
-              <div className="text-sm text-white/50">Promedio mensual</div>
+              <div className="text-sm text-white/50">Cumplimiento (entrenador)</div>
             </CardContent>
           </Card>
           <Card className="border-white/10 bg-white/5 backdrop-blur-sm cursor-pointer hover:bg-white/10 transition-colors" onClick={() => setShowMeasurements(true)}>
@@ -165,13 +181,42 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
           </Button>
         </div>
 
+        {/* Valoración del entrenador (solo lectura) */}
+        <Card className="mb-8 border-[hsl(var(--accent-green))]/30 bg-[hsl(var(--accent-green))]/5 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="text-white">Valoración de tu entrenador</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {!latestReview ? (
+              <p className="text-white/50 text-sm">
+                Todavía no hay una evaluación. Tu entrenador la publicará tras revisar tus mediciones.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-white/40 text-sm">
+                  Última revisión: {new Date(latestReview.review_date).toLocaleDateString('es-ES')}
+                </p>
+                {latestReview.notes && (
+                  <p className="text-white/80 whitespace-pre-wrap">{latestReview.notes}</p>
+                )}
+                {latestReview.next_steps && (
+                  <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+                    <p className="text-white/50 text-sm mb-1">Próximos pasos</p>
+                    <p className="text-white/80 whitespace-pre-wrap">{latestReview.next_steps}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Progress Chart */}
         <Card className="mb-8 border-white/10 bg-white/5 backdrop-blur-sm">
           <CardHeader><CardTitle className="text-white">Evolución de Cumplimiento (Últimos 30 días)</CardTitle></CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig} className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={progressData}>
+                <LineChart data={reviewChartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis dataKey="displayDate" stroke="rgba(255,255,255,0.4)" tick={{ fill: 'rgba(255,255,255,0.4)' }} />
                   <YAxis domain={[0, 100]} stroke="rgba(255,255,255,0.4)" tick={{ fill: 'rgba(255,255,255,0.4)' }} />
@@ -189,10 +234,10 @@ const MyProgress: React.FC<MyProgressProps> = ({ onGoBack }) => {
           <CardContent>
             <ChartContainer config={chartConfig} className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={progressData.slice(-7)}>
+                <BarChart data={reviewChartData.slice(-7)}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis dataKey="displayDate" stroke="rgba(255,255,255,0.4)" tick={{ fill: 'rgba(255,255,255,0.4)' }} />
-                  <YAxis domain={[0, 1]} stroke="rgba(255,255,255,0.4)" tick={{ fill: 'rgba(255,255,255,0.4)' }} />
+                  <YAxis domain={[0, 100]} stroke="rgba(255,255,255,0.4)" tick={{ fill: 'rgba(255,255,255,0.4)' }} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="diet" fill="var(--color-diet)" />
                   <Bar dataKey="workout" fill="var(--color-workout)" />

@@ -374,6 +374,54 @@ export type Database = {
         }
         Relationships: []
       }
+      client_progress_reviews: {
+        Row: {
+          compliance_pct: number
+          created_at: string
+          created_by: string | null
+          diet_pct: number | null
+          id: string
+          next_steps: string | null
+          notes: string | null
+          review_date: string
+          sleep_pct: number | null
+          training_pct: number | null
+          updated_at: string
+          user_id: string
+          water_pct: number | null
+        }
+        Insert: {
+          compliance_pct?: number
+          created_at?: string
+          created_by?: string | null
+          diet_pct?: number | null
+          id?: string
+          next_steps?: string | null
+          notes?: string | null
+          review_date?: string
+          sleep_pct?: number | null
+          training_pct?: number | null
+          updated_at?: string
+          user_id: string
+          water_pct?: number | null
+        }
+        Update: {
+          compliance_pct?: number
+          created_at?: string
+          created_by?: string | null
+          diet_pct?: number | null
+          id?: string
+          next_steps?: string | null
+          notes?: string | null
+          review_date?: string
+          sleep_pct?: number | null
+          training_pct?: number | null
+          updated_at?: string
+          user_id?: string
+          water_pct?: number | null
+        }
+        Relationships: []
+      }
       coach_conversations: {
         Row: {
           created_at: string
@@ -1464,6 +1512,10 @@ export type Database = {
       admin_delete_diet_plan: { Args: { p_id: string }; Returns: undefined }
       admin_delete_exercise: { Args: { p_id: string }; Returns: undefined }
       admin_delete_meal: { Args: { p_id: string }; Returns: undefined }
+      admin_delete_progress_review: {
+        Args: { p_id: string }
+        Returns: undefined
+      }
       admin_delete_workout_plan: { Args: { p_id: string }; Returns: undefined }
       admin_list_coach_users: {
         Args: never
@@ -1712,6 +1764,40 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "meals_library"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_upsert_progress_review: {
+        Args: {
+          p_compliance_pct: number
+          p_diet_pct?: number
+          p_next_steps?: string
+          p_notes?: string
+          p_review_date: string
+          p_sleep_pct?: number
+          p_training_pct?: number
+          p_user_id: string
+          p_water_pct?: number
+        }
+        Returns: {
+          compliance_pct: number
+          created_at: string
+          created_by: string | null
+          diet_pct: number | null
+          id: string
+          next_steps: string | null
+          notes: string | null
+          review_date: string
+          sleep_pct: number | null
+          training_pct: number | null
+          updated_at: string
+          user_id: string
+          water_pct: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "client_progress_reviews"
           isOneToOne: true
           isSetofReturn: false
         }
