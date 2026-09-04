@@ -14,8 +14,6 @@ import AdminNewsManager from './AdminNewsManager';
 import AdminTestimonials from './AdminTestimonials';
 import AdminQuestionnaireResponses from './AdminQuestionnaireResponses';
 import AdminLeadTracking from './AdminLeadTracking';
-import AdminAuditLog from './AdminAuditLog';
-import AdminCoachReview from './AdminCoachReview';
 import AdminProgressReview from './AdminProgressReview';
 import { useToast } from '@/hooks/use-toast';
 
@@ -118,9 +116,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
       case 'testimonials': return <AdminTestimonials onBack={() => setCurrentView('overview')} />;
       case 'questionnaire': return <AdminQuestionnaireResponses onGoBack={() => setCurrentView('overview')} />;
       case 'leads': return <AdminLeadTracking onGoBack={() => setCurrentView('overview')} />;
-      case 'audit': return <AdminAuditLog onGoBack={() => setCurrentView('overview')} />;
       case 'progress-review': return <AdminProgressReview onGoBack={() => setCurrentView('overview')} />;
-      case 'coach-review': return <AdminCoachReview onGoBack={() => setCurrentView('overview')} />;
       default:
         return (
           <div className="container mx-auto px-4 py-8">
