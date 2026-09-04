@@ -15,6 +15,7 @@ interface Exercise {
 }
 interface PlanItem {
   exercise_id: string; name: string; muscle_group: string;
+  equipment?: string | null; instructions?: string | null;
   video_url: string | null; thumbnail_url: string | null;
   sets: number; reps: string; rest_seconds: number; notes: string;
 }
@@ -102,6 +103,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
       return { day, items: (ex?.items || []).map((it: any) => ({
         exercise_id: it.exercise_id || '', name: it.name || '',
         muscle_group: it.muscle_group || '',
+        equipment: it.equipment ?? null, instructions: it.instructions ?? null,
         video_url: it.video_url || null, thumbnail_url: it.thumbnail_url || null,
         sets: it.sets || 3, reps: it.reps || '10', rest_seconds: it.rest_seconds || 60, notes: it.notes || ''
       })) };
@@ -113,6 +115,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
     setDays(prev => prev.map((d, i) => i !== dayIndex ? d : ({
       ...d, items: [...d.items, {
         exercise_id: ex.id, name: ex.name, muscle_group: ex.muscle_group,
+        equipment: ex.equipment, instructions: ex.instructions ?? null,
         video_url: ex.video_url, thumbnail_url: ex.thumbnail_url,
         sets: 3, reps: '10', rest_seconds: 60, notes: ''
       }]
