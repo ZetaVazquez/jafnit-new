@@ -1589,10 +1589,10 @@ export type Database = {
       }
       admin_update_subscription_end_date: {
         Args: {
-          p_new_end: string
+          p_new_end?: string
           p_plan_type?: string
           p_remove?: boolean
-          p_subscription_id: string
+          p_subscription_id?: string
           p_user_id?: string
         }
         Returns: {
