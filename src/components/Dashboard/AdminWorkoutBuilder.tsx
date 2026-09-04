@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 interface Client { id: string; name: string; email: string; }
 interface Exercise {
   id: string; name: string; muscle_group: string; description: string | null;
+  instructions?: string | null;
   video_url: string | null; thumbnail_url: string | null; difficulty: string; equipment: string | null;
 }
 interface PlanItem {
