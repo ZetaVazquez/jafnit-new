@@ -475,6 +475,16 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
     );
   };
 
+  // ¿El usuario ya tiene respuestas guardadas? (cuestionario empezado o completado)
+  const hasAnyAnswers = Object.values(blockData).some(block =>
+    Object.values(block || {}).some(v => {
+      if (v === null || v === undefined) return false;
+      if (typeof v === 'string') return v.trim() !== '';
+      if (Array.isArray(v)) return v.length > 0;
+      return true;
+    })
+  );
+
   // Pantalla introductoria con el mensaje del entrenador
   if (showIntro && !initialLoading) {
     return (
@@ -526,7 +536,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
               onClick={() => setShowIntro(false)}
               className="flex-1 btn-cta h-12 text-base"
             >
-              Comenzar evaluación
+              {alreadyCompleted ? 'Revisar mis respuestas' : hasAnyAnswers ? 'Continuar evaluación' : 'Comenzar evaluación'}
               <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
             {onClose && (
