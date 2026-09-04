@@ -5,6 +5,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Send, X, Dumbbell } from 'lucide-react';
 import { toast } from 'sonner';
+import fitMascot from '@/assets/fit-mascot.png';
+
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
