@@ -50,7 +50,7 @@ const Results: React.FC = () => {
           {stats.map((stat, i) => (
             <div
               key={i}
-              className="relative group text-center p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--accent-green))]/30 transition-all duration-300"
+              className="relative group text-center p-4 md:p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--accent-green))]/30 transition-all duration-300"
             >
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[hsl(var(--accent-green))]/10 flex items-center justify-center group-hover:bg-[hsl(var(--accent-green))]/20 transition-colors">
                 <stat.icon className="w-6 h-6 text-[hsl(var(--accent-green))]" />

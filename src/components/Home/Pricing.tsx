@@ -95,7 +95,7 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramMo
   };
 
   return (
-    <section id="pricing" className="py-20 dark-section relative overflow-hidden">
+    <section id="pricing" className="py-14 md:py-20 dark-section relative overflow-hidden">
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}

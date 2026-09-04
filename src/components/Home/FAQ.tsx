@@ -32,7 +32,7 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-20 dark-section relative overflow-hidden">
+    <section id="faq" className="py-14 md:py-20 dark-section relative overflow-hidden">
       {/* Subtle radial glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[hsla(var(--accent-green)/0.05)] blur-[120px]" />

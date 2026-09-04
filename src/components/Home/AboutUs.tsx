@@ -11,7 +11,7 @@ interface AboutUsProps {
 
 const AboutUs: React.FC<AboutUsProps> = ({ onQuestionnaireOpen, onOpenAboutDetail }) => {
   return (
-    <section id="sobre-mi" className="py-20 dark-section relative overflow-hidden">
+    <section id="sobre-mi" className="py-14 md:py-20 dark-section relative overflow-hidden">
       {/* Subtle radial glows */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-1/4 w-[600px] h-[600px] rounded-full bg-[hsla(var(--accent-green)/0.05)] blur-[120px]" />

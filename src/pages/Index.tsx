@@ -294,7 +294,7 @@ const Index = () => {
           <button
             onClick={() => setShowCoach(true)}
             aria-label="Hablar con José Antonio"
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full bg-primary px-5 py-3.5 text-primary-foreground font-montserrat font-bold shadow-[0_10px_40px_-10px_hsl(var(--primary))] hover:bg-primary/90 transition-transform hover:scale-105"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 sm:gap-3 rounded-full bg-primary p-3.5 sm:px-5 sm:py-3.5 text-primary-foreground font-montserrat font-bold shadow-[0_10px_40px_-10px_hsl(var(--primary))] hover:bg-primary/90 transition-transform hover:scale-105"
           >
             <span className="relative flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/70" />
