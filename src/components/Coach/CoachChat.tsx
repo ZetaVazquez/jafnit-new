@@ -228,7 +228,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             placeholder="Escribe tu respuesta…"
             rows={1}
             disabled={loading || initialLoading}
-            className="min-h-[44px] max-h-32 resize-none bg-white/5 text-white placeholder:text-white/40 border-primary/30 focus-visible:ring-primary"
+            className="min-h-[44px] max-h-32 resize-none bg-white/5 text-base text-white placeholder:text-white/40 border-primary/30 focus-visible:ring-primary"
           />
           <Button
             onClick={handleSend}
