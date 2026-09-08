@@ -28,7 +28,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const handlePlanSelection = (planType: PlanId) => {
+  const handlePlanSelection = async (planType: PlanId) => {
     if (!user) {
       toast({
         title: "Error",
@@ -37,15 +37,17 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       });
       return;
     }
-    // El pago se asocia al usuario (client_reference_id) para poder activarlo automáticamente.
-    if (openStripeCheckout(planType, user)) {
+    // Se crea una sesión de Stripe Checkout asociada al usuario autenticado.
+    const ok = await openStripeCheckout(planType, user);
+    if (ok) {
       toast({
         title: "Redirigiendo a Stripe",
-        description: "Te hemos redirigido a la página de pago segura"
+        description: "Te llevamos a la página de pago segura"
       });
     }
     onClose();
   };
+
 
   return (
     <>

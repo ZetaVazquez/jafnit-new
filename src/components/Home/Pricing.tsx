@@ -5,6 +5,8 @@ import { Check, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { openStripeCheckout } from '@/lib/checkout';
+
 
 interface PricingProps {
   onStartQuestionnaire: () => void;
@@ -80,19 +82,21 @@ const Pricing: React.FC<PricingProps> = ({ onStartQuestionnaire, onOpenProgramMo
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const handleSelectPlan = (plan: typeof plans[0]) => {
+  const handleSelectPlan = async (plan: typeof plans[0]) => {
     if (!user) {
-      onStartQuestionnaire();
+      // Sin cuenta: primero registro (datos del paso 7) y después el pago.
+      onOpenProgramModal?.(plan.id);
       return;
     }
-    if (plan.stripeUrl) {
-      window.open(plan.stripeUrl, '_blank');
+    const ok = await openStripeCheckout(plan.id, user);
+    if (ok) {
       toast({
         title: 'Redirigiendo a Stripe',
-        description: 'Te hemos redirigido a la página de pago segura.',
+        description: 'Te llevamos a la página de pago segura.',
       });
     }
   };
+
 
   return (
     <section id="pricing" className="py-14 md:py-20 dark-section relative overflow-hidden">
