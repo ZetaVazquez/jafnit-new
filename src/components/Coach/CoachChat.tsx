@@ -83,7 +83,10 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       if (data?.reply) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+        // Small pause ("reading" the message) before starting to type.
+        await new Promise(r => setTimeout(r, 700 + Math.random() * 700));
+        setLoading(false);
+        await typeOut(String(data.reply));
       }
       if (data?.readyForDiagnosis) setReady(true);
     } catch (e: any) {
