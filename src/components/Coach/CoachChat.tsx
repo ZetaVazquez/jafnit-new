@@ -46,6 +46,29 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   // Keep the in-memory copy in sync so the thread survives view changes.
   useEffect(() => { coachMemory = messages; }, [messages]);
 
+  // Reveals the reply progressively, as if FIT were typing it.
+  const typeOut = (full: string) =>
+    new Promise<void>((resolve) => {
+      let shown = 0;
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      const step = () => {
+        // ~28 characters per tick with a small human-like jitter
+        shown = Math.min(full.length, shown + 2 + Math.floor(Math.random() * 3));
+        const slice = full.slice(0, shown);
+        setMessages(prev => {
+          const next = [...prev];
+          next[next.length - 1] = { role: 'assistant', content: slice };
+          return next;
+        });
+        if (shown < full.length) {
+          setTimeout(step, 18 + Math.random() * 22);
+        } else {
+          resolve();
+        }
+      };
+      setTimeout(step, 120);
+    });
+
   const sendMessage = async (userMessage: Msg | null, history: Msg[] = []) => {
     setLoading(true);
     try {
@@ -60,7 +83,10 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       if (data?.reply) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+        // Small pause ("reading" the message) before starting to type.
+        await new Promise(r => setTimeout(r, 700 + Math.random() * 700));
+        setLoading(false);
+        await typeOut(String(data.reply));
       }
       if (data?.readyForDiagnosis) setReady(true);
     } catch (e: any) {
@@ -113,19 +139,22 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[hsl(0_0%_6%)] flex flex-col">
+    <div
+      className="fixed inset-0 z-[100] bg-[hsl(0_0%_6%)] flex flex-col overflow-hidden [-webkit-text-size-adjust:100%] text-[15px] sm:text-base"
+      style={{ height: '100dvh' }}
+    >
       {/* Header */}
-      <div className="border-b border-primary/20 bg-black/40 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-11 h-11 rounded-full bg-primary/10 border border-primary/40 overflow-hidden flex items-center justify-center">
+      <div className="shrink-0 border-b border-primary/20 bg-black/40 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-2 pt-[max(0.625rem,env(safe-area-inset-top))]">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="relative shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-primary/10 border border-primary/40 overflow-hidden flex items-center justify-center">
               <img src={fitMascot} alt="FIT, asistente virtual de JAFN" width={512} height={512} className="w-full h-full object-contain" />
             </div>
-            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-primary border-2 border-black" />
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-primary border-2 border-black" />
           </div>
-          <div>
-            <div className="font-montserrat font-bold text-white">FIT</div>
-            <div className="text-xs text-primary/80">En línea · Asistente con IA de la consulta de José</div>
+          <div className="min-w-0">
+            <div className="font-montserrat font-bold text-white text-sm sm:text-base leading-tight">FIT</div>
+            <div className="text-[11px] sm:text-xs text-primary/80 truncate">En línea · Asistente con IA de la consulta de José</div>
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:text-primary">
@@ -134,8 +163,8 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="max-w-2xl mx-auto space-y-4">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 sm:px-4 py-4 sm:py-6">
+        <div className="max-w-2xl mx-auto space-y-3.5 sm:space-y-4">
           {initialLoading && (
             <div className="flex justify-center py-10">
               <Loader2 className="w-6 h-6 text-primary animate-spin" />
@@ -189,7 +218,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       </div>
 
       {/* Composer */}
-      <div className="border-t border-primary/20 bg-black/40 px-4 py-3">
+      <div className="shrink-0 border-t border-primary/20 bg-black/40 px-3 sm:px-4 py-2.5 sm:py-3 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
         <div className="max-w-2xl mx-auto flex items-end gap-2">
           <Textarea
             ref={inputRef}
@@ -199,7 +228,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             placeholder="Escribe tu respuesta…"
             rows={1}
             disabled={loading || initialLoading}
-            className="min-h-[44px] max-h-32 resize-none bg-white/5 text-white placeholder:text-white/40 border-primary/30 focus-visible:ring-primary"
+            className="min-h-[44px] max-h-32 resize-none bg-white/5 text-base text-white placeholder:text-white/40 border-primary/30 focus-visible:ring-primary"
           />
           <Button
             onClick={handleSend}
