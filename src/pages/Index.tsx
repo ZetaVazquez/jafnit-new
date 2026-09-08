@@ -16,7 +16,6 @@ import BMICalculatorModal from '@/components/Home/BMICalculatorModal';
 import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
 import AdminDashboard from '@/components/Dashboard/AdminDashboard';
-import SubscriptionGuard from '@/components/SubscriptionGuard';
 import AuthModal from '@/components/Auth/AuthModal';
 import { ClientFormModal } from '@/components/Auth/ClientFormModal';
 import { useAuth } from '@/hooks/useAuth';
@@ -160,14 +159,12 @@ const Index = () => {
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
-      <SubscriptionGuard strictMode={true}>
-        <ClientDashboard 
-          onNavigateToHome={handleBackToHome} 
-          onLogout={handleLogout}
-          initialView={dashboardView}
-          onViewChange={setDashboardView}
-        />
-      </SubscriptionGuard>
+      <ClientDashboard 
+        onNavigateToHome={handleBackToHome} 
+        onLogout={handleLogout}
+        initialView={dashboardView}
+        onViewChange={setDashboardView}
+      />
     );
   }
 

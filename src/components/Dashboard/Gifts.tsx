@@ -45,7 +45,7 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-orange-500/5 backdrop-blur-sm shadow-xl">
+          <Card className="border-yellow-500/30 bg-[hsl(220,20%,12%)] shadow-xl">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-br from-yellow-500/30 to-orange-500/30 rounded-full flex items-center justify-center mb-4 border border-yellow-500/30">
                 <Gift className="w-8 h-8 text-yellow-400" />
@@ -53,10 +53,10 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
               <CardTitle className="text-2xl text-yellow-400">🎁 ¡Tu Regalo de Bienvenida!</CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-6">
-              <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+              <div className="bg-[hsl(220,20%,16%)] rounded-lg p-6 border border-white/10">
                 <h3 className="text-xl font-bold text-white mb-3">Guía Exclusiva JAFN</h3>
-                <p className="text-white/50 mb-4">Como nuevo miembro de nuestra comunidad, tienes acceso a esta guía especial que te ayudará a comenzar tu transformación de la mejor manera.</p>
-                <div className="bg-white/5 rounded-lg p-4 mb-4 border border-white/10">
+                <p className="text-white/80 mb-4">Como nuevo miembro de nuestra comunidad, tienes acceso a esta guía especial que te ayudará a comenzar tu transformación de la mejor manera.</p>
+                <div className="bg-[hsl(220,20%,20%)] rounded-lg p-4 mb-4 border border-white/10">
                   <p className="text-sm text-[hsl(var(--accent-green))] font-medium">📄 Formato: PDF</p>
                   <p className="text-sm text-[hsl(var(--accent-green))] font-medium">📊 Contenido: Tips exclusivos y estrategias</p>
                   <p className="text-sm text-[hsl(var(--accent-green))] font-medium">🎯 Objetivo: Acelerar tu progreso</p>
@@ -67,8 +67,8 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
                   <Download className="w-5 h-5 mr-2" />Descargar
                 </Button>
               </div>
-              <div className="mt-8 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                <p className="text-sm text-yellow-300/80">💡 <strong>Consejo:</strong> Guarda este archivo en un lugar seguro. Siempre podrás volver a descargarlo desde esta sección.</p>
+              <div className="mt-8 p-4 bg-[hsl(220,20%,16%)] border border-yellow-500/20 rounded-lg">
+                <p className="text-sm text-yellow-200">💡 <strong>Consejo:</strong> Guarda este archivo en un lugar seguro. Siempre podrás volver a descargarlo desde esta sección.</p>
               </div>
             </CardContent>
           </Card>
