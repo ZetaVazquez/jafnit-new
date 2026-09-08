@@ -46,6 +46,29 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   // Keep the in-memory copy in sync so the thread survives view changes.
   useEffect(() => { coachMemory = messages; }, [messages]);
 
+  // Reveals the reply progressively, as if FIT were typing it.
+  const typeOut = (full: string) =>
+    new Promise<void>((resolve) => {
+      let shown = 0;
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      const step = () => {
+        // ~28 characters per tick with a small human-like jitter
+        shown = Math.min(full.length, shown + 2 + Math.floor(Math.random() * 3));
+        const slice = full.slice(0, shown);
+        setMessages(prev => {
+          const next = [...prev];
+          next[next.length - 1] = { role: 'assistant', content: slice };
+          return next;
+        });
+        if (shown < full.length) {
+          setTimeout(step, 18 + Math.random() * 22);
+        } else {
+          resolve();
+        }
+      };
+      setTimeout(step, 120);
+    });
+
   const sendMessage = async (userMessage: Msg | null, history: Msg[] = []) => {
     setLoading(true);
     try {
