@@ -12,8 +12,29 @@ const SubscriptionInfo: React.FC = () => {
   const { toast } = useToast();
   const [showPlansModal, setShowPlansModal] = useState(false);
 
-  const handleManageSubscription = () => setShowPlansModal(true);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  /** Abre el portal de cliente de Stripe para gestionar la suscripción. */
+  const handleManageSubscription = async () => {
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('customer-portal');
+      if (error || !data?.url) {
+        toast({
+          title: 'No se pudo abrir la gestión',
+          description: 'Inténtalo de nuevo en unos segundos.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      window.location.href = data.url as string;
+    } finally {
+      setPortalLoading(false);
+    }
+  };
+
   const handleRefreshStatus = () => { refreshSubscription(); toast({ title: "Actualizando...", description: "Verificando estado de suscripción" }); };
+
 
   const getPlanDisplayName = (plan: string | null) => {
     switch (plan) {

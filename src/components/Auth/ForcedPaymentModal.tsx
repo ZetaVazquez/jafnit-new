@@ -78,7 +78,7 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
     }
   };
 
-  const handlePlanSelection = (planType: PlanId) => {
+  const handlePlanSelection = async (planType: PlanId) => {
     setLoading(true);
     try {
       if (!user) {
