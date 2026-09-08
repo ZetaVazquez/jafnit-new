@@ -48,6 +48,16 @@ const Index = () => {
   const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
   const { user, isAdmin, signOut, hasActiveSubscription } = useAuth();
 
+  // Al volver del pago de Stripe abrimos directamente el panel del cliente.
+  React.useEffect(() => {
+    if (user && localStorage.getItem('jafn_open_dashboard') === '1') {
+      localStorage.removeItem('jafn_open_dashboard');
+      setShowDashboard(true);
+    }
+  }, [user]);
+
+
+
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
   };
