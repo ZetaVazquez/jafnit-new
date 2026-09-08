@@ -6,6 +6,7 @@ import { Check, Clock, Users, Trophy, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { PLANS, PlanId } from '@/config/plans';
+import { openStripeCheckout } from '@/lib/checkout';
 
 interface ForcedPaymentModalProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutos
   const { toast } = useToast();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   // Countdown timer
   useEffect(() => {
