@@ -160,14 +160,12 @@ const Index = () => {
     return isAdmin ? (
       <AdminDashboard onNavigateToHome={handleBackToHome} onLogout={handleLogout} />
     ) : (
-      <SubscriptionGuard strictMode={true}>
-        <ClientDashboard 
-          onNavigateToHome={handleBackToHome} 
-          onLogout={handleLogout}
-          initialView={dashboardView}
-          onViewChange={setDashboardView}
-        />
-      </SubscriptionGuard>
+      <ClientDashboard 
+        onNavigateToHome={handleBackToHome} 
+        onLogout={handleLogout}
+        initialView={dashboardView}
+        onViewChange={setDashboardView}
+      />
     );
   }
 
