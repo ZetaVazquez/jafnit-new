@@ -96,8 +96,9 @@ const SubscriptionInfo: React.FC = () => {
         )}
         {hasActiveSubscription && !isBasicPlan && (
           <div className="pt-4 border-t border-white/10">
-            <Button onClick={handleManageSubscription} className="w-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white" variant="outline">
-              <ExternalLink className="w-4 h-4 mr-2" />Gestionar Suscripción
+            <Button onClick={handleManageSubscription} disabled={portalLoading} className="w-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white" variant="outline">
+              <ExternalLink className="w-4 h-4 mr-2" />{portalLoading ? 'Abriendo...' : 'Gestionar Suscripción'}
+
             </Button>
             <p className="text-xs text-white/30 mt-2 text-center">Cambiar método de pago, cancelar o modificar plan</p>
           </div>
