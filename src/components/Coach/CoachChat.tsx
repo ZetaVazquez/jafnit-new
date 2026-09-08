@@ -218,7 +218,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       </div>
 
       {/* Composer */}
-      <div className="border-t border-primary/20 bg-black/40 px-4 py-3">
+      <div className="shrink-0 border-t border-primary/20 bg-black/40 px-3 sm:px-4 py-2.5 sm:py-3 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
         <div className="max-w-2xl mx-auto flex items-end gap-2">
           <Textarea
             ref={inputRef}
