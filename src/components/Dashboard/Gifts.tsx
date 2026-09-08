@@ -68,7 +68,7 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
                 </Button>
               </div>
               <div className="mt-8 p-4 bg-[hsl(220,20%,16%)] border border-yellow-500/20 rounded-lg">
-                <p className="text-sm text-yellow-300/80">💡 <strong>Consejo:</strong> Guarda este archivo en un lugar seguro. Siempre podrás volver a descargarlo desde esta sección.</p>
+                <p className="text-sm text-yellow-200">💡 <strong>Consejo:</strong> Guarda este archivo en un lugar seguro. Siempre podrás volver a descargarlo desde esta sección.</p>
               </div>
             </CardContent>
           </Card>
