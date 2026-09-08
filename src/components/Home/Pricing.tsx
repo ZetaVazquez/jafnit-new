@@ -19,7 +19,7 @@ const plans = [
     name: 'Explorador',
     tagline: 'Persona que empieza y necesita orden',
     price: '29',
-    duration: 'Pago único',
+    duration: '/mes',
     highlighted: false,
     features: [
       'Base estructural',
