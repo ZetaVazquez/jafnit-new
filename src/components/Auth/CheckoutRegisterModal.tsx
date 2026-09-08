@@ -76,9 +76,10 @@ const CheckoutRegisterModal: React.FC<CheckoutRegisterModalProps> = ({ isOpen, p
 
     // Si ya hay sesión, no repetimos el registro: directamente al pago.
     if (user) {
-      openStripeCheckout(plan.id, user);
+      await openStripeCheckout(plan.id, user);
       return;
     }
+
 
     if (!accepted) {
       toast({ title: 'Faltan los términos', description: 'Debes aceptar los términos y condiciones.', variant: 'destructive' });
@@ -136,7 +137,8 @@ const CheckoutRegisterModal: React.FC<CheckoutRegisterModalProps> = ({ isOpen, p
       });
 
       toast({ title: 'Cuenta creada', description: 'Te llevamos al pago seguro de Stripe.' });
-      openStripeCheckout(plan.id, { id: created.id, email: created.email });
+      await openStripeCheckout(plan.id, { id: created.id, email: created.email });
+
     } catch (err) {
       console.error(err);
       toast({ title: 'Error', description: 'Ha ocurrido un error inesperado.', variant: 'destructive' });

@@ -6,14 +6,37 @@ import { CreditCard, Calendar, RefreshCw, ExternalLink } from 'lucide-react';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useToast } from '@/hooks/use-toast';
 import PlanRecommendationModal from './PlanRecommendationModal';
+import { supabase } from '@/integrations/supabase/client';
+
 
 const SubscriptionInfo: React.FC = () => {
   const { subscriptionStatus, planType, subscriptionEnd, isBasicPlan, hasActiveSubscription, loading, refreshSubscription } = useSubscription();
   const { toast } = useToast();
   const [showPlansModal, setShowPlansModal] = useState(false);
 
-  const handleManageSubscription = () => setShowPlansModal(true);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  /** Abre el portal de cliente de Stripe para gestionar la suscripción. */
+  const handleManageSubscription = async () => {
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('customer-portal');
+      if (error || !data?.url) {
+        toast({
+          title: 'No se pudo abrir la gestión',
+          description: 'Inténtalo de nuevo en unos segundos.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      window.location.href = data.url as string;
+    } finally {
+      setPortalLoading(false);
+    }
+  };
+
   const handleRefreshStatus = () => { refreshSubscription(); toast({ title: "Actualizando...", description: "Verificando estado de suscripción" }); };
+
 
   const getPlanDisplayName = (plan: string | null) => {
     switch (plan) {
@@ -73,8 +96,9 @@ const SubscriptionInfo: React.FC = () => {
         )}
         {hasActiveSubscription && !isBasicPlan && (
           <div className="pt-4 border-t border-white/10">
-            <Button onClick={handleManageSubscription} className="w-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white" variant="outline">
-              <ExternalLink className="w-4 h-4 mr-2" />Gestionar Suscripción
+            <Button onClick={handleManageSubscription} disabled={portalLoading} className="w-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white" variant="outline">
+              <ExternalLink className="w-4 h-4 mr-2" />{portalLoading ? 'Abriendo...' : 'Gestionar Suscripción'}
+
             </Button>
             <p className="text-xs text-white/30 mt-2 text-center">Cambiar método de pago, cancelar o modificar plan</p>
           </div>

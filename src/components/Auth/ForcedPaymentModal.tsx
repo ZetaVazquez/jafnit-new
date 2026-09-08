@@ -78,7 +78,7 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
     }
   };
 
-  const handlePlanSelection = (planType: PlanId) => {
+  const handlePlanSelection = async (planType: PlanId) => {
     setLoading(true);
     try {
       if (!user) {
@@ -90,7 +90,7 @@ const ForcedPaymentModal: React.FC<ForcedPaymentModalProps> = ({
         return;
       }
       // Pago asociado al usuario para activarlo automáticamente al confirmarse.
-      openStripeCheckout(planType, user);
+      await openStripeCheckout(planType, user);
       toast({
         title: "Redirigiendo a Stripe",
         description: "Te hemos redirigido a la página de pago segura. Una vez completado el pago, tu suscripción será activada."
