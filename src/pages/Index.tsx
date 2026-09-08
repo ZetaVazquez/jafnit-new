@@ -326,17 +326,22 @@ const Index = () => {
         <ProgramExploradorModal
           isOpen={showExploradorModal}
           onClose={() => setShowExploradorModal(false)}
-          onStartRegistration={handleStartRegistration}
+          onStartRegistration={() => handleStartRegistration('explorador')}
         />
         <ProgramConstructorModal
           isOpen={showConstructorModal}
           onClose={() => setShowConstructorModal(false)}
-          onStartRegistration={handleStartRegistration}
+          onStartRegistration={() => handleStartRegistration('constructor')}
         />
         <ProgramEstrategaModal
           isOpen={showEstrategaModal}
           onClose={() => setShowEstrategaModal(false)}
-          onStartRegistration={handleStartRegistration}
+          onStartRegistration={() => handleStartRegistration('estratega')}
+        />
+        <CheckoutRegisterModal
+          isOpen={!!checkoutPlanId}
+          planId={checkoutPlanId}
+          onClose={() => setCheckoutPlanId(null)}
         />
         <AboutUsDetailModal
           isOpen={showAboutDetailModal}
