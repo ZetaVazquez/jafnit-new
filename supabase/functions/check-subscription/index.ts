@@ -127,18 +127,17 @@ serve(async (req) => {
       const subscription = subscriptions.data[0];
       subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
       logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd });
-      
-      // Determine subscription tier from price
+
+      // El plan se identifica por el price de Stripe (modo TEST)
       const priceId = subscription.items.data[0].price.id;
-      const price = await stripe.prices.retrieve(priceId);
-      const amount = price.unit_amount || 0;
-      
-      if (amount <= 15000) { // Up to €150
-        subscriptionTier = "premium";
-      } else {
-        subscriptionTier = "pro";
-      }
-      logStep("Determined subscription tier", { priceId, amount, subscriptionTier });
+      const PLAN_BY_PRICE: Record<string, string> = {
+        price_1UDPmGPtWMY1We6RrAECdeee: "explorador",
+        price_1UDPokPtWMY1We6Rbk0m2rgQ: "constructor",
+        price_1UDPpmPtWMY1We6Rq6wxFLF5: "estratega",
+      };
+      subscriptionTier = PLAN_BY_PRICE[priceId] ?? "constructor";
+      logStep("Determined subscription plan", { priceId, subscriptionTier });
+
 
       // Update database
       await supabaseClient.from("stripe_subscriptions").upsert({
