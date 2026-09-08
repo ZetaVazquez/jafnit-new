@@ -163,8 +163,8 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="max-w-2xl mx-auto space-y-4">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 sm:px-4 py-4 sm:py-6">
+        <div className="max-w-2xl mx-auto space-y-3.5 sm:space-y-4">
           {initialLoading && (
             <div className="flex justify-center py-10">
               <Loader2 className="w-6 h-6 text-primary animate-spin" />
