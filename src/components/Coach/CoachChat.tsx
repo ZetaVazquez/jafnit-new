@@ -139,19 +139,22 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[hsl(0_0%_6%)] flex flex-col">
+    <div
+      className="fixed inset-0 z-[100] bg-[hsl(0_0%_6%)] flex flex-col overflow-hidden [-webkit-text-size-adjust:100%] text-[15px] sm:text-base"
+      style={{ height: '100dvh' }}
+    >
       {/* Header */}
-      <div className="border-b border-primary/20 bg-black/40 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-11 h-11 rounded-full bg-primary/10 border border-primary/40 overflow-hidden flex items-center justify-center">
+      <div className="shrink-0 border-b border-primary/20 bg-black/40 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-2 pt-[max(0.625rem,env(safe-area-inset-top))]">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="relative shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-primary/10 border border-primary/40 overflow-hidden flex items-center justify-center">
               <img src={fitMascot} alt="FIT, asistente virtual de JAFN" width={512} height={512} className="w-full h-full object-contain" />
             </div>
-            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-primary border-2 border-black" />
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-primary border-2 border-black" />
           </div>
-          <div>
-            <div className="font-montserrat font-bold text-white">FIT</div>
-            <div className="text-xs text-primary/80">En línea · Asistente con IA de la consulta de José</div>
+          <div className="min-w-0">
+            <div className="font-montserrat font-bold text-white text-sm sm:text-base leading-tight">FIT</div>
+            <div className="text-[11px] sm:text-xs text-primary/80 truncate">En línea · Asistente con IA de la consulta de José</div>
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:text-primary">
