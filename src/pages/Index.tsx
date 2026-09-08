@@ -26,6 +26,7 @@ import ProgramConstructorModal from '@/components/Home/ProgramConstructorModal';
 import ProgramEstrategaModal from '@/components/Home/ProgramEstrategaModal';
 import AboutUsDetailModal from '@/components/Home/AboutUsDetailModal';
 import CoachChat, { clearCoachChat } from '@/components/Coach/CoachChat';
+import CheckoutRegisterModal from '@/components/Auth/CheckoutRegisterModal';
 import { MessageCircle } from 'lucide-react';
 
 const Index = () => {
@@ -44,7 +45,18 @@ const Index = () => {
   const [showEstrategaModal, setShowEstrategaModal] = useState(false);
   const [showAboutDetailModal, setShowAboutDetailModal] = useState(false);
   const [showCoach, setShowCoach] = useState(false);
+  const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
   const { user, isAdmin, signOut, hasActiveSubscription } = useAuth();
+
+  // Al volver del pago de Stripe abrimos directamente el panel del cliente.
+  React.useEffect(() => {
+    if (user && localStorage.getItem('jafn_open_dashboard') === '1') {
+      localStorage.removeItem('jafn_open_dashboard');
+      setShowDashboard(true);
+    }
+  }, [user]);
+
+
 
   const handleStartQuestionnaire = () => {
     setShowQuestionnaire(true);
@@ -141,11 +153,10 @@ const Index = () => {
     setShowClientForm(true);
   };
 
-  // Al elegir un programa se abre directamente el modal de creación de usuario,
-  // sin pasar por la evaluación inicial.
-  const handleStartRegistration = () => {
-    setAuthModalTab('register');
-    setShowAuthModal(true);
+  // Al elegir un programa se abre el registro previo al pago (datos del paso 7)
+  // y, al terminar, se envía al pago de Stripe ya asociado al usuario.
+  const handleStartRegistration = (planId: string) => {
+    setCheckoutPlanId(planId);
   };
 
   const handleOpenProgramModal = (programId: string) => {
@@ -325,17 +336,22 @@ const Index = () => {
         <ProgramExploradorModal
           isOpen={showExploradorModal}
           onClose={() => setShowExploradorModal(false)}
-          onStartRegistration={handleStartRegistration}
+          onStartRegistration={() => handleStartRegistration('explorador')}
         />
         <ProgramConstructorModal
           isOpen={showConstructorModal}
           onClose={() => setShowConstructorModal(false)}
-          onStartRegistration={handleStartRegistration}
+          onStartRegistration={() => handleStartRegistration('constructor')}
         />
         <ProgramEstrategaModal
           isOpen={showEstrategaModal}
           onClose={() => setShowEstrategaModal(false)}
-          onStartRegistration={handleStartRegistration}
+          onStartRegistration={() => handleStartRegistration('estratega')}
+        />
+        <CheckoutRegisterModal
+          isOpen={!!checkoutPlanId}
+          planId={checkoutPlanId}
+          onClose={() => setCheckoutPlanId(null)}
         />
         <AboutUsDetailModal
           isOpen={showAboutDetailModal}

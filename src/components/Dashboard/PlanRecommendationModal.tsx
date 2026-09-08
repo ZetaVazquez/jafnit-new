@@ -7,6 +7,7 @@ import { Check, Star } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { PLANS, PlanId } from '@/config/plans';
+import { openStripeCheckout } from '@/lib/checkout';
 
 interface PlanRecommendationModalProps {
   isOpen: boolean;
@@ -36,9 +37,8 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
       });
       return;
     }
-    const plan = PLANS.find(p => p.id === planType);
-    if (plan?.stripeUrl) {
-      window.open(plan.stripeUrl, '_blank');
+    // El pago se asocia al usuario (client_reference_id) para poder activarlo automáticamente.
+    if (openStripeCheckout(planType, user)) {
       toast({
         title: "Redirigiendo a Stripe",
         description: "Te hemos redirigido a la página de pago segura"
