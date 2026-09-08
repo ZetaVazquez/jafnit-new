@@ -9,7 +9,9 @@ export interface PlanConfig {
   duration: string;
   highlighted: boolean;
   features: string[];
-  stripeUrl: string;
+  /** Precio recurrente ya existente en Stripe (modo TEST) */
+  priceId: string;
+  productId: string;
 }
 
 export const PLANS: PlanConfig[] = [
@@ -19,7 +21,7 @@ export const PLANS: PlanConfig[] = [
     tagline: 'Persona que empieza y necesita orden',
     price: 29,
     priceLabel: '29€',
-    duration: 'Pago único',
+    duration: '/mes',
     highlighted: false,
     features: [
       'Base estructural',
@@ -28,7 +30,8 @@ export const PLANS: PlanConfig[] = [
       'Orientación general',
       'Sin seguimiento',
     ],
-    stripeUrl: 'https://buy.stripe.com/28EcN62DHgtIgxtfE46wE00',
+    priceId: 'price_1UDPmGPtWMY1We6RrAECdeee',
+    productId: 'prod_ShAQhPIY5kIWxT',
   },
   {
     id: 'constructor',
@@ -45,7 +48,8 @@ export const PLANS: PlanConfig[] = [
       'Rutina progresiva',
       'Evaluación y ajuste 1 a 1',
     ],
-    stripeUrl: 'https://buy.stripe.com/7sYdRa7Y13GW9513Vm6wE01',
+    priceId: 'price_1UDPokPtWMY1We6Rbk0m2rgQ',
+    productId: 'prod_VDrXPMPW24DFWt',
   },
   {
     id: 'estratega',
@@ -62,9 +66,17 @@ export const PLANS: PlanConfig[] = [
       'Plan personalizado y progresivo',
       'Evaluaciones periódicas y ajustes estratégicos',
     ],
-    stripeUrl: 'https://buy.stripe.com/6oUbJ21zDfpE0yvbnO6wE02',
+    priceId: 'price_1UDPpmPtWMY1We6Rq6wxFLF5',
+    productId: 'prod_VDrYDsDuSQggep',
   },
 ];
 
 export const getPlanById = (id: string): PlanConfig | undefined =>
   PLANS.find(p => p.id === id);
+
+/** Mapa priceId -> planId, usado para saber qué plan tiene activo el cliente. */
+export const PLAN_BY_PRICE_ID: Record<string, PlanId> = PLANS.reduce((acc, p) => {
+  acc[p.priceId] = p.id;
+  return acc;
+}, {} as Record<string, PlanId>);
+
