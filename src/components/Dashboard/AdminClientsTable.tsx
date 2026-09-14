@@ -304,9 +304,13 @@ const AdminClientsTable: React.FC<AdminClientsTableProps> = ({ onGoBack }) => {
     }
 
     try {
-      const { error } = await supabase.auth.admin.deleteUser(clientId);
-      
+      // El borrado se hace en el servidor, donde se comprueba el rol de administrador.
+      const { data, error } = await supabase.functions.invoke('admin-delete-user', {
+        body: { userId: clientId },
+      });
+
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       toast({
         title: "Cliente eliminado",
