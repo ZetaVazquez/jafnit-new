@@ -9,15 +9,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import ForcedPaymentModal from './ForcedPaymentModal';
 import TermsModal from './TermsModal';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: 'login' | 'register';
-  onSuccess?: () => void;
-  onRegistrationSuccess?: () => void;
+  /** Se invoca tras iniciar sesión o tras crear la cuenta (ya con sesión iniciada). */
+  onSuccess?: (mode: 'login' | 'register') => void;
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ 
@@ -25,7 +24,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
   onClose, 
   initialTab = 'login',
   onSuccess,
-  onRegistrationSuccess 
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +34,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
     confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   
@@ -71,7 +69,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
           description: "Has iniciado sesión correctamente.",
         });
         onClose();
-        onSuccess?.();
+        onSuccess?.('login');
       }
     } catch (error) {
       toast({
@@ -151,13 +149,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
         }
         
         toast({
-          title: "¡Registro exitoso!",
-          description: "Tu cuenta ha sido creada correctamente.",
+          title: "¡Cuenta creada!",
+          description: "Ya has iniciado sesión. Elige tu programa para activarla.",
         });
         onClose();
-        // Mostrar modal de pago forzoso después del registro
-        setShowPaymentModal(true);
-        onRegistrationSuccess?.();
+        onSuccess?.('register');
       }
     } catch (error) {
       toast({
@@ -174,24 +170,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
     setActiveTab(initialTab);
   }, [initialTab]);
 
-  const handlePaymentCompleted = () => {
-    setShowPaymentModal(false);
-    onSuccess?.();
-  };
-
-  const handleAccountClosure = () => {
-    setShowPaymentModal(false);
-    // El usuario será redirigido al inicio automáticamente por el signOut
-  };
-
   return (
     <>
-      <ForcedPaymentModal
-        isOpen={showPaymentModal}
-        onPaymentCompleted={handlePaymentCompleted}
-        onAccountClosure={handleAccountClosure}
-      />
-      
       <TermsModal
         isOpen={showTermsModal}
         onClose={() => setShowTermsModal(false)}
