@@ -325,14 +325,6 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
-      {/* Login Modal */}
-      {showLoginModal && (
-        <LoginModal
-          onClose={handleLoginModalClose}
-          onLogin={handleLoginSubmit}
-          initialMode="login"
-        />
-      )}
 
       {/* Sidebar for logged-in users */}
       {isSidebarOpen && (
