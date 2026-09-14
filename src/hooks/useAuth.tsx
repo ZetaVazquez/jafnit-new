@@ -141,12 +141,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    return { error };
+    const credentials = {
+      email: email.trim().toLowerCase(),
+      password,
+    };
+
+    let result = await supabase.auth.signInWithPassword(credentials);
+
+    // Algunos navegadores cortan puntualmente la primera petición al cambiar
+    // entre el dominio público y la pasarela de autenticación.
+    if (result.error?.message.toLowerCase().includes('failed to fetch')) {
+      await new Promise((resolve) => window.setTimeout(resolve, 800));
+      result = await supabase.auth.signInWithPassword(credentials);
+    }
+
+    return { error: result.error };
   };
 
   const signOut = async () => {

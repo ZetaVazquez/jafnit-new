@@ -56,11 +56,14 @@ const AuthModal: React.FC<AuthModalProps> = ({
       const { error } = await signIn(formData.email, formData.password);
       
       if (error) {
+        const isConnectionError = error.message.toLowerCase().includes('failed to fetch');
         toast({
           title: "Error de inicio de sesión",
           description: error.message === 'Invalid login credentials' 
             ? 'Credenciales incorrectas. Verifica tu email y contraseña.'
-            : error.message,
+            : isConnectionError
+              ? 'No se pudo conectar con el acceso. Recarga la página y vuelve a intentarlo.'
+              : error.message,
           variant: "destructive"
         });
       } else {
