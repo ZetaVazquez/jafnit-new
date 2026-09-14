@@ -34,6 +34,7 @@ import WelcomeGiftModal from './WelcomeGiftModal';
 import SubscriptionInfo from './SubscriptionInfo';
 import InitialEvaluationModal from './InitialEvaluationModal';
 import NotificationBell from './NotificationBell';
+import PlanRecommendationModal from './PlanRecommendationModal';
 import { TodayGoalsWidget, WorkoutStatsWidget, ActiveDaysWidget } from './DashboardWidgets';
 import { useToast } from '@/hooks/use-toast';
 
