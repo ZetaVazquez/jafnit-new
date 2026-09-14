@@ -291,6 +291,21 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
           <ActiveDaysWidget />
         </div>
 
+        {/* Aviso para clientes sin plan activo */}
+        {!subscriptionLoading && !hasActiveSubscription && (
+          <div className="mb-8 rounded-xl border border-[hsl(var(--accent-green))]/30 bg-[hsl(var(--accent-green))]/10 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-white">Tu cuenta está sin plan activo</h2>
+              <p className="text-white/60 text-sm mt-1">
+                Contrata tu programa para desbloquear dietas, entrenamientos, agenda y regalos.
+              </p>
+            </div>
+            <Button onClick={() => setShowPlansModal(true)} className="btn-cta whitespace-nowrap">
+              Contratar mi plan
+            </Button>
+          </div>
+        )}
+
         {/* Subscription Info */}
         <div className="mb-8">
           <SubscriptionInfo />
