@@ -327,7 +327,7 @@ const Index = () => {
           isOpen={showPlanModal}
           onClose={() => setShowPlanModal(false)}
           onDecideLater={() => setShowPlanModal(false)}
-          recommendedPlan="constructor"
+          recommendedPlan={(pendingPlanId as any) ?? 'constructor'}
           fromQuestionnaire={false}
         />
         <AuthModal
@@ -363,6 +363,16 @@ const Index = () => {
           isOpen={!!checkoutPlanId}
           planId={checkoutPlanId}
           onClose={() => setCheckoutPlanId(null)}
+          onLogin={() => {
+            setCheckoutPlanId(null);
+            setAuthModalTab('login');
+            setShowAuthModal(true);
+          }}
+          onRegister={() => {
+            setCheckoutPlanId(null);
+            setAuthModalTab('register');
+            setShowAuthModal(true);
+          }}
         />
         <AboutUsDetailModal
           isOpen={showAboutDetailModal}
