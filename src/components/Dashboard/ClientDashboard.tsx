@@ -52,6 +52,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showInitialEvaluation, setShowInitialEvaluation] = useState(false);
   const [reopenEvaluation, setReopenEvaluation] = useState(false);
+  const [showPlansModal, setShowPlansModal] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
