@@ -46,6 +46,7 @@ const Index = () => {
   const [showAboutDetailModal, setShowAboutDetailModal] = useState(false);
   const [showCoach, setShowCoach] = useState(false);
   const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
+  const [pendingPlanId, setPendingPlanId] = useState<string | null>(null);
   const { user, isAdmin, signOut, hasActiveSubscription } = useAuth();
 
   // Al volver del pago de Stripe abrimos directamente el panel del cliente.
@@ -150,13 +151,23 @@ const Index = () => {
 
   const handleAuthSuccess = () => {
     setShowAuthModal(false);
-    setShowClientForm(true);
+    // Si venía de contratar un programa, le mostramos el modal de planes para pagar.
+    if (pendingPlanId) {
+      setShowPlanModal(true);
+    } else {
+      setShowClientForm(true);
+    }
   };
 
-  // Al elegir un programa se abre el registro previo al pago (datos del paso 7)
-  // y, al terminar, se envía al pago de Stripe ya asociado al usuario.
+  // Al elegir un programa: si hay sesión se abre directamente el modal de planes
+  // para pagar; si no, se pide iniciar sesión (o crear cuenta) primero.
   const handleStartRegistration = (planId: string) => {
-    setCheckoutPlanId(planId);
+    setPendingPlanId(planId);
+    if (user) {
+      setShowPlanModal(true);
+    } else {
+      setCheckoutPlanId(planId);
+    }
   };
 
   const handleOpenProgramModal = (programId: string) => {
@@ -316,7 +327,7 @@ const Index = () => {
           isOpen={showPlanModal}
           onClose={() => setShowPlanModal(false)}
           onDecideLater={() => setShowPlanModal(false)}
-          recommendedPlan="constructor"
+          recommendedPlan={(pendingPlanId as any) ?? 'constructor'}
           fromQuestionnaire={false}
         />
         <AuthModal
@@ -352,6 +363,16 @@ const Index = () => {
           isOpen={!!checkoutPlanId}
           planId={checkoutPlanId}
           onClose={() => setCheckoutPlanId(null)}
+          onLogin={() => {
+            setCheckoutPlanId(null);
+            setAuthModalTab('login');
+            setShowAuthModal(true);
+          }}
+          onRegister={() => {
+            setCheckoutPlanId(null);
+            setAuthModalTab('register');
+            setShowAuthModal(true);
+          }}
         />
         <AboutUsDetailModal
           isOpen={showAboutDetailModal}
