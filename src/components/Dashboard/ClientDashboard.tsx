@@ -34,6 +34,7 @@ import WelcomeGiftModal from './WelcomeGiftModal';
 import SubscriptionInfo from './SubscriptionInfo';
 import InitialEvaluationModal from './InitialEvaluationModal';
 import NotificationBell from './NotificationBell';
+import PlanRecommendationModal from './PlanRecommendationModal';
 import { TodayGoalsWidget, WorkoutStatsWidget, ActiveDaysWidget } from './DashboardWidgets';
 import { useToast } from '@/hooks/use-toast';
 
@@ -51,6 +52,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showInitialEvaluation, setShowInitialEvaluation] = useState(false);
   const [reopenEvaluation, setReopenEvaluation] = useState(false);
+  const [showPlansModal, setShowPlansModal] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -175,11 +177,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
 
   const handlePremiumView = (view: string) => {
     if (!hasActiveSubscription) {
-      toast({
-        title: "Suscripción requerida",
-        description: "Esta función está disponible solo para usuarios con suscripción activa",
-        variant: "destructive"
-      });
+      setShowPlansModal(true);
       return;
     }
     setCurrentView(view);
@@ -225,6 +223,14 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
         onComplete={() => setReopenEvaluation(false)}
         allowClose
         onClose={() => setReopenEvaluation(false)}
+      />
+
+      <PlanRecommendationModal
+        isOpen={showPlansModal}
+        onClose={() => setShowPlansModal(false)}
+        onDecideLater={() => setShowPlansModal(false)}
+        recommendedPlan="constructor"
+        redirectOnClose={false}
       />
 
       {/* Header */}
@@ -293,6 +299,21 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
           <ActiveDaysWidget />
         </div>
 
+        {/* Aviso para clientes sin plan activo */}
+        {!subscriptionLoading && !hasActiveSubscription && (
+          <div className="mb-8 rounded-xl border border-[hsl(var(--accent-green))]/30 bg-[hsl(var(--accent-green))]/10 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-white">Tu cuenta está sin plan activo</h2>
+              <p className="text-white/60 text-sm mt-1">
+                Contrata tu programa para desbloquear dietas, entrenamientos, agenda y regalos.
+              </p>
+            </div>
+            <Button onClick={() => setShowPlansModal(true)} className="btn-cta whitespace-nowrap">
+              Contratar mi plan
+            </Button>
+          </div>
+        )}
+
         {/* Subscription Info */}
         <div className="mb-8">
           <SubscriptionInfo />
@@ -329,13 +350,13 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 <CardContent>
                   <p className="text-white/50 mb-4">{card.desc}</p>
                   <Button 
+                    onClick={(e) => { e.stopPropagation(); handleClick(); }}
                     className={`w-full ${locked 
-                      ? 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10' 
+                      ? 'bg-white/10 text-white/60 hover:bg-white/20 border border-white/15' 
                       : 'bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/30 border border-[hsl(var(--accent-green))]/30'
                     }`}
-                    disabled={locked}
                   >
-                    {locked ? 'Suscripción Requerida' : (
+                    {locked ? 'Activar mi plan' : (
                       <span className="flex items-center gap-2">
                         Ver {card.title.replace('Mi ', '').replace('Mis ', '')} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </span>
