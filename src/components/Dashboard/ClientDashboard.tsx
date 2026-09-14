@@ -327,13 +327,13 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 <CardContent>
                   <p className="text-white/50 mb-4">{card.desc}</p>
                   <Button 
+                    onClick={(e) => { e.stopPropagation(); handleClick(); }}
                     className={`w-full ${locked 
-                      ? 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10' 
+                      ? 'bg-white/10 text-white/60 hover:bg-white/20 border border-white/15' 
                       : 'bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/30 border border-[hsl(var(--accent-green))]/30'
                     }`}
-                    disabled={locked}
                   >
-                    {locked ? 'Suscripción Requerida' : (
+                    {locked ? 'Activar mi plan' : (
                       <span className="flex items-center gap-2">
                         Ver {card.title.replace('Mi ', '').replace('Mis ', '')} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </span>
