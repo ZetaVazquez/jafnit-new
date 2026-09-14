@@ -118,19 +118,10 @@ const Header: React.FC<HeaderProps> = ({
     setIsMenuOpen(false);
   };
 
+  // Abrimos siempre el mismo modal de acceso/creación de cuenta (AuthModal).
   const handleLoginClick = () => {
-    setShowLoginModal(true);
-    setIsMenuOpen(false);
-  };
-
-  const handleLoginModalClose = () => {
-    setShowLoginModal(false);
-  };
-
-  const handleLoginSubmit = (email: string, password: string) => {
-    console.log('Login attempt:', { email, password });
     onLogin();
-    setShowLoginModal(false);
+    setIsMenuOpen(false);
   };
 
   const handleChatWithTrainer = () => {

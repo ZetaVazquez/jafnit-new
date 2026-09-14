@@ -149,10 +149,11 @@ const Index = () => {
     setShowAuthModal(false);
   };
 
-  const handleAuthSuccess = () => {
+  const handleAuthSuccess = (mode: 'login' | 'register' = 'login') => {
     setShowAuthModal(false);
-    // Si venía de contratar un programa, le mostramos el modal de planes para pagar.
-    if (pendingPlanId) {
+    // Al crear cuenta el usuario ya queda logueado como cliente inactivo:
+    // le mostramos directamente el modal de programas para que pague.
+    if (mode === 'register' || pendingPlanId) {
       setShowPlanModal(true);
     } else {
       setShowClientForm(true);
@@ -333,7 +334,7 @@ const Index = () => {
         <AuthModal
           isOpen={showAuthModal}
           onClose={handleAuthModalClose}
-          onSuccess={handleAuthSuccess}
+          onSuccess={(mode) => handleAuthSuccess(mode)}
           initialTab={authModalTab}
         />
         <BMICalculatorModal

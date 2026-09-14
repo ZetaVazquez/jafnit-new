@@ -34,7 +34,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
     confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   
