@@ -9,15 +9,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import ForcedPaymentModal from './ForcedPaymentModal';
 import TermsModal from './TermsModal';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: 'login' | 'register';
-  onSuccess?: () => void;
-  onRegistrationSuccess?: () => void;
+  /** Se invoca tras iniciar sesión o tras crear la cuenta (ya con sesión iniciada). */
+  onSuccess?: (mode: 'login' | 'register') => void;
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ 
@@ -25,7 +24,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
   onClose, 
   initialTab = 'login',
   onSuccess,
-  onRegistrationSuccess 
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [showPassword, setShowPassword] = useState(false);
