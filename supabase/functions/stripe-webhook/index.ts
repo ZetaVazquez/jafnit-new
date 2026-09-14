@@ -38,7 +38,22 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ received: true }), { status: 200 });
   }
 
-  const session = event.data.object as Stripe.Checkout.Session;
+  let session = event.data.object as Stripe.Checkout.Session;
+
+  // Si no hay secreto de firma configurado, comprobamos la sesión directamente
+  // contra Stripe para no fiarnos del cuerpo recibido.
+  if (!webhookSecret) {
+    try {
+      session = await stripe.checkout.sessions.retrieve(session.id);
+    } catch (err) {
+      console.error('Sesión no verificable en Stripe', err);
+      return new Response('unverified session', { status: 400 });
+    }
+    if (session.payment_status !== 'paid') {
+      return new Response(JSON.stringify({ received: true, paid: false }), { status: 200 });
+    }
+  }
+
   const userId = session.client_reference_id;
   const amount = session.amount_total ?? 0;
 
