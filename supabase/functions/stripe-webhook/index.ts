@@ -81,6 +81,16 @@ Deno.serve(async (req) => {
     amount: amount / 100,
   });
 
+  // 23505 = ya existe una suscripción activa (la creó check-subscription).
+  if (error && error.code === '23505') {
+    await admin
+      .from('subscriptions')
+      .update({ plan_type: mapped.plan, end_date: end.toISOString(), payment_method: 'stripe' })
+      .eq('user_id', userId)
+      .eq('status', 'active');
+    return new Response(JSON.stringify({ received: true, linked: true }), { status: 200 });
+  }
+
   if (error) {
     console.error('No se pudo activar la suscripción', error);
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
