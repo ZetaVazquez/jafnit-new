@@ -15,6 +15,8 @@ interface PlanRecommendationModalProps {
   onDecideLater: () => void;
   recommendedPlan: PlanId;
   fromQuestionnaire?: boolean;
+  /** Si es false, al cerrar no se redirige a la portada (uso dentro del panel). */
+  redirectOnClose?: boolean;
 }
 
 const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
@@ -22,7 +24,8 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
   onClose,
   onDecideLater,
   recommendedPlan,
-  fromQuestionnaire = false
+  fromQuestionnaire = false,
+  redirectOnClose = true
 }) => {
   const [selectedPlan, setSelectedPlan] = useState<PlanId>(recommendedPlan);
   const { user } = useAuth();
