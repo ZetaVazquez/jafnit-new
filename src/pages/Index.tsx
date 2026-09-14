@@ -46,6 +46,7 @@ const Index = () => {
   const [showAboutDetailModal, setShowAboutDetailModal] = useState(false);
   const [showCoach, setShowCoach] = useState(false);
   const [checkoutPlanId, setCheckoutPlanId] = useState<string | null>(null);
+  const [pendingPlanId, setPendingPlanId] = useState<string | null>(null);
   const { user, isAdmin, signOut, hasActiveSubscription } = useAuth();
 
   // Al volver del pago de Stripe abrimos directamente el panel del cliente.
