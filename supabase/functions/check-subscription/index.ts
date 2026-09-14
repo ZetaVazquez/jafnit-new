@@ -172,7 +172,8 @@ serve(async (req) => {
           })
           .eq("id", existing.id);
       } else {
-        await supabaseClient.from("subscriptions").insert({
+        // El índice único evita duplicados si varias llamadas coinciden.
+        const { error: insertError } = await supabaseClient.from("subscriptions").insert({
           user_id: user.id,
           plan_type: subscriptionTier,
           status: "active",
@@ -181,6 +182,9 @@ serve(async (req) => {
           payment_method: "stripe",
           amount: (subscription.items.data[0].price.unit_amount ?? 0) / 100,
         });
+        if (insertError && insertError.code !== "23505") {
+          logStep("ERROR mirroring subscription", { message: insertError.message });
+        }
       }
       logStep("Subscription mirrored into subscriptions table");
 
