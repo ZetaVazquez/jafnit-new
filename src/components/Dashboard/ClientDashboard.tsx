@@ -177,11 +177,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
 
   const handlePremiumView = (view: string) => {
     if (!hasActiveSubscription) {
-      toast({
-        title: "Suscripción requerida",
-        description: "Esta función está disponible solo para usuarios con suscripción activa",
-        variant: "destructive"
-      });
+      setShowPlansModal(true);
       return;
     }
     setCurrentView(view);
