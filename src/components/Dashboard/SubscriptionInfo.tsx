@@ -21,6 +21,11 @@ const SubscriptionInfo: React.FC = () => {
     setPortalLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('customer-portal');
+      if (data?.no_customer) {
+        // Nunca ha pagado: le mostramos los planes en vez de un error.
+        setShowPlansModal(true);
+        return;
+      }
       if (error || !data?.url) {
         toast({
           title: 'No se pudo abrir la gestión',
