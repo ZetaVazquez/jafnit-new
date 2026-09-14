@@ -68,6 +68,7 @@ Deno.serve(async (req) => {
       subscription_data: { metadata: { user_id: user.id, plan_id: planId } },
       metadata: { user_id: user.id, plan_id: planId },
       allow_promotion_codes: true,
+      locale: "es",
     });
 
     log("session created", { id: session.id });
