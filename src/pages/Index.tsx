@@ -156,7 +156,8 @@ const Index = () => {
     if (mode === 'register' || pendingPlanId) {
       setShowPlanModal(true);
     } else {
-      setShowClientForm(true);
+      // Al iniciar sesión vamos directamente al panel (cliente o admin).
+      setShowDashboard(true);
     }
   };
 
