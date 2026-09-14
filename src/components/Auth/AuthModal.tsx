@@ -69,7 +69,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
           description: "Has iniciado sesión correctamente.",
         });
         onClose();
-        onSuccess?.();
+        onSuccess?.('login');
       }
     } catch (error) {
       toast({
@@ -149,13 +149,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
         }
         
         toast({
-          title: "¡Registro exitoso!",
-          description: "Tu cuenta ha sido creada correctamente.",
+          title: "¡Cuenta creada!",
+          description: "Ya has iniciado sesión. Elige tu programa para activarla.",
         });
         onClose();
-        // Mostrar modal de pago forzoso después del registro
-        setShowPaymentModal(true);
-        onRegistrationSuccess?.();
+        onSuccess?.('register');
       }
     } catch (error) {
       toast({
