@@ -170,24 +170,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
     setActiveTab(initialTab);
   }, [initialTab]);
 
-  const handlePaymentCompleted = () => {
-    setShowPaymentModal(false);
-    onSuccess?.();
-  };
-
-  const handleAccountClosure = () => {
-    setShowPaymentModal(false);
-    // El usuario será redirigido al inicio automáticamente por el signOut
-  };
-
   return (
     <>
-      <ForcedPaymentModal
-        isOpen={showPaymentModal}
-        onPaymentCompleted={handlePaymentCompleted}
-        onAccountClosure={handleAccountClosure}
-      />
-      
       <TermsModal
         isOpen={showTermsModal}
         onClose={() => setShowTermsModal(false)}
