@@ -54,7 +54,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={() => { onClose(); window.location.href = '/'; }}>
+      <Dialog open={isOpen} onOpenChange={() => { onClose(); if (redirectOnClose) window.location.href = '/'; }}>
         <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto bg-[hsl(220,20%,8%)] border-white/10 text-white">
           <div className="relative z-10">
             <DialogHeader className="mb-6">
@@ -128,7 +128,7 @@ const PlanRecommendationModal: React.FC<PlanRecommendationModalProps> = ({
                   variant="outline"
                   onClick={() => {
                     onDecideLater();
-                    window.location.href = '/';
+                    if (redirectOnClose) window.location.href = '/';
                   }}
                   className="px-8 py-2 bg-transparent border-white/20 text-white/70 hover:bg-white/10 hover:text-white"
                 >
