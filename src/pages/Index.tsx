@@ -151,13 +151,23 @@ const Index = () => {
 
   const handleAuthSuccess = () => {
     setShowAuthModal(false);
-    setShowClientForm(true);
+    // Si venía de contratar un programa, le mostramos el modal de planes para pagar.
+    if (pendingPlanId) {
+      setShowPlanModal(true);
+    } else {
+      setShowClientForm(true);
+    }
   };
 
-  // Al elegir un programa se abre el registro previo al pago (datos del paso 7)
-  // y, al terminar, se envía al pago de Stripe ya asociado al usuario.
+  // Al elegir un programa: si hay sesión se abre directamente el modal de planes
+  // para pagar; si no, se pide iniciar sesión (o crear cuenta) primero.
   const handleStartRegistration = (planId: string) => {
-    setCheckoutPlanId(planId);
+    setPendingPlanId(planId);
+    if (user) {
+      setShowPlanModal(true);
+    } else {
+      setCheckoutPlanId(planId);
+    }
   };
 
   const handleOpenProgramModal = (programId: string) => {
