@@ -11,6 +11,8 @@ const PROTECTED_EMAILS = [
   "josefiguenu@gmail.com",
   "consultajafn@gmail.com",
   "zaiidav347@gmail.com",
+  "zaidav347@gmail.com",
+  "zaida.colorderosa@gmail.com",
 ];
 
 const TABLES = [
