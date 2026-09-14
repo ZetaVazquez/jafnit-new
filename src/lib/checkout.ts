@@ -29,7 +29,23 @@ export const openStripeCheckout = async (
       return false;
     }
 
-    window.location.href = data.url as string;
+    const url = data.url as string;
+    const inIframe = window.self !== window.top;
+
+    if (inIframe) {
+      // Stripe Checkout no se puede mostrar dentro de un iframe (preview):
+      // se abre en una pestaña nueva.
+      const win = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!win) {
+        try {
+          (window.top as Window).location.href = url;
+        } catch {
+          window.location.href = url;
+        }
+      }
+    } else {
+      window.location.href = url;
+    }
     return true;
   } catch (err) {
     console.error(err);
