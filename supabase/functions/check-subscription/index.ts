@@ -153,6 +153,37 @@ serve(async (req) => {
         updated_at: new Date().toISOString(),
       }, { onConflict: 'user_id' });
 
+      // Reflejamos la suscripción en la tabla principal que usa la app para
+      // dar acceso (evita depender únicamente del webhook de Stripe).
+      const { data: existing } = await supabaseClient
+        .from("subscriptions")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .maybeSingle();
+
+      if (existing) {
+        await supabaseClient
+          .from("subscriptions")
+          .update({
+            plan_type: subscriptionTier,
+            end_date: subscriptionEnd,
+            payment_method: "stripe",
+          })
+          .eq("id", existing.id);
+      } else {
+        await supabaseClient.from("subscriptions").insert({
+          user_id: user.id,
+          plan_type: subscriptionTier,
+          status: "active",
+          start_date: new Date(subscription.current_period_start * 1000).toISOString(),
+          end_date: subscriptionEnd,
+          payment_method: "stripe",
+          amount: (subscription.items.data[0].price.unit_amount ?? 0) / 100,
+        });
+      }
+      logStep("Subscription mirrored into subscriptions table");
+
     } else {
       // Check for completed one-time payments (basic plan)
       const completedSessions = sessions.data.filter(s => s.payment_status === 'paid' && s.mode === 'payment');
