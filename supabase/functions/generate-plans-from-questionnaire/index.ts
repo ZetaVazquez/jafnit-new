@@ -381,7 +381,7 @@ REGLAS:
       meal_plan: {
         duration: durationKey, duration_label: durationConfig.label,
         days: enrichedDays, is_generic: isGeneric,
-        targets, created_meals_count: createdCount,
+        targets, meal_targets: perMeal, created_meals_count: createdCount,
       }
     });
     if (error) throw error;
