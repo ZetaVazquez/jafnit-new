@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { computeTargets, genericTargets } from "../_shared/nutrition.ts";
+import { computeTargets, computeTargetsFromLegacy, genericTargets, mealTargets } from "../_shared/nutrition.ts";
 import { computeMealFromIngredients, normalize as normName } from "../_shared/bedca.ts";
 
 const corsHeaders = {
@@ -179,12 +179,34 @@ IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s)
 
     // DIET
     // Compute clinical targets from the questionnaire (Mifflin-St Jeor)
-    const targets = isGeneric ? genericTargets() : (computeTargets(initial) || genericTargets());
+    const targets = isGeneric
+      ? genericTargets()
+      : (computeTargets(initial) || computeTargetsFromLegacy(questionnaire, clientForm) || genericTargets());
+    const perMeal = mealTargets(targets);
+    const perMealBlock = perMeal.map(m =>
+      `- ${m.label} (${m.meal_type}): ${m.kcal} kcal | ${m.protein_g} g proteína | ${m.carbs_g} g hidratos | ${m.fats_g} g grasas`
+    ).join("\n");
+
+    // Antropometría y objetivos explícitos para la IA
+    const b8 = (initial as any)?.block_8_anthropometry ?? {};
+    const b1 = (initial as any)?.block_1_identification ?? {};
+    const clientMetrics = [
+      `Peso: ${targets.weight_kg} kg`,
+      `Altura: ${targets.height_cm} cm`,
+      `Edad: ${targets.age}`,
+      `Sexo: ${targets.gender === "female" ? "mujer" : "hombre"}`,
+      b8.body_fat ? `% graso: ${b8.body_fat}` : null,
+      b8.waist ? `Cintura: ${b8.waist} cm` : null,
+      b1.main_objective ? `Objetivo principal: ${b1.main_objective}` : null,
+      b1.real_priority ? `Prioridad real: ${b1.real_priority}` : null,
+    ].filter(Boolean).join(" | ");
 
     const { data: meals } = await admin.from("meals_library").select("id, name, meal_type, calories, protein_g, carbs_g, fats_g, diet_tags");
-    const mealsList = (meals || []).map(m => `- [${m.id}] ${m.name} (${m.meal_type}, ${m.calories ?? "?"} kcal)`).join("\n");
+    const mealsList = (meals || []).map(m => `- [${m.id}] ${m.name} (${m.meal_type}, ${m.calories ?? "?"} kcal, ${m.protein_g ?? "?"}P/${m.carbs_g ?? "?"}C/${m.fats_g ?? "?"}F por ración)`).join("\n");
 
     const systemPrompt = `Eres un nutricionista del método JAFN. Genera un plan de dieta calculado para los OBJETIVOS NUTRICIONALES CLÍNICOS dados (NO los inventes).
+
+MEDICIONES Y OBJETIVO DEL CLIENTE: ${clientMetrics}
 
 OBJETIVOS DIARIOS OBLIGATORIOS (basados en Mifflin-St Jeor):
 - Calorías: ${targets.kcal} kcal/día (±10%)
@@ -193,14 +215,19 @@ OBJETIVOS DIARIOS OBLIGATORIOS (basados en Mifflin-St Jeor):
 - Grasas: ${targets.fats_g} g
 - Objetivo: ${targets.goal} | TMB: ${targets.bmr} | GET: ${targets.tdee} | Actividad: ${targets.activity_factor}
 
+OBJETIVOS POR COMIDA (cada una de las 2 opciones de esa comida debe cumplirlos por separado, ±10%):
+${perMealBlock}
+
 REGLAS:
 - El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) en este orden: ${durationConfig.days.join(", ")}.
-- Cada día EXACTAMENTE 2 opciones por tipo (breakfast, lunch, snack, dinner) = 8 entradas/día. Nunca repitas comida dentro del mismo tipo y día.
-- Puedes usar comidas existentes de la biblioteca (por meal_id) O crear nuevas (new_meal) si crees que conviene. Una entrada lleva meal_id O new_meal, NUNCA ambos.
-- Para new_meal indica ingredientes en gramos REALES en español estándar (ej: "pechuga de pollo", "arroz integral cocido", "aceite de oliva"). Los macros se calcularán automáticamente desde la base de datos española BEDCA, NO los inventes tú.
-- Cuando uses meal_id existente, rellena "quantity" en gramos/unidades para ajustar la ración a los objetivos del cliente.
-- "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones del cuestionario.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}${instructionsBlock}`;
-    const userPrompt = `Datos del cliente:\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día, ajustadas a ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F.`;
+- Cada día EXACTAMENTE 2 opciones por tipo (breakfast, lunch, snack, dinner) = 8 entradas/día. Las 2 opciones de un mismo tipo son INTERCAMBIABLES: deben aportar las MISMAS calorías y macros objetivo de esa comida (±10%), para que el cliente elija la que prefiera. Nunca repitas el mismo plato dentro del mismo tipo y día.
+- Puedes usar comidas existentes de la biblioteca (por meal_id) O crear nuevas (new_meal). Una entrada lleva meal_id O new_meal, NUNCA ambos.
+- PREFIERE new_meal cuando la ración de la biblioteca no encaje con las kcal objetivo de esa comida: así los gramos quedan exactos.
+- Para new_meal indica ingredientes con GRAMOS EXACTOS en español estándar (ej: "pechuga de pollo", "arroz integral cocido", "aceite de oliva"), ajustando los gramos hasta cuadrar las kcal y macros de esa comida. Los macros se calculan automáticamente desde la base de datos española BEDCA, NO los inventes tú.
+- Cuando uses meal_id existente, rellena "quantity" SIEMPRE con gramos concretos (ej: "180 g") para escalar la ración a las kcal objetivo de esa comida.
+- Rellena "target_kcal" con las kcal objetivo de esa comida.
+- "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones y patologías del cuestionario de 7 bloques.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}${instructionsBlock}`;
+    const userPrompt = `Datos del cliente (cuestionario de bloques, evaluación inicial y ficha):\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día (2 opciones equivalentes por comida), total diario ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F y con gramos exactos por ingrediente.`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -231,7 +258,8 @@ REGLAS:
                           type: "object",
                           properties: {
                             meal_id: { type: "string", description: "ID existente de biblioteca; vacío si new_meal" },
-                            quantity: { type: "string", description: "Cantidad en g/ml/unid para meal_id existente" },
+                            quantity: { type: "string", description: "Cantidad en gramos concretos (ej: '180 g') para meal_id existente" },
+                            target_kcal: { type: "number", description: "Kcal objetivo de esta comida para el cliente" },
                             notes: { type: "string" },
                             new_meal: {
                               type: "object",
@@ -336,6 +364,8 @@ REGLAS:
           meal_id: lib.id, name: lib.name, meal_type: lib.meal_type, image_url: lib.image_url,
           calories: lib.calories, protein_g: lib.protein_g, carbs_g: lib.carbs_g, fats_g: lib.fats_g,
           quantity: m.quantity || "1 ración", notes: m.notes || "",
+          target_kcal: m.target_kcal ?? perMeal.find(p => p.meal_type === lib.meal_type)?.kcal ?? null,
+          option: dayMeals.filter((x: any) => x.meal_type === lib.meal_type).length + 1,
         });
       }
       if (dayMeals.length > 0) enrichedDaysRaw.push({ day: d.day, meals: dayMeals });
@@ -351,7 +381,7 @@ REGLAS:
       meal_plan: {
         duration: durationKey, duration_label: durationConfig.label,
         days: enrichedDays, is_generic: isGeneric,
-        targets, created_meals_count: createdCount,
+        targets, meal_targets: perMeal, created_meals_count: createdCount,
       }
     });
     if (error) throw error;
