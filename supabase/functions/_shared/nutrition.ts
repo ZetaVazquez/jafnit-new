@@ -92,6 +92,84 @@ export function computeTargets(initial: Record<string, any> | null): Targets | n
   };
 }
 
+// Fallback: derive targets from older questionnaire / client form data
+export function computeTargetsFromLegacy(
+  questionnaire: Record<string, any> | null,
+  clientForm: Record<string, any> | null,
+): Targets | null {
+  const weight = num(questionnaire?.weight) ?? num(clientForm?.initial_weight);
+  const height = num(questionnaire?.height) ?? num(clientForm?.height_cm);
+  const age = num(questionnaire?.age) ?? num(clientForm?.age);
+  if (!weight || !height || !age) return null;
+
+  const gender = detectGender(clientForm?.gender);
+  const bmr = gender === "male"
+    ? 10 * weight + 6.25 * height - 5 * age + 5
+    : 10 * weight + 6.25 * height - 5 * age - 161;
+
+  const actText = String(
+    questionnaire?.activity_level ?? clientForm?.daily_activity_level ?? "",
+  ).toLowerCase();
+  let af = 1.375;
+  if (/sedent|bajo|baja/.test(actText)) af = 1.2;
+  else if (/moder/.test(actText)) af = 1.55;
+  else if (/alto|alta|muy activ/.test(actText)) af = 1.725;
+
+  const goalText = String(
+    questionnaire?.health_goals ?? clientForm?.main_objective ?? "",
+  ).toLowerCase();
+  const goal: Targets["goal"] = /(adelgaz|perder|grasa|definici|bajar)/.test(goalText)
+    ? "deficit"
+    : /(volumen|ganar|masa|hipertrofi|aumentar)/.test(goalText)
+    ? "bulk"
+    : "maintenance";
+
+  const tdee = bmr * af;
+  let kcal = tdee;
+  if (goal === "deficit") kcal = Math.max(tdee - 400, bmr * 1.1, gender === "female" ? 1200 : 1500);
+  else if (goal === "bulk") kcal = tdee + 300;
+
+  const proteinPerKg = goal === "deficit" ? 1.8 : goal === "bulk" ? 2.0 : 1.6;
+  const protein_g = Math.round(proteinPerKg * weight);
+  const fats_g = Math.max(Math.round((kcal * 0.25) / 9), Math.round(0.8 * weight));
+  const carbs_g = Math.max(Math.round((kcal - (protein_g * 4 + fats_g * 9)) / 4), 50);
+
+  return {
+    kcal: Math.round(kcal), protein_g, carbs_g, fats_g,
+    bmr: Math.round(bmr), tdee: Math.round(tdee),
+    goal, weight_kg: weight, height_cm: height, age, gender,
+    activity_factor: af, is_estimated: true,
+    notes: ["Calculado con datos del cuestionario inicial/ficha (Mifflin-St Jeor)"],
+  };
+}
+
+export interface MealTarget {
+  meal_type: "breakfast" | "lunch" | "snack" | "dinner";
+  label: string;
+  share: number;
+  kcal: number;
+  protein_g: number;
+  carbs_g: number;
+  fats_g: number;
+}
+
+// Distribución por comida (ajustada a 4 tomas/día)
+export function mealTargets(t: Targets): MealTarget[] {
+  const dist: Array<[MealTarget["meal_type"], string, number]> = [
+    ["breakfast", "Desayuno", 0.25],
+    ["lunch", "Comida", 0.35],
+    ["snack", "Merienda/Snack", 0.10],
+    ["dinner", "Cena", 0.30],
+  ];
+  return dist.map(([meal_type, label, share]) => ({
+    meal_type, label, share,
+    kcal: Math.round(t.kcal * share),
+    protein_g: Math.round(t.protein_g * share),
+    carbs_g: Math.round(t.carbs_g * share),
+    fats_g: Math.round(t.fats_g * share),
+  }));
+}
+
 export function genericTargets(): Targets {
   return {
     kcal: 2000, protein_g: 120, carbs_g: 225, fats_g: 67,
