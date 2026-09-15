@@ -364,6 +364,8 @@ REGLAS:
           meal_id: lib.id, name: lib.name, meal_type: lib.meal_type, image_url: lib.image_url,
           calories: lib.calories, protein_g: lib.protein_g, carbs_g: lib.carbs_g, fats_g: lib.fats_g,
           quantity: m.quantity || "1 ración", notes: m.notes || "",
+          target_kcal: m.target_kcal ?? perMeal.find(p => p.meal_type === lib.meal_type)?.kcal ?? null,
+          option: dayMeals.filter((x: any) => x.meal_type === lib.meal_type).length + 1,
         });
       }
       if (dayMeals.length > 0) enrichedDaysRaw.push({ day: d.day, meals: dayMeals });
