@@ -258,7 +258,8 @@ REGLAS:
                           type: "object",
                           properties: {
                             meal_id: { type: "string", description: "ID existente de biblioteca; vacío si new_meal" },
-                            quantity: { type: "string", description: "Cantidad en g/ml/unid para meal_id existente" },
+                            quantity: { type: "string", description: "Cantidad en gramos concretos (ej: '180 g') para meal_id existente" },
+                            target_kcal: { type: "number", description: "Kcal objetivo de esta comida para el cliente" },
                             notes: { type: "string" },
                             new_meal: {
                               type: "object",
