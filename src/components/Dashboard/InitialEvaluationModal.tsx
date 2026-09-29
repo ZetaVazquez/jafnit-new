@@ -417,8 +417,13 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
     toast.success('¡Evaluación completada!', {
       id: loadingToastId,
-      description: 'Gracias por completar tu evaluación inicial.',
+      description: 'Estamos preparando tu dieta personalizada. Tu entrenador la revisará y la verás en "Mi Plan Nutricional" cuando la apruebe.',
+      duration: 8000,
     });
+    // Genera la dieta en segundo plano (queda pendiente de aprobación del admin).
+    supabase.functions
+      .invoke('generate-plans-from-questionnaire', { body: { self_request: true, type: 'diet' } })
+      .then(({ error }) => { if (error) console.error('Diet generation failed', error); });
     onComplete();
   };
 
@@ -750,7 +755,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             {!isLast ? (
               <Button onClick={handleSaveAndContinue} disabled={loading} className="btn-cta">
                 {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                {loading ? 'Guardando...' : 'Guardar y continuar'}
+                {loading ? 'Guardando...' : 'Continuar'}
               </Button>
             ) : (
               <>
@@ -765,7 +770,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
                 </Button>
                 <Button onClick={handleFinish} disabled={loading} className="btn-cta">
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle2 className="w-4 h-4 mr-2" />}
-                  {loading ? 'Finalizando...' : 'Finalizar evaluación'}
+                  {loading ? 'Finalizando...' : 'Finalizar y generar mi dieta'}
                 </Button>
               </>
             )}

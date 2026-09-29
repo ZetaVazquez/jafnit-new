@@ -15,6 +15,13 @@
       "when": 1789405778028,
       "tag": "0001_unique_active_subscription_per_user",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790693040084,
+      "tag": "0002_clients_see_only_approved_plans",
+      "breakpoints": true
     }
   ]
 }

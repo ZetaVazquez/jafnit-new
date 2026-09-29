@@ -26,9 +26,22 @@ Deno.serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
     const { data: roleData } = await admin.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
-    if (!roleData) return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const body = await req.json();
+    let { user_id, type, duration, instructions } = body;
 
-    const { user_id, type, duration, instructions } = await req.json();
+    // Cliente: puede pedir UNA dieta propia al terminar el cuestionario de 7 bloques.
+    // Queda en borrador hasta que un admin la apruebe.
+    let selfRequest = false;
+    if (!roleData) {
+      if (body.self_request !== true) return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      const { data: ev } = await admin.from("initial_evaluations").select("completed").eq("user_id", user.id).maybeSingle();
+      if (!ev?.completed) return new Response(JSON.stringify({ error: "Completa el cuestionario primero" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      const { count } = await admin.from("diet_plans").select("id", { count: "exact", head: true }).eq("assigned_to", user.id).eq("generated_by_ai", true);
+      if ((count ?? 0) > 0) return new Response(JSON.stringify({ success: true, already: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      user_id = user.id; type = "diet"; duration = "1_week"; instructions = "";
+      selfRequest = true;
+    }
+
     const adminInstructions = typeof instructions === "string" ? instructions.trim().slice(0, 3000) : "";
     const instructionsBlock = adminInstructions
       ? `\n\nPAUTAS OBLIGATORIAS DEL ADMINISTRADOR (tienen PRIORIDAD sobre cualquier otra preferencia, salvo alergias/intolerancias del cliente):\n${adminInstructions}`
@@ -395,6 +408,22 @@ REGLAS:
       }
     });
     if (error) throw error;
+
+    if (selfRequest) {
+      try {
+        const { data: admins } = await admin.from("user_roles").select("user_id").eq("role", "admin");
+        const who = profile ? `${profile.name || "Cliente"} (${profile.email})` : user_id;
+        if (admins?.length) {
+          await admin.from("user_notifications").upsert(admins.map((a: any) => ({
+            user_id: a.user_id,
+            type: "admin_diet_review",
+            title: "🥗 Dieta pendiente de aprobar",
+            message: `${who} ha completado el cuestionario de 7 bloques. Su dieta generada por IA espera tu aprobación en Dietas.`,
+            dedupe_key: `diet_review:${user_id}`,
+          })), { onConflict: "user_id,dedupe_key", ignoreDuplicates: true });
+        }
+      } catch (e) { console.error("notify diet review failed", e); }
+    }
 
     return new Response(JSON.stringify({ success: true, targets, created_meals_count: createdCount }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e: any) {
