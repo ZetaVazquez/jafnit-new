@@ -88,6 +88,9 @@ const AdminQuestionnaireResponses: React.FC<AdminQuestionnaireResponsesProps> = 
         <p className="text-white/50 mt-2">
           Selecciona un cliente para ver los bloques completados al 100%. Los bloques incompletos no se muestran hasta que el cliente los finalice.
         </p>
+        <p className="text-white/70 mt-2 text-sm">
+          <span className="text-[hsl(var(--accent-green-light))] font-semibold">{clients.filter(c => c.evaluation.completed).length}</span> completados · {clients.filter(c => !c.evaluation.completed).length} en curso
+        </p>
       </div>
 
       {clients.length === 0 ? (
@@ -114,12 +117,16 @@ const AdminQuestionnaireResponses: React.FC<AdminQuestionnaireResponsesProps> = 
                   </p>
                 </div>
               </div>
-              <div className="mt-4 flex items-center justify-between">
-                <Badge className="bg-[hsl(var(--accent-green-light)/0.15)] text-[hsl(var(--accent-green-light))] border border-[hsl(var(--accent-green-light)/0.3)] hover:bg-[hsl(var(--accent-green-light)/0.2)]">
-                  <CheckCircle2 className="w-3 h-3 mr-1" />
-                  {c.completedBlocks}/{EVALUATION_BLOCKS.length} bloques al 100%
-                </Badge>
-                <span className="text-xs text-white/40">{c.overallPercent}% total</span>
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                {c.evaluation.completed ? (
+                  <Badge className="bg-[hsl(var(--accent-green-light))] text-black border-0">
+                    <CheckCircle2 className="w-3 h-3 mr-1" />
+                    Completado{c.evaluation.completed_at ? ` · ${new Date(c.evaluation.completed_at).toLocaleDateString('es-ES')}` : ''}
+                  </Badge>
+                ) : (
+                  <Badge className="bg-white/10 text-white/70 border border-white/20">En curso</Badge>
+                )}
+                <span className="text-xs text-white/40 ml-auto">{c.completedBlocks}/{EVALUATION_BLOCKS.length} bloques · {c.overallPercent}%</span>
               </div>
             </button>
           ))}
