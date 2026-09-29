@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { notifyAdminsOfPayment } from "../_shared/notifyAdmins.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -184,6 +185,13 @@ serve(async (req) => {
         });
         if (insertError && insertError.code !== "23505") {
           logStep("ERROR mirroring subscription", { message: insertError.message });
+        }
+        if (!insertError) {
+          await notifyAdminsOfPayment(supabaseClient, {
+            userId: user.id, plan: subscriptionTier,
+            amount: (subscription.items.data[0].price.unit_amount ?? 0) / 100,
+            ref: subscription.id,
+          });
         }
       }
       logStep("Subscription mirrored into subscriptions table");
