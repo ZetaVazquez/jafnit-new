@@ -2,6 +2,7 @@
 // El pago llega asociado al usuario mediante `client_reference_id`.
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import { notifyAdminsOfPayment } from '../_shared/notifyAdmins.ts';
 
 const PLAN_BY_AMOUNT: Record<number, { plan: string; days: number }> = {
   2900: { plan: 'explorador', days: 30 },
