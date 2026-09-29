@@ -226,6 +226,7 @@ REGLAS:
 - Para new_meal indica ingredientes con GRAMOS EXACTOS en español estándar (ej: "pechuga de pollo", "arroz integral cocido", "aceite de oliva"), ajustando los gramos hasta cuadrar las kcal y macros de esa comida. Los macros se calculan automáticamente desde la base de datos española BEDCA, NO los inventes tú.
 - Cuando uses meal_id existente, rellena "quantity" SIEMPRE con gramos concretos (ej: "180 g") para escalar la ración a las kcal objetivo de esa comida.
 - Rellena "target_kcal" con las kcal objetivo de esa comida.
+- MEDIDAS CASERAS OBLIGATORIAS: cada ingrediente de new_meal lleva "household" con una medida fácil (ej: 2 huevos, 1 taza de arroz cocido, 1 cucharada de aceite, 1 pieza mediana de fruta, 1 rebanada de pan, 1 puñado de frutos secos). Para meal_id rellena "household_quantity".
 - "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones y patologías del cuestionario de 7 bloques.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}${instructionsBlock}`;
     const userPrompt = `Datos del cliente (cuestionario de bloques, evaluación inicial y ficha):\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día (2 opciones equivalentes por comida), total diario ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F y con gramos exactos por ingrediente.`;
 
@@ -259,6 +260,7 @@ REGLAS:
                           properties: {
                             meal_id: { type: "string", description: "ID existente de biblioteca; vacío si new_meal" },
                             quantity: { type: "string", description: "Cantidad en gramos concretos (ej: '180 g') para meal_id existente" },
+                            household_quantity: { type: "string", description: "Equivalente en medida casera de la cantidad (ej: '1 plato hondo', '2 piezas', '1 taza')" },
                             target_kcal: { type: "number", description: "Kcal objetivo de esta comida para el cliente" },
                             notes: { type: "string" },
                             new_meal: {
@@ -274,9 +276,10 @@ REGLAS:
                                     type: "object",
                                     properties: {
                                       ingredient_name: { type: "string" },
-                                      grams: { type: "number" }
+                                      grams: { type: "number" },
+                                      household: { type: "string", description: "Medida casera fácil: '2 huevos', '1 taza', '1 cucharada', '1 pieza mediana', '1 puñado'" }
                                     },
-                                    required: ["ingredient_name", "grams"]
+                                    required: ["ingredient_name", "grams", "household"]
                                   }
                                 },
                                 diet_tags: { type: "array", items: { type: "string" } }
