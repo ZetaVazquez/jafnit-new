@@ -81,6 +81,11 @@ Deno.serve(async (req) => {
     amount: amount / 100,
   });
 
+  await notifyAdminsOfPayment(admin, {
+    userId, plan: mapped.plan, amount: amount / 100,
+    ref: String(session.subscription || session.id),
+  });
+
   // 23505 = ya existe una suscripción activa (la creó check-subscription).
   if (error && error.code === '23505') {
     await admin

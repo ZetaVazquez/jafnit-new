@@ -185,6 +185,13 @@ serve(async (req) => {
         if (insertError && insertError.code !== "23505") {
           logStep("ERROR mirroring subscription", { message: insertError.message });
         }
+        if (!insertError) {
+          await notifyAdminsOfPayment(supabaseClient, {
+            userId: user.id, plan: subscriptionTier,
+            amount: (subscription.items.data[0].price.unit_amount ?? 0) / 100,
+            ref: subscription.id,
+          });
+        }
       }
       logStep("Subscription mirrored into subscriptions table");
 
