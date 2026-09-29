@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ArrowLeft, Search, Plus, Edit, Trash2, ChevronDown, ChevronUp, Calendar, Sparkles, X, Check, Clock, Loader2, Image as ImageIcon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import AdminDietRequests from './AdminDietRequests';
 
 interface Client { id: string; name: string; email: string; }
 interface Meal {
@@ -39,7 +40,7 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   const [plans, setPlans] = useState<DietPlanRow[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<DietPlanRow | null>(null);
-  const [view, setView] = useState<'all' | 'drafts'>('all');
+  const [view, setView] = useState<'all' | 'drafts' | 'requests'>('all');
   const [expandedPlan, setExpandedPlan] = useState<string | null>(null);
 
   const [searchClient, setSearchClient] = useState('');
@@ -197,8 +198,11 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
           <div className="flex gap-2">
             <div className="rounded-lg border border-white/10 bg-white/5 flex">
               <button onClick={() => setView('all')} className={`px-3 py-1.5 text-sm rounded-l-lg ${view === 'all' ? 'bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))]' : 'text-white/60'}`}>Todos</button>
-              <button onClick={() => setView('drafts')} className={`px-3 py-1.5 text-sm rounded-r-lg ${view === 'drafts' ? 'bg-yellow-500/20 text-yellow-400' : 'text-white/60'}`}>
+              <button onClick={() => setView('drafts')} className={`px-3 py-1.5 text-sm ${view === 'drafts' ? 'bg-yellow-500/20 text-yellow-400' : 'text-white/60'}`}>
                 Borradores ({plans.filter(p => p.status === 'draft').length})
+              </button>
+              <button onClick={() => setView('requests')} className={`px-3 py-1.5 text-sm rounded-r-lg ${view === 'requests' ? 'bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))]' : 'text-white/60'}`}>
+                Solicitadas ({plans.filter(p => p.status === 'draft' && p.generated_by_ai).length})
               </button>
             </div>
             <Button onClick={() => { resetForm(); setShowForm(true); }} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/80 text-white">
@@ -319,7 +323,9 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
           </div>
         )}
 
-        <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+        {view === 'requests' && <AdminDietRequests onChanged={fetchPlans} />}
+
+        <div className={`rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm ${view === 'requests' ? 'hidden' : ''}`}>
           <div className="p-4 space-y-3">
             {visiblePlans.length === 0 ? (
               <p className="text-center py-8 text-white/40">No hay planes.</p>
