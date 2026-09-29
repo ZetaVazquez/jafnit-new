@@ -335,7 +335,7 @@ REGLAS:
             lib = existing;
           } else {
             const computed = await computeMealFromIngredients(admin, nm.ingredients_grams);
-            const ingredientsText = nm.ingredients_grams.map((i: any) => `${i.grams} g ${i.ingredient_name}`).join(", ");
+            const ingredientsText = nm.ingredients_grams.map((i: any) => `${i.grams} g ${i.ingredient_name}${i.household ? ` (${i.household})` : ""}`).join(", ");
             const sources = new Set(computed.ingredients_resolved.map(r => r.source));
             const source = sources.has("bedca") || sources.has("cache") ? "bedca"
               : sources.has("fallback") ? "fallback" : "estimated";
@@ -363,10 +363,17 @@ REGLAS:
         }
 
         if (!lib) continue;
+        const ingredientsDetail = Array.isArray(m.new_meal?.ingredients_grams)
+          ? m.new_meal.ingredients_grams.map((i: any) => ({ name: i.ingredient_name, grams: i.grams, household: i.household || "" }))
+          : null;
+        const qty = ingredientsDetail
+          ? `${ingredientsDetail.reduce((s: number, i: any) => s + (Number(i.grams) || 0), 0)} g`
+          : (m.quantity || "1 ración");
         dayMeals.push({
           meal_id: lib.id, name: lib.name, meal_type: lib.meal_type, image_url: lib.image_url,
           calories: lib.calories, protein_g: lib.protein_g, carbs_g: lib.carbs_g, fats_g: lib.fats_g,
-          quantity: m.quantity || "1 ración", notes: m.notes || "",
+          quantity: qty, household_quantity: m.household_quantity || "",
+          ingredients_detail: ingredientsDetail, notes: m.notes || "",
           target_kcal: m.target_kcal ?? perMeal.find(p => p.meal_type === lib.meal_type)?.kcal ?? null,
           option: dayMeals.filter((x: any) => x.meal_type === lib.meal_type).length + 1,
         });
