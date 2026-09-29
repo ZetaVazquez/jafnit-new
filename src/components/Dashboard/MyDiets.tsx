@@ -176,8 +176,11 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
             .map((m: any) => {
               const parts: string[] = [];
               if (g.items.length > 1) parts.push(`[${m.name}]`);
-              if (m.quantity) parts.push(`CANTIDAD: ${m.quantity}`);
               if (m.calories != null) parts.push(`${m.calories} kcal`);
+              if (m.quantity) parts.push(`CANTIDAD: ${m.quantity}${m.household_quantity ? ` (${m.household_quantity})` : ''}`);
+              if (Array.isArray(m.ingredients_detail) && m.ingredients_detail.length) {
+                parts.push('INGREDIENTES: ' + m.ingredients_detail.map((i: any) => `${i.household ? i.household + ' de ' : ''}${i.name} (${i.grams} g)`).join(', '));
+              }
               if (m.notes) parts.push(`PREPARACIÓN: ${m.notes}`);
               return parts.join('  ');
             })
@@ -332,11 +335,23 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                                                       )}
                                                       <div className="flex-1 min-w-0">
                                                         <div className="text-[10px] text-white/40 uppercase">Opción {mi + 1}</div>
-                                                        <div className="text-white text-sm font-medium">{m.name}</div>
+                                                        <div className="flex items-start justify-between gap-2">
+                                                          <div className="text-white text-sm font-medium">{m.name}</div>
+                                                          {m.calories != null && (
+                                                            <span className="shrink-0 rounded-full bg-[hsl(var(--accent-green))]/15 text-[hsl(var(--accent-green))] text-xs font-bold px-2 py-0.5">{m.calories} kcal</span>
+                                                          )}
+                                                        </div>
                                                         <div className="text-xs text-white/60 mt-1">
                                                           <span className="font-semibold text-[hsl(var(--accent-green))]/90">Cantidad:</span> {m.quantity}
-                                                          {m.calories != null ? ` · ${m.calories} kcal` : ''}
+                                                          {m.household_quantity ? ` (${m.household_quantity})` : ''}
                                                         </div>
+                                                        {Array.isArray(m.ingredients_detail) && m.ingredients_detail.length > 0 && (
+                                                          <ul className="text-xs text-white/70 mt-1 space-y-0.5">
+                                                            {m.ingredients_detail.map((i: any, ii: number) => (
+                                                              <li key={ii}>• {i.household ? <span className="font-semibold text-white">{i.household}</span> : null}{i.household ? ' de ' : ''}{i.name} <span className="text-white/40">({i.grams} g)</span></li>
+                                                            ))}
+                                                          </ul>
+                                                        )}
                                                         {m.notes && (
                                                           <div className="text-xs text-white/70 mt-1 leading-snug">
                                                             <span className="font-semibold text-[hsl(var(--accent-green))]/90">Preparación:</span> {m.notes}

@@ -94,6 +94,7 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     setDays(baseDays.map((day, i) => {
       const ex = existingDays.find((x: any) => x.day === day) || existingDays[i];
       return { day, meals: (ex?.meals || []).map((it: any) => ({
+        ...it,
         meal_id: it.meal_id || '', name: it.name || '', meal_type: it.meal_type || '',
         image_url: it.image_url || null,
         calories: it.calories ?? null, protein_g: it.protein_g ?? null, carbs_g: it.carbs_g ?? null, fats_g: it.fats_g ?? null,
