@@ -1551,6 +1551,29 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_reject_diet_plan: {
+        Args: { p_id: string }
+        Returns: {
+          assigned_to: string | null
+          calories_target: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          generated_by_ai: boolean
+          id: string
+          meal_plan: Json | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "diet_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       admin_update_coach_measurements: {
         Args: {
           p_activity_level: string
