@@ -249,7 +249,8 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="lg:hidden border-t border-white/10 bg-[hsl(220,20%,10%)]/98 backdrop-blur-md">
+            <div className="lg:hidden border-t border-white/10 bg-[hsl(220,20%,10%)]/98 backdrop-blur-md max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
+              <ScrollLock />
               <nav className="py-4 space-y-1">
                 {navigationItems.map((item) => (
                   <button
