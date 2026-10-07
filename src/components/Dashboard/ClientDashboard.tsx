@@ -1,4 +1,5 @@
 import TrainerChatDialog from '@/components/Contact/TrainerChatDialog';
+import TrainerChatUnreadDot from '@/components/Contact/TrainerChatUnreadDot';
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -256,7 +257,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 onClick={handleChatWithTrainer}
                 className="text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
+                <span className="relative mr-2"><MessageCircle className="w-4 h-4" /><TrainerChatUnreadDot /></span>
                 Chat
               </Button>
               <NotificationBell onNavigate={(view) => setCurrentView(view)} />

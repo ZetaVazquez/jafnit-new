@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ScrollLock } from '@/hooks/useBodyScrollLock';
 import { Button } from '@/components/ui/button';
 import TrainerChatDialog from '@/components/Contact/TrainerChatDialog';
+import TrainerChatUnreadDot from '@/components/Contact/TrainerChatUnreadDot';
 import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail, Star } from 'lucide-react';
 
 interface HeaderProps {
@@ -194,7 +195,7 @@ const Header: React.FC<HeaderProps> = ({
                     size="sm"
                     className="hidden lg:flex text-white/80 hover:text-white hover:bg-white/10"
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <span className="relative mr-2"><MessageCircle className="w-4 h-4" /><TrainerChatUnreadDot /></span>
                     Chat
                   </Button>
                   
@@ -246,7 +247,7 @@ const Header: React.FC<HeaderProps> = ({
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="lg:hidden text-white hover:bg-white/10"
               >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                <span className="relative">{isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}<TrainerChatUnreadDot /></span>
               </Button>
             </div>
           </div>
@@ -287,7 +288,7 @@ const Header: React.FC<HeaderProps> = ({
                       onClick={() => { handleChatWithTrainer(); setIsMenuOpen(false); }}
                       className="w-full btn-cta"
                     >
-                      <MessageCircle className="w-4 h-4 mr-2" />
+                      <span className="relative mr-2"><MessageCircle className="w-4 h-4" /><TrainerChatUnreadDot /></span>
                       Chat con Entrenador
                     </Button>
                     {onNavigateToDashboard && (

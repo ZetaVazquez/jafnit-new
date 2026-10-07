@@ -5,9 +5,13 @@ import { Loader2, Send, UserRound } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { readTrainerMessages, sendTrainerMessage, TrainerMessage } from '@/lib/trainerChat';
 import { supabase } from '@/integrations/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { trainerChatUnreadKey } from '@/hooks/useTrainerChatUnread';
 
 export default function TrainerChatPanel({ sessionId, onSessionId, closed = false }: { sessionId: string | null; onSessionId?: (id: string) => void; closed?: boolean }) {
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
+  const queryClient = useQueryClient();
+  const lastRead = useRef<string | null>(null);
   const [messages, setMessages] = useState<TrainerMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
@@ -36,6 +40,19 @@ export default function TrainerChatPanel({ sessionId, onSessionId, closed = fals
     return () => window.clearInterval(timer);
   }, [refresh, sessionId]);
   useEffect(() => { end.current?.scrollIntoView({ block: 'nearest', behavior: 'auto' }); }, [messages.length]);
+
+  useEffect(() => {
+    if (isAdmin || !user || document.hidden) return;
+    const latest = [...messages].reverse().find(message => message.from_admin);
+    if (!latest || lastRead.current === latest.id) return;
+    let mounted = true;
+    void supabase.rpc('mark_my_trainer_chat_read', { p_message_id: latest.id }).then(({ error }) => {
+      if (error || !mounted) return;
+      lastRead.current = latest.id;
+      void queryClient.invalidateQueries({ queryKey: trainerChatUnreadKey(user.id) });
+    });
+    return () => { mounted = false; };
+  }, [messages, isAdmin, user, queryClient]);
 
   const send = async () => {
     if (!draft.trim() || sending || closed) return;
