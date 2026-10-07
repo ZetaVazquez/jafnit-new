@@ -557,6 +557,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             )}
           </div>
         </div>
+        </div>
       </div>
     );
   }
@@ -583,13 +584,13 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   };
 
   return (
-    <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-4 overflow-hidden">
+    <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-2 sm:p-4 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(var(--accent-green))]/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[hsl(var(--accent-green))]/3 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-5xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl relative z-10 max-h-[95vh] flex flex-col">
+      <div className="w-full max-w-5xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl relative z-10 h-[calc(100dvh-1rem)] sm:h-auto sm:max-h-[95dvh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="p-6 pb-4 border-b border-white/10 flex-shrink-0">
           <div className="flex items-center justify-between mb-4 gap-4">
