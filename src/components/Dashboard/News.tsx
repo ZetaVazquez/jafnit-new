@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import AdminNews from './AdminNews';
-import SubscriptionGuard from '@/components/SubscriptionGuard';
 
 interface NewsProps {
   onGoBack?: () => void;
@@ -32,7 +31,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
   }
 
   return (
-    <SubscriptionGuard>
+    <>
       <div className="min-h-screen bg-[hsl(220,20%,8%)]">
         <div className="container mx-auto px-4 py-8">
           {onGoBack && (
@@ -43,7 +42,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
           <AdminNews />
         </div>
       </div>
-    </SubscriptionGuard>
+    </>
   );
 };
 

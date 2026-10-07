@@ -384,16 +384,18 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
   const handleSaveAndContinue = async () => {
     const currentBlockNumber = currentBlock + 1;
-    const loadingToastId = toast.loading(`Guardando bloque ${currentBlockNumber}...`);
+    const loadingToastId = toast.loading(`Guardando bloque ${currentBlockNumber}...`, { position: 'top-center' });
     const ok = await saveBlock(false);
     if (!ok) {
       toast.dismiss(loadingToastId);
       return;
     }
 
+    // Aviso breve y arriba para no tapar el botón "Continuar"
     toast.success(`Bloque ${currentBlockNumber} guardado`, {
       id: loadingToastId,
-      description: 'Tus respuestas se han guardado correctamente.',
+      duration: 1500,
+      position: 'top-center',
     });
 
     if (currentBlock < EVALUATION_BLOCKS.length - 1) {

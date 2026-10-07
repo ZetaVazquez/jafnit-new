@@ -45,12 +45,15 @@ const SubscriptionInfo: React.FC = () => {
 
   const getPlanDisplayName = (plan: string | null) => {
     switch (plan) {
+      case 'explorador': return 'Explorador';
+      case 'constructor': return 'Constructor';
+      case 'estratega': return 'Estratega';
       case 'basic': return 'Plan Básico';
       case 'premium': return 'Plan Premium';
       case 'pro': return 'Plan PRO';
       case 'quarterly': return 'Plan Trimestral';
       case 'monthly': return 'Plan Mensual';
-      default: return 'Sin plan activo';
+      default: return hasActiveSubscription ? 'Plan activo' : 'Sin plan activo';
     }
   };
 
