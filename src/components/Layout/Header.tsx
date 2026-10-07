@@ -191,6 +191,7 @@ const Header: React.FC<HeaderProps> = ({
                 <>
                   <Button
                     onClick={handleChatWithTrainer}
+                    aria-label="Chat"
                     variant="ghost"
                     size="sm"
                     className="hidden lg:flex text-white/80 hover:text-white hover:bg-white/10"
@@ -286,6 +287,7 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="px-4 mt-4 space-y-2">
                     <Button
                       onClick={() => { handleChatWithTrainer(); setIsMenuOpen(false); }}
+                      aria-label="Chat con Entrenador"
                       className="w-full btn-cta"
                     >
                       <span className="relative mr-2"><MessageCircle className="w-4 h-4" /><TrainerChatUnreadDot /></span>

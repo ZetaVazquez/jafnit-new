@@ -255,6 +255,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 variant="ghost" 
                 size="sm"
                 onClick={handleChatWithTrainer}
+                aria-label="Chat"
                 className="text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10"
               >
                 <span className="relative mr-2"><MessageCircle className="w-4 h-4" /><TrainerChatUnreadDot /></span>
