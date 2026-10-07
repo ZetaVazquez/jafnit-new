@@ -495,13 +495,13 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   // Pantalla introductoria con el mensaje del entrenador
   if (showIntro && !initialLoading) {
     return (
-      <div className="fixed inset-0 bg-[hsl(220,20%,8%)]/95 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 bg-[hsl(220,20%,8%)]/95 backdrop-blur-sm z-[100] overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(var(--accent-green))]/10 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[hsl(var(--accent-green))]/5 rounded-full blur-3xl" />
         </div>
-
-        <div className="w-full max-w-2xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl p-8 md:p-10 relative z-10">
+        <div className="min-h-full flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl p-6 md:p-10 relative z-10 my-4">
           {onClose && (
             <button
               type="button"
