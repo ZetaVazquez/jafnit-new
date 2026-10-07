@@ -77,21 +77,24 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
       const payload = user
         ? (userMessage ? [{ role: 'user', content: userMessage.content }] : [])
         : [...history, ...(userMessage ? [userMessage] : [])];
-      const { data, error } = await supabase.functions.invoke('coach-chat', {
-        body: { messages: payload },
-      });
+      const { data, error } = await Promise.race([
+        supabase.functions.invoke('coach-chat', { body: { messages: payload } }),
+        new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), 45000)),
+      ]);
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      if (data?.reply) {
+      const reply = String(data?.reply || '').trim() || 'Perdona, se me ha cortado un momento 😅 ¿Me lo repites?';
+      {
         // Small pause ("reading" the message) before starting to type.
         await new Promise(r => setTimeout(r, 700 + Math.random() * 700));
         setLoading(false);
-        await typeOut(String(data.reply));
+        await typeOut(reply);
       }
       if (data?.readyForDiagnosis) setReady(true);
     } catch (e: any) {
       console.error(e);
-      toast.error(e.message || 'Error al hablar con el Coach');
+      setLoading(false);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Uy, no me ha llegado bien tu mensaje por un fallo de conexión 😅 ¿Me lo vuelves a escribir?' }]);
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 50);
