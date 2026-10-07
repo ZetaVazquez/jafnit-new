@@ -495,13 +495,13 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   // Pantalla introductoria con el mensaje del entrenador
   if (showIntro && !initialLoading) {
     return (
-      <div className="fixed inset-0 bg-[hsl(220,20%,8%)]/95 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 bg-[hsl(220,20%,8%)]/95 backdrop-blur-sm z-[100] overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(var(--accent-green))]/10 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[hsl(var(--accent-green))]/5 rounded-full blur-3xl" />
         </div>
-
-        <div className="w-full max-w-2xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl p-8 md:p-10 relative z-10">
+        <div className="min-h-full flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl p-6 md:p-10 relative z-10 my-4">
           {onClose && (
             <button
               type="button"
@@ -557,6 +557,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             )}
           </div>
         </div>
+        </div>
       </div>
     );
   }
@@ -583,13 +584,13 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
   };
 
   return (
-    <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-4 overflow-hidden">
+    <div className="fixed inset-0 bg-[hsl(220,20%,8%)] flex items-center justify-center z-[100] p-2 sm:p-4 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(var(--accent-green))]/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[hsl(var(--accent-green))]/3 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-5xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl relative z-10 max-h-[95vh] flex flex-col">
+      <div className="w-full max-w-5xl bg-[hsl(220,20%,12%)] border border-white/10 rounded-2xl shadow-2xl relative z-10 h-[calc(100dvh-1rem)] sm:h-auto sm:max-h-[95dvh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="p-6 pb-4 border-b border-white/10 flex-shrink-0">
           <div className="flex items-center justify-between mb-4 gap-4">
@@ -639,7 +640,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         </div>
 
         {/* Body */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 min-h-0 flex overflow-hidden">
           {/* Sidebar de bloques con progreso individual */}
           <aside className="hidden lg:flex w-64 border-r border-white/10 overflow-y-auto flex-col p-3 gap-1.5 bg-white/[0.02]">
             {EVALUATION_BLOCKS.map((b, idx) => {
@@ -686,7 +687,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             })}
           </aside>
 
-          <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
               <div>
                 <h3 className="text-lg font-semibold text-[hsl(var(--accent-green-light))] mb-1">{block.title}</h3>
