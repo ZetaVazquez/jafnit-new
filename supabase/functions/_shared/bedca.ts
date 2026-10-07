@@ -79,6 +79,17 @@ const FALLBACK: Record<string, Omit<FoodMacros, "source" | "name_used">> = {
   "azúcar": { kcal_100g: 387, protein_g_100g: 0, carbs_g_100g: 100, fats_g_100g: 0 },
   "harina de avena": { kcal_100g: 389, protein_g_100g: 17, carbs_g_100g: 66, fats_g_100g: 7 },
   "proteína whey": { kcal_100g: 400, protein_g_100g: 80, carbs_g_100g: 8, fats_g_100g: 5 },
+  "bebida vegetal": { kcal_100g: 15, protein_g_100g: 0.5, carbs_g_100g: 0.3, fats_g_100g: 1.1 },
+  "bebida de almendra": { kcal_100g: 15, protein_g_100g: 0.5, carbs_g_100g: 0.3, fats_g_100g: 1.1 },
+  "leche de almendras": { kcal_100g: 15, protein_g_100g: 0.5, carbs_g_100g: 0.3, fats_g_100g: 1.1 },
+  "bebida de avena": { kcal_100g: 45, protein_g_100g: 0.6, carbs_g_100g: 7.5, fats_g_100g: 1.3 },
+  "bebida de soja": { kcal_100g: 39, protein_g_100g: 3.3, carbs_g_100g: 1.8, fats_g_100g: 1.9 },
+  "claras de huevo": { kcal_100g: 48, protein_g_100g: 11.1, carbs_g_100g: 0.7, fats_g_100g: 0 },
+  "proteina de suero": { kcal_100g: 380, protein_g_100g: 78, carbs_g_100g: 6, fats_g_100g: 5 },
+  "gelatina sin azucar": { kcal_100g: 7, protein_g_100g: 1.5, carbs_g_100g: 0, fats_g_100g: 0 },
+  "yogur de soja": { kcal_100g: 45, protein_g_100g: 4, carbs_g_100g: 1.2, fats_g_100g: 2.4 },
+  "queso fresco batido": { kcal_100g: 46, protein_g_100g: 8, carbs_g_100g: 3.5, fats_g_100g: 0.2 },
+  "leche de coco": { kcal_100g: 70, protein_g_100g: 0.7, carbs_g_100g: 2.6, fats_g_100g: 6.5 },
   "tofu": { kcal_100g: 76, protein_g_100g: 8, carbs_g_100g: 1.9, fats_g_100g: 4.8 },
 };
 
