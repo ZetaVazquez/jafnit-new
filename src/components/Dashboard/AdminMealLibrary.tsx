@@ -155,6 +155,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
       ingredients: m.ingredients || '', diet_tags: (m.diet_tags || []).join(', ')
     });
     setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const deleteMeal = async (id: string, name: string) => {

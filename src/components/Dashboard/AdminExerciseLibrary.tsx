@@ -114,6 +114,7 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
       thumbnail_url: ex.thumbnail_url || '', difficulty: ex.difficulty, equipment: ex.equipment || ''
     });
     setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const deleteEx = async (id: string, name: string) => {
