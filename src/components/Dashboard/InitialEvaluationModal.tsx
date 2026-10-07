@@ -384,7 +384,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
 
   const handleSaveAndContinue = async () => {
     const currentBlockNumber = currentBlock + 1;
-    const loadingToastId = toast.loading(`Guardando bloque ${currentBlockNumber}...`);
+    const loadingToastId = toast.loading(`Guardando bloque ${currentBlockNumber}...`, { position: 'top-center' });
     const ok = await saveBlock(false);
     if (!ok) {
       toast.dismiss(loadingToastId);
