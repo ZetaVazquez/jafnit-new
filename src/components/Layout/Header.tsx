@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { ScrollLock } from '@/hooks/useBodyScrollLock';
 import { Button } from '@/components/ui/button';
 import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail, Star } from 'lucide-react';
 
