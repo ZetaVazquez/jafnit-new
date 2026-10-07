@@ -87,7 +87,11 @@ serve(async (req) => {
     await admin.from("profiles").delete().eq("id", userId);
 
     const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
-    if (deleteError) return json({ error: deleteError.message }, 500);
+    // Si la cuenta ya no existía (p. ej. borrada por la limpieza automática),
+    // los datos ya están eliminados: lo tratamos como éxito.
+    if (deleteError && !/user not found/i.test(deleteError.message)) {
+      return json({ error: deleteError.message }, 500);
+    }
 
     return json({ success: true });
   } catch (error) {
