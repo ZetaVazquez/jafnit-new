@@ -153,9 +153,13 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
         });
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('workout_plans').insert({
-          title, description, assigned_to: selectedClient, user_id: selectedClient,
-          difficulty_level: difficulty, status, exercises: exercisesPayload as any,
+        const { error } = await supabase.rpc('admin_create_workout_plan', {
+          p_title: title,
+          p_description: description,
+          p_assigned_to: selectedClient,
+          p_difficulty_level: difficulty,
+          p_status: status,
+          p_exercises: exercisesPayload as unknown as any,
         });
         if (error) throw error;
       }
