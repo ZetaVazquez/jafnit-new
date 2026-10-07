@@ -61,11 +61,16 @@ const MySchedule: React.FC<MyScheduleProps> = ({ onGoBack }) => {
   const saveDayEntry = async () => {
     if (!user) return;
     try {
-      const { error } = await supabase.from('activity_logs').upsert({
+      const payload = {
         user_id: user.id, activity_type: 'day_entry', description: `Entrada del día ${currentEntry.date}`,
-        metadata: { date: currentEntry.date, workout_quality: currentEntry.workout_quality, diet_quality: currentEntry.diet_quality, mood: currentEntry.mood, notes: currentEntry.notes }
-      }, { onConflict: 'user_id,metadata->date' });
-      if (error) { toast({ title: "Error", description: "No se pudo guardar la entrada del día", variant: "destructive" }); return; }
+        metadata: { date: currentEntry.date, workout_quality: currentEntry.workout_quality ?? null, diet_quality: currentEntry.diet_quality ?? null, mood: currentEntry.mood ?? null, notes: currentEntry.notes ?? '' }
+      };
+      const { data: existing } = await supabase.from('activity_logs').select('id')
+        .eq('user_id', user.id).eq('activity_type', 'day_entry').eq('metadata->>date', currentEntry.date).limit(1);
+      const { error } = existing && existing.length > 0
+        ? await supabase.from('activity_logs').update(payload).eq('id', existing[0].id)
+        : await supabase.from('activity_logs').insert(payload);
+      if (error) { console.error('Error saving day entry:', error); toast({ title: "Error", description: "No se pudo guardar la entrada del día", variant: "destructive" }); return; }
       setDayEntries(prev => ({ ...prev, [currentEntry.date]: currentEntry }));
       toast({ title: "Guardado", description: "Entrada del día guardada correctamente" });
     } catch (error) { console.error('Error:', error); }
