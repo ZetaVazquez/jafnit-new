@@ -1255,6 +1255,7 @@ export type Database = {
         Row: {
           admin_read_at: string | null
           client_closed: boolean
+          client_read_at: string | null
           created_at: string
           expires_at: string
           id: string
@@ -1263,6 +1264,7 @@ export type Database = {
         Insert: {
           admin_read_at?: string | null
           client_closed?: boolean
+          client_read_at?: string | null
           created_at?: string
           expires_at?: string
           id?: string
@@ -1271,6 +1273,7 @@ export type Database = {
         Update: {
           admin_read_at?: string | null
           client_closed?: boolean
+          client_read_at?: string | null
           created_at?: string
           expires_at?: string
           id?: string
@@ -1928,6 +1931,7 @@ export type Database = {
         }[]
       }
       get_my_trainer_chat: { Args: never; Returns: string }
+      get_my_trainer_chat_unread_count: { Args: never; Returns: number }
       get_user_subscription_status: {
         Args: { user_uuid: string }
         Returns: string
@@ -1938,6 +1942,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      mark_my_trainer_chat_read: {
+        Args: { p_message_id: string }
+        Returns: undefined
       }
       read_trainer_chat: {
         Args: { p_session_id: string }
