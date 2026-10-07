@@ -236,7 +236,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
       {/* Header */}
       <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center space-x-4">
               <Avatar 
                 className="w-12 h-12 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--accent-green))] transition-all border-2 border-[hsl(var(--accent-green))]/30"
@@ -248,13 +248,13 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-xl sm:text-2xl font-bold text-white">
                   ¡Hola, {profile?.name || 'Usuario'}!
                 </h1>
-                <p className="text-white/50">Bienvenido a tu panel de control</p>
+                <p className="text-white/50 text-sm">Bienvenido a tu panel de control</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center flex-wrap gap-1 sm:gap-2">
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -273,7 +273,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                   className="border-[hsl(var(--accent-green))]/30 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10 bg-transparent"
                 >
                   <Home className="w-4 h-4 mr-2" />
-                  Página Principal
+                  <span className="hidden sm:inline">Página Principal</span>
                 </Button>
               )}
               <Button
@@ -283,7 +283,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
                 className="text-white/50 hover:text-red-400 hover:bg-red-500/10"
               >
                 <LogOut className="w-4 h-4 mr-2" />
-                Cerrar Sesión
+                <span className="hidden sm:inline">Cerrar Sesión</span>
               </Button>
             </div>
           </div>
