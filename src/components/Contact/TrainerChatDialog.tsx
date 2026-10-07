@@ -10,17 +10,19 @@ export default function TrainerChatDialog({ open, onOpenChange }: { open: boolea
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const currentId = useRef<string | null>(null);
+  const accessToken = useRef(session?.access_token);
+  accessToken.current = session?.access_token;
   const changeId = (id: string) => { currentId.current = id; setSessionId(id); };
 
   useEffect(() => {
     if (isAdmin) return;
     const onLeave = () => {
-      if (!currentId.current || !session?.access_token) return;
-      void fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/rpc/close_trainer_chat`, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json', apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ p_session_id: currentId.current }) });
+      if (!currentId.current || !accessToken.current) return;
+      void fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/rpc/close_trainer_chat`, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json', apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${accessToken.current}` }, body: JSON.stringify({ p_session_id: currentId.current }) });
     };
     window.addEventListener('pagehide', onLeave);
     return () => { window.removeEventListener('pagehide', onLeave); if (currentId.current) void closeTrainerChat(currentId.current).catch(() => undefined); };
-  }, [isAdmin, session?.access_token]);
+  }, [isAdmin]);
 
   const changeOpen = async (next: boolean) => {
     if (!next && sessionId && !isAdmin) {
