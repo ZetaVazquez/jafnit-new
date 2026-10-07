@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Calendar, ChevronDown, ChevronUp, ExternalLink, ImageOff } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { useSubscription } from '@/hooks/useSubscription';
+import { Button } from '@/components/ui/button';
 
 interface NewsItem {
   id: string;
@@ -20,16 +20,16 @@ const AdminNews: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [expandedNews, setExpandedNews] = useState<string | null>(null);
   const { user } = useAuth();
-  const { hasActiveSubscription } = useSubscription();
+  const [failedImages, setFailedImages] = useState<string[]>([]);
 
   useEffect(() => {
     // Solo cargar noticias si el usuario está autenticado y tiene suscripción activa
-    if (user && hasActiveSubscription) {
+    if (user) {
       fetchNews();
     } else {
       setLoading(false);
     }
-  }, [user, hasActiveSubscription]);
+  }, [user]);
 
   const fetchNews = async () => {
     try {
@@ -54,18 +54,18 @@ const AdminNews: React.FC = () => {
   };
 
   // Si el usuario no está autenticado o no tiene suscripción activa, no mostrar nada
-  if (!user || !hasActiveSubscription) {
+  if (!user) {
     return (
-      <div className="min-h-screen bg-nutrition-green-lighter">
-        <div className="container mx-auto px-4 py-8">
+      <div className="text-[hsl(var(--text-primary))]">
+        <div className="w-full">
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-nutrition-green mb-6">
+            <h2 className="text-2xl font-bold text-[hsl(var(--accent-green-light))] mb-6">
               Noticias y Actualizaciones
             </h2>
-            <Card>
+            <Card className="border-[hsl(var(--dark-border))] bg-[hsl(var(--dark-surface))]">
               <CardContent className="p-8 text-center">
-                <p className="text-gray-600">
-                  Necesitas una suscripción activa para ver las noticias y actualizaciones.
+                <p className="text-[hsl(var(--text-secondary))]">
+                  Debes iniciar sesión para ver las noticias y actualizaciones.
                 </p>
               </CardContent>
             </Card>
@@ -77,14 +77,14 @@ const AdminNews: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-nutrition-green-lighter">
-        <div className="container mx-auto px-4 py-8">
+      <div className="text-[hsl(var(--text-primary))]">
+        <div className="w-full">
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-nutrition-green mb-6">
+            <h2 className="text-2xl font-bold text-[hsl(var(--accent-green-light))] mb-6">
               Noticias y Actualizaciones
             </h2>
             <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-nutrition-green"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[hsl(var(--accent-green))]"></div>
             </div>
           </div>
         </div>
@@ -94,15 +94,15 @@ const AdminNews: React.FC = () => {
 
   if (news.length === 0) {
     return (
-      <div className="min-h-screen bg-nutrition-green-lighter">
-        <div className="container mx-auto px-4 py-8">
+      <div className="text-[hsl(var(--text-primary))]">
+        <div className="w-full">
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-nutrition-green mb-6">
+            <h2 className="text-2xl font-bold text-[hsl(var(--accent-green-light))] mb-6">
               Noticias y Actualizaciones
             </h2>
-            <Card>
+            <Card className="border-[hsl(var(--dark-border))] bg-[hsl(var(--dark-surface))]">
               <CardContent className="p-8 text-center">
-                <p className="text-gray-600">No hay noticias disponibles en este momento.</p>
+                <p className="text-[hsl(var(--text-secondary))]">No hay noticias disponibles en este momento.</p>
               </CardContent>
             </Card>
           </div>
@@ -112,10 +112,10 @@ const AdminNews: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-nutrition-green-lighter">
-      <div className="container mx-auto px-4 py-8">
+    <div className="text-[hsl(var(--text-primary))]">
+      <div className="w-full">
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-nutrition-green mb-6">
+          <h2 className="text-2xl font-bold text-[hsl(var(--accent-green-light))] mb-6">
             Noticias y Actualizaciones
           </h2>
           
@@ -129,39 +129,43 @@ const AdminNews: React.FC = () => {
               return (
                 <Card 
                   key={item.id} 
-                  className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                  onClick={() => toggleExpanded(item.id)}
+                  className="overflow-hidden border-[hsl(var(--dark-border))] bg-[hsl(var(--dark-surface))] text-[hsl(var(--text-primary))]"
                 >
                   <CardContent className="p-0">
                     {item.image_url && (
-                      <div className="relative">
-                        <img
-                          src={item.image_url}
-                          alt={item.title}
-                          className="w-full h-48 object-cover rounded-t-lg"
-                        />
+                      <div className="flex min-h-40 items-center justify-center bg-[hsl(var(--dark-bg))]">
+                        {failedImages.includes(item.id) ? (
+                          <div className="flex flex-col items-center gap-2 py-10 text-[hsl(var(--text-secondary))]">
+                            <ImageOff className="h-6 w-6" />
+                            <p className="text-sm">Imagen no disponible</p>
+                          </div>
+                        ) : (
+                          <img
+                            src={item.image_url}
+                            alt={item.title}
+                            loading="lazy"
+                            onError={() => setFailedImages((previous) => [...previous, item.id])}
+                            className="block w-full max-h-96 object-contain"
+                          />
+                        )}
                       </div>
                     )}
                     <div className="p-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Calendar className="w-4 h-4 mr-2" />
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div className="flex items-center text-sm text-[hsl(var(--text-secondary))] min-w-0">
+                          <Calendar className="w-4 h-4 mr-2 shrink-0" />
                           {new Date(item.created_at).toLocaleDateString('es-ES', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                           })}
                         </div>
-                        {isExpanded ? (
-                          <ChevronUp className="w-5 h-5 text-nutrition-green" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-nutrition-green" />
-                        )}
+
                       </div>
-                      <h3 className="text-xl font-bold text-nutrition-black mb-3">
+                      <h3 className="text-xl font-bold text-[hsl(var(--text-primary))] mb-3 break-words">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-[hsl(var(--text-secondary))] leading-relaxed whitespace-pre-line break-words">
                         {isExpanded ? item.content : truncatedContent}
                       </p>
                       {item.link_url && (
@@ -170,15 +174,21 @@ const AdminNews: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1 text-nutrition-green text-sm mt-3 font-medium hover:underline"
+                          className="inline-flex items-center gap-1 text-[hsl(var(--accent-green-light))] text-sm mt-3 font-medium hover:underline"
                         >
                           <ExternalLink className="w-4 h-4" /> Ver enlace
                         </a>
                       )}
                       {item.content.length > 150 && (
-                        <p className="text-nutrition-green text-sm mt-2 font-medium">
-                          {isExpanded ? 'Hacer clic para contraer' : 'Hacer clic para leer más'}
-                        </p>
+                        <Button
+                          variant="ghost"
+                          onClick={() => toggleExpanded(item.id)}
+                          aria-expanded={isExpanded}
+                          className="mt-3 text-[hsl(var(--accent-green-light))] hover:bg-[hsl(var(--accent-green))]/10"
+                        >
+                          {isExpanded ? <ChevronUp className="mr-2 h-4 w-4" /> : <ChevronDown className="mr-2 h-4 w-4" />}
+                          {isExpanded ? 'Leer menos' : 'Leer más'}
+                        </Button>
                       )}
                     </div>
                   </CardContent>

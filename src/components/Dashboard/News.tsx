@@ -14,7 +14,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[hsl(220,20%,8%)]">
+      <div className="min-h-screen dark-section">
         <div className="container mx-auto px-4 py-8">
           {onGoBack && (
             <Button onClick={onGoBack} variant="ghost" className="mb-6 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10">
@@ -23,7 +23,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
           )}
           <div className="text-center">
             <h2 className="text-2xl font-bold text-[hsl(var(--accent-green))] mb-4">Noticias y Actualizaciones</h2>
-            <p className="text-white/50">Debes iniciar sesión para ver las noticias.</p>
+            <p className="text-[hsl(var(--text-secondary))]">Debes iniciar sesión para ver las noticias.</p>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@ const News: React.FC<NewsProps> = ({ onGoBack }) => {
 
   return (
     <>
-      <div className="min-h-screen bg-[hsl(220,20%,8%)]">
+      <div className="min-h-screen dark-section">
         <div className="container mx-auto px-4 py-8">
           {onGoBack && (
             <Button onClick={onGoBack} variant="ghost" className="mb-6 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/10">
