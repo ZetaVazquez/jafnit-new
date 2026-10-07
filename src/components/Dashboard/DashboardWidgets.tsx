@@ -39,7 +39,7 @@ export const TodayGoalsWidget: React.FC = () => {
   }, [user, today]);
 
   return (
-    <Card className="border-white/10 bg-gradient-to-br from-[hsl(var(--accent-green))]/20 to-[hsl(var(--accent-green))]/5 backdrop-blur-sm">
+    <Card className="border-white/10 bg-gradient-to-br from-[hsl(var(--accent-green))]/20 to-[hsl(var(--accent-green))]/5 bg-white/5 backdrop-blur-sm">
       <CardContent className="py-6">
         <div className="flex items-center justify-between">
           <div>
@@ -75,7 +75,7 @@ export const WorkoutStatsWidget: React.FC = () => {
   }, [user]);
 
   return (
-    <Card className="border-white/10 bg-gradient-to-br from-blue-500/20 to-blue-500/5 backdrop-blur-sm">
+    <Card className="border-white/10 bg-gradient-to-br from-blue-500/20 to-blue-500/5 bg-white/5 backdrop-blur-sm">
       <CardContent className="py-6">
         <div className="flex items-center justify-between">
           <div>
@@ -113,7 +113,7 @@ export const ActiveDaysWidget: React.FC = () => {
   }, [user]);
 
   return (
-    <Card className="border-white/10 bg-gradient-to-br from-purple-500/20 to-purple-500/5 backdrop-blur-sm">
+    <Card className="border-white/10 bg-gradient-to-br from-purple-500/20 to-purple-500/5 bg-white/5 backdrop-blur-sm">
       <CardContent className="py-6">
         <div className="flex items-center justify-between">
           <div>
