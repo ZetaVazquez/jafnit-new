@@ -36,6 +36,13 @@
       "when": 1791378737924,
       "tag": "0004_trainer_client_chat",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791379828286,
+      "tag": "0005_trainer_chat_persist_two_days",
+      "breakpoints": true
     }
   ]
 }
