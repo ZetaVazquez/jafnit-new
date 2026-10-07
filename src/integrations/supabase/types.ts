@@ -1927,6 +1927,7 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_my_trainer_chat: { Args: never; Returns: string }
       get_user_subscription_status: {
         Args: { user_uuid: string }
         Returns: string
