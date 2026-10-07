@@ -1,3 +1,4 @@
+import TrainerChatDialog from '@/components/Contact/TrainerChatDialog';
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -53,6 +54,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   const [showInitialEvaluation, setShowInitialEvaluation] = useState(false);
   const [reopenEvaluation, setReopenEvaluation] = useState(false);
   const [showPlansModal, setShowPlansModal] = useState(false);
+  const [showTrainerChat, setShowTrainerChat] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -164,15 +166,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
   };
 
   const handleChatWithTrainer = () => {
-    if (!hasActiveSubscription) {
-      toast({
-        title: "Suscripción requerida",
-        description: "Necesitas una suscripción activa para acceder al chat con el entrenador",
-        variant: "destructive"
-      });
-      return;
-    }
-    alert('Abriendo chat con tu entrenador personal...');
+    setShowTrainerChat(true);
   };
 
   const handlePremiumView = (view: string) => {
@@ -205,6 +199,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ onNavigateToHome, onL
 
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
+      <TrainerChatDialog open={showTrainerChat} onOpenChange={setShowTrainerChat} />
       <WelcomeGiftModal 
         isOpen={showWelcomeModal} 
         onClose={handleCloseWelcomeModal} 
