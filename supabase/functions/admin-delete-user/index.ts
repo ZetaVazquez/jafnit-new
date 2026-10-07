@@ -86,8 +86,16 @@ serve(async (req) => {
     await admin.from("workout_plans").delete().eq("assigned_to", userId);
     await admin.from("profiles").delete().eq("id", userId);
 
-    const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
-    if (deleteError) return json({ error: deleteError.message }, 500);
+    // Si la cuenta ya no existía (p. ej. borrada por la limpieza automática),
+    // los datos ya están eliminados: lo tratamos como éxito.
+    const notFound = (e: any) =>
+      e && (e.status === 404 || e.code === "user_not_found" || /not found/i.test(String(e.message ?? e)));
+    try {
+      const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
+      if (deleteError && !notFound(deleteError)) return json({ error: deleteError.message }, 500);
+    } catch (e) {
+      if (!notFound(e)) throw e;
+    }
 
     return json({ success: true });
   } catch (error) {
