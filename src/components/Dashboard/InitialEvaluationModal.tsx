@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -284,6 +285,7 @@ export const getOverallEvaluationProgress = (
 
 const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen, onComplete, allowClose = false, onClose }) => {
   const { user } = useAuth();
+  useBodyScrollLock(isOpen);
   const [currentBlock, setCurrentBlock] = useState(0);
   const [blockData, setBlockData] = useState<Record<string, Record<string, any>>>({});
   const [evaluationId, setEvaluationId] = useState<string | null>(null);
