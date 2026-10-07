@@ -391,9 +391,11 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
       return;
     }
 
+    // Aviso breve y arriba para no tapar el botón "Continuar"
     toast.success(`Bloque ${currentBlockNumber} guardado`, {
       id: loadingToastId,
-      description: 'Tus respuestas se han guardado correctamente.',
+      duration: 1500,
+      position: 'top-center',
     });
 
     if (currentBlock < EVALUATION_BLOCKS.length - 1) {
