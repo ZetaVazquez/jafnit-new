@@ -16,6 +16,8 @@ import AdminQuestionnaireResponses from './AdminQuestionnaireResponses';
 import AdminLeadTracking from './AdminLeadTracking';
 import AdminProgressReview from './AdminProgressReview';
 import { useToast } from '@/hooks/use-toast';
+import AdminTrainerChats from './AdminTrainerChats';
+import { listTrainerChats } from '@/lib/trainerChat';
 
 interface AdminDashboardProps {
   onNavigateToHome: () => void;
@@ -23,7 +25,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLogout }) => {
-  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library' | 'leads' | 'progress-review'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'clients' | 'diet' | 'workout' | 'earnings' | 'pending-payments' | 'news' | 'testimonials' | 'questionnaire' | 'exercise-library' | 'meal-library' | 'leads' | 'progress-review' | 'trainer-chat'>('overview');
   const { user, signOut } = useAuth();
   const [totalClients, setTotalClients] = useState(0);
   const [totalDietPlans, setTotalDietPlans] = useState(0);
@@ -31,6 +33,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
   const [monthlyEarnings, setMonthlyEarnings] = useState(0);
   const [totalNews, setTotalNews] = useState(0);
   const { toast } = useToast();
+  const [unreadChats, setUnreadChats] = useState(0);
+
+  useEffect(() => {
+    const refresh = async () => {
+      try { const chats = await listTrainerChats(); setUnreadChats(chats.reduce((total, c) => total + Number(c.unread_count), 0)); }
+      catch { /* Existing dashboard remains available if messaging is unavailable. */ }
+    };
+    void refresh();
+    const timer = window.setInterval(() => { if (!document.hidden) void refresh(); }, 10000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -87,6 +100,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
   };
 
   const cards = [
+    { view: 'trainer-chat' as const, icon: MessageSquare, color: 'border-[hsl(var(--accent-green))]/30 bg-[hsl(var(--dark-surface))]', iconColor: 'text-[hsl(var(--accent-green-light))]', title: 'Chateando con clientes', subtitle: unreadChats ? `${unreadChats} mensajes sin leer` : 'Conversaciones con el entrenador' },
     { view: 'clients' as const, icon: Users, color: 'from-blue-500/20 to-blue-600/10 border-blue-500/30', iconColor: 'text-blue-400', title: 'Clientes', subtitle: `${totalClients} usuarios` },
     { view: 'diet' as const, icon: FileText, color: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/30', iconColor: 'text-emerald-400', title: 'Planes de Dieta', subtitle: `${totalDietPlans} planes` },
     { view: 'workout' as const, icon: Dumbbell, color: 'from-red-500/20 to-red-600/10 border-red-500/30', iconColor: 'text-red-400', title: 'Planes de Ejercicio', subtitle: `${totalWorkoutPlans} planes` },
@@ -103,6 +117,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateToHome, onLog
 
   const renderContent = () => {
     switch (currentView) {
+      case 'trainer-chat': return <AdminTrainerChats onGoBack={() => setCurrentView('overview')} />;
       case 'clients': return <AdminClientsTable onGoBack={() => setCurrentView('overview')} />;
       case 'diet': return <AdminDietBuilder onGoBack={() => setCurrentView('overview')} />;
       case 'workout': return <AdminWorkoutBuilder onGoBack={() => setCurrentView('overview')} />;

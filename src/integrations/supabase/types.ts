@@ -1216,6 +1216,76 @@ export type Database = {
         }
         Relationships: []
       }
+      trainer_chat_messages: {
+        Row: {
+          body: string
+          created_at: string
+          from_admin: boolean
+          id: string
+          sender_id: string
+          session_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          from_admin?: boolean
+          id?: string
+          sender_id: string
+          session_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          from_admin?: boolean
+          id?: string
+          sender_id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trainer_chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "trainer_chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trainer_chat_sessions: {
+        Row: {
+          admin_read_at: string | null
+          client_closed: boolean
+          created_at: string
+          expires_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          admin_read_at?: string | null
+          client_closed?: boolean
+          created_at?: string
+          expires_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          admin_read_at?: string | null
+          client_closed?: boolean
+          created_at?: string
+          expires_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trainer_chat_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_modal_interactions: {
         Row: {
           created_at: string
@@ -1536,6 +1606,23 @@ export type Database = {
           weight_kg: number
         }[]
       }
+      admin_list_trainer_chats: {
+        Args: never
+        Returns: {
+          client_closed: boolean
+          client_email: string
+          client_name: string
+          expires_at: string
+          id: string
+          last_at: string
+          last_message: string
+          unread_count: number
+        }[]
+      }
+      admin_mark_trainer_chat_read: {
+        Args: { p_session_id: string }
+        Returns: undefined
+      }
       admin_read_coach_conversation: {
         Args: { p_user_id: string }
         Returns: {
@@ -1825,6 +1912,8 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      cleanup_trainer_chats: { Args: never; Returns: undefined }
+      close_trainer_chat: { Args: { p_session_id: string }; Returns: undefined }
       generate_plan_expiry_notifications: { Args: never; Returns: undefined }
       get_active_profiles: {
         Args: never
@@ -1848,6 +1937,23 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      read_trainer_chat: {
+        Args: { p_session_id: string }
+        Returns: {
+          body: string
+          created_at: string
+          from_admin: boolean
+          id: string
+          sender_id: string
+          session_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "trainer_chat_messages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       save_initial_evaluation: {
         Args: {
@@ -1883,6 +1989,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      send_trainer_message: {
+        Args: { p_body: string; p_session_id: string }
+        Returns: string
       }
       update_expired_subscriptions: { Args: never; Returns: undefined }
     }
