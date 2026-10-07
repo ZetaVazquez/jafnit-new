@@ -5,6 +5,7 @@ import { Calendar, ChevronDown, ChevronUp, ExternalLink, ImageOff } from 'lucide
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import { resolveNewsImage } from '@/lib/newsImage';
 
 interface NewsItem {
   id: string;
@@ -23,7 +24,7 @@ const AdminNews: React.FC = () => {
   const [failedImages, setFailedImages] = useState<string[]>([]);
 
   useEffect(() => {
-    // Solo cargar noticias si el usuario está autenticado y tiene suscripción activa
+    // Las noticias están disponibles para los clientes con sesión iniciada.
     if (user) {
       fetchNews();
     } else {
@@ -41,7 +42,11 @@ const AdminNews: React.FC = () => {
         .limit(10);
 
       if (error) throw error;
-      setNews(data || []);
+      const items = await Promise.all((data || []).map(async (item) => ({
+        ...item,
+        image_url: await resolveNewsImage(item.image_url),
+      })));
+      setNews(items);
     } catch (error) {
       console.error('Error fetching admin news:', error);
     } finally {
@@ -53,7 +58,7 @@ const AdminNews: React.FC = () => {
     setExpandedNews(expandedNews === newsId ? null : newsId);
   };
 
-  // Si el usuario no está autenticado o no tiene suscripción activa, no mostrar nada
+  // No mostrar noticias sin sesión iniciada.
   if (!user) {
     return (
       <div className="text-[hsl(var(--text-primary))]">
