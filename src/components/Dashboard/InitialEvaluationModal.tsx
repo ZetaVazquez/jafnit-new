@@ -640,7 +640,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
         </div>
 
         {/* Body */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 min-h-0 flex overflow-hidden">
           {/* Sidebar de bloques con progreso individual */}
           <aside className="hidden lg:flex w-64 border-r border-white/10 overflow-y-auto flex-col p-3 gap-1.5 bg-white/[0.02]">
             {EVALUATION_BLOCKS.map((b, idx) => {
@@ -687,7 +687,7 @@ const InitialEvaluationModal: React.FC<InitialEvaluationModalProps> = ({ isOpen,
             })}
           </aside>
 
-          <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
             <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
               <div>
                 <h3 className="text-lg font-semibold text-[hsl(var(--accent-green-light))] mb-1">{block.title}</h3>
