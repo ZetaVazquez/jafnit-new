@@ -105,7 +105,7 @@ OBJECIONES
 - Precio: dilo siempre de forma directa, nunca lo escondas para pedir datos antes.
 
 SERVICIOS REALES (no inventes ni cambies precios ni condiciones)
-- Explorador · 29€ pago único · base estructural de 7 días, guía de alimentación y orientación general, sin seguimiento. Para quien empieza y necesita orden.
+- Explorador · 29€/mes · base estructural de 7 días, guía de alimentación y orientación general, sin seguimiento. Para quien empieza y necesita orden.
 - Constructor · 99€/mes · planificación estructurada, plan nutricional adaptado, rutina progresiva y evaluación/ajuste 1 a 1. Para quien quiere aplicar método.
 - Estratega · 297€/mes · acompañamiento completo 12 semanas, plan personalizado y progresivo, evaluaciones periódicas y ajustes estratégicos. Para transformación real.
 Si solo necesita una orientación puntual, dilo: probablemente no le compense un seguimiento completo.
@@ -201,7 +201,7 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
           "Lovable-API-Key": LOVABLE_API_KEY,
         },
-        body: JSON.stringify({ model: MODEL, messages: fullMessages, tools, tool_choice: "auto" }),
+        body: JSON.stringify({ model: MODEL, messages: fullMessages, tools, tool_choice: i >= 3 ? "none" : "auto" }),
       });
 
       if (!aiRes.ok) {
@@ -252,6 +252,14 @@ Deno.serve(async (req) => {
       assistantFinal = { role: "assistant", content: msg.content || "" };
       fullMessages.push(assistantFinal);
       break;
+    }
+
+    // Never return an empty reply: the chat would look stuck.
+    if (!assistantFinal || !assistantFinal.content.trim()) {
+      assistantFinal = { role: "assistant", content: readyForDiagnosis
+        ? "Con lo que me has contado ya tengo una idea clara de tu punto de partida. Si quieres, te enseño los programas de José para que veas cuál encaja contigo 💪"
+        : "Perdona, se me ha cortado un momento 😅 ¿Me lo repites o me cuentas un poco más?" };
+      fullMessages.push(assistantFinal);
     }
 
     // Persist conversation only for registered users (guests keep it in the browser session).

@@ -196,7 +196,7 @@ const Index = () => {
     return (
       <CoachChat
         onClose={() => setShowCoach(false)}
-        onOpenPlans={() => { setShowCoach(false); setShowPlanModal(true); }}
+        onOpenPlans={() => { setShowCoach(false); if (user) setShowPlanModal(true); else { setPendingPlanId('constructor'); setCheckoutPlanId('constructor'); } }}
       />
     );
   }
@@ -331,6 +331,7 @@ const Index = () => {
           onDecideLater={() => setShowPlanModal(false)}
           recommendedPlan={(pendingPlanId as any) ?? 'constructor'}
           fromQuestionnaire={false}
+          redirectOnClose={false}
         />
         <AuthModal
           isOpen={showAuthModal}
