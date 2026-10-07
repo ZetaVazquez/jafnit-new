@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import TrainerContactDialog from '@/components/Contact/TrainerContactDialog';
 
 interface MyDietsProps {
   onGoBack: () => void;
@@ -21,6 +22,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
   const [loading, setLoading] = useState(true);
   const [showGenericModal, setShowGenericModal] = useState(false);
   const [genericNoticeShown, setGenericNoticeShown] = useState(false);
+  const [showTrainerContact, setShowTrainerContact] = useState(false);
 
   const formatMealPlan = (mealPlan: any) => {
     if (!mealPlan) return 'No hay plan de comidas disponible';
@@ -271,7 +273,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                 <ChefHat className="w-16 h-16 text-[hsl(var(--accent-green))] mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-white mb-2">No tienes planes de dieta asignados</h3>
                 <p className="text-white/50 mb-6">José Antonio está preparando tu plan de alimentación personalizado. Recibirás una notificación cuando esté listo.</p>
-                <Button className="bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/30 border border-[hsl(var(--accent-green))]/30">Contactar con José Antonio</Button>
+                <Button onClick={() => setShowTrainerContact(true)} className="bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/30 border border-[hsl(var(--accent-green))]/30">Contactar con José Antonio</Button>
               </CardContent>
             </Card>
           ) : (
@@ -406,7 +408,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
     );
   };
 
-  return <SubscriptionGuard><DietsContent /></SubscriptionGuard>;
+  return <SubscriptionGuard><DietsContent /><TrainerContactDialog open={showTrainerContact} onOpenChange={setShowTrainerContact} /></SubscriptionGuard>;
 };
 
 export default MyDiets;

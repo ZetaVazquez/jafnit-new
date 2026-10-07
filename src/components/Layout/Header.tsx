@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ScrollLock } from '@/hooks/useBodyScrollLock';
 import { Button } from '@/components/ui/button';
+import TrainerChatDialog from '@/components/Contact/TrainerChatDialog';
 import { Menu, X, User, LogOut, Settings, Calendar, BookOpen, Dumbbell, CreditCard, MessageCircle, Home, ChevronDown, Calculator, Newspaper, HelpCircle, Mail, Star } from 'lucide-react';
 
 interface HeaderProps {
@@ -47,6 +48,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [showTrainerChat, setShowTrainerChat] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -124,11 +126,12 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleChatWithTrainer = () => {
-    window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank');
+    setShowTrainerChat(true);
   };
 
   return (
     <>
+      <TrainerChatDialog open={showTrainerChat} onOpenChange={setShowTrainerChat} />
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-[hsl(220,20%,10%)]/95 backdrop-blur-md shadow-lg shadow-black/20' 
