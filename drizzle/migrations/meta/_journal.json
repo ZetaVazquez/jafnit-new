@@ -57,6 +57,13 @@
       "when": 1791383058128,
       "tag": "0007_restrict_libraries_to_admins",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792146606560,
+      "tag": "0008_restrict_news_image_reads_to_visible_news",
+      "breakpoints": true
     }
   ]
 }
