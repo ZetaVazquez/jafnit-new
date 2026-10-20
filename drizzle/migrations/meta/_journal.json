@@ -71,6 +71,13 @@
       "when": 1792486392053,
       "tag": "0009_protect_fit_metered_usage",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792488805102,
+      "tag": "0010_exercise_common_errors",
+      "breakpoints": true
     }
   ]
 }

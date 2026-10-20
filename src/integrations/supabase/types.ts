@@ -622,6 +622,7 @@ export type Database = {
       }
       exercises_library: {
         Row: {
+          common_errors: string | null
           created_at: string
           description: string | null
           difficulty: string
@@ -635,6 +636,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          common_errors?: string | null
           created_at?: string
           description?: string | null
           difficulty?: string
@@ -648,6 +650,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          common_errors?: string | null
           created_at?: string
           description?: string | null
           difficulty?: string
@@ -1841,6 +1844,41 @@ export type Database = {
           p_video_url: string
         }
         Returns: {
+          common_errors: string | null
+          created_at: string
+          description: string | null
+          difficulty: string
+          equipment: string | null
+          id: string
+          instructions: string | null
+          muscle_group: string
+          name: string
+          thumbnail_url: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "exercises_library"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_upsert_exercise_details: {
+        Args: {
+          p_common_errors: string
+          p_description: string
+          p_difficulty: string
+          p_equipment: string
+          p_id: string
+          p_instructions: string
+          p_muscle_group: string
+          p_name: string
+          p_thumbnail_url: string
+          p_video_url: string
+        }
+        Returns: {
+          common_errors: string | null
           created_at: string
           description: string | null
           difficulty: string
