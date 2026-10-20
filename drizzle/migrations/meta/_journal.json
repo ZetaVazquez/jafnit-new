@@ -64,6 +64,13 @@
       "when": 1792146606560,
       "tag": "0008_restrict_news_image_reads_to_visible_news",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792486392053,
+      "tag": "0009_protect_fit_metered_usage",
+      "breakpoints": true
     }
   ]
 }

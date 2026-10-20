@@ -81,7 +81,17 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
         supabase.functions.invoke('coach-chat', { body: { messages: payload } }),
         new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), 45000)),
       ]);
-      if (error) throw error;
+      if (error) {
+        // Keep the existing chat layout; explain a rejected request instead of asking for retries.
+        const response = (error as { context?: Response }).context;
+        if (response?.status === 429 || response?.status === 413 || response?.status === 400 || response?.status === 503) {
+          const body = await response.json().catch(() => null);
+          setLoading(false);
+          setMessages(prev => [...prev, { role: 'assistant', content: body?.error || 'FIT no está disponible temporalmente. Prueba más tarde.' }]);
+          return;
+        }
+        throw error;
+      }
       if (data?.error) throw new Error(data.error);
       const reply = String(data?.reply || '').trim() || 'Perdona, se me ha cortado un momento 😅 ¿Me lo repites?';
       {
