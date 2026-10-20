@@ -209,7 +209,7 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
             String(it.sets ?? '-'),
             String(it.reps ?? '-'),
             it.rest_seconds ? `${it.rest_seconds}s` : '-',
-            it.notes || '',
+             [it.instructions && `Ejecución: ${it.instructions}`, it.common_errors && `Errores comunes: ${it.common_errors}`, it.notes].filter(Boolean).join('\n'),
           ]);
           autoTable(doc, {
             startY: 42,
@@ -399,8 +399,9 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
                                       )}
                                       <div className="text-sm text-white/70">{it.sets} series × {it.reps} reps · {it.rest_seconds}s descanso</div>
                                       {it.instructions && (
-                                        <div className="text-xs text-white/50 mt-1 leading-relaxed">{it.instructions}</div>
+                                        <div className="text-xs text-muted-foreground mt-1 leading-relaxed whitespace-pre-wrap"><strong>Ejecución: </strong>{it.instructions}</div>
                                       )}
+                                      {it.common_errors && <div className="text-xs text-muted-foreground mt-2 leading-relaxed whitespace-pre-wrap"><strong>Errores comunes: </strong>{it.common_errors}</div>}
                                       {it.notes && <div className="text-xs text-white/50 mt-1 italic">{it.notes}</div>}
                                     </div>
                                   </div>

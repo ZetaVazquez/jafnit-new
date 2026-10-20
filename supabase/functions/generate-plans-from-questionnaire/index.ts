@@ -164,11 +164,13 @@ IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s)
       const libMap = new Map((libFull || []).map(e => [e.id, e] as const));
       let enrichedDays = (args.days || []).map((d: any) => ({
         day: d.day,
-        items: (d.items || []).filter((it: any) => libMap.has(it.exercise_id)).map((it: any) => {
-          const lib = libMap.get(it.exercise_id)!;
+        items: (d.items || []).flatMap((it: any) => {
+          const lib = libMap.get(it.exercise_id);
+          if (!lib) return [];
           return {
             exercise_id: lib.id, name: lib.name, muscle_group: lib.muscle_group,
             equipment: lib.equipment, instructions: lib.instructions,
+            common_errors: lib.common_errors,
             video_url: lib.video_url, thumbnail_url: lib.thumbnail_url,
             sets: it.sets, reps: it.reps, rest_seconds: it.rest_seconds, notes: it.notes || ""
           };

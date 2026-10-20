@@ -5,3 +5,5 @@
 - Track client trainer-chat read receipts on the server using displayed message IDs and share unread polling through one query key so notifications persist across views without marking unseen replies as read.
 - Centralize trainer contact details in the shared contact module so all contact dialogs use the same values.
 - Keep FIT guest access behind service-only atomic database quotas on callers and every paid gateway iteration; forwarded IP hints are supplementary, while shared guest/global ceilings and fail-closed errors prevent identity rotation from bypassing the budget.
+- Preserve the stored instructions field for execution text and save common_errors through the additive admin_upsert_exercise_details RPC; older published clients must remain compatible.
+- Copy exercise execution, common errors and library media into manual and generated workout items so assigned plans and direct PDFs preserve the same guidance.

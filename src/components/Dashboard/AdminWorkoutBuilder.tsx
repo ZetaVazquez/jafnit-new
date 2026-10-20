@@ -7,16 +7,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ArrowLeft, Search, Plus, Edit, Trash2, ChevronDown, ChevronUp, Calendar, Sparkles, X, Check, Clock, Loader2, Video, Image as ImageIcon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import WorkoutDifficulty from './WorkoutDifficulty';
 
 interface Client { id: string; name: string; email: string; }
 interface Exercise {
   id: string; name: string; muscle_group: string; description: string | null;
   instructions?: string | null;
+  common_errors?: string | null;
   video_url: string | null; thumbnail_url: string | null; difficulty: string; equipment: string | null;
 }
 interface PlanItem {
   exercise_id: string; name: string; muscle_group: string;
   equipment?: string | null; instructions?: string | null;
+  common_errors?: string | null;
   video_url: string | null; thumbnail_url: string | null;
   sets: number; reps: string; rest_seconds: number; notes: string;
 }
@@ -105,6 +108,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
         exercise_id: it.exercise_id || '', name: it.name || '',
         muscle_group: it.muscle_group || '',
         equipment: it.equipment ?? null, instructions: it.instructions ?? null,
+        common_errors: it.common_errors ?? library.find(e => e.id === it.exercise_id)?.common_errors ?? null,
         video_url: it.video_url || null, thumbnail_url: it.thumbnail_url || null,
         sets: it.sets || 3, reps: it.reps || '10', rest_seconds: it.rest_seconds || 60, notes: it.notes || ''
       })) };
@@ -117,6 +121,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
       ...d, items: [...d.items, {
         exercise_id: ex.id, name: ex.name, muscle_group: ex.muscle_group,
         equipment: ex.equipment, instructions: ex.instructions ?? null,
+        common_errors: ex.common_errors ?? null,
         video_url: ex.video_url, thumbnail_url: ex.thumbnail_url,
         sets: 3, reps: '10', rest_seconds: 60, notes: ''
       }]
@@ -279,14 +284,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
               </div>
               <div>
                 <label className="block text-sm text-white/70 mb-1">Dificultad</label>
-                <Select value={difficulty} onValueChange={setDifficulty}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                  <SelectContent className="bg-[hsl(220,20%,15%)] border-white/10">
-                    <SelectItem value="beginner" className="text-white">Principiante</SelectItem>
-                    <SelectItem value="intermediate" className="text-white">Intermedio</SelectItem>
-                    <SelectItem value="advanced" className="text-white">Avanzado</SelectItem>
-                  </SelectContent>
-                </Select>
+                <WorkoutDifficulty value={difficulty} onChange={setDifficulty} />
               </div>
             </div>
             <Textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Descripción..." rows={2} className="bg-white/5 border-white/10 text-white mb-4" />
