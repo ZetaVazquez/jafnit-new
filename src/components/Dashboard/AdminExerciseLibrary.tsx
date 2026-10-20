@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ArrowLeft, Plus, Edit, Trash2, Upload, Video, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { exerciseThumbnail } from '@/lib/exerciseMedia';
 
 interface Exercise {
   id: string;
@@ -13,6 +14,7 @@ interface Exercise {
   muscle_group: string;
   description: string | null;
   instructions: string | null;
+  common_errors: string | null;
   video_url: string | null;
   thumbnail_url: string | null;
   difficulty: string;
@@ -42,7 +44,7 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
   const { toast } = useToast();
 
   const [form, setForm] = useState({
-    name: '', muscle_group: 'pecho', description: '', instructions: '',
+    name: '', muscle_group: 'pecho', description: '', instructions: '', common_errors: '',
     video_url: '', thumbnail_url: '', difficulty: 'intermediate', equipment: ''
   });
 
@@ -51,11 +53,11 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
   const fetchExercises = async () => {
     const { data, error } = await supabase.from('exercises_library').select('*').order('muscle_group').order('name');
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
-    setExercises(data || []);
+    setExercises((data || []).map(ex => ({ ...ex, thumbnail_url: exerciseThumbnail(ex.id, ex.thumbnail_url) })));
   };
 
   const resetForm = () => {
-    setForm({ name: '', muscle_group: 'pecho', description: '', instructions: '', video_url: '', thumbnail_url: '', difficulty: 'intermediate', equipment: '' });
+    setForm({ name: '', muscle_group: 'pecho', description: '', instructions: '', common_errors: '', video_url: '', thumbnail_url: '', difficulty: 'intermediate', equipment: '' });
     setEditing(null); setShowForm(false);
   };
 
@@ -80,20 +82,22 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
     setSaving(true);
     try {
       if (editing) {
-        const { error } = await supabase.rpc('admin_upsert_exercise', {
+        const { error } = await supabase.rpc('admin_upsert_exercise_details', {
           p_id: editing.id,
           p_name: form.name, p_muscle_group: form.muscle_group,
           p_description: form.description || null, p_instructions: form.instructions || null,
+          p_common_errors: form.common_errors || null,
           p_video_url: form.video_url || null, p_thumbnail_url: form.thumbnail_url || null,
           p_difficulty: form.difficulty, p_equipment: form.equipment || null,
         });
         if (error) throw error;
         toast({ title: 'Ejercicio actualizado' });
       } else {
-        const { error } = await supabase.rpc('admin_upsert_exercise', {
+        const { error } = await supabase.rpc('admin_upsert_exercise_details', {
           p_id: null,
           p_name: form.name, p_muscle_group: form.muscle_group,
           p_description: form.description || null, p_instructions: form.instructions || null,
+          p_common_errors: form.common_errors || null,
           p_video_url: form.video_url || null, p_thumbnail_url: form.thumbnail_url || null,
           p_difficulty: form.difficulty, p_equipment: form.equipment || null,
         });
@@ -111,6 +115,7 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
     setForm({
       name: ex.name, muscle_group: ex.muscle_group, description: ex.description || '',
       instructions: ex.instructions || '', video_url: ex.video_url || '',
+      common_errors: ex.common_errors || '',
       thumbnail_url: ex.thumbnail_url || '', difficulty: ex.difficulty, equipment: ex.equipment || ''
     });
     setShowForm(true);
@@ -182,8 +187,12 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
               <Input value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="bg-white/5 border-white/10 text-white" />
             </div>
             <div>
-              <label className="block text-sm text-white/70 mb-1">Instrucciones</label>
-              <Textarea value={form.instructions} onChange={e => setForm({ ...form, instructions: e.target.value })} rows={3} className="bg-white/5 border-white/10 text-white" />
+              <label htmlFor="exercise-execution" className="block text-sm text-muted-foreground mb-1">Ejecución</label>
+              <Textarea id="exercise-execution" value={form.instructions} onChange={e => setForm({ ...form, instructions: e.target.value })} rows={3} className="bg-card border-input text-foreground" />
+            </div>
+            <div>
+              <label htmlFor="exercise-errors" className="block text-sm text-muted-foreground mb-1">Errores comunes</label>
+              <Textarea id="exercise-errors" value={form.common_errors} onChange={e => setForm({ ...form, common_errors: e.target.value })} rows={3} className="bg-card border-input text-foreground" />
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -245,7 +254,7 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
                 <div className="flex items-center justify-between mt-3">
                   <span className="text-xs text-white/40">{ex.equipment || 'Sin equipo'}</span>
                   <div className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={() => editEx(ex)} className="text-white/50 hover:text-white hover:bg-white/10"><Edit className="w-4 h-4" /></Button>
+                    <Button size="sm" variant="ghost" aria-label={`Editar ${ex.name}`} onClick={() => editEx(ex)} className="text-white/50 hover:text-white hover:bg-white/10"><Edit className="w-4 h-4" /></Button>
                     <Button size="sm" variant="ghost" onClick={() => deleteEx(ex.id, ex.name)} className="text-red-400/60 hover:text-red-400 hover:bg-red-500/10"><Trash2 className="w-4 h-4" /></Button>
                   </div>
                 </div>

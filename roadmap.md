@@ -11,6 +11,7 @@
 - [x] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto; dos respuestas reales y bloqueo diario comprobados.
 
 # Rutinas y biblioteca de ejercicios
-- [ ] Corregir y verificar el selector de dificultad sin salir de la web.
-- [ ] Añadir Errores comunes y renombrar Instrucciones a Ejecución, conservando los datos existentes.
-- [ ] Restaurar imágenes de la biblioteca original en los ejercicios con fotos IA, cuando estén disponibles.
+- [x] Sustituir el desplegable por botones de dificultad y verificar guardado y reapertura sin salir de la web; salto a Google no reproducido en la versión publicada.
+- [x] Añadir Errores comunes y renombrar Instrucciones a Ejecución, conservando los datos existentes; guardado y reapertura comprobados.
+- [ ] Restaurar las demás imágenes originales: pendiente del archivo con hombros, tríceps, piernas, pecho, espalda y core; el aportado solo contiene bíceps.
+- [x] Revisar los 32 GIF del archivo aportado; aplicar los correspondientes a Curl con barra y Curl martillo, sin sustituir movimientos por otros distintos.
