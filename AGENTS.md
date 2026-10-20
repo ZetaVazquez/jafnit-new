@@ -4,3 +4,4 @@
 - Keep human trainer messaging separate from FIT; use authenticated RPCs with server-validated ownership and roles, preserve sessions when dialogs close, and enforce retention in reads plus scheduled cleanup.
 - Track client trainer-chat read receipts on the server using displayed message IDs and share unread polling through one query key so notifications persist across views without marking unseen replies as read.
 - Centralize trainer contact details in the shared contact module so all contact dialogs use the same values.
+- Keep FIT guest access behind service-only atomic database quotas on callers and every paid gateway iteration; forwarded IP hints are supplementary, while shared guest/global ceilings and fail-closed errors prevent identity rotation from bypassing the budget.

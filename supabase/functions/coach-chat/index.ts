@@ -1,14 +1,11 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { callerKey, chatInputSchema, consumeAllowance, limitResponse } from "./security.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
-const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY") || "";
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
+const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 
 const MODEL = "google/gemini-3.8-flash";
 
@@ -142,8 +139,12 @@ No vendas por presión. Vende mediante comprensión, criterio y claridad. Habla 
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method !== "POST") return new Response(null, { status: 405, headers: corsHeaders });
 
   try {
+    if (!LOVABLE_API_KEY || !SUPABASE_URL || !SUPABASE_ANON_KEY || !SERVICE_ROLE) {
+      throw new Error("FIT no está disponible temporalmente.");
+    }
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
     // Auth is OPTIONAL: visitors can chat with "Jose" without registering (guest mode).
@@ -152,12 +153,43 @@ Deno.serve(async (req) => {
       const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         global: { headers: { Authorization: `Bearer ${token}` } },
       });
+      // A public client credential is not a user session. Failed verification stays
+      // in the stricter guest pool, never gaining an authenticated allowance.
       const { data: userData } = await userClient.auth.getUser();
       user = userData?.user ?? null;
     }
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-    const { messages: incomingMessages }: { messages: ChatMessage[] } = await req.json();
+    const key = await callerKey(req, user?.id, SERVICE_ROLE);
+    if (!await consumeAllowance(admin, key, Boolean(user))) return limitResponse(corsHeaders);
+
+    // Enforce a byte limit while reading instead of trusting Content-Length.
+    const reader = req.body?.getReader();
+    if (!reader) return new Response(null, { status: 400, headers: corsHeaders });
+    const chunks: Uint8Array[] = [];
+    let bytes = 0;
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      bytes += chunk.value.byteLength;
+      if (bytes > 262144) {
+        await reader.cancel();
+        return new Response(JSON.stringify({ error: "El mensaje es demasiado largo." }), { status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      chunks.push(chunk.value);
+    }
+    const raw = new Uint8Array(bytes);
+    let offset = 0;
+    for (const chunk of chunks) { raw.set(chunk, offset); offset += chunk.length; }
+    let body: unknown;
+    try { body = JSON.parse(new TextDecoder().decode(raw)); }
+    catch { return new Response(null, { status: 400, headers: corsHeaders }); }
+    const parsed = chatInputSchema.safeParse(body);
+    if (!parsed.success) return new Response(JSON.stringify({ error: "El mensaje o la conversación son demasiado largos o no son válidos." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const incomingMessages: ChatMessage[] = parsed.data.messages;
+    if (user && incomingMessages.some(message => message.role !== "user")) {
+      return new Response(null, { status: 400, headers: corsHeaders });
+    }
 
     // Registered users: load their stored context + history. Guests: history comes from the client.
     let priorMessages: ChatMessage[] = [];
@@ -195,6 +227,9 @@ Deno.serve(async (req) => {
 
     // Tool loop (max 5 iterations)
     for (let i = 0; i < 5; i++) {
+      // Every paid call, including tool continuations, reserves an atomic persistent slot.
+      // This shared ceiling cannot be bypassed with new IPs, accounts or reloads.
+      if (!await consumeAllowance(admin, key, Boolean(user), true)) return limitResponse(corsHeaders);
       const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -278,7 +313,7 @@ Deno.serve(async (req) => {
       savedMeasurements,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (err) {
-    console.error("coach-chat error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    console.error("coach-chat request failed");
+    return new Response(JSON.stringify({ error: "FIT no está disponible temporalmente. Prueba más tarde." }), { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });

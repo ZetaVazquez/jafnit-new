@@ -662,6 +662,24 @@ export type Database = {
         }
         Relationships: []
       }
+      fit_usage_limits: {
+        Row: {
+          bucket_start: string
+          requests: number
+          scope: string
+        }
+        Insert: {
+          bucket_start: string
+          requests?: number
+          scope: string
+        }
+        Update: {
+          bucket_start?: string
+          requests?: number
+          scope?: string
+        }
+        Relationships: []
+      }
       guide_purchases: {
         Row: {
           amount_paid: number
@@ -1917,6 +1935,10 @@ export type Database = {
       }
       cleanup_trainer_chats: { Args: never; Returns: undefined }
       close_trainer_chat: { Args: { p_session_id: string }; Returns: undefined }
+      consume_fit_allowance: {
+        Args: { p_authenticated: boolean; p_gateway?: boolean; p_key: string }
+        Returns: boolean
+      }
       generate_plan_expiry_notifications: { Args: never; Returns: undefined }
       get_active_profiles: {
         Args: never
