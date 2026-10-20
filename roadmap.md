@@ -8,4 +8,4 @@
 
 # Seguridad sin cambios visibles
 - [x] Restringir el acceso a fotos de noticias a publicaciones visibles y administradores; comprobar descarga publicada y denegación de archivo no publicado.
-- [ ] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto.
+- [x] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto; dos respuestas reales y bloqueo diario comprobados.
