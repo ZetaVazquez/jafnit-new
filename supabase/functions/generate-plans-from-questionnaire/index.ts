@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { computeTargets, computeTargetsFromLegacy, genericTargets, mealTargets } from "../_shared/nutrition.ts";
 import { computeMealFromIngredients, normalize as normName } from "../_shared/bedca.ts";
 
