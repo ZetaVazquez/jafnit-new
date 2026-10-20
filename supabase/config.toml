@@ -4,7 +4,7 @@ project_id = "ecddfjnddtgxrqciwsgj"
 verify_jwt = false
 
 [functions.generate-plans-from-questionnaire]
-verify_jwt = true
+verify_jwt = false
 [functions.coach-chat]
 verify_jwt = false
 
