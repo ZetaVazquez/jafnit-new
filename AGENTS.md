@@ -7,3 +7,4 @@
 - Keep FIT guest access behind service-only atomic database quotas on callers and every paid gateway iteration; forwarded IP hints are supplementary, while shared guest/global ceilings and fail-closed errors prevent identity rotation from bypassing the budget.
 - Preserve the stored instructions field for execution text and save common_errors through the additive admin_upsert_exercise_details RPC; older published clients must remain compatible.
 - Copy exercise execution, common errors and library media into manual and generated workout items so assigned plans and direct PDFs preserve the same guidance.
+- Resolve verified user-supplied exercise media through the shared exerciseMedia helper and persist absolute URLs for generated plans; never map unrelated movements to fill missing assets.

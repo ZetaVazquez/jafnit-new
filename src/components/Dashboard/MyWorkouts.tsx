@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { exerciseThumbnail } from '@/lib/exerciseMedia';
 
 interface MyWorkoutsProps {
   onGoBack: () => void;
@@ -384,8 +385,8 @@ const MyWorkouts: React.FC<MyWorkoutsProps> = ({ onGoBack }) => {
                                   <div key={i} className="rounded-lg border border-white/10 bg-white/5 p-3 flex gap-3">
                                     {it.video_url ? (
                                       <video src={it.video_url} controls className="w-32 h-32 object-cover rounded" poster={it.thumbnail_url || undefined} />
-                                    ) : it.thumbnail_url ? (
-                                      <img src={it.thumbnail_url} alt={it.name} className="w-32 h-32 object-cover rounded" />
+                                     ) : exerciseThumbnail(it.exercise_id, it.thumbnail_url) ? (
+                                       <img src={exerciseThumbnail(it.exercise_id, it.thumbnail_url) || undefined} alt={it.name} className="w-32 h-32 object-contain rounded" />
                                     ) : (
                                       <div className="w-32 h-32 bg-white/5 rounded flex items-center justify-center text-white/30">Sin media</div>
                                     )}

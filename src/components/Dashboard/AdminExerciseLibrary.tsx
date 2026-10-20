@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ArrowLeft, Plus, Edit, Trash2, Upload, Video, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { exerciseThumbnail } from '@/lib/exerciseMedia';
 
 interface Exercise {
   id: string;
@@ -52,7 +53,7 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
   const fetchExercises = async () => {
     const { data, error } = await supabase.from('exercises_library').select('*').order('muscle_group').order('name');
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
-    setExercises(data || []);
+    setExercises((data || []).map(ex => ({ ...ex, thumbnail_url: exerciseThumbnail(ex.id, ex.thumbnail_url) })));
   };
 
   const resetForm = () => {

@@ -8,6 +8,7 @@ import { ArrowLeft, Search, Plus, Edit, Trash2, ChevronDown, ChevronUp, Calendar
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import WorkoutDifficulty from './WorkoutDifficulty';
+import { exerciseThumbnail } from '@/lib/exerciseMedia';
 
 interface Client { id: string; name: string; email: string; }
 interface Exercise {
@@ -79,7 +80,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
   };
   const fetchLibrary = async () => {
     const { data } = await supabase.from('exercises_library').select('*').order('name');
-    setLibrary(data || []);
+    setLibrary((data || []).map(ex => ({ ...ex, thumbnail_url: exerciseThumbnail(ex.id, ex.thumbnail_url) })));
   };
   const fetchPlans = async () => {
     const { data } = await supabase.from('workout_plans').select('*').order('created_at', { ascending: false });
@@ -109,7 +110,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
         muscle_group: it.muscle_group || '',
         equipment: it.equipment ?? null, instructions: it.instructions ?? null,
         common_errors: it.common_errors ?? library.find(e => e.id === it.exercise_id)?.common_errors ?? null,
-        video_url: it.video_url || null, thumbnail_url: it.thumbnail_url || null,
+        video_url: it.video_url || null, thumbnail_url: exerciseThumbnail(it.exercise_id, it.thumbnail_url),
         sets: it.sets || 3, reps: it.reps || '10', rest_seconds: it.rest_seconds || 60, notes: it.notes || ''
       })) };
     }));
