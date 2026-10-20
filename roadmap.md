@@ -11,7 +11,7 @@
 - [x] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto; dos respuestas reales y bloqueo diario comprobados.
 
 # Rutinas y biblioteca de ejercicios
-- [ ] Incorporar los diez vídeos nuevos, comprobar duplicados y asociarlos únicamente a sus aperturas y circuitos correspondientes.
+- [x] Incorporar los diez vídeos nuevos como ocho ejercicios completos de aperturas y circuitos, sin dos duplicados; añadir miniaturas originales, Ejecución y Errores comunes y comprobar guardado, reapertura y reproducción.
 - [x] Sustituir el desplegable por botones de dificultad y verificar guardado y reapertura sin salir de la web; salto a Google no reproducido en la versión publicada.
 - [x] Añadir Errores comunes y renombrar Instrucciones a Ejecución, conservando los datos existentes; guardado y reapertura comprobados.
 - [ ] Restaurar las demás imágenes originales: pendiente del archivo con hombros, tríceps, piernas, pecho, espalda y core; el aportado solo contiene bíceps.
