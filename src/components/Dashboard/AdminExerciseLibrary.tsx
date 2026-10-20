@@ -188,11 +188,11 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
             </div>
             <div>
               <label htmlFor="exercise-execution" className="block text-sm text-muted-foreground mb-1">Ejecución</label>
-              <Textarea id="exercise-execution" value={form.instructions} onChange={e => setForm({ ...form, instructions: e.target.value })} rows={3} className="bg-background border-input text-foreground" />
+              <Textarea id="exercise-execution" value={form.instructions} onChange={e => setForm({ ...form, instructions: e.target.value })} rows={3} className="bg-card border-input text-foreground" />
             </div>
             <div>
               <label htmlFor="exercise-errors" className="block text-sm text-muted-foreground mb-1">Errores comunes</label>
-              <Textarea id="exercise-errors" value={form.common_errors} onChange={e => setForm({ ...form, common_errors: e.target.value })} rows={3} className="bg-background border-input text-foreground" />
+              <Textarea id="exercise-errors" value={form.common_errors} onChange={e => setForm({ ...form, common_errors: e.target.value })} rows={3} className="bg-card border-input text-foreground" />
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
