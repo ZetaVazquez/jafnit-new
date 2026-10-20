@@ -14,3 +14,4 @@
 - [ ] Corregir y verificar el selector de dificultad sin salir de la web.
 - [ ] Añadir Errores comunes y renombrar Instrucciones a Ejecución, conservando los datos existentes.
 - [ ] Restaurar imágenes de la biblioteca original en los ejercicios con fotos IA, cuando estén disponibles.
+- [ ] Revisar los GIF del archivo aportado y sustituir solo las imágenes con correspondencia comprobada; identificar faltantes.
