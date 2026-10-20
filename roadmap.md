@@ -11,9 +11,9 @@
 - [x] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto; dos respuestas reales y bloqueo diario comprobados.
 
 # Rutinas y biblioteca de ejercicios
-- [ ] Incorporar el segundo lote de diez vídeos: circuitos en step, HIIT y sentados, curls de bíceps y curl femoral; evitar duplicados y verificar reproducción.
+- [x] Incorporar el segundo lote: ocho fichas nuevas y curl femoral actualizado, conservando las dos demostraciones diferentes de curl concentrado y una versión de curl femoral; guardado, reapertura y reproducción comprobados.
 - [x] Incorporar los diez vídeos nuevos como ocho ejercicios completos de aperturas y circuitos, sin dos duplicados; añadir miniaturas originales, Ejecución y Errores comunes y comprobar guardado, reapertura y reproducción.
 - [x] Sustituir el desplegable por botones de dificultad y verificar guardado y reapertura sin salir de la web; salto a Google no reproducido en la versión publicada.
 - [x] Añadir Errores comunes y renombrar Instrucciones a Ejecución, conservando los datos existentes; guardado y reapertura comprobados.
-- [ ] Restaurar las demás imágenes originales: pendiente del archivo con hombros, tríceps, piernas, pecho, espalda y core; el aportado solo contiene bíceps.
+- [ ] Restaurar las demás imágenes originales, incluidos elevaciones laterales y press militar: pendiente de los archivos específicos restantes; aplicados los GIF de bíceps y los dos lotes de vídeos disponibles.
 - [x] Revisar los 32 GIF del archivo aportado; aplicar los correspondientes a Curl con barra y Curl martillo, sin sustituir movimientos por otros distintos.
