@@ -3,7 +3,8 @@ import React from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Gift, Download } from 'lucide-react';
+import { ArrowLeft, Gift, Download, StretchHorizontal } from 'lucide-react';
+import manualAsset from '@/assets/manual-estiramiento-movilidad.pdf.asset.json';
 
 interface GiftsProps {
   onGoBack: () => void;
@@ -11,8 +12,7 @@ interface GiftsProps {
 
 const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
   const { toast } = useToast();
-  const handleDownloadGift = async () => {
-    const pdfPath = '/gifts/welcome-gift.pdf';
+  const downloadPdf = async (pdfPath: string, fileName: string) => {
     try {
       const res = await fetch(pdfPath, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -20,16 +20,17 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
       if (!contentType.includes('pdf')) throw new Error('Contenido inesperado (no es PDF)');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a'); link.href = url; link.download = 'JAFN-Gift-Welcome.pdf';
+      const link = document.createElement('a'); link.href = url; link.download = fileName;
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       toast({ title: 'Descarga iniciada', description: 'Se está descargando tu regalo en PDF.' });
     } catch (error) {
       console.error('Error al descargar el PDF:', error);
       toast({ variant: 'destructive', title: 'No se pudo descargar el PDF', description: 'Revisaremos el enlace. Intenta de nuevo más tarde.' });
-      window.open(pdfPath, '_blank', 'noopener,noreferrer');
     }
   };
+  const handleDownloadGift = () => downloadPdf('/gifts/welcome-gift.pdf', 'JAFN-Gift-Welcome.pdf');
+  const handleDownloadManual = () => downloadPdf(manualAsset.url, 'JAFN-Manual-Estiramiento-Movilidad.pdf');
 
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
@@ -69,6 +70,28 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
               </div>
               <div className="mt-8 p-4 bg-[hsl(220,20%,16%)] border border-yellow-500/20 rounded-lg">
                 <p className="text-sm text-yellow-200">💡 <strong>Consejo:</strong> Guarda este archivo en un lugar seguro. Siempre podrás volver a descargarlo desde esta sección.</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="mt-8 border-[hsl(var(--accent-green))]/30 bg-[hsl(220,20%,12%)] shadow-xl">
+            <CardHeader className="text-center">
+              <div className="mx-auto w-16 h-16 bg-[hsl(var(--accent-green))]/15 rounded-full flex items-center justify-center mb-4 border border-[hsl(var(--accent-green))]/30">
+                <StretchHorizontal className="w-8 h-8 text-[hsl(var(--accent-green))]" />
+              </div>
+              <CardTitle className="text-2xl text-[hsl(var(--accent-green))]">Manual de Estiramiento y Movilidad</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center space-y-6">
+              <div className="bg-[hsl(220,20%,16%)] rounded-lg p-6 border border-white/10">
+                <p className="text-white/80 mb-4">Prepara tu cuerpo, mejora tus movimientos y entrena con mayor calidad: ejercicios para hombros, espalda, caderas y piernas, rutinas listas de 5, 8 y 15 minutos y los errores que debes evitar.</p>
+                <div className="bg-[hsl(220,20%,20%)] rounded-lg p-4 border border-white/10">
+                  <p className="text-sm text-[hsl(var(--accent-green))] font-medium">📄 Formato: PDF · 10 páginas</p>
+                  <p className="text-sm text-[hsl(var(--accent-green))] font-medium">🧘 Contenido: Movilidad, estiramientos y rutinas listas</p>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <Button onClick={handleDownloadManual} className="bg-[hsl(var(--accent-green))] hover:bg-[hsl(var(--accent-green))]/90 text-black font-bold py-3 px-6 rounded-full shadow-lg">
+                  <Download className="w-5 h-5 mr-2" />Descargar
+                </Button>
               </div>
             </CardContent>
           </Card>
