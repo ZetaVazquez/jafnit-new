@@ -11,6 +11,7 @@
 - [x] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto; dos respuestas reales y bloqueo diario comprobados.
 
 # Rutinas y biblioteca de ejercicios
+- [ ] Recuperar cambios sobrescritos del administrador: localizar una versión anterior verificable antes de restaurar; futuras importaciones solo añaden ejercicios nuevos.
 - [x] Incorporar el segundo lote: ocho fichas nuevas y curl femoral actualizado, conservando las dos demostraciones diferentes de curl concentrado y una versión de curl femoral; guardado, reapertura y reproducción comprobados.
 - [x] Incorporar los diez vídeos nuevos como ocho ejercicios completos de aperturas y circuitos, sin dos duplicados; añadir miniaturas originales, Ejecución y Errores comunes y comprobar guardado, reapertura y reproducción.
 - [x] Sustituir el desplegable por botones de dificultad y verificar guardado y reapertura sin salir de la web; salto a Google no reproducido en la versión publicada.
