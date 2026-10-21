@@ -11,6 +11,7 @@
 - [x] Proteger FIT con límites persistentes y validar conversación de visitantes, sin exigir registro ni cambiar su aspecto; dos respuestas reales y bloqueo diario comprobados.
 
 # Rutinas y biblioteca de ejercicios
+- [ ] Entregar relación de ejercicios sobrescritos y campos afectados, separando evidencia confirmada de cambios no verificables, sin modificar la biblioteca.
 - [x] Revisar las sobrescrituras: no hay importador automático activo ni historial de versiones en la biblioteca; futuras importaciones deben añadir solo nuevos ejercicios sin tocar los existentes.
 - [ ] Recuperar cambios del administrador: bloqueado por falta de una copia anterior verificable; las copias en rutinas no acreditan la última edición del administrador. No restaurar toda la base de datos ni reconstruir textos por suposición.
 - [x] Incorporar el segundo lote: ocho fichas nuevas y curl femoral actualizado, conservando las dos demostraciones diferentes de curl concentrado y una versión de curl femoral; guardado, reapertura y reproducción comprobados.
