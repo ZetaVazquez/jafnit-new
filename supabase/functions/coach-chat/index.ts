@@ -38,6 +38,14 @@ const tools = [
       parameters: { type: "object", properties: {} },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "handoff_to_trainer",
+      description: "Deriva la conversación al chat directo con José Antonio. Úsala cuando la persona pregunte algo concreto de SU plan de entrenamiento, SU dieta, SUS progresos, ajustes, revisiones o su seguimiento.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
 ];
 
 function buildSystemPrompt(ctx: {
@@ -132,6 +140,9 @@ DATOS DEL CLIENTE
     agua: m.water_l,
   })}
 
+DUDAS SOBRE SU PLAN (derivar a José)
+Tú resuelves dudas GENERALES (principios, hábitos, conceptos, servicios). Si la persona pregunta algo concreto de SU plan de entrenamiento, SU dieta, SUS progresos, cambios o ajustes de su seguimiento, NO lo respondas tú: llama a handoff_to_trainer y dile en una frase que eso lo trata José Antonio directamente y que puede escribirle con el botón que aparece debajo.
+
 PRINCIPIO FINAL
 No vendas por presión. Vende mediante comprensión, criterio y claridad. Habla siempre tú en segundo lugar: espera a que la persona escriba primero y responde a lo que realmente te pregunta.`;
 }
@@ -222,6 +233,7 @@ Deno.serve(async (req) => {
     ];
 
     let readyForDiagnosis = false;
+    let handoffToTrainer = false;
     let assistantFinal: ChatMessage | null = null;
     const savedMeasurements: any = {};
 
@@ -277,6 +289,8 @@ Deno.serve(async (req) => {
             }
           } else if (fname === "mark_ready_for_diagnosis") {
             readyForDiagnosis = true;
+          } else if (fname === "handoff_to_trainer") {
+            handoffToTrainer = true;
           }
           fullMessages.push({ role: "tool", tool_call_id: call.id, content: JSON.stringify(result) });
         }
@@ -310,6 +324,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({
       reply: assistantFinal?.content || "",
       readyForDiagnosis,
+      handoffToTrainer,
       savedMeasurements,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (err) {
