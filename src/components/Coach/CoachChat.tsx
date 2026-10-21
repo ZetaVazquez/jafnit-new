@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Send, X, Dumbbell } from 'lucide-react';
 import { toast } from 'sonner';
 import fitMascot from '@/assets/fit-mascot.png';
+import TrainerChatDialog from '@/components/Contact/TrainerChatDialog';
 
 
 type Msg = { role: 'user' | 'assistant'; content: string };
@@ -40,6 +41,8 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [ready, setReady] = useState(false);
+  const [handoff, setHandoff] = useState(false);
+  const [showTrainerChat, setShowTrainerChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -101,6 +104,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
         await typeOut(reply);
       }
       if (data?.readyForDiagnosis) setReady(true);
+      if (data?.handoffToTrainer && user) setHandoff(true);
     } catch (e: any) {
       console.error(e);
       setLoading(false);
@@ -216,6 +220,14 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             </div>
           )}
 
+          {handoff && user && (
+            <div className="pt-2">
+              <Button onClick={() => setShowTrainerChat(true)} size="lg" variant="outline" className="w-full border-primary text-primary hover:bg-primary/10 font-bold">
+                Hablar con José Antonio →
+              </Button>
+            </div>
+          )}
+
           {ready && onOpenPlans && (
             <div className="pt-4">
               <Button
@@ -253,6 +265,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
           </Button>
         </div>
       </div>
+      {user && <TrainerChatDialog open={showTrainerChat} onOpenChange={setShowTrainerChat} />}
     </div>
   );
 };
