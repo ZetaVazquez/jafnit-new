@@ -10,6 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 import WorkoutDifficulty from './WorkoutDifficulty';
 import { exerciseThumbnail } from '@/lib/exerciseMedia';
 
+const CARDIO_MODALITIES = ["Caminata en cinta", "Caminata inclinada", "Carrera", "Bicicleta estática", "Elíptica", "Remo", "Escaladora"];
+
 interface Client { id: string; name: string; email: string; }
 interface Exercise {
   id: string; name: string; muscle_group: string; description: string | null;
@@ -436,7 +438,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
           {pickerFilter === 'cardio' && cardioModality !== 'all' && (
             <p className="text-xs text-white/50 mb-2">Elige el método: se añadirá como «Método · {cardioModality}».</p>
           )}
-          <div className="hidden">
+          <div>
           </div>
           <div className="grid sm:grid-cols-2 gap-2">
             {filteredLib.map(ex => (
