@@ -62,6 +62,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
   const [pickerOpen, setPickerOpen] = useState<{ dayIndex: number } | null>(null);
   const [pickerSearch, setPickerSearch] = useState('');
   const [pickerFilter, setPickerFilter] = useState('all');
+  const [cardioModality, setCardioModality] = useState('all');
   const [generating, setGenerating] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -118,9 +119,11 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
   };
 
   const addItemToDay = (dayIndex: number, ex: Exercise) => {
+    const name = ex.muscle_group === 'cardio' && cardioModality !== 'all' && !CARDIO_MODALITIES.includes(ex.name)
+      ? `${ex.name} · ${cardioModality}` : ex.name;
     setDays(prev => prev.map((d, i) => i !== dayIndex ? d : ({
       ...d, items: [...d.items, {
-        exercise_id: ex.id, name: ex.name, muscle_group: ex.muscle_group,
+        exercise_id: ex.id, name, muscle_group: ex.muscle_group,
         equipment: ex.equipment, instructions: ex.instructions ?? null,
         common_errors: ex.common_errors ?? null,
         video_url: ex.video_url, thumbnail_url: ex.thumbnail_url,
@@ -211,6 +214,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
   );
   const filteredLib = library.filter(e =>
     (pickerFilter === 'all' || e.muscle_group === pickerFilter) &&
+    (pickerFilter !== 'cardio' || cardioModality === 'all' || !CARDIO_MODALITIES.includes(e.name)) &&
     (pickerSearch === '' || e.name.toLowerCase().includes(pickerSearch.toLowerCase()))
   );
   const visiblePlans = view === 'drafts' ? plans.filter(p => p.status === 'draft') : plans;
@@ -408,7 +412,7 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
           <DialogHeader><DialogTitle className="text-white">Elegir ejercicio</DialogTitle></DialogHeader>
           <div className="flex flex-wrap gap-2 mb-3">
             <Input placeholder="Buscar..." value={pickerSearch} onChange={e => setPickerSearch(e.target.value)} className="bg-white/5 border-white/10 text-white max-w-xs" />
-            <Select value={pickerFilter} onValueChange={setPickerFilter}>
+            <Select value={pickerFilter} onValueChange={v => { setPickerFilter(v); setCardioModality('all'); }}>
               <SelectTrigger className="bg-white/5 border-white/10 text-white max-w-xs"><SelectValue /></SelectTrigger>
               <SelectContent className="bg-[hsl(220,20%,15%)] border-white/10">
                 <SelectItem value="all" className="text-white">Todos</SelectItem>
@@ -417,6 +421,22 @@ const AdminWorkoutBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) =
                 ))}
               </SelectContent>
             </Select>
+            {pickerFilter === 'cardio' && (
+              <Select value={cardioModality} onValueChange={setCardioModality}>
+                <SelectTrigger aria-label="Modalidad de cardio" className="bg-white/5 border-white/10 text-white max-w-xs"><SelectValue /></SelectTrigger>
+                <SelectContent className="bg-[hsl(220,20%,15%)] border-white/10">
+                  <SelectItem value="all" className="text-white">Todas las modalidades</SelectItem>
+                  {CARDIO_MODALITIES.map(m => (
+                    <SelectItem key={m} value={m} className="text-white">Cardio de {m.toLowerCase()}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+          {pickerFilter === 'cardio' && cardioModality !== 'all' && (
+            <p className="text-xs text-white/50 mb-2">Elige el método: se añadirá como «Método · {cardioModality}».</p>
+          )}
+          <div className="hidden">
           </div>
           <div className="grid sm:grid-cols-2 gap-2">
             {filteredLib.map(ex => (
