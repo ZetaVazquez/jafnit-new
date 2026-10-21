@@ -15,5 +15,6 @@
 - [x] Incorporar los diez vídeos nuevos como ocho ejercicios completos de aperturas y circuitos, sin dos duplicados; añadir miniaturas originales, Ejecución y Errores comunes y comprobar guardado, reapertura y reproducción.
 - [x] Sustituir el desplegable por botones de dificultad y verificar guardado y reapertura sin salir de la web; salto a Google no reproducido en la versión publicada.
 - [x] Añadir Errores comunes y renombrar Instrucciones a Ejecución, conservando los datos existentes; guardado y reapertura comprobados.
-- [ ] Restaurar las demás imágenes originales, incluidos elevaciones laterales y press militar: pendiente de los archivos específicos restantes; aplicados los GIF de bíceps y los dos lotes de vídeos disponibles.
+- [x] Tercer lote: 9 vídeos (7 fichas nuevas, dominada prona y gemelos con mancuernas actualizados).
+- [ ] Restaurar las demás imágenes originales: pendiente de más archivos del usuario.
 - [x] Revisar los 32 GIF del archivo aportado; aplicar los correspondientes a Curl con barra y Curl martillo, sin sustituir movimientos por otros distintos.
