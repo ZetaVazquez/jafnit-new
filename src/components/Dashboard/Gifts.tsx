@@ -4,7 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Gift, Download, StretchHorizontal } from 'lucide-react';
-import manualAsset from '@/assets/manual-estiramiento-movilidad.pdf.asset.json';
+import manualAsset from '@/assets/manual-movilidad-estiramiento.pdf.asset.json';
 
 interface GiftsProps {
   onGoBack: () => void;
@@ -30,7 +30,7 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
     }
   };
   const handleDownloadGift = () => downloadPdf('/gifts/welcome-gift.pdf', 'JAFN-Gift-Welcome.pdf');
-  const handleDownloadManual = () => downloadPdf(manualAsset.url, 'JAFN-Manual-Estiramiento-Movilidad.pdf');
+  const handleDownloadManual = () => downloadPdf(manualAsset.url, 'JAFN-Manual-Movilidad-y-Estiramiento.pdf');
 
   return (
     <div className="min-h-screen bg-[hsl(220,20%,8%)]">
@@ -78,13 +78,13 @@ const Gifts: React.FC<GiftsProps> = ({ onGoBack }) => {
               <div className="mx-auto w-16 h-16 bg-[hsl(var(--accent-green))]/15 rounded-full flex items-center justify-center mb-4 border border-[hsl(var(--accent-green))]/30">
                 <StretchHorizontal className="w-8 h-8 text-[hsl(var(--accent-green))]" />
               </div>
-              <CardTitle className="text-2xl text-[hsl(var(--accent-green))]">Manual de Estiramiento y Movilidad</CardTitle>
+              <CardTitle className="text-2xl text-[hsl(var(--accent-green))]">Manual de Movilidad y Estiramiento</CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-6">
               <div className="bg-[hsl(220,20%,16%)] rounded-lg p-6 border border-white/10">
-                <p className="text-white/80 mb-4">Prepara tu cuerpo, mejora tus movimientos y entrena con mayor calidad: ejercicios para hombros, espalda, caderas y piernas, rutinas listas de 5, 8 y 15 minutos y los errores que debes evitar.</p>
+                <p className="text-white/80 mb-4">Muévete mejor y entrena con más rango: ejercicios para hombros, espalda, caderas y piernas, rutinas listas de 5, 8 y 15 minutos y los errores que debes evitar.</p>
                 <div className="bg-[hsl(220,20%,20%)] rounded-lg p-4 border border-white/10">
-                  <p className="text-sm text-[hsl(var(--accent-green))] font-medium">📄 Formato: PDF · 10 páginas</p>
+                  <p className="text-sm text-[hsl(var(--accent-green))] font-medium">📄 Formato: PDF · 9 páginas</p>
                   <p className="text-sm text-[hsl(var(--accent-green))] font-medium">🧘 Contenido: Movilidad, estiramientos y rutinas listas</p>
                 </div>
               </div>
