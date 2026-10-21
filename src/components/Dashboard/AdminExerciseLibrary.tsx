@@ -15,12 +15,21 @@ const CARDIO_METHODS = [
   'Sprint Interval Training — SIT', 'Fartlek', 'Cardio continuo postentrenamiento de fuerza',
 ];
 const CARDIO_MODALITIES = ['Caminata en cinta', 'Caminata inclinada', 'Carrera', 'Bicicleta estática', 'Elíptica', 'Remo', 'Escaladora'];
+const ARM_GROUPS = ['Bíceps', 'Tríceps', 'Antebrazo'];
+const armGroup = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes('tríc') || n.includes('tricep') || n.startsWith('extensión') || n.startsWith('extension') || n === 'press kaz' || n.includes('agarre cerrado')) return 'Tríceps';
+  if (n.includes('martillo') || n.includes('inverso') || n.includes('prono')) return 'Antebrazo';
+  return 'Bíceps';
+};
 const filterLabel = (f: string) =>
   f === 'all' ? 'Todos los grupos'
   : f === 'cardio' ? 'Cardio'
   : f === 'cardio:methods' ? 'Cardio · Métodos'
   : f === 'cardio:modalities' ? 'Cardio · Modalidades'
   : f.startsWith('cardio:name:') ? `Cardio · ${f.slice(12)}`
+  : f === 'brazos' ? 'Brazos'
+  : f.startsWith('brazos:group:') ? `Brazos · ${f.slice(13)}`
   : f.charAt(0).toUpperCase() + f.slice(1);
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -154,6 +163,9 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
       if (filter === 'cardio:methods' && !CARDIO_METHODS.includes(ex.name)) return false;
       if (filter === 'cardio:modalities' && !CARDIO_MODALITIES.includes(ex.name)) return false;
       if (filter.startsWith('cardio:name:') && ex.name !== filter.slice(12)) return false;
+    } else if (filter.startsWith('brazos')) {
+      if (ex.muscle_group !== 'brazos') return false;
+      if (filter.startsWith('brazos:group:') && armGroup(ex.name) !== filter.slice(13)) return false;
     } else if (filter !== 'all' && ex.muscle_group !== filter) return false;
     if (search && !ex.name.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
@@ -269,6 +281,16 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
                     <DropdownMenuLabel className="text-muted-foreground text-xs">Modalidades</DropdownMenuLabel>
                     <DropdownMenuItem onSelect={() => setFilter('cardio:modalities')}>Ver todas las modalidades</DropdownMenuItem>
                     {CARDIO_MODALITIES.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`cardio:name:${m}`)}>{m}</DropdownMenuItem>)}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              ) : g === 'brazos' ? (
+                <DropdownMenuSub key={g}>
+                  <DropdownMenuSubTrigger onClick={() => setFilter('brazos')}>Brazos</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="max-h-[70vh] overflow-y-auto w-72 bg-[hsl(220,20%,15%)] border-white/10 text-white">
+                    <DropdownMenuItem onSelect={() => setFilter('brazos')}>Todos los brazos</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-muted-foreground text-xs">Músculos</DropdownMenuLabel>
+                    {ARM_GROUPS.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`brazos:group:${m}`)}>{m}<span className="text-white/40 text-xs ml-2">{exercises.filter(e => e.muscle_group === 'brazos' && armGroup(e.name) === m).length}</span></DropdownMenuItem>)}
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
               ) : (
