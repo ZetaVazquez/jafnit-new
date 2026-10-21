@@ -3,7 +3,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, Plus, Edit, Trash2, Upload, Video, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Upload, Video, Image as ImageIcon, Loader2, ChevronDown } from 'lucide-react';
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+const CARDIO_METHODS = [
+  'Calentamiento cardiovascular general', 'Vuelta a la calma', 'Cardio continuo de baja intensidad — LISS',
+  'Cardio continuo moderado — MICT', 'Tempo / ritmo próximo al umbral', 'HIIT',
+  'Sprint Interval Training — SIT', 'Fartlek', 'Cardio continuo postentrenamiento de fuerza',
+];
+const CARDIO_MODALITIES = ['Caminata en cinta', 'Caminata inclinada', 'Carrera', 'Bicicleta estática', 'Elíptica', 'Remo', 'Escaladora'];
+const filterLabel = (f: string) =>
+  f === 'all' ? 'Todos los grupos'
+  : f === 'cardio' ? 'Cardio'
+  : f === 'cardio:methods' ? 'Cardio · Métodos'
+  : f === 'cardio:modalities' ? 'Cardio · Modalidades'
+  : f.startsWith('cardio:name:') ? `Cardio · ${f.slice(12)}`
+  : f.charAt(0).toUpperCase() + f.slice(1);
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { exerciseThumbnail } from '@/lib/exerciseMedia';
@@ -131,7 +149,12 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
   };
 
   const filtered = exercises.filter(ex => {
-    if (filter !== 'all' && ex.muscle_group !== filter) return false;
+    if (filter.startsWith('cardio')) {
+      if (ex.muscle_group !== 'cardio') return false;
+      if (filter === 'cardio:methods' && !CARDIO_METHODS.includes(ex.name)) return false;
+      if (filter === 'cardio:modalities' && !CARDIO_MODALITIES.includes(ex.name)) return false;
+      if (filter.startsWith('cardio:name:') && ex.name !== filter.slice(12)) return false;
+    } else if (filter !== 'all' && ex.muscle_group !== filter) return false;
     if (search && !ex.name.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
@@ -225,13 +248,34 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
 
         <div className="rounded-xl border border-white/10 bg-white/5 p-4 mb-4 flex flex-wrap gap-3 items-center">
           <Input placeholder="Buscar ejercicio..." value={search} onChange={e => setSearch(e.target.value)} className="bg-white/5 border-white/10 text-white max-w-xs" />
-          <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="bg-white/5 border-white/10 text-white max-w-xs"><SelectValue /></SelectTrigger>
-            <SelectContent className="bg-[hsl(220,20%,15%)] border-white/10">
-              <SelectItem value="all" className="text-white">Todos los grupos</SelectItem>
-              {MUSCLE_GROUPS.map(g => <SelectItem key={g} value={g} className="text-white capitalize">{g}</SelectItem>)}
-            </SelectContent>
-          </Select>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button type="button" variant="outline" className="bg-white/5 border-white/10 text-white w-full max-w-xs justify-between font-normal">
+                <span className="truncate">{filterLabel(filter)}</span><ChevronDown className="w-4 h-4 opacity-50" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56 bg-[hsl(220,20%,15%)] border-white/10 text-white">
+              <DropdownMenuItem onSelect={() => setFilter('all')}>Todos los grupos</DropdownMenuItem>
+              {MUSCLE_GROUPS.map(g => g === 'cardio' ? (
+                <DropdownMenuSub key={g}>
+                  <DropdownMenuSubTrigger onClick={() => setFilter('cardio')}>Cardio</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="max-h-[70vh] overflow-y-auto w-72 bg-[hsl(220,20%,15%)] border-white/10 text-white">
+                    <DropdownMenuItem onSelect={() => setFilter('cardio')}>Todo el cardio</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-muted-foreground text-xs">Métodos / intensidad</DropdownMenuLabel>
+                    <DropdownMenuItem onSelect={() => setFilter('cardio:methods')}>Ver todos los métodos</DropdownMenuItem>
+                    {CARDIO_METHODS.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`cardio:name:${m}`)}>{m}</DropdownMenuItem>)}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-muted-foreground text-xs">Modalidades</DropdownMenuLabel>
+                    <DropdownMenuItem onSelect={() => setFilter('cardio:modalities')}>Ver todas las modalidades</DropdownMenuItem>
+                    {CARDIO_MODALITIES.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`cardio:name:${m}`)}>{m}</DropdownMenuItem>)}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              ) : (
+                <DropdownMenuItem key={g} className="capitalize" onSelect={() => setFilter(g)}>{g}</DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <span className="text-sm text-white/40 ml-auto">{filtered.length} ejercicios</span>
         </div>
 
