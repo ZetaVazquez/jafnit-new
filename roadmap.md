@@ -18,3 +18,4 @@
 - [x] Tercer lote: 9 vídeos (7 fichas nuevas, dominada prona y gemelos con mancuernas actualizados).
 - [ ] Restaurar las demás imágenes originales: pendiente de más archivos del usuario.
 - [x] Revisar los 32 GIF del archivo aportado; aplicar los correspondientes a Curl con barra y Curl martillo, sin sustituir movimientos por otros distintos.
+- [ ] Desplegable de Brazos con subgrupos (bíceps, tríceps, antebrazo) igual que el de Cardio; comprobar filtrado en pantalla.
