@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Check, X, Loader2, ClipboardList, Flame } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { calorieLabel } from '@/lib/dietPlan';
 import { EVALUATION_BLOCKS } from './InitialEvaluationModal';
 
 interface Props { onChanged?: () => void }
@@ -80,7 +81,7 @@ const AdminDietRequests: React.FC<Props> = ({ onChanged }) => {
                     <p className="text-sm text-white/50">{r.profiles?.email} · {new Date(r.created_at).toLocaleString('es-ES')}</p>
                     <p className="text-sm text-white/80 mt-2">{r.title}</p>
                     <div className="flex gap-2 mt-2 flex-wrap">
-                      <Badge className="bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green-light))] border-0"><Flame className="w-3 h-3 mr-1" />{r.calories_target || t?.kcal || '—'} kcal/día</Badge>
+                      <Badge className="bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green-light))] border-0"><Flame className="w-3 h-3 mr-1" />{calorieLabel(r.meal_plan?.days || [])}</Badge>
                       {t && <Badge className="bg-white/10 text-white/80 border-0">P {t.protein_g ?? t.protein}g · C {t.carbs_g ?? t.carbs}g · G {t.fats_g ?? t.fats}g</Badge>}
                       {ev?.completed ? <Badge className="bg-white/10 text-white/80 border-0">Cuestionario completado</Badge> : <Badge className="bg-white/10 text-white/50 border-0">Sin cuestionario completo</Badge>}
                     </div>
@@ -130,7 +131,7 @@ const AdminDietRequests: React.FC<Props> = ({ onChanged }) => {
                     <AccordionContent>
                       {(r.meal_plan?.days || []).map((d: any, i: number) => (
                         <div key={i} className="mb-3">
-                          <p className="text-sm font-semibold text-white mb-1">{d.day}</p>
+                          <p className="text-sm font-semibold text-white mb-1">{d.day} · {calorieLabel([d])}</p>
                           <ul className="space-y-1">
                             {(d.meals || []).map((m: any, j: number) => (
                               <li key={j} className="text-sm text-white/70">

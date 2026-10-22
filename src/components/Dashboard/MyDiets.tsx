@@ -11,6 +11,7 @@ import SubscriptionGuard from '@/components/SubscriptionGuard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import TrainerContactDialog from '@/components/Contact/TrainerContactDialog';
+import { calorieLabel } from '@/lib/dietPlan';
 
 interface MyDietsProps {
   onGoBack: () => void;
@@ -102,7 +103,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
     doc.setFontSize(9);
     doc.text('NUTRICIÓN Y ENTRENAMIENTO', pageW / 2, pageH - 24, { align: 'center' });
     if (diet.calories_target) {
-      doc.text(`Objetivo: ${diet.calories_target} kcal/día`, pageW / 2, pageH - 17, { align: 'center' });
+      doc.text(`Comidas: ${calorieLabel(diet.meal_plan?.days || [])} · Objetivo clínico: ${diet.calories_target} kcal/día`, pageW / 2, pageH - 17, { align: 'center' });
     }
     doc.text(`Fecha: ${new Date(diet.created_at).toLocaleDateString('es-ES')}`, pageW / 2, pageH - 12, { align: 'center' });
 
@@ -168,7 +169,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
         doc.setTextColor(...BLACK);
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(16);
-        doc.text(day.day || `Día ${idx + 1}`, 12, 28);
+        doc.text(`${day.day || `Día ${idx + 1}`} · ${calorieLabel([day])}`, 12, 28);
 
         const groups = groupMeals(day.meals || []);
         const body: any[] = [];
@@ -288,7 +289,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                       <div>
                         <p className="text-white/50 mb-4">{diet.description}</p>
                         <div className="flex items-center space-x-4 text-sm text-white/40">
-                          <div className="flex items-center space-x-1"><Target className="w-4 h-4" /><span>{diet.calories_target} cal/día</span></div>
+                          <div className="flex items-center space-x-1"><Target className="w-4 h-4" /><span>{calorieLabel(diet.meal_plan?.days || [])}</span></div>
                           <div className="flex items-center space-x-1"><Calendar className="w-4 h-4" /><span>Creado: {new Date(diet.created_at).toLocaleDateString('es-ES')}</span></div>
                         </div>
                       </div>
@@ -302,7 +303,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                             <div className="space-y-4">
                               {diet.description && <div><h4 className="font-semibold text-white mb-2">Descripción:</h4><p className="text-white/60">{diet.description}</p></div>}
                               <div className="grid grid-cols-2 gap-4">
-                                {diet.calories_target && <div><h4 className="font-semibold text-white mb-1">Objetivo de calorías:</h4><p className="text-white/60">{diet.calories_target} cal/día</p></div>}
+                                {diet.calories_target && <div><h4 className="font-semibold text-white mb-1">Objetivo clínico:</h4><p className="text-white/60">{diet.calories_target} kcal/día</p></div>}
                                 <div><h4 className="font-semibold text-white mb-1">Fecha de creación:</h4><p className="text-white/60">{new Date(diet.created_at).toLocaleDateString('es-ES')}</p></div>
                               </div>
                               <div>
@@ -311,7 +312,7 @@ const MyDiets: React.FC<MyDietsProps> = ({ onGoBack }) => {
                                   <div className="space-y-4">
                                     {diet.meal_plan.days.map((day: any, di: number) => (
                                       <div key={di} className="rounded-lg border border-white/10 bg-white/5 p-3">
-                                        <h5 className="text-[hsl(var(--accent-green))] font-semibold mb-2">{day.day}</h5>
+                                        <h5 className="text-[hsl(var(--accent-green))] font-semibold mb-2">{day.day} · {calorieLabel([day])}</h5>
                                 <div className="space-y-3">
                                           {(() => {
                                             const groups: Record<string, any[]> = {};
