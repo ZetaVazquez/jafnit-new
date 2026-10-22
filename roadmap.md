@@ -22,3 +22,8 @@
 - [ ] Restaurar las demás imágenes originales: pendiente de más archivos del usuario.
 - [x] Revisar los 32 GIF del archivo aportado; aplicar los correspondientes a Curl con barra y Curl martillo, sin sustituir movimientos por otros distintos.
 - [x] Desplegable de Brazos con subgrupos (bíceps 19, tríceps 14, antebrazo 6) igual que el de Cardio; filtrado y recuento comprobados en pantalla.
+
+# Calorías y variedad de dietas
+- [x] Separar objetivo clínico de calorías reales y mostrar intervalos por día y en PDF, contando una alternativa por toma.
+- [x] Calcular las raciones generadas desde ingredientes/cantidades y bloquear conjuntos de platos repetidos para el mismo cliente.
+- [x] Ocho pruebas aprobadas, pantalla y generación con biblioteca verificadas; borrador de prueba eliminado y planes anteriores intactos, sin publicar. Ingredientes no calculables bloquean el guardado y muestran el motivo.

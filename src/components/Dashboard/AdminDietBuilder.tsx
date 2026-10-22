@@ -8,6 +8,7 @@ import { ArrowLeft, Search, Plus, Edit, Trash2, ChevronDown, ChevronUp, Calendar
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import AdminDietRequests from './AdminDietRequests';
+import { calorieLabel, calorieRange, assertDietVariety, gramsFromQuantity, recipeGrams, scaleMeal } from '@/lib/dietPlan';
 
 interface Client { id: string; name: string; email: string; }
 interface Meal {
@@ -17,7 +18,7 @@ interface Meal {
 interface MealItem {
   meal_id: string; name: string; meal_type: string; image_url: string | null;
   calories: number | null; protein_g: number | null; carbs_g: number | null; fats_g: number | null;
-  quantity: string; notes: string;
+  quantity: string; notes: string; ingredients_detail?: any[] | null;
 }
 interface DayPlan { day: string; meals: MealItem[]; }
 interface DietPlanRow {
@@ -116,7 +117,16 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     setPickerOpen(null);
   };
   const updateMeal = (dayIndex: number, idx: number, patch: Partial<MealItem>) => {
-    setDays(prev => prev.map((d, i) => i !== dayIndex ? d : ({ ...d, meals: d.meals.map((it, j) => j === idx ? { ...it, ...patch } : it) })));
+    setDays(prev => prev.map((d, i) => i !== dayIndex ? d : ({ ...d, meals: d.meals.map((it, j) => {
+      if (j !== idx) return it;
+      if (patch.quantity !== undefined) {
+        const grams = gramsFromQuantity(patch.quantity);
+        const oldGrams = gramsFromQuantity(it.quantity) || recipeGrams(library.find(m => m.id === it.meal_id) || {});
+        if (grams && oldGrams) return { ...scaleMeal(it, grams / oldGrams), ...patch } as MealItem;
+        if (patch.quantity !== it.quantity) return { ...it, ...patch, calories: null, protein_g: null, carbs_g: null, fats_g: null };
+      }
+      return { ...it, ...patch };
+    }) })));
   };
   const removeMeal = (dayIndex: number, idx: number) => {
     setDays(prev => prev.map((d, i) => i !== dayIndex ? d : ({ ...d, meals: d.meals.filter((_, j) => j !== idx) })));
@@ -126,7 +136,10 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
     if (!selectedClient || !title) { toast({ title: 'Faltan datos', variant: 'destructive' }); return; }
     setSaving(true);
     try {
-      const meal_plan = { duration, duration_label: DURATION_CONFIG[duration].label, days: days.filter(d => d.meals.length > 0) };
+      const filledDays = days.filter(d => d.meals.length > 0);
+      if (!calorieRange(filledDays)) throw new Error('Faltan calorías o cantidades válidas en las comidas.');
+      assertDietVariety(filledDays, plans.filter(p => p.id !== editing?.id && (p.assigned_to || p.user_id) === selectedClient).map(p => p.meal_plan?.days || []));
+      const meal_plan = { ...editing?.meal_plan, duration, duration_label: DURATION_CONFIG[duration].label, days: filledDays, calorie_range: calorieRange(filledDays) };
       const calories_target = calories ? Number(calories) : null;
       if (editing) {
         const { error } = await supabase.rpc('admin_update_diet_plan', {
@@ -167,7 +180,10 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
       const { data, error } = await supabase.functions.invoke('generate-plans-from-questionnaire', {
         body: { user_id: clientId, type: 'diet', duration, instructions: aiInstructions.trim() || undefined }
       });
-      if (error) throw error;
+      if (error) {
+        const details = await error.context?.json?.().catch(() => null);
+        throw new Error(details?.error || error.message);
+      }
       if (!data?.success) throw new Error(data?.error || 'Error generando');
       toast({ title: 'Borrador de dieta generado por IA' });
       fetchPlans(); setView('drafts');
@@ -275,7 +291,7 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                 <div key={dIdx} className="rounded-lg border border-white/10">
                   <button type="button" onClick={() => setExpandedDay(expandedDay === dIdx ? -1 : dIdx)}
                     className={`w-full flex items-center justify-between p-3 text-sm ${day.meals.length > 0 ? 'bg-[hsl(var(--accent-green))]/10 text-[hsl(var(--accent-green))]' : 'bg-white/5 text-white/60'}`}>
-                    <span className="flex items-center gap-2 font-medium">{day.day} {day.meals.length > 0 && <span className="text-xs opacity-60">· {day.meals.length} comidas</span>}</span>
+                    <span className="flex items-center gap-2 font-medium">{day.day} {day.meals.length > 0 && <span className="text-xs opacity-60">· {calorieLabel([day])}</span>}</span>
                     {expandedDay === dIdx ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                   {expandedDay === dIdx && (
@@ -338,7 +354,7 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                       {p.status === 'draft' && <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400">BORRADOR</span>}
                       {p.generated_by_ai && <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 flex items-center gap-1"><Sparkles className="w-3 h-3" />IA</span>}
                     </div>
-                    <p className="text-sm text-white/40 mt-1">{p.client_name} · {p.calories_target ? `${p.calories_target} kcal` : ''} · {new Date(p.created_at).toLocaleDateString('es-ES')}</p>
+                    <p className="text-sm text-white/40 mt-1">{p.client_name} · {calorieLabel(p.meal_plan?.days || [])} · {new Date(p.created_at).toLocaleDateString('es-ES')}</p>
                   </div>
                   <div className="flex gap-2">
                     {p.status === 'draft' && (
@@ -354,9 +370,9 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                   <div className="border-t border-white/10 p-4 space-y-2">
                     {p.meal_plan.days.map((d: any, i: number) => (
                       <div key={i} className="rounded-lg bg-white/5 p-3">
-                        <h4 className="text-sm font-semibold text-[hsl(var(--accent-green))] mb-2">{d.day}</h4>
+                        <h4 className="text-sm font-semibold text-[hsl(var(--accent-green))] mb-2">{d.day} · {calorieLabel([d])}</h4>
                         {(d.meals || []).map((m: any, j: number) => (
-                          <div key={j} className="text-sm text-white/70 py-1">• {m.name} ({m.meal_type}) — {m.quantity}</div>
+                          <div key={j} className="text-sm text-white/70 py-1">• {m.name} ({m.meal_type}) — {m.quantity} · {m.calories != null ? `${m.calories} kcal` : "Sin calorías"}</div>
                         ))}
                       </div>
                     ))}

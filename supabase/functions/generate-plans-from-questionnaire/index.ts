@@ -2,10 +2,8 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { computeTargets, computeTargetsFromLegacy, genericTargets, mealTargets } from "../_shared/nutrition.ts";
 import { computeMealFromIngredients, normalize as normName } from "../_shared/bedca.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { assertCompleteDiet, assertDietVariety, calorieRange, gramsFromQuantity, recipeGrams, scaleMeal } from "../_shared/dietPlan.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -196,6 +194,10 @@ IMPORTANTE: El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s)
     }
 
     // DIET
+    const { data: previousPlans, error: historyError } = await admin.from("diet_plans").select("meal_plan").eq("user_id", user_id).order("created_at", { ascending: false });
+    if (historyError) throw historyError;
+    const previousDays = (previousPlans || []).map(p => p.meal_plan?.days || []);
+    const previousMenus = previousDays.map((days, i) => `Plan ${i + 1}: ${[...new Set(days.flatMap((d: any) => (d.meals || []).map((m: any) => m.name)))].join(", ")}`).join("\n");
     // Compute clinical targets from the questionnaire (Mifflin-St Jeor)
     const targets = isGeneric
       ? genericTargets()
@@ -238,6 +240,7 @@ ${perMealBlock}
 
 REGLAS:
 - El plan debe tener EXACTAMENTE ${durationConfig.days.length} día(s) en este orden: ${durationConfig.days.join(", ")}.
+- ROTACIÓN SEMANAL OBLIGATORIA: varía los platos respecto a todos los menús anteriores del cliente. No basta cambiar el título, el orden o los gramos. Mantén alergias y restricciones; incorpora comidas diferentes cada semana.
 - Cada día EXACTAMENTE 2 opciones por tipo (breakfast, lunch, snack, dinner) = 8 entradas/día. Las 2 opciones de un mismo tipo son INTERCAMBIABLES: deben aportar las MISMAS calorías y macros objetivo de esa comida (±10%), para que el cliente elija la que prefiera. Nunca repitas el mismo plato dentro del mismo tipo y día.
 - Puedes usar comidas existentes de la biblioteca (por meal_id) O crear nuevas (new_meal). Una entrada lleva meal_id O new_meal, NUNCA ambos.
 - PREFIERE new_meal cuando la ración de la biblioteca no encaje con las kcal objetivo de esa comida: así los gramos quedan exactos.
@@ -246,7 +249,7 @@ REGLAS:
 - Rellena "target_kcal" con las kcal objetivo de esa comida.
 - MEDIDAS CASERAS OBLIGATORIAS: cada ingrediente de new_meal lleva "household" con una medida fácil (ej: 2 huevos, 1 taza de arroz cocido, 1 cucharada de aceite, 1 pieza mediana de fruta, 1 rebanada de pan, 1 puñado de frutos secos). Para meal_id rellena "household_quantity".
 - "notes" = preparación paso a paso, respetando alergias/intolerancias/restricciones y patologías del cuestionario de 7 bloques.${isGeneric ? "\n- Cliente sin cuestionario: usa los targets genéricos dados (2000 kcal)." : ""}${instructionsBlock}`;
-    const userPrompt = `Datos del cliente (cuestionario de bloques, evaluación inicial y ficha):\n${JSON.stringify(profileSummary, null, 2)}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día (2 opciones equivalentes por comida), total diario ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F y con gramos exactos por ingrediente.`;
+    const userPrompt = `Datos del cliente (cuestionario de bloques, evaluación inicial y ficha):\n${JSON.stringify(profileSummary, null, 2)}\n\nMenús anteriores (NO repetir el mismo conjunto de platos):\n${previousMenus || "Ninguno"}\n\nBiblioteca disponible (puedes reutilizar por meal_id):\n${mealsList}\n\nDías (${durationConfig.days.length}): ${durationConfig.days.join(", ")}\nRecuerda: 8 entradas/día (2 opciones equivalentes por comida), total diario ${targets.kcal} kcal con ${targets.protein_g}P/${targets.carbs_g}C/${targets.fats_g}F y con gramos exactos por ingrediente.`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -343,16 +346,19 @@ REGLAS:
     for (const d of (args.days || [])) {
       const dayMeals: any[] = [];
       for (const m of (d.meals || [])) {
-        let lib = m.meal_id ? libMap.get(m.meal_id) : undefined;
+        let lib: any = m.meal_id ? libMap.get(m.meal_id) : undefined;
+        let computedRecipe: any = null;
 
         // If AI proposed a new meal, compute macros from BEDCA and insert into library
         if (!lib && m.new_meal && Array.isArray(m.new_meal.ingredients_grams) && m.new_meal.ingredients_grams.length > 0) {
           const nm = m.new_meal;
+          computedRecipe = await computeMealFromIngredients(admin, nm.ingredients_grams);
+          if (computedRecipe.ingredients_resolved.some((r: any) => r.source === "estimated") || computedRecipe.kcal <= 0) throw new Error("No se han podido calcular todos los ingredientes. Revisa el borrador antes de guardarlo.");
           const existing = libByName.get(normName(nm.name || ""));
           if (existing) {
             lib = existing;
           } else {
-            const computed = await computeMealFromIngredients(admin, nm.ingredients_grams);
+            const computed = computedRecipe;
             const ingredientsText = nm.ingredients_grams.map((i: any) => `${i.grams} g ${i.ingredient_name}${i.household ? ` (${i.household})` : ""}`).join(", ");
             const sources = new Set(computed.ingredients_resolved.map(r => r.source));
             const source = sources.has("bedca") || sources.has("cache") ? "bedca"
@@ -380,16 +386,26 @@ REGLAS:
           }
         }
 
-        if (!lib) continue;
+        if (!lib) throw new Error("No se ha podido resolver una comida del plan.");
         const ingredientsDetail = Array.isArray(m.new_meal?.ingredients_grams)
           ? m.new_meal.ingredients_grams.map((i: any) => ({ name: i.ingredient_name, grams: i.grams, household: i.household || "" }))
           : null;
         const qty = ingredientsDetail
           ? `${ingredientsDetail.reduce((s: number, i: any) => s + (Number(i.grams) || 0), 0)} g`
           : (m.quantity || "1 ración");
+        let portion: any = { ...lib };
+        if (computedRecipe) {
+          portion = { ...portion, name: m.new_meal.name, meal_type: m.new_meal.meal_type, calories: computedRecipe.kcal, protein_g: computedRecipe.protein_g, carbs_g: computedRecipe.carbs_g, fats_g: computedRecipe.fats_g };
+        } else {
+          const grams = gramsFromQuantity(qty);
+          const baseGrams = recipeGrams(lib);
+          if (grams && !baseGrams) throw new Error(`Faltan los gramos de la receta de ${lib.name}; no se puede calcular esa ración.`);
+          if (grams && baseGrams) portion = scaleMeal(portion, grams / baseGrams);
+          else if (qty !== "1 ración") throw new Error(`Indica gramos o una ración para ${lib.name}.`);
+        }
         dayMeals.push({
-          meal_id: lib.id, name: lib.name, meal_type: lib.meal_type, image_url: lib.image_url,
-          calories: lib.calories, protein_g: lib.protein_g, carbs_g: lib.carbs_g, fats_g: lib.fats_g,
+          meal_id: lib.id, name: portion.name, meal_type: portion.meal_type, image_url: lib.image_url,
+          calories: portion.calories, protein_g: portion.protein_g, carbs_g: portion.carbs_g, fats_g: portion.fats_g,
           quantity: qty, household_quantity: m.household_quantity || "",
           ingredients_detail: ingredientsDetail, notes: m.notes || "",
           target_kcal: m.target_kcal ?? perMeal.find(p => p.meal_type === lib.meal_type)?.kcal ?? null,
@@ -399,6 +415,8 @@ REGLAS:
       if (dayMeals.length > 0) enrichedDaysRaw.push({ day: d.day, meals: dayMeals });
     }
     const enrichedDays = enrichedDaysRaw.slice(0, durationConfig.days.length);
+    assertCompleteDiet(enrichedDays, durationConfig.days.length);
+    assertDietVariety(enrichedDays, previousDays);
 
     const { error } = await admin.from("diet_plans").insert({
       title: (isGeneric ? "[Genérico] " : "") + args.title,
@@ -409,6 +427,7 @@ REGLAS:
       meal_plan: {
         duration: durationKey, duration_label: durationConfig.label,
         days: enrichedDays, is_generic: isGeneric,
+        calorie_range: calorieRange(enrichedDays),
         targets, meal_targets: perMeal, created_meals_count: createdCount,
       }
     });
