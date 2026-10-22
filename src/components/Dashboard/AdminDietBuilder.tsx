@@ -180,7 +180,10 @@ const AdminDietBuilder: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
       const { data, error } = await supabase.functions.invoke('generate-plans-from-questionnaire', {
         body: { user_id: clientId, type: 'diet', duration, instructions: aiInstructions.trim() || undefined }
       });
-      if (error) throw error;
+      if (error) {
+        const details = await error.context?.json?.().catch(() => null);
+        throw new Error(details?.error || error.message);
+      }
       if (!data?.success) throw new Error(data?.error || 'Error generando');
       toast({ title: 'Borrador de dieta generado por IA' });
       fetchPlans(); setView('drafts');
