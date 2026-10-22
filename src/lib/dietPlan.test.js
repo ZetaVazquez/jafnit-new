@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'bun:test';
 import { calorieRange, assertDietVariety, scaleMeal, recipeGrams } from './dietPlan';
-const day = (name: string, calories = 400) => ({ meals: [{ name, meal_type: 'breakfast', calories }] });
+const day = (name, calories = 400) => ({ meals: [{ name, meal_type: 'breakfast', calories }] });
 describe('Calorías reales y rotación semanal', () => {
   it('no sustituye las comidas por el objetivo 1649', () => expect(calorieRange([{ meals: [{ calories: 401, meal_type: 'breakfast' }, { calories: 586, meal_type: 'lunch' }, { calories: 169, meal_type: 'snack' }, { calories: 493, meal_type: 'dinner' }] }])).toEqual({ min: 1649, max: 1649 }));
   it('suma una alternativa por toma, no ambas', () => expect(calorieRange([{ meals: [{ calories: 401, meal_type: 'breakfast' }, { calories: 405, meal_type: 'breakfast' }, { calories: 562, meal_type: 'lunch' }, { calories: 586, meal_type: 'lunch' }] }])).toEqual({ min: 963, max: 991 }));
