@@ -22,15 +22,36 @@ const armGroup = (name: string) => {
   if (n.includes('martillo') || n.includes('inverso') || n.includes('prono')) return 'Antebrazo';
   return 'Bíceps';
 };
-const filterLabel = (f: string) =>
-  f === 'all' ? 'Todos los grupos'
-  : f === 'cardio' ? 'Cardio'
-  : f === 'cardio:methods' ? 'Cardio · Métodos'
-  : f === 'cardio:modalities' ? 'Cardio · Modalidades'
-  : f.startsWith('cardio:name:') ? `Cardio · ${f.slice(12)}`
-  : f === 'brazos' ? 'Brazos'
-  : f.startsWith('brazos:group:') ? `Brazos · ${f.slice(13)}`
-  : f.charAt(0).toUpperCase() + f.slice(1);
+const LEG_GROUPS = ['Cuádriceps', 'Isquiotibiales', 'Gemelos', 'Aductores'];
+const legGroup = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes('gemelo') || n.includes('calf')) return 'Gemelos';
+  if (n.includes('aducción') || n.includes('aduccion') || n.includes('adduction')) return 'Aductores';
+  if (n.includes('femoral') || n.includes('nórdico') || n.includes('nordico') || n.includes('peso muerto') || n.includes('buenos días')) return 'Isquiotibiales';
+  return 'Cuádriceps';
+};
+const GLUTE_GROUPS = ['Glúteo mayor', 'Glúteo medio', 'Piriforme'];
+const gluteGroup = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes('clamshell') || n.includes('piriforme') || n.includes('rotación externa')) return 'Piriforme';
+  if (n.includes('abducción') || n.includes('abduccion') || n.includes('monster walk') || n.includes('lateral')) return 'Glúteo medio';
+  return 'Glúteo mayor';
+};
+const SUB_GROUPS: Record<string, { groups: string[]; fn: (n: string) => string; all: string }> = {
+  brazos: { groups: ARM_GROUPS, fn: armGroup, all: 'Todos los brazos' },
+  piernas: { groups: LEG_GROUPS, fn: legGroup, all: 'Todas las piernas' },
+  'glúteos': { groups: GLUTE_GROUPS, fn: gluteGroup, all: 'Todos los glúteos' },
+};
+const filterLabel = (f: string) => {
+  if (f === 'all') return 'Todos los grupos';
+  if (f === 'cardio') return 'Cardio';
+  if (f === 'cardio:methods') return 'Cardio · Métodos';
+  if (f === 'cardio:modalities') return 'Cardio · Modalidades';
+  if (f.startsWith('cardio:name:')) return `Cardio · ${f.slice(12)}`;
+  const [base, , sub] = f.split(':');
+  const cap = base.charAt(0).toUpperCase() + base.slice(1);
+  return sub ? `${cap} · ${sub}` : cap;
+};
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { exerciseThumbnail } from '@/lib/exerciseMedia';
@@ -163,9 +184,10 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
       if (filter === 'cardio:methods' && !CARDIO_METHODS.includes(ex.name)) return false;
       if (filter === 'cardio:modalities' && !CARDIO_MODALITIES.includes(ex.name)) return false;
       if (filter.startsWith('cardio:name:') && ex.name !== filter.slice(12)) return false;
-    } else if (filter.startsWith('brazos')) {
-      if (ex.muscle_group !== 'brazos') return false;
-      if (filter.startsWith('brazos:group:') && armGroup(ex.name) !== filter.slice(13)) return false;
+    } else if (SUB_GROUPS[filter.split(':')[0]]) {
+      const [base, , sub] = filter.split(':');
+      if (ex.muscle_group !== base) return false;
+      if (sub && SUB_GROUPS[base].fn(ex.name) !== sub) return false;
     } else if (filter !== 'all' && ex.muscle_group !== filter) return false;
     if (search && !ex.name.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
@@ -283,14 +305,14 @@ const AdminExerciseLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) 
                     {CARDIO_MODALITIES.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`cardio:name:${m}`)}>{m}</DropdownMenuItem>)}
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
-              ) : g === 'brazos' ? (
+              ) : SUB_GROUPS[g] ? (
                 <DropdownMenuSub key={g}>
-                  <DropdownMenuSubTrigger onClick={() => setFilter('brazos')}>Brazos</DropdownMenuSubTrigger>
+                  <DropdownMenuSubTrigger className="capitalize" onClick={() => setFilter(g)}>{g}</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="max-h-[70vh] overflow-y-auto w-72 bg-[hsl(220,20%,15%)] border-white/10 text-white">
-                    <DropdownMenuItem onSelect={() => setFilter('brazos')}>Todos los brazos</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => setFilter(g)}>{SUB_GROUPS[g].all}</DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuLabel className="text-muted-foreground text-xs">Músculos</DropdownMenuLabel>
-                    {ARM_GROUPS.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`brazos:group:${m}`)}>{m}<span className="text-white/40 text-xs ml-2">{exercises.filter(e => e.muscle_group === 'brazos' && armGroup(e.name) === m).length}</span></DropdownMenuItem>)}
+                    {SUB_GROUPS[g].groups.map(m => <DropdownMenuItem key={m} onSelect={() => setFilter(`${g}:group:${m}`)}>{m}<span className="text-white/40 text-xs ml-2">{exercises.filter(e => e.muscle_group === g && SUB_GROUPS[g].fn(e.name) === m).length}</span></DropdownMenuItem>)}
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
               ) : (
