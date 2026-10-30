@@ -341,20 +341,20 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
               <div><label className="block text-xs text-white/70 mb-1">Grasas (g)</label><Input type="number" step="0.1" value={form.fats_g} onChange={e => setForm({ ...form, fats_g: e.target.value })} className="bg-white/5 border-white/10 text-white" /></div>
             </div>
             <div>
-              <label id="meal-tags-label" className="block text-sm text-muted-foreground mb-1">Etiquetas</label>
+              <label id="meal-tags-label" className="block text-sm text-[hsl(var(--text-secondary))] mb-1">Etiquetas</label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button type="button" variant="outline" aria-labelledby="meal-tags-label meal-tags-value" className="w-full h-auto min-h-10 justify-between gap-2 bg-background text-foreground border-input text-left">
+                  <Button type="button" variant="outline" aria-labelledby="meal-tags-label meal-tags-value" className="w-full h-auto min-h-10 justify-between gap-2 bg-dark-surface text-[hsl(var(--text-primary))] border-dark-border hover:bg-dark-card hover:text-[hsl(var(--text-primary))] text-left">
                     <span id="meal-tags-value" className="whitespace-pre-wrap break-words min-w-0">{form.diet_tags?.length ? form.diet_tags.join(', ') : 'Seleccionar etiquetas'}</span>
-                    <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
+                    <ChevronDown className="w-4 h-4 shrink-0 text-[hsl(var(--text-secondary))]" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="max-h-72 overflow-y-auto max-w-[calc(100vw-2rem)]">
+                <DropdownMenuContent align="start" className="max-h-72 overflow-y-auto max-w-[calc(100vw-2rem)] bg-dark-surface border-dark-border text-[hsl(var(--text-primary))]">
                   {mealTagOptions([form.diet_tags, ...meals.map(meal => meal.diet_tags)]).map(tag => (
                     <DropdownMenuCheckboxItem key={tag} checked={form.diet_tags?.includes(tag) ?? false}
                       onSelect={event => event.preventDefault()}
                       onCheckedChange={checked => setForm(prev => ({ ...prev, diet_tags: toggleMealTag(prev.diet_tags, tag, checked === true) }))}
-                      className="whitespace-pre-wrap break-words">
+                      className="whitespace-pre-wrap break-words focus:bg-dark-card focus:text-[hsl(var(--text-primary))]">
                       {tag}
                     </DropdownMenuCheckboxItem>
                   ))}
