@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Keep meal-tag form state as the original string array and merge stored tags into selector options without normalization; opening an editor must never rewrite existing recipe data.
+
 - Resolve stored news image URLs through the shared news image helper before rendering; private storage requires temporary signed access rather than public URLs, and storage reads must be limited to images attached to published news or server-validated admins so drafts and unattached uploads remain private.
 - Keep human trainer messaging separate from FIT; use authenticated RPCs with server-validated ownership and roles, preserve sessions when dialogs close, and enforce retention in reads plus scheduled cleanup.
 - Track client trainer-chat read receipts on the server using displayed message IDs and share unread polling through one query key so notifications persist across views without marking unseen replies as read.

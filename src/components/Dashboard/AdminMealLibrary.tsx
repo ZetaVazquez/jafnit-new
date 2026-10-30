@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, Plus, Edit, Trash2, Upload, Image as ImageIcon, Loader2, Sparkles } from 'lucide-react';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
+import { mealTagOptions, toggleMealTag } from '@/lib/mealTags';
+import { ArrowLeft, Plus, Edit, Trash2, Upload, Image as ImageIcon, Loader2, Sparkles, ChevronDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -67,7 +69,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
 
   const [form, setForm] = useState({
     name: '', meal_type: 'breakfast', description: '', image_url: '',
-    calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: ''
+    calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: [] as string[] | null
   });
 
   useEffect(() => { fetchMeals(); }, []);
@@ -80,7 +82,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   };
 
   const resetForm = () => {
-    setForm({ name: '', meal_type: 'breakfast', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: '' });
+    setForm({ name: '', meal_type: 'breakfast', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: [] });
     setEditing(null); setShowForm(false);
   };
 
@@ -114,7 +116,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
         carbs_g: form.carbs_g ? Number(form.carbs_g) : null,
         fats_g: form.fats_g ? Number(form.fats_g) : null,
         ingredients: form.ingredients || null,
-        diet_tags: form.diet_tags ? form.diet_tags.split(',').map(t => t.trim()).filter(Boolean) : []
+        diet_tags: form.diet_tags
       };
       if (editing) {
         const { error } = await supabase.rpc('admin_upsert_meal', {
@@ -152,7 +154,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
       image_url: m.image_url || '',
       calories: m.calories?.toString() || '', protein_g: m.protein_g?.toString() || '',
       carbs_g: m.carbs_g?.toString() || '', fats_g: m.fats_g?.toString() || '',
-      ingredients: m.ingredients || '', diet_tags: (m.diet_tags || []).join(', ')
+      ingredients: m.ingredients || '', diet_tags: m.diet_tags == null ? null : [...m.diet_tags]
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -339,8 +341,25 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
               <div><label className="block text-xs text-white/70 mb-1">Grasas (g)</label><Input type="number" step="0.1" value={form.fats_g} onChange={e => setForm({ ...form, fats_g: e.target.value })} className="bg-white/5 border-white/10 text-white" /></div>
             </div>
             <div>
-              <label className="block text-sm text-white/70 mb-1">Etiquetas (separadas por coma)</label>
-              <Input value={form.diet_tags} onChange={e => setForm({ ...form, diet_tags: e.target.value })} className="bg-white/5 border-white/10 text-white" placeholder="vegetariano, alto en proteína, sin gluten" />
+              <label id="meal-tags-label" className="block text-sm text-muted-foreground mb-1">Etiquetas</label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button type="button" variant="outline" aria-labelledby="meal-tags-label meal-tags-value" className="w-full h-auto min-h-10 justify-between gap-2 bg-background text-foreground border-input text-left">
+                    <span id="meal-tags-value" className="whitespace-pre-wrap break-words min-w-0">{form.diet_tags?.length ? form.diet_tags.join(', ') : 'Seleccionar etiquetas'}</span>
+                    <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="max-h-72 overflow-y-auto max-w-[calc(100vw-2rem)]">
+                  {mealTagOptions([form.diet_tags, ...meals.map(meal => meal.diet_tags)]).map(tag => (
+                    <DropdownMenuCheckboxItem key={tag} checked={form.diet_tags?.includes(tag) ?? false}
+                      onSelect={event => event.preventDefault()}
+                      onCheckedChange={checked => setForm(prev => ({ ...prev, diet_tags: toggleMealTag(prev.diet_tags, tag, checked === true) }))}
+                      className="whitespace-pre-wrap break-words">
+                      {tag}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div>
               <label className="block text-sm text-white/70 mb-1 flex items-center gap-1"><ImageIcon className="w-4 h-4" /> Foto de la comida</label>
