@@ -416,6 +416,13 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                   {m.carbs_g != null && <span>C: {m.carbs_g}g</span>}
                   {m.fats_g != null && <span>G: {m.fats_g}g</span>}
                 </div>
+                {m.diet_tags && m.diet_tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {m.diet_tags.map(tag => (
+                      <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-[hsl(var(--accent-green))]/20 text-[hsl(var(--accent-green))]">{tag}</span>
+                    ))}
+                  </div>
+                )}
                 <div className="flex items-center justify-end mt-3 gap-1">
                   <Button size="sm" variant="ghost" onClick={() => editMeal(m)} className="text-white/50 hover:text-white hover:bg-white/10"><Edit className="w-4 h-4" /></Button>
                   <Button size="sm" variant="ghost" onClick={() => deleteMeal(m.id, m.name)} className="text-red-400/60 hover:text-red-400 hover:bg-red-500/10"><Trash2 className="w-4 h-4" /></Button>
