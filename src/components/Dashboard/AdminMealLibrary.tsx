@@ -357,11 +357,12 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start"
-                  onOpenAutoFocus={event => { event.preventDefault(); tagSearchRef.current?.focus(); }}
                   onCloseAutoFocus={event => event.preventDefault()}
                   className="max-h-96 overflow-y-auto max-w-[calc(100vw-2rem)] bg-dark-surface border-dark-border text-[hsl(var(--text-primary))]">
                   <div className="sticky top-0 z-10 bg-dark-surface pb-2 mb-1 border-b border-dark-border">
-                    <Textarea ref={tagSearchRef} value={tagSearch} rows={2}
+                    <Textarea ref={node => { tagSearchRef.current = node; if (node) setTimeout(() => node.focus(), 0); }}
+                      value={tagSearch} rows={2}
+
                       onChange={event => setTagSearch(event.target.value)}
                       onKeyDown={event => event.stopPropagation()}
                       onPaste={event => event.stopPropagation()}
