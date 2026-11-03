@@ -362,8 +362,8 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                   <div className="sticky top-0 z-10 bg-dark-surface pb-2 mb-1 border-b border-dark-border">
                     <Textarea ref={node => { tagSearchRef.current = node; if (node) setTimeout(() => node.focus(), 0); }}
                       value={tagSearch} rows={2}
-
                       onChange={event => setTagSearch(event.target.value)}
+
                       onKeyDown={event => event.stopPropagation()}
                       onPaste={event => event.stopPropagation()}
                       placeholder="Buscar etiquetas… escribe p. ej. «sin lactosa», «keto», «vegano»"
