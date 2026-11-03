@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { MEAL_TAG_OPTIONS, mealTagOptions, toggleMealTag } from './mealTags';
+import { MEAL_TAG_OPTIONS, filterMealTagOptions, mealTagOptions, toggleMealTag } from './mealTags';
 
 test('ofrece exactamente las ocho categorías fijas', () => {
   expect(MEAL_TAG_OPTIONS).toEqual([
