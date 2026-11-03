@@ -21,6 +21,29 @@ export function mealTagOptions(_existing: (string[] | null)[]): string[] {
   return [...MEAL_TAG_OPTIONS];
 }
 
+// Normaliza para comparar sin distinguir mayúsculas ni acentos: «perdida»
+// encuentra «Pérdida de peso», «SIN LACTOSA» encuentra «Sin lactosa».
+export function normalizeMealTag(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Filtra las opciones del desplegable por lo escrito en el buscador.
+// Cada palabra escrita debe aparecer en la etiqueta; el orden no importa.
+export function filterMealTagOptions(options: string[], query: string): string[] {
+  const tokens = normalizeMealTag(query).split(' ').filter(Boolean);
+  if (tokens.length === 0) return [...options];
+  return options.filter(option => {
+    const normalized = normalizeMealTag(option);
+    return tokens.every(token => normalized.includes(token));
+  });
+}
+
+
 export function toggleMealTag(tags: string[] | null, tag: string, selected: boolean): string[] {
   const current = tags ?? [];
   return selected
