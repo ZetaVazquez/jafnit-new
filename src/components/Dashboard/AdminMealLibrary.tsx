@@ -73,8 +73,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
   });
 
   // Buscador del desplegable de etiquetas: filtra las opciones mientras se escribe.
-  const [tagSearch, setTagSearch] = useState('');
-  const tagSearchRef = useRef<HTMLTextAreaElement>(null);
+  const [tagText, setTagText] = useState<string | null>(null);
 
 
   useEffect(() => { fetchMeals(); }, []);
@@ -88,7 +87,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
 
   const resetForm = () => {
     setForm({ name: '', meal_type: 'breakfast', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: [] });
-    setTagSearch('');
+    setTagText(null);
     setEditing(null); setShowForm(false);
   };
 
@@ -349,27 +348,29 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
             </div>
             <div>
               <label id="meal-tags-label" className="block text-sm text-[hsl(var(--text-secondary))] mb-1">Etiquetas</label>
-              <DropdownMenu onOpenChange={open => { if (!open) setTagSearch(''); }}>
-                <DropdownMenuTrigger asChild>
-                  <Button type="button" variant="outline" aria-labelledby="meal-tags-label meal-tags-value" className="w-full h-auto min-h-10 justify-between gap-2 bg-dark-surface text-[hsl(var(--text-primary))] border-dark-border hover:bg-dark-card hover:text-[hsl(var(--text-primary))] text-left">
-                    <span id="meal-tags-value" className="whitespace-pre-wrap break-words min-w-0">{form.diet_tags?.length ? form.diet_tags.join(', ') : 'Seleccionar etiquetas'}</span>
-                    <ChevronDown className="w-4 h-4 shrink-0 text-[hsl(var(--text-secondary))]" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start"
+              <DropdownMenu modal={false}>
+                <div className="flex w-full items-stretch rounded-md border border-dark-border bg-dark-surface">
+                  <input id="meal-tags-value" aria-labelledby="meal-tags-label"
+                    value={tagText ?? (form.diet_tags ?? []).join(', ')}
+                    onFocus={() => setTagText((form.diet_tags ?? []).join(', '))}
+                    onBlur={() => setTagText(null)}
+                    onChange={event => {
+                      const text = event.target.value;
+                      setTagText(text);
+                      setForm(prev => ({ ...prev, diet_tags: text.split(',').map(t => t.trim()).filter(Boolean) }));
+                    }}
+                    placeholder="Escribe etiquetas separadas por comas o elige en la flecha"
+                    className="flex-1 min-w-0 bg-transparent px-3 py-2 text-sm font-medium text-[hsl(var(--text-primary))] placeholder:text-[hsl(var(--text-secondary))] outline-none" />
+                  <DropdownMenuTrigger asChild>
+                    <button type="button" aria-label="Ver opciones de etiquetas" className="px-3 border-l border-dark-border hover:bg-dark-card rounded-r-md">
+                      <ChevronDown className="w-4 h-4 text-[hsl(var(--text-secondary))]" />
+                    </button>
+                  </DropdownMenuTrigger>
+                </div>
+                <DropdownMenuContent align="end"
                   onCloseAutoFocus={event => event.preventDefault()}
                   className="max-h-96 overflow-y-auto max-w-[calc(100vw-2rem)] bg-dark-surface border-dark-border text-[hsl(var(--text-primary))]">
-                  <div className="sticky top-0 z-10 bg-dark-surface pb-2 mb-1 border-b border-dark-border">
-                    <Textarea ref={node => { tagSearchRef.current = node; if (node) setTimeout(() => node.focus(), 0); }}
-                      value={tagSearch} rows={2}
-                      onChange={event => setTagSearch(event.target.value)}
-
-                      onKeyDown={event => event.stopPropagation()}
-                      onPaste={event => event.stopPropagation()}
-                      placeholder="Buscar etiquetas… escribe p. ej. «sin lactosa», «keto», «vegano»"
-                      className="bg-dark-card border-dark-border text-[hsl(var(--text-primary))] text-sm resize-none min-h-0" />
-                  </div>
-                  {filterMealTagOptions(mealTagOptions([form.diet_tags, ...meals.map(meal => meal.diet_tags)]), tagSearch).map(tag => (
+                  {mealTagOptions([form.diet_tags]).map(tag => (
                     <DropdownMenuCheckboxItem key={tag} checked={form.diet_tags?.includes(tag) ?? false}
                       onSelect={event => event.preventDefault()}
                       onCheckedChange={checked => setForm(prev => ({ ...prev, diet_tags: toggleMealTag(prev.diet_tags, tag, checked === true) }))}
@@ -377,11 +378,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
                       {tag}
                     </DropdownMenuCheckboxItem>
                   ))}
-                  {filterMealTagOptions(mealTagOptions([form.diet_tags, ...meals.map(meal => meal.diet_tags)]), tagSearch).length === 0 && (
-                    <p className="px-2 py-3 text-sm text-[hsl(var(--text-secondary))]">Ninguna etiqueta coincide con «{tagSearch}»</p>
-                  )}
                 </DropdownMenuContent>
-
               </DropdownMenu>
             </div>
             <div>
