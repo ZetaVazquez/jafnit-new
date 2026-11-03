@@ -87,7 +87,7 @@ const AdminMealLibrary: React.FC<{ onGoBack: () => void }> = ({ onGoBack }) => {
 
   const resetForm = () => {
     setForm({ name: '', meal_type: 'breakfast', description: '', image_url: '', calories: '', protein_g: '', carbs_g: '', fats_g: '', ingredients: '', diet_tags: [] });
-    setTagSearch('');
+    setTagText(null);
     setEditing(null); setShowForm(false);
   };
 
