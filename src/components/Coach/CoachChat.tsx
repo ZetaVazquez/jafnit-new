@@ -165,13 +165,13 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div className="relative shrink-0">
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-primary/10 border border-primary/40 overflow-hidden flex items-center justify-center">
-              <img src={fitMascot} alt="FIT, asistente virtual de JAFN" width={512} height={512} className="w-full h-full object-contain" />
+              <img src={fitMascot} alt="FIT, asistente virtual de FIT PLATFORM" width={512} height={512} className="w-full h-full object-contain" />
             </div>
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-primary border-2 border-black" />
           </div>
           <div className="min-w-0">
             <div className="font-montserrat font-bold text-white text-sm sm:text-base leading-tight">FIT</div>
-            <div className="text-[11px] sm:text-xs text-primary/80 truncate">En línea · Asistente con IA de la consulta de José</div>
+            <div className="text-[11px] sm:text-xs text-primary/80 truncate">En línea · Asistente con IA de FIT PLATFORM</div>
           </div>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:text-primary">
@@ -191,7 +191,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
             <div className="flex justify-start items-end gap-2">
               <img src={fitMascot} alt="" aria-hidden="true" loading="lazy" width={512} height={512} className="w-8 h-8 shrink-0 object-contain" />
               <div className="max-w-[85%] text-white whitespace-pre-wrap leading-relaxed">
-                Hola, soy <strong>FIT</strong>, el asistente con IA de la consulta de José. Cuéntame qué te gustaría mejorar y te oriento para ver qué opción puede tener más sentido en tu caso.
+                Hola, soy <strong>FIT</strong>, el asistente con IA de FIT PLATFORM. Cuéntame qué necesitas gestionar en tu negocio y te oriento para ver qué módulos pueden tener más sentido en tu caso.
               </div>
             </div>
           )}
@@ -223,7 +223,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
           {handoff && user && (
             <div className="pt-2">
               <Button onClick={() => setShowTrainerChat(true)} size="lg" variant="outline" className="w-full border-primary text-primary hover:bg-primary/10 font-bold">
-                Hablar con José Antonio →
+                Hablar con el equipo de FIT PLATFORM →
               </Button>
             </div>
           )}
@@ -235,7 +235,7 @@ const CoachChat: React.FC<CoachChatProps> = ({ onClose, onOpenPlans }) => {
                 size="lg"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
               >
-                Ver programas personalizados de José Antonio →
+                Ver planes de FIT PLATFORM →
               </Button>
             </div>
           )}

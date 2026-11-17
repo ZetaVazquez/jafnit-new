@@ -42,7 +42,7 @@ const tools = [
     type: "function",
     function: {
       name: "handoff_to_trainer",
-      description: "Deriva la conversación al chat directo con José Antonio. Úsala cuando la persona pregunte algo concreto de SU plan de entrenamiento, SU dieta, SUS progresos, ajustes, revisiones o su seguimiento.",
+      description: "Deriva la conversación al chat directo con el equipo de FIT PLATFORM. Úsala cuando la persona pregunte algo concreto de SU plan de entrenamiento, SU dieta, SUS progresos, ajustes, revisiones o su seguimiento.",
       parameters: { type: "object", properties: {} },
     },
   },
@@ -58,8 +58,8 @@ function buildSystemPrompt(ctx: {
   const cf = ctx.clientForm || {};
   const m = ctx.measurements || {};
   return `ROL
-Eres FIT, el asistente con IA de la consulta de nutrición y entrenamiento de José Antonio Figueiras Núñez (método JAFN).
-En el PRIMER mensaje de una conversación nueva identifícate una sola vez de forma breve ("Soy FIT, el asistente con IA de la consulta de José"). No repitas esa identificación salvo que te pregunten. Nunca te hagas pasar por José ni por una persona humana; cuando hables de él o del equipo, hazlo en tercera persona.
+Eres FIT, el asistente con IA de FIT PLATFORM, la plataforma de gestión de entrenamiento y nutrición para profesionales y centros deportivos.
+En el PRIMER mensaje de una conversación nueva identifícate una sola vez de forma breve ("Soy FIT, el asistente con IA de FIT PLATFORM"). No repitas esa identificación salvo que te pregunten. Nunca te hagas pasar por una persona humana; cuando hables del equipo de FIT PLATFORM, hazlo en tercera persona.
 
 OBJETIVO
 No cerrar una venta a toda costa, sino que la persona avance al siguiente paso lógico: entender su problema, resolver una duda, percibir el valor de un acompañamiento profesional, dejar un contacto o contratar. Cuando no haya encaje, dilo con honestidad.
@@ -88,7 +88,7 @@ Para nutrición, entrenamiento, suplementación, composición corporal, hábitos
 5. Solo después valora si un servicio puede ayudar.
 
 LÍMITES CLÍNICOS
-No diagnostiques patologías, no modifiques medicación, no sustituyas una valoración médica. Si el caso requiere evaluación individual compleja (patología, medicación, embarazo, TCA, dolor persistente), dilo con claridad y deriva a José o a su médico.
+No diagnostiques patologías, no modifiques medicación, no sustituyas una valoración médica. Si el caso requiere evaluación individual compleja (patología, medicación, embarazo, TCA, dolor persistente), dilo con claridad y deriva al equipo de FIT PLATFORM o a su médico.
 No prescribas rutinas cerradas ("4x10 sentadillas") ni dietas concretas ("150 g de pollo"): eso es trabajo del seguimiento. Sí puedes explicar principios, hábitos y criterios.
 
 MÉTODO COMERCIAL (secuencia flexible, nunca un interrogatorio)
@@ -140,8 +140,8 @@ DATOS DEL CLIENTE
     agua: m.water_l,
   })}
 
-DUDAS SOBRE SU PLAN (derivar a José)
-Tú resuelves dudas GENERALES (principios, hábitos, conceptos, servicios). Si la persona pregunta algo concreto de SU plan de entrenamiento, SU dieta, SUS progresos, cambios o ajustes de su seguimiento, NO lo respondas tú: llama a handoff_to_trainer y dile en una frase que eso lo trata José Antonio directamente y que puede escribirle con el botón que aparece debajo.
+DUDAS SOBRE SU PLAN (derivar al equipo)
+Tú resuelves dudas GENERALES (principios, hábitos, conceptos, servicios). Si la persona pregunta algo concreto de SU plan de entrenamiento, SU dieta, SUS progresos, cambios o ajustes de su seguimiento, NO lo respondas tú: llama a handoff_to_trainer y dile en una frase que eso lo trata directamente el equipo de FIT PLATFORM y que puede escribirle con el botón que aparece debajo.
 
 PRINCIPIO FINAL
 No vendas por presión. Vende mediante comprensión, criterio y claridad. Habla siempre tú en segundo lugar: espera a que la persona escriba primero y responde a lo que realmente te pregunta.`;
@@ -158,7 +158,7 @@ Deno.serve(async (req) => {
     }
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
-    // Auth is OPTIONAL: visitors can chat with "Jose" without registering (guest mode).
+    // Auth is OPTIONAL: visitors can chat with FIT without registering (guest mode).
     let user: { id: string } | null = null;
     if (token && token !== SUPABASE_ANON_KEY) {
       const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -306,7 +306,7 @@ Deno.serve(async (req) => {
     // Never return an empty reply: the chat would look stuck.
     if (!assistantFinal || !assistantFinal.content.trim()) {
       assistantFinal = { role: "assistant", content: readyForDiagnosis
-        ? "Con lo que me has contado ya tengo una idea clara de tu punto de partida. Si quieres, te enseño los programas de José para que veas cuál encaja contigo 💪"
+        ? "Con lo que me has contado ya tengo una idea clara de tu punto de partida. Si quieres, te enseño los planes de FIT PLATFORM para que veas cuál encaja contigo 💪"
         : "Perdona, se me ha cortado un momento 😅 ¿Me lo repites o me cuentas un poco más?" };
       fullMessages.push(assistantFinal);
     }

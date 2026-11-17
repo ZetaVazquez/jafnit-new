@@ -16,12 +16,12 @@ const Contact: React.FC = () => {
         <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(var(--text-primary))] mb-4">
-              <em className="heading-accent not-italic font-bold italic">Contáctame</em>
+              Hablemos de <em className="heading-accent not-italic font-bold italic">FIT PLATFORM</em>
             </h2>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={200}>
             <p className="text-lg text-[hsl(var(--text-secondary))] max-w-2xl mx-auto">
-              ¿Listo para comenzar tu transformación? Ponte en contacto conmigo
+              ¿Quieres ver la plataforma con tus propios datos? Escríbenos y te enseñamos cómo encaja en tu negocio
             </p>
           </ScrollReveal>
         </div>
@@ -33,7 +33,7 @@ const Contact: React.FC = () => {
               {[
                 { icon: Phone, title: 'Teléfono', line1: '+34 697754823', line2: 'Lunes a Viernes, 9:00 - 20:00' },
                 { icon: Mail, title: 'Email', line1: 'consultajafn@gmail.com', line2: 'Respuesta en 24 horas' },
-                { icon: MapPin, title: 'Dirección', line1: 'Consulta con el entrenador', line2: '' },
+                { icon: MapPin, title: 'Dirección', line1: 'Atención a profesionales del fitness', line2: '' },
               ].map((item, i) => (
                 <div key={i} className="glass-card-light p-6">
                   <div className="flex items-start space-x-4">
@@ -58,11 +58,11 @@ const Contact: React.FC = () => {
                   <h4 className="font-bold text-[hsl(var(--text-primary))]">¿Reservamos una cita?</h4>
                 </div>
                 <p className="text-sm text-[hsl(var(--text-secondary))] mb-4">
-                  Agenda una consulta personalizada para conocer tus objetivos y diseñar tu plan ideal.
+                  Agenda una demostración para ver la plataforma con tus propios clientes, planes y objetivos.
                 </p>
                 <Button
                   className="btn-cta"
-                  onClick={() => window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola+Jose%2C+quiero+empezar+mi+plan+con+JAFNFIT+%EF%BF%BD&type=phone_number&app_absent=0', '_blank')}
+                  onClick={() => window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola%2C+quiero+una+demostraci%C3%B3n+de+FIT+PLATFORM&type=phone_number&app_absent=0', '_blank')}
                 >
                   ¿Tenemos una cita?
                 </Button>
@@ -81,7 +81,7 @@ const Contact: React.FC = () => {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación José Antonio Dietética"
+                title="Ubicación FIT PLATFORM"
               ></iframe>
             </div>
           </ScrollReveal>
