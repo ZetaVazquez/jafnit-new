@@ -1,8 +1,7 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Phone, Mail, MapPin, Calendar } from 'lucide-react';
-import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Phone, Mail, MapPin, Calendar } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const Contact: React.FC = () => {
   return (
@@ -31,9 +30,9 @@ const Contact: React.FC = () => {
           <ScrollReveal direction="left" delay={400}>
             <div className="space-y-6">
               {[
-                { icon: Phone, title: 'Teléfono', line1: '+34 697754823', line2: 'Lunes a Viernes, 9:00 - 20:00' },
-                { icon: Mail, title: 'Email', line1: 'consultajafn@gmail.com', line2: 'Respuesta en 24 horas' },
-                { icon: MapPin, title: 'Dirección', line1: 'Atención a profesionales del fitness', line2: '' },
+                { icon: Phone, title: "Teléfono", line1: "+34 123456789", line2: "Lunes a Viernes, 9:00 - 20:00" },
+                { icon: Mail, title: "Email", line1: "appenventa@gmail.com", line2: "Respuesta en 24 horas" },
+                { icon: MapPin, title: "Dirección", line1: "Atención a profesionales del fitness", line2: "" },
               ].map((item, i) => (
                 <div key={i} className="glass-card-light p-6">
                   <div className="flex items-start space-x-4">
@@ -43,7 +42,9 @@ const Contact: React.FC = () => {
                     <div>
                       <h4 className="font-bold text-[hsl(var(--text-primary))] mb-1">{item.title}</h4>
                       <p className="text-[hsl(var(--text-secondary))] text-sm">{item.line1}</p>
-                      {item.line2 && <p className="text-[hsl(var(--text-secondary))] text-xs opacity-60">{item.line2}</p>}
+                      {item.line2 && (
+                        <p className="text-[hsl(var(--text-secondary))] text-xs opacity-60">{item.line2}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -62,7 +63,12 @@ const Contact: React.FC = () => {
                 </p>
                 <Button
                   className="btn-cta"
-                  onClick={() => window.open('https://api.whatsapp.com/send/?phone=34697754823&text=Hola%2C+quiero+una+demostraci%C3%B3n+de+FIT+PLATFORM&type=phone_number&app_absent=0', '_blank')}
+                  onClick={() =>
+                    window.open(
+                      "https://api.whatsapp.com/send/?phone=34697754823&text=Hola%2C+quiero+una+demostraci%C3%B3n+de+FIT+PLATFORM&type=phone_number&app_absent=0",
+                      "_blank",
+                    )
+                  }
                 >
                   ¿Tenemos una cita?
                 </Button>
