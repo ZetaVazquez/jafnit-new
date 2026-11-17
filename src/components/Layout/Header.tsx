@@ -70,18 +70,16 @@ const Header: React.FC<HeaderProps> = ({
 
   const navigationItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Programas', href: '#pricing' },
-    { label: 'Sobre Mí', href: '#sobre-mi' },
-    { label: 'Evaluación', href: '#evaluacion' },
+    { label: 'Funcionalidades', href: '#servicios' },
+    { label: 'Demo', href: '#pricing' },
+    { label: 'Contacto', href: '#contacto' },
   ];
 
   const moreItems = [
     { label: 'Calculadora de IMC', href: '#bmi', icon: Calculator, action: onOpenBMI },
     { label: 'Guías y Recursos', href: '#guias', icon: BookOpen, action: onOpenGuides },
-    { label: 'Opiniones', href: '#testimonios', icon: Star },
-    { label: 'Noticias y Actualizaciones', href: '#noticias', icon: Newspaper },
     { label: 'Preguntas Frecuentes', href: '#faq', icon: HelpCircle },
-    { label: 'Contáctame', href: '#contacto', icon: Mail },
+    { label: 'Contacto', href: '#contacto', icon: Mail },
   ];
 
   const handleNavClick = (href: string) => {
@@ -142,11 +140,9 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <img 
-                src="/images/logo-metodo-jafn.png" 
-                alt="Método JAFN - Dietética y Entrenamiento" 
-                className="h-24 lg:h-40 w-auto"
-              />
+              <span className="font-montserrat font-bold text-xl lg:text-2xl tracking-wide text-white">
+                FIT <span className="heading-accent">PLATFORM</span>
+              </span>
             </div>
 
             {/* Desktop Navigation */}

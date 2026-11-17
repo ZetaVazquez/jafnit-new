@@ -1,17 +1,13 @@
 
 import React, { useState } from 'react';
-import Results from '@/components/Home/Results';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
 import HeroCarousel from '@/components/Home/HeroCarousel';
-import AboutUs from '@/components/Home/AboutUs';
 import Services from '@/components/Home/Services';
 import GuidesModal from '@/components/Home/GuidesModal';
-import Testimonials from '@/components/Home/Testimonials';
 import Pricing from '@/components/Home/Pricing';
 import Contact from '@/components/Home/Contact';
 import FAQ from '@/components/Home/FAQ';
-import News from '@/components/Home/News';
 import BMICalculatorModal from '@/components/Home/BMICalculatorModal';
 import Questionnaire from '@/components/Home/Questionnaire';
 import ClientDashboard from '@/components/Dashboard/ClientDashboard';
@@ -298,15 +294,9 @@ const Index = () => {
           <HeroCarousel onStartQuestionnaire={handleStartQuestionnaire} />
           {/* 2. Nuestros servicios */}
           <Services />
-          {/* 3. Resultados con JAFN */}
-          <Results />
-          {/* 4. Opiniones de los clientes */}
-          <Testimonials onStartQuestionnaire={handleStartQuestionnaire} />
-          {/* 5. Tipos de programas / precios */}
+          {/* Solicitud de demostración */}
           <Pricing onStartQuestionnaire={handleStartQuestionnaire} onOpenProgramModal={handleOpenProgramModal} />
           {/* Resto de secciones */}
-          <AboutUs onQuestionnaireOpen={handleStartQuestionnaire} onOpenAboutDetail={() => setShowAboutDetailModal(true)} />
-          <News />
           <FAQ />
           <Contact />
         </main>

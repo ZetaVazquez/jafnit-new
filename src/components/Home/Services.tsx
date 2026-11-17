@@ -5,40 +5,40 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 const services = [
   {
-    icon: Apple,
-    title: 'Planes Nutricionales Personalizados',
-    description: 'Diseñamos planes de alimentación adaptados a tus objetivos, preferencias y estilo de vida.',
-    features: ['Análisis nutricional completo', 'Menús semanales', 'Lista de compras', 'Recetas saludables']
+    icon: Users,
+    title: 'Gestión de Clientes',
+    description: 'Fichas completas con valoración inicial, objetivos, historial y estado de suscripción.',
+    features: ['Cuestionario de valoración', 'Ficha de cada cliente', 'Estado de pagos', 'Regalos y recursos']
   },
   {
     icon: Dumbbell,
-    title: 'Entrenamiento Personalizado',
-    description: 'Rutinas de ejercicio complementarias a tu plan nutricional para maximizar resultados.',
-    features: ['Rutinas adaptadas', 'Videos explicativos', 'Progress tracking', 'Ajustes semanales']
+    title: 'Entrenamientos',
+    description: 'Crea rutinas con una biblioteca de ejercicios con vídeo, ejecución y errores comunes.',
+    features: ['Biblioteca con vídeos', 'Filtros por grupo muscular', 'Rutinas en PDF', 'Niveles de dificultad']
   },
   {
-    icon: Users,
-    title: 'Seguimiento Individualizado',
-    description: 'Acompañamiento personalizado con revisiones regulares y ajustes según tu progreso.',
-    features: ['Consultas regulares', 'Análisis de progreso', 'Ajustes del plan', 'Soporte continuo']
-  },
-  {
-    icon: Calendar,
-    title: 'Planificación de Comidas',
-    description: 'Organización completa de tus comidas con horarios y preparación anticipada.',
-    features: ['Calendario de comidas', 'Meal prep', 'Horarios optimizados', 'Preparación por lotes']
-  },
-  {
-    icon: MessageCircle,
-    title: 'Soporte 24/7',
-    description: 'Comunicación directa con tu nutricionista para resolver dudas y mantenerte motivado.',
-    features: ['Chat directo', 'Respuesta rápida', 'Motivación constante', 'Resolución de dudas']
+    icon: Apple,
+    title: 'Nutrición',
+    description: 'Planes de alimentación con biblioteca de comidas, cantidades y calorías calculadas.',
+    features: ['Biblioteca de comidas', 'Calorías por ración', 'Menús que varían cada semana', 'Etiquetas de dieta']
   },
   {
     icon: BarChart3,
-    title: 'Análisis de Progreso',
-    description: 'Seguimiento detallado de tu evolución con métricas y gráficos personalizados.',
-    features: ['Métricas corporales', 'Gráficos de progreso', 'Reportes mensuales', 'Análisis de tendencias']
+    title: 'Seguimiento',
+    description: 'Controla la evolución de cada cliente con hábitos, objetivos y progreso.',
+    features: ['Seguimiento de hábitos', 'Objetivos', 'Evolución del cumplimiento', 'Calendario']
+  },
+  {
+    icon: Calendar,
+    title: 'Administración',
+    description: 'Un panel para gestionar planes, contenidos, noticias, pagos y clientes.',
+    features: ['Aprobación de planes', 'Gestión de pagos', 'Noticias y guías', 'Chat con clientes']
+  },
+  {
+    icon: MessageCircle,
+    title: 'Inteligencia Artificial',
+    description: 'Asistente que atiende a tus clientes y genera borradores de dietas y rutinas.',
+    features: ['Asistente virtual 24/7', 'Borradores automáticos', 'Revisión antes de publicar', 'Ahorro de tiempo']
   }
 ];
 
@@ -82,12 +82,12 @@ const Services: React.FC = () => {
         <div className="text-center mb-10 md:mb-16">
           <ScrollReveal direction="down">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-              Nuestros <em className="heading-accent not-italic italic">Servicios</em>
+              Todo lo que <em className="heading-accent not-italic italic">necesitas</em>
             </h2>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={200}>
             <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-              Enfoque integral para tu bienestar, combinando nutrición, ejercicio y seguimiento personalizado.
+              Funcionalidades reales para gestionar tu negocio fitness de principio a fin.
             </p>
           </ScrollReveal>
         </div>
@@ -99,100 +99,7 @@ const Services: React.FC = () => {
           ))}
         </div>
 
-        {/* CTA banner */}
-        <ScrollReveal direction="up" delay={400}>
-          <div className="mt-10 md:mt-16 glass-card-light p-6 md:p-8 lg:p-10 text-center">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4">
-              ¿Necesitas algo más <em className="heading-accent not-italic italic">específico</em>?
-            </h3>
-            <p className="text-white/60 mb-8 max-w-2xl mx-auto">
-              Ofrecemos consultas personalizadas para necesidades específicas como nutrición deportiva,
-              trastornos alimentarios, alergias e intolerancias, y mucho más.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {['Nutrición Deportiva', 'Pérdida de Peso', 'Ganancia Muscular', 'Alergias e Intolerancias'].map((tag) => (
-                <span key={tag} className="px-4 py-2 rounded-full text-sm font-medium bg-[hsl(var(--accent-green))]/15 text-[hsl(var(--accent-green-light))] border border-[hsl(var(--accent-green))]/25">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
-
-        {/* Communication Section */}
-        <ScrollReveal direction="up" delay={300}>
-          <div className="mt-10 md:mt-16 glass-card-light overflow-hidden">
-            <div className="grid lg:grid-cols-2 gap-6 md:gap-8 p-5 sm:p-8 lg:p-12 items-center">
-              {/* Text Content */}
-              <div className="order-2 lg:order-1">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-6">
-                  💬 El diálogo constante es <em className="heading-accent not-italic italic">fundamental</em>
-                </h3>
-                <div className="space-y-4 text-white/60">
-                  <p className="text-base leading-relaxed">
-                    Mi objetivo es comprender tu situación de manera completa para ofrecerte la mejor orientación y apoyo.
-                  </p>
-                  <p className="text-base leading-relaxed text-white/80 font-medium">
-                    La comunicación es esencial para personalizar y optimizar tu plan de forma efectiva.
-                  </p>
-                  <p className="text-base leading-relaxed">
-                    Cualquier ajuste que necesites, <span className="text-[hsl(var(--accent-green-light))] font-bold">SIEMPRE</span> existe una alternativa y <span className="text-[hsl(var(--accent-green-light))] font-bold">SIEMPRE</span> encontramos la mejor solución para ti.
-                  </p>
-                </div>
-
-                <div className="mt-8 space-y-3">
-                  {['Contáctame cuando lo necesites', 'Soporte y motivación diarios', 'Material educativo y recursos'].map((item) => (
-                    <div key={item} className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-[hsl(var(--accent-green))] rounded-full"></div>
-                      <span className="text-white/80 text-sm font-medium">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* WhatsApp Phone Mockup */}
-              <div className="order-1 lg:order-2 flex justify-center">
-                <div className="relative transform rotate-3">
-                  <div className="relative w-64 h-[500px] bg-[hsl(var(--dark-surface))] rounded-[2.5rem] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.5)] border border-[hsl(var(--dark-border))]">
-                    <div className="w-full h-full bg-[hsl(var(--dark-bg))] rounded-[2rem] overflow-hidden relative">
-                      {/* Status Bar */}
-                      <div className="flex justify-between items-center px-6 pt-3 pb-1 bg-[hsl(var(--dark-surface))]">
-                        <span className="text-xs font-medium text-white/70">13:17</span>
-                        <div className="flex items-center space-x-1">
-                          <div className="w-4 h-2 bg-white/50 rounded-sm"></div>
-                        </div>
-                      </div>
-
-                      {/* WhatsApp Header */}
-                      <div className="bg-[hsl(var(--accent-green))] p-3 flex items-center space-x-3">
-                        <div className="w-9 h-9 bg-white/20 rounded-full"></div>
-                        <div>
-                          <h4 className="text-white font-semibold text-xs">JAFNFIT - José Antonio</h4>
-                          <p className="text-white/70 text-[10px]">en línea</p>
-                        </div>
-                      </div>
-
-                      {/* Chat Content */}
-                      <div className="flex-1 p-3 space-y-2.5 bg-[hsl(var(--dark-bg))] h-full">
-                        {[
-                          { text: 'Hola, tenía que decírtelo... ¡Estoy flipando! 😍 me está encantando el menú.', time: '8:27' },
-                          { text: 'Me preparé las tostadas que me indicaste, probé las combinaciones... ¡riquísimo!', time: '8:28' },
-                          { text: '¡Bajé ya 2 kg sin darme cuenta! Gracias 🙏 💚', time: '8:29' },
-                        ].map((msg, i) => (
-                          <div key={i} className="bg-[hsl(var(--dark-surface))] p-2.5 rounded-lg max-w-[85%] border border-[hsl(var(--dark-border))]">
-                            <p className="text-[10px] text-white/80 leading-relaxed">{msg.text}</p>
-                            <p className="text-[9px] text-white/30 mt-1 text-right">{msg.time}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
-      </div>
+        </div>
     </section>
   );
 };

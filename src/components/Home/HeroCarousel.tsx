@@ -13,7 +13,7 @@ const heroImages = [
   '/images/hero-bg-4.jpeg',
 ];
 
-const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => {
+const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire: _start }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = useCallback(() => {
@@ -54,37 +54,34 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           <div className="space-y-6 lg:space-y-8 text-center max-w-3xl">
             <div className="space-y-4">
               <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] md:leading-[1.05]">
-                Mejora tu{' '}
-                <em className="heading-accent not-italic font-bold italic">ESTRUCTURA</em>
+                Tu negocio fitness,
                 <br />
-                y alcanza resultados
-                <br />
-                <span className="heading-accent">REALES</span>
+                en una sola <span className="heading-accent">plataforma.</span>
               </h1>
-              <p className="text-lg lg:text-xl text-white/70 max-w-lg mx-auto leading-relaxed">
-                Evalúa en qué punto te encuentras para conocer el plan adecuado para ti.
+              <p className="text-lg lg:text-xl text-white/70 max-w-xl mx-auto leading-relaxed">
+                Gestiona clientes, entrenamientos, nutrición y seguimiento desde una aplicación diseñada para profesionales.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-                onClick={onStartQuestionnaire}
+                onClick={() => document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' })}
                 className="px-8 py-4 rounded-lg font-bold text-base transition-all duration-300 hover:-translate-y-0.5"
                 style={{ backgroundColor: 'hsl(142, 71%, 45%)', color: '#ffffff' }}
               >
-                Realizar Evaluación
+                Descubre la plataforma
               </button>
               <button
                 onClick={handleScrollToPrograms}
                 className="text-white/70 hover:text-white font-medium flex items-center gap-1 transition-colors py-3"
               >
-                Ver Programas <ChevronRight className="w-4 h-4" />
+                Solicitar demo <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
             <div className="pt-4">
               <p className="text-white/50 text-sm font-medium">
-                José Antonio Figueiras Núñez · <span className="text-white/40">Coach Nutricional & Fitness</span>
+                Para entrenadores personales, nutricionistas y centros deportivos
               </p>
             </div>
           </div>
@@ -108,18 +105,18 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onStartQuestionnaire }) => 
           {[
             {
               icon: CheckCircle,
-              title: 'Análisis Personalizado',
-              description: 'Evaluación completa de tu situación actual.'
+              title: 'Todo en un panel',
+              description: 'Clientes, planes y seguimiento centralizados.'
             },
             {
               icon: Target,
-              title: 'Planificación Estructurada',
-              description: 'Programa adaptado a tu nivel y objetivo.'
+              title: 'Planes en minutos',
+              description: 'Rutinas y dietas asistidas por inteligencia artificial.'
             },
             {
               icon: BarChart3,
-              title: 'Acompañamiento Profesional',
-              description: 'Seguimiento y ajuste con criterio experto.'
+              title: 'Control profesional',
+              description: 'Revisas y apruebas cada plan antes de entregarlo.'
             }
           ].map((feature, i) => (
             <div 
